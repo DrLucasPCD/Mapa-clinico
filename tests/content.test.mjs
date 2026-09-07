@@ -116,3 +116,26 @@ test('WebMCP rejects invalid requests without changing app state', async () => {
   assert.equal(response.view, 'atlas');
   cleanup();
 });
+
+test('Every catalog search entry has selectable geometry and truthful totals', async () => {
+  const entries = JSON.parse(await readFile('app/atlas-catalog.json', 'utf8'));
+  const counts = new Map();
+  for (const node of nodes)
+    counts.set(
+      node.userData.anatomyId,
+      (counts.get(node.userData.anatomyId) || 0) + 1,
+    );
+  assert.equal(new Set(entries.map((item) => item.id)).size, entries.length);
+  for (const item of entries) {
+    assert.equal(
+      counts.get(item.id),
+      item.objectCount,
+      `Catalog count mismatch: ${item.id}`,
+    );
+    assert(item.name && item.system);
+  }
+  assert.equal(
+    entries.reduce((sum, item) => sum + item.objectCount, 0),
+    nodes.length,
+  );
+});

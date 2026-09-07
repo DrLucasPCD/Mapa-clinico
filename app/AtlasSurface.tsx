@@ -17,7 +17,7 @@ export default function AtlasSurface({
         ref={surfaceRef}
         tabIndex={0}
         role="application"
-        aria-label="Atlas anatômico 3D. Arraste para girar ou use as setas do teclado. Use mais e menos para zoom. Clique em uma estrutura ou use a lista de estruturas para selecionar."
+        aria-label="Atlas anatômico 3D. Arraste para girar ou use as setas do teclado. Use mais e menos para zoom. Clique em uma estrutura para selecioná-la e clique duas vezes para aproximar o foco."
       />
       {status ? (
         <div className="atlas-status" role="status">

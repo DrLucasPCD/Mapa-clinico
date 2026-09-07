@@ -4,10 +4,13 @@
 
 ## O que esta versão faz
 
-- Atlas humano masculino 3D real (Vanatome / Z-Anatomy), com centenas de estruturas selecionáveis, rotação, zoom, isolamento, ocultação, afastamento e planos de corte.
+- Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
+- Atlas humano masculino 3D real (Vanatome / Z-Anatomy), com 749 estruturas e 984 malhas, busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
 - Módulos explicativos de coração, encéfalo, pulmões, fígado, metacarpos e seis músculos com origem, inserção e ação.
 - Seleção de 1º a 12º período, agrupados em quatro níveis didáticos: fundamentos, integração, ciclo clínico e internato.
-- Pulsação cardíaca ilustrativa e flexão do cotovelo esquerdo em modelo cinemático simplificado.
+- Corpo montado, camadas separadas e grade de estruturas; filtros regionais de braço e tornozelo.
+- Pulsação cardíaca ilustrativa, flexão do cotovelo esquerdo e movimentos aproximados do pé (flexão e inversão/eversão), em modelo cinemático simplificado.
+- Fichas por período, mapa de conexões com conteúdo existente, listas de estruturas e favoritos de publicações armazenados no dispositivo.
 - Três casos reais da Radiopaedia com imagens locais de RX, TC e RM, autoria, links, perguntas e discussão; localização de referência no atlas com lateralidade.
 - Introduções narradas com a voz exata `Trelis/piper-pt-br-faber-medium`, sem substituição pela voz do navegador.
 - PWA com ícones, manifesto e cache offline. O atlas, imagens e narrações ficam disponíveis offline após serem carregados online. A instalação depende do suporte do navegador.

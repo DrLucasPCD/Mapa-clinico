@@ -1,25 +1,70 @@
-import { useState } from 'react';
-import { ArrowUpRight, ScanLine, Check, RotateCcw } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  Expand,
+  ScanLine,
+  RotateCcw,
+} from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import type { ClinicalCase } from './content';
+import './panels.css';
 export default function CaseStudy({
   item,
   period,
   onLocate,
+  caseIndex,
+  caseCount,
+  onPreviousCase,
+  onNextCase,
 }: {
   item: ClinicalCase;
   period: number;
   onLocate: () => void;
+  caseIndex?: number;
+  caseCount?: number;
+  onPreviousCase?: () => void;
+  onNextCase?: () => void;
 }) {
   const [index, setIndex] = useState(0),
     [zoom, setZoom] = useState(1),
     [contrast, setContrast] = useState(100),
     [brightness, setBrightness] = useState(100),
     [answer, setAnswer] = useState<number | null>(null),
-    [reveal, setReveal] = useState(false);
-  const image = item.images[index];
+    [reveal, setReveal] = useState(false),
+    [panel, setPanel] = useState<'cases' | 'images' | 'questions'>('cases'),
+    [fullscreen, setFullscreen] = useState(false);
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+  const image = item.images[index] || item.images[0];
   return (
-    <section className="case-detail">
+    <section className="case-detail clinical-panel">
+      <div className="panel-tabs" role="tablist" aria-label="Conteúdo clínico">
+        {(
+          [
+            ['cases', 'Casos clínicos'],
+            ['images', 'Imagens'],
+            ['questions', 'Questões'],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            role="tab"
+            aria-selected={panel === value}
+            className={panel === value ? 'active' : ''}
+            onClick={() => setPanel(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
       <div className="case-top">
         <span className="level-badge">
           CASO REAL · {item.modality} · rID {item.id}
@@ -28,11 +73,56 @@ export default function CaseStudy({
           Caso original <ArrowUpRight size={15} />
         </a>
       </div>
-      <h2>{item.title}</h2>
-      <p>{item.presentation}</p>
-      <div className="case-layout">
+      <div className="case-heading-row">
         <div>
-          <div className="radiograph">
+          <h2>{item.title}</h2>
+          <p>{item.presentation}</p>
+        </div>
+        <div
+          className="case-pagination"
+          aria-label={caseCount ? 'Paginação de casos' : 'Imagem do caso'}
+        >
+          <button
+            aria-label={caseCount ? 'Caso anterior' : 'Imagem anterior'}
+            disabled={caseCount ? !onPreviousCase : index === 0}
+            onClick={
+              caseCount && onPreviousCase
+                ? onPreviousCase
+                : () => setIndex((value) => Math.max(0, value - 1))
+            }
+          >
+            <ArrowLeft size={14} />
+          </button>
+          <span>
+            {caseCount && caseIndex !== undefined ? caseIndex + 1 : index + 1} /{' '}
+            {caseCount || item.images.length}
+          </span>
+          <button
+            aria-label={caseCount ? 'Próximo caso' : 'Próxima imagem'}
+            disabled={
+              caseCount ? !onNextCase : index === item.images.length - 1
+            }
+            onClick={
+              caseCount && onNextCase
+                ? onNextCase
+                : () =>
+                    setIndex((value) =>
+                      Math.min(item.images.length - 1, value + 1),
+                    )
+            }
+          >
+            <ArrowRight size={14} />
+          </button>
+        </div>
+      </div>
+      <div className="case-layout">
+        <div className="case-media" hidden={panel === 'questions'}>
+          <div
+            role={fullscreen ? 'dialog' : undefined}
+            aria-modal={fullscreen ? true : undefined}
+            aria-label={fullscreen ? 'Imagem ampliada' : undefined}
+            className={'radiograph' + (fullscreen ? ' is-fullscreen' : '')}
+          >
             <img
               src={image.src}
               alt={`${item.modality}: ${image.label}. Caso ${item.id}, ${item.author}, Radiopaedia.org.`}
@@ -52,6 +142,14 @@ export default function CaseStudy({
               }}
             >
               <RotateCcw size={17} />
+            </button>
+            <button
+              className="expand-image"
+              title={fullscreen ? 'Sair da tela cheia' : 'Ampliar imagem'}
+              aria-label={fullscreen ? 'Sair da tela cheia' : 'Ampliar imagem'}
+              onClick={() => setFullscreen((value) => !value)}
+            >
+              <Expand size={17} />
             </button>
           </div>
           <div className="image-options">
@@ -127,7 +225,7 @@ export default function CaseStudy({
             .
           </p>
         </div>
-        <div className="case-reasoning">
+        <div className="case-reasoning" hidden={panel === 'images'}>
           <div className="eyebrow teal">PENSE ANTES DE REVELAR</div>
           <h3>{item.question}</h3>
           <div className="quiz">

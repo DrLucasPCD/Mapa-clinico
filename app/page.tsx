@@ -1,36 +1,50 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { flushSync } from 'react-dom';
 import {
   Activity,
-  Layers,
-  Brain,
-  Heart,
-  Bone,
   ArrowUpRight,
-  RotateCcw,
-  ScanLine,
-  Volume2,
-  ChevronRight,
+  Bone,
   BookOpen,
-  Microscope,
-  Move3D,
+  Brain,
+  Bookmark,
+  ChevronRight,
+  CircleHelp,
   Focus,
+  Grid3X3,
+  Heart,
+  Home,
+  Layers,
+  Library,
+  ListChecks,
+  Menu,
+  Move3D,
+  Newspaper,
+  RotateCcw,
   Search,
+  ScanLine,
+  SlidersHorizontal,
+  X,
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
-import { lessons, lessonFor, cases } from './content';
+import { cases, lessonFor, lessons } from './content';
+import {
+  ATLAS_MESH_COUNT,
+  ATLAS_STRUCTURE_COUNT,
+  searchAtlasStructures,
+} from './catalog';
 import CaseStudy from './CaseStudy';
 import Discoveries from './Discoveries';
 import Install from './Install';
-import { flushSync } from 'react-dom';
 import { registerStudyTool, type Context } from './webmcp';
+import './dashboard.css';
+
 const Atlas = lazy(() => import('./Atlas'));
 const systems = [
   ['all', 'Corpo integrado', Layers],
@@ -42,45 +56,108 @@ const systems = [
   ['digestive', 'Digestório', Layers],
   ['urinary', 'Urinário', Layers],
 ] as const;
+type Drawer =
+  | 'lesson'
+  | 'structures'
+  | 'maps'
+  | 'protocols'
+  | 'questions'
+  | 'lists'
+  | null;
+
 export default function App() {
+  const [lessonTab, setLessonTab] = useState<'anatomia' | 'funcao' | 'clinica'>(
+    'anatomia',
+  );
+  const [ankleInversion, setAnkleInversion] = useState(0);
   const [system, setSystem] = useState('all'),
-    [period, setPeriod] = useState('2'),
-    [selected, setSelected] = useState('heart'),
-    [name, setName] = useState('Coração'),
-    [tab, setTab] = useState('anatomia'),
-    [isolate, setIsolate] = useState(false),
-    [explode, setExplode] = useState(0),
+    [period, setPeriod] = useState('2');
+  const [selected, setSelected] = useState('heart'),
+    [name, setName] = useState('Coração');
+  const [isolate, setIsolate] = useState(false),
+    [beating, setBeating] = useState(true);
+  const [explode, setExplode] = useState(0),
     [cut, setCut] = useState(0),
-    [plane, setPlane] = useState('sagital'),
+    [transparency, setTransparency] = useState(0);
+  const [plane, setPlane] = useState('sagital'),
     [motion, setMotion] = useState(0),
-    [beating, setBeating] = useState(true),
-    [reset, setReset] = useState(0),
-    [view, setView] = useState('atlas'),
-    [caseId, setCaseId] = useState('2604'),
-    [pathology, setPathology] = useState(''),
+    [ankleMotion, setAnkleMotion] = useState(0);
+  const [layoutMode, setLayoutMode] = useState<'assembled' | 'layers' | 'grid'>(
+    'assembled',
+  );
+  const [region, setRegion] = useState<'all' | 'arm' | 'ankle'>('all');
+  const [reset, setReset] = useState(0),
+    [caseId, setCaseId] = useState('2604');
+  const [pathology, setPathology] = useState(''),
     [query, setQuery] = useState(''),
     [hidden, setHidden] = useState<string[]>([]);
-  const n = Number(period);
-  const lesson = lessonFor(selected),
-    level = n <= 2 ? 0 : n <= 4 ? 1 : n <= 8 ? 2 : 3;
-  const activeCase = cases.find((c) => c.id === caseId)!;
+  const [drawer, setDrawer] = useState<Drawer>(null),
+    [mobileNav, setMobileNav] = useState(false),
+    [saved, setSaved] = useState<string[]>([]);
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDrawer(null);
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+  const n = Number(period),
+    lesson = lessons.find((l) => selected.includes(l.id)),
+    activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
+  const searchResults = useMemo(
+    () => searchAtlasStructures(query, system, 30),
+    [query, system],
+  );
+
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('mapa-period');
-      if (saved && Number(saved) >= 1 && Number(saved) <= 12) setPeriod(saved);
+      const p = localStorage.getItem('mapa-period'),
+        s = localStorage.getItem('mapa-saved');
+      if (p && Number(p) >= 1 && Number(p) <= 12) setPeriod(p);
+      if (s && Array.isArray(JSON.parse(s))) setSaved(JSON.parse(s));
     } catch {}
   }, []);
   useEffect(() => {
     try {
       localStorage.setItem('mapa-period', period);
+      localStorage.setItem('mapa-saved', JSON.stringify(saved));
     } catch {}
-  }, [period]);
+  }, [period, saved]);
   const choose = (id: string, title: string) => {
     setSelected(id);
     setName(title);
     setPathology('');
   };
+  const focusStructure = (id: string, title: string) => {
+    choose(id, title);
+    setSystem('all');
+    setRegion('all');
+    setLayoutMode('assembled');
+    setCut(0);
+    setIsolate(true);
+    setHidden([]);
+    setDrawer(null);
+    setMobileNav(false);
+  };
+  const resetAtlas = () => {
+    setReset((v) => v + 1);
+    setIsolate(false);
+    setCut(0);
+    setExplode(0);
+    setTransparency(0);
+    setMotion(0);
+    setAnkleMotion(0);
+    setAnkleInversion(0);
+    setLayoutMode('assembled');
+    setRegion('all');
+    setPathology('');
+    setHidden([]);
+    setSystem('all');
+  };
   const locate = () => {
+    setRegion('all');
+    setLayoutMode('assembled');
+    setTransparency(0);
     setSystem(activeCase.system);
     setSelected(activeCase.region);
     setName(activeCase.region === 'cerebrum' ? 'Encéfalo' : 'Metacarpos');
@@ -95,7 +172,6 @@ export default function App() {
     setHidden([]);
     setCut(0);
     setExplode(0);
-    setView('atlas');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   useEffect(
@@ -104,36 +180,60 @@ export default function App() {
         (document as Document & { modelContext?: Context }).modelContext,
         (id, p) =>
           flushSync(() => {
-            const l = lessons.find((l) => l.id === id)!;
-            setSelected(id);
-            setName(l.name);
+            const item = lessons.find((l) => l.id === id)!;
+            focusStructure(id, item.name);
             setPeriod(String(p));
-            setSystem('all');
-            setIsolate(true);
-            setHidden([]);
-            setCut(0);
-            setExplode(0);
-            setPathology('');
-            setView('atlas');
           }),
         lessons.map((l) => l.id),
       ),
     [],
   );
+
   return (
-    <div className="app-shell">
-      <header className="masthead">
-        <a className="brand" href="/">
-          <span className="brand-mark">
+    <div className="clinical-dashboard" id="top">
+      <header className="clinical-topbar">
+        <button
+          className="mobile-menu"
+          aria-label="Abrir navegação"
+          onClick={() => setMobileNav(!mobileNav)}
+        >
+          <Menu />
+        </button>
+        <a className="clinical-brand" href="#top">
+          <span>
             <Activity />
           </span>
-          <span>
-            Mapa Clínico<small>DO CORPO À CLÍNICA</small>
-          </span>
+          <strong>
+            Mapa Clínico<small>Do corpo à clínica</small>
+          </strong>
         </a>
-        <div className="header-note">
-          ANATOMIA <span>×</span> RADIOLOGIA <span>×</span> CLÍNICA
+        <div className="search-wrap">
+          <label className="global-search">
+            <Search />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => query && setDrawer('structures')}
+              aria-label="Buscar no catálogo"
+              placeholder="Buscar nas 749 estruturas do atlas…"
+            />
+          </label>
+          {query && (
+            <button onClick={() => setDrawer('structures')}>
+              {searchResults.length} resultados
+            </button>
+          )}
         </div>
+        <button className="saved-button" onClick={() => setDrawer('lists')}>
+          <BookOpen /> Minhas listas <span>{saved.length || ''}</span>
+        </button>
+        <button
+          className="icon-button"
+          title="Itens salvos"
+          onClick={() => setDrawer('lists')}
+        >
+          <Bookmark />
+        </button>
         <div className="period">
           <span>Meu período</span>
           <Select value={period} onValueChange={(v) => setPeriod(v || '2')}>
@@ -149,443 +249,697 @@ export default function App() {
             </SelectContent>
           </Select>
         </div>
+        <div className="profile">
+          <span>LA</span>
+          <strong>
+            Lucas Albuquerque<small>@DrLucasPCD</small>
+          </strong>
+        </div>
       </header>
-      <div className="workspace">
-        <aside className="systems">
-          <div className="eyebrow">EXPLORAR SISTEMAS</div>
-          {systems.map(([id, label, Icon]) => (
+      <div className="clinical-body">
+        <aside className={'clinical-sidebar ' + (mobileNav ? 'open' : '')}>
+          <button
+            className="nav-item active"
+            onClick={() => {
+              resetAtlas();
+              setMobileNav(false);
+            }}
+          >
+            <Home /> Início
+          </button>
+          <p>EXPLORAR</p>
+          <button className="nav-item selected" onClick={resetAtlas}>
+            <Layers /> Corpo integrado
+          </button>
+          <button
+            className="nav-item"
+            onClick={() => {
+              setRegion('all');
+              setLayoutMode('assembled');
+            }}
+          >
+            <Layers /> Atlas 3D
+          </button>
+          <button
+            className="nav-item"
+            onClick={() =>
+              document
+                .querySelector('.case-column')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
+            <Focus /> Casos clínicos
+          </button>
+          <button
+            className="nav-item"
+            onClick={() =>
+              document
+                .querySelector('.radiograph')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
+            <ScanLine /> Imagens (TC, RM, RX)
+          </button>
+          <button
+            className="nav-item"
+            onClick={() =>
+              document
+                .querySelector('.publication-column')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
+            <Newspaper /> Publicações
+          </button>
+          <button className="nav-item" onClick={() => setDrawer('maps')}>
+            <Brain /> Mapas mentais
+          </button>
+          <button className="nav-item" onClick={() => setDrawer('protocols')}>
+            <Library /> Protocolos e diretrizes
+          </button>
+          <button className="nav-item" onClick={() => setDrawer('questions')}>
+            <ListChecks /> Simulados e questões
+          </button>
+          <div className="side-rule" />
+          <p>SISTEMAS</p>
+          {systems.slice(1).map(([id, label, Icon]) => (
             <button
               key={id}
-              className={'system ' + (system === id ? 'active' : '')}
+              className={
+                'nav-item system-link ' + (system === id ? 'selected' : '')
+              }
               onClick={() => {
                 setSystem(id);
                 setIsolate(false);
               }}
             >
-              <Icon size={18} />
-              <span>{label}</span>
-              <ChevronRight size={14} />
+              <Icon />
+              {label}
             </button>
           ))}
-          <div className="sidebar-divider" />
-          <div className="eyebrow">ESTRUTURAS EM FOCO</div>
-          <label className="structure-search">
-            <Search size={15} />
-            <input
-              placeholder="Buscar estrutura…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              aria-label="Buscar estrutura"
-            />
-          </label>
-          {lessons
-            .filter((l) =>
-              l.name
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .includes(
-                  query
-                    .toLowerCase()
-                    .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, ''),
-                ),
-            )
-            .map((l) => (
+          <button
+            className="connect-card"
+            onClick={() => setDrawer('structures')}
+          >
+            <Brain />
+            <span>
+              <strong>Conectar conhecimentos</strong>
+              <small>Do corpo à clínica</small>
+            </span>
+          </button>
+        </aside>
+        <main className="dashboard-stage">
+          <section className="atlas-column">
+            <div className="column-tabs">
+              <button className="active" onClick={() => setDrawer(null)}>
+                Atlas 3D
+              </button>
+              {(
+                [
+                  ['anatomia', 'Anatomia'],
+                  ['funcao', 'Função'],
+                  ['clinica', 'Clínica'],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    setLessonTab(id);
+                    setDrawer('lesson');
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="atlas-search-row">
+              <label>
+                <Search />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') setDrawer('structures');
+                  }}
+                  aria-label="Buscar estrutura no modelo"
+                  placeholder="Buscar estrutura + Enter…"
+                />
+              </label>
+              <button className="body-option active">♂</button>
               <button
-                className="structure-link"
-                key={l.id}
-                onClick={() => {
-                  choose(l.id, l.name);
-                  setSystem('all');
-                  setIsolate(true);
-                  setHidden([]);
-                  setView('atlas');
+                disabled
+                className="body-option"
+                title="Modelo feminino ainda indisponível"
+              >
+                ♀
+              </button>
+            </div>
+            <div className="atlas-system-select">
+              <span>Sistema</span>
+              <Select
+                value={system}
+                onValueChange={(v) => {
+                  setSystem(v || 'all');
+                  setIsolate(false);
                 }}
               >
-                {l.name}
-                <ArrowUpRight size={14} />
-              </button>
-            ))}
-          <div className="study-note">
-            <BookOpen size={20} />
-            <strong>Aprender por conexões</strong>
-            <p>Da forma à função. Da imagem ao raciocínio clínico.</p>
-            <span>
-              {n <= 2
-                ? 'Ciclo básico'
-                : n <= 4
-                  ? 'Integração morfofuncional'
-                  : n <= 8
-                    ? 'Ciclo clínico'
-                    : 'Internato'}
-            </span>
-          </div>
-        </aside>
-        <main className="main">
-          <div className="page-heading">
-            <div>
-              <div className="eyebrow teal">
-                ATLAS INTERATIVO / VISÃO INTEGRADA
-              </div>
-              <h1>O corpo conta uma história.</h1>
-              <p>Explore as estruturas. Conecte os conhecimentos.</p>
+                <SelectTrigger>
+                  <SelectValue>
+                    {systems.find((s) => s[0] === system)?.[1]}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {systems.map(([id, label]) => (
+                    <SelectItem value={id} key={id}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <span className="version">
-              ATLAS 01 <i />
-            </span>
-          </div>
-          <Tabs value={view} onValueChange={(v) => setView(String(v))}>
-            <TabsList className="main-tabs">
-              <TabsTrigger value="atlas">
-                <Layers size={16} />
-                Atlas 3D
-              </TabsTrigger>
-              <TabsTrigger value="casos">
-                <ScanLine size={16} />
-                Casos e imagens
-              </TabsTrigger>
-              <TabsTrigger value="novidades">
-                <BookOpen size={16} />
-                Novas publicações
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          {view === 'casos' && (
-            <>
-              <div className="case-picker">
-                {cases.map((c) => (
-                  <button
-                    key={c.id}
-                    className={caseId === c.id ? 'active' : ''}
-                    onClick={() => setCaseId(c.id)}
-                  >
-                    <span>{c.modality}</span>
-                    {c.title}
-                    <ArrowUpRight size={17} />
-                  </button>
-                ))}
-              </div>
-              <CaseStudy
-                key={caseId}
-                item={activeCase}
-                period={n}
-                onLocate={locate}
+            <Suspense
+              fallback={
+                <div className="atlas-loading">Preparando visualização 3D…</div>
+              }
+            >
+              <Atlas
+                system={system}
+                selected={selected}
+                isolate={isolate}
+                explode={explode}
+                cut={cut}
+                plane={plane}
+                beating={beating}
+                motion={motion}
+                pathology={pathology}
+                hidden={hidden}
+                reset={reset}
+                onSelect={choose}
+                transparency={transparency}
+                layoutMode={layoutMode}
+                region={region}
+                ankleMotion={ankleMotion}
+                ankleInversion={ankleInversion}
               />
-            </>
-          )}
-          {view === 'novidades' && <Discoveries />}
-          <div
-            className="study-grid"
-            style={{ display: view === 'atlas' ? undefined : 'none' }}
-          >
-            <section className="viewer">
-              <div className="viewer-header">
-                <span>
-                  <i className="live-dot" /> Anatomia humana 3D
-                </span>
-                <span>MODELO MASCULINO</span>
-              </div>
-              <Suspense
-                fallback={
-                  <div className="atlas-status">Preparando visualização…</div>
-                }
+            </Suspense>
+            <div className="atlas-float-tools">
+              <button
+                className={isolate ? 'active' : ''}
+                onClick={() => setIsolate(!isolate)}
               >
-                <Atlas
-                  system={system}
-                  selected={selected}
-                  isolate={isolate}
-                  explode={explode}
-                  cut={cut}
-                  plane={plane}
-                  beating={beating}
-                  motion={motion}
-                  pathology={pathology}
-                  hidden={hidden}
-                  reset={reset}
-                  onSelect={choose}
-                />
-              </Suspense>
-              <div className="orientation">
-                S<span>ANTERIOR</span>I
-              </div>
-              <div className="viewer-tools">
-                <button
-                  onClick={() => {
-                    setReset((x) => x + 1);
-                    setIsolate(false);
-                    setCut(0);
-                    setExplode(0);
-                    setMotion(0);
-                    setPathology('');
-                    setHidden([]);
-                  }}
-                  title="Restaurar visão"
-                  aria-label="Restaurar visão"
-                >
-                  <RotateCcw size={19} />
-                </button>
-                <button
-                  className={isolate ? 'selected' : ''}
-                  onClick={() => setIsolate(!isolate)}
-                  title="Isolar estrutura"
-                  aria-label="Isolar estrutura"
-                >
-                  <Focus size={19} />
-                </button>
-                <button
-                  onClick={() => setBeating(!beating)}
-                  className={beating ? 'selected' : ''}
-                  title="Animar coração"
-                  aria-label="Animar coração"
-                >
-                  <Heart size={19} />
-                </button>
-              </div>
-              <div className="viewer-caption">
-                <Move3D size={16} /> Arraste para girar · Role para ampliar ·
-                Toque para selecionar
-              </div>
-              <div className="viewer-controls">
-                <div>
-                  <label>
-                    Dissecação por afastamento <span>{explode}%</span>
-                  </label>
+                <Focus />
+                <span>Isolar</span>
+              </button>
+              <button
+                onClick={() => {
+                  setHidden([...hidden, selected]);
+                  setIsolate(false);
+                }}
+              >
+                <Activity />
+                <span>Ocultar</span>
+              </button>
+              <button
+                className={beating ? 'active' : ''}
+                onClick={() => setBeating(!beating)}
+              >
+                <Heart />
+                <span>Movimento</span>
+              </button>
+              <button onClick={resetAtlas}>
+                <RotateCcw />
+                <span>Resetar</span>
+              </button>
+            </div>
+            <div className="atlas-help">
+              <Move3D /> Arraste para girar
+              <br />
+              <span>Role para ampliar · Clique para selecionar</span>
+            </div>
+            <details className="dissection-panel">
+              <summary>
+                <SlidersHorizontal /> Dissecação e movimentos
+              </summary>
+              <div>
+                <label>
+                  Região
+                  <Select
+                    value={region}
+                    onValueChange={(v) => {
+                      setRegion((v || 'all') as typeof region);
+                      setIsolate(false);
+                      setSystem('all');
+                      setHidden([]);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue>
+                        {
+                          {
+                            all: 'Corpo inteiro',
+                            arm: 'Braço',
+                            ankle: 'Tornozelo',
+                          }[region]
+                        }
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Corpo inteiro</SelectItem>
+                      <SelectItem value="arm">Braço</SelectItem>
+                      <SelectItem value="ankle">Tornozelo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </label>
+                <label>
+                  Organização
+                  <div className="layout-buttons">
+                    <button
+                      className={layoutMode === 'assembled' ? 'active' : ''}
+                      onClick={() => setLayoutMode('assembled')}
+                    >
+                      Corpo
+                    </button>
+                    <button
+                      className={layoutMode === 'layers' ? 'active' : ''}
+                      onClick={() => setLayoutMode('layers')}
+                    >
+                      Camadas
+                    </button>
+                    <button
+                      className={layoutMode === 'grid' ? 'active' : ''}
+                      onClick={() => setLayoutMode('grid')}
+                    >
+                      <Grid3X3 />
+                      Grade
+                    </button>
+                  </div>
+                </label>
+                <label>
+                  Transparência {transparency}%
                   <Slider
-                    aria-label="Afastamento das estruturas"
+                    value={[transparency]}
+                    onValueChange={(v) =>
+                      setTransparency(Array.isArray(v) ? v[0] : v)
+                    }
+                  />
+                </label>
+                {region === 'ankle' && (
+                  <label>
+                    Movimento do tornozelo {ankleMotion}°
+                    <Slider
+                      min={-35}
+                      max={45}
+                      value={[ankleMotion]}
+                      onValueChange={(v) =>
+                        setAnkleMotion(Array.isArray(v) ? v[0] : v)
+                      }
+                    />
+                  </label>
+                )}
+                {region === 'ankle' && (
+                  <label>
+                    Inversão / eversão {ankleInversion}°
+                    <Slider
+                      min={-20}
+                      max={20}
+                      value={[ankleInversion]}
+                      onValueChange={(v) =>
+                        setAnkleInversion(Array.isArray(v) ? v[0] : v)
+                      }
+                    />
+                  </label>
+                )}
+                {region === 'arm' && (
+                  <label>
+                    Flexão do cotovelo esquerdo {motion}°
+                    <Slider
+                      min={0}
+                      max={120}
+                      value={[motion]}
+                      onValueChange={(v) =>
+                        setMotion(Array.isArray(v) ? v[0] : v)
+                      }
+                    />
+                  </label>
+                )}
+                <label>
+                  Afastamento {explode}%
+                  <Slider
                     value={[explode]}
                     onValueChange={(v) =>
                       setExplode(Array.isArray(v) ? v[0] : v)
                     }
                   />
-                </div>
-                <div>
-                  <label>
-                    Corte anatômico <span>{cut}%</span>
-                  </label>
+                </label>
+                <label>
+                  Plano de corte
+                  <select
+                    aria-label="Plano de corte"
+                    value={plane}
+                    onChange={(e) => setPlane(e.target.value)}
+                  >
+                    <option value="sagital">Sagital</option>
+                    <option value="coronal">Coronal</option>
+                    <option value="axial">Axial</option>
+                  </select>
+                </label>
+                <label>
+                  Corte anatômico {cut}%
                   <Slider
-                    aria-label="Profundidade do corte"
                     value={[cut]}
                     onValueChange={(v) => setCut(Array.isArray(v) ? v[0] : v)}
                   />
-                </div>
-                <Select
-                  value={plane}
-                  onValueChange={(v) => setPlane(v || 'sagital')}
-                >
-                  <SelectTrigger aria-label="Plano anatômico">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['sagital', 'coronal', 'axial'].map((x) => (
-                      <SelectItem value={x} key={x}>
-                        {x}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                </label>
+                <small>
+                  Movimentos geométricos aproximados; não simulam tensão ou
+                  deformação dos tecidos.
+                </small>
               </div>
-            </section>
-            <section className="inspector">
-              <div className="eyebrow">ESTRUTURA SELECIONADA</div>
-              <div className="structure-title">
-                <h2>{name}</h2>
-                <Heart size={22} />
-              </div>
-              <p className="latin">
-                {lesson?.latin || 'Nomenclatura original do atlas'}
-              </p>
-              <Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
-                <TabsList className="detail-tabs">
-                  <TabsTrigger value="anatomia">Anatomia</TabsTrigger>
-                  <TabsTrigger value="funcao">Função</TabsTrigger>
-                  <TabsTrigger value="clinica">Clínica</TabsTrigger>
-                </TabsList>
-              </Tabs>
-              <div className="level-badge">
-                NÍVEL{' '}
-                {n <= 2
-                  ? 'FUNDAMENTOS'
-                  : n <= 4
-                    ? 'INTEGRAÇÃO'
-                    : n <= 8
-                      ? 'RACIOCÍNIO CLÍNICO'
-                      : 'PRÁTICA SUPERVISIONADA'}
-              </div>
-              {lesson ? (
-                <>
-                  <h3>
-                    {tab === 'anatomia'
-                      ? 'A estrutura por trás da função'
-                      : tab === 'funcao'
-                        ? 'Entenda a função'
-                        : 'Conecte com o exame clínico'}
-                  </h3>
-                  <p>{lesson[tab as 'anatomia' | 'funcao' | 'clinica']}</p>
-                  <p className="level-content">{lesson.levels[level]}</p>
-                  {lesson.origin && (
-                    <dl className="muscle-facts">
-                      <dt>Origem</dt>
-                      <dd>{lesson.origin}</dd>
-                      <dt>Inserção</dt>
-                      <dd>{lesson.insertion}</dd>
-                      <dt>Ação</dt>
-                      <dd>{lesson.action}</dd>
-                    </dl>
-                  )}
-                  <div className="connection">
-                    <span>
-                      <ScanLine size={17} /> PONTE COM A RADIOLOGIA
-                    </span>
-                    <p>{lesson.bridge}</p>
-                  </div>
-                  {lesson.audio && (
-                    <div className="audio-card">
-                      <Volume2 size={18} />
-                      <span>
-                        Ouvir introdução
-                        <small>Voz Faber · Português brasileiro</small>
-                      </span>
-                      <audio
-                        key={lesson.audio}
-                        controls
-                        preload="none"
-                        src={'/audio/' + lesson.audio + '.wav'}
-                      />
-                    </div>
-                  )}
-                  <a
-                    className="source-link"
-                    href={lesson.source}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Referência de estudo <ArrowUpRight size={13} />
-                  </a>
-                </>
-              ) : (
-                <>
-                  <h3>Estrutura do atlas</h3>
-                  <p>
-                    Nome original: {name}. Selecione um dos módulos de estudo
-                    para uma explicação integrada. Esta estrutura ainda não
-                    possui uma ficha didática específica.
-                  </p>
-                </>
-              )}
-              <div className="selection-actions">
-                <button
-                  className="secondary-button"
-                  onClick={() => setIsolate(!isolate)}
-                >
-                  {isolate ? 'Mostrar contexto' : 'Isolar estrutura'}
-                </button>
-                <button
-                  className="secondary-button"
-                  onClick={() => {
-                    setHidden([...hidden, selected]);
-                    setIsolate(false);
-                  }}
-                >
-                  Ocultar estrutura
-                </button>
-              </div>
-              {pathology && (
-                <p className="pathology-note">
-                  Destaque anatômico ilustrativo: {activeCase.regionLabel}
-                </p>
-              )}
-              <button className="primary" onClick={() => setView('casos')}>
-                Estudar casos e imagens <ArrowUpRight size={17} />
+            </details>
+            <div className="model-switch">
+              <button className="active">Masculino</button>
+              <button disabled title="Modelo ainda indisponível">
+                Feminino
               </button>
-            </section>
-          </div>
-          {view === 'atlas' && (
-            <>
-              <section className="motion-panel">
-                <div>
-                  <span className="eyebrow teal">LABORATÓRIO DE MOVIMENTO</span>
-                  <h3>Flexão do cotovelo esquerdo</h3>
-                  <p>
-                    Modelo cinemático simplificado dos ossos do antebraço e da
-                    mão. Não simula ligamentos nem deformação muscular.
-                  </p>
-                </div>
-                <div>
-                  <button
-                    className="secondary-button"
-                    onClick={() => {
-                      setSystem('skeletal');
-                      setIsolate(false);
-                      setHidden([]);
-                      setMotion(motion === 0 ? 90 : 0);
-                    }}
-                  >
-                    {motion === 0 ? 'Demonstrar flexão' : 'Voltar à extensão'}
-                  </button>
-                  <label>
-                    Ângulo: {motion}°
-                    <Slider
-                      aria-label="Flexão do cotovelo esquerdo"
-                      min={0}
-                      max={120}
-                      value={[motion]}
-                      onValueChange={(v) => {
-                        setSystem('skeletal');
-                        setIsolate(false);
-                        setMotion(Array.isArray(v) ? v[0] : v);
-                      }}
-                    />
-                  </label>
-                </div>
-              </section>
-              <div className="lower-heading">
-                <div>
-                  <span className="eyebrow teal">DO ATLAS À PRÁTICA</span>
-                  <h2>Uma estrutura. Diferentes perspectivas.</h2>
-                </div>
-                <Microscope size={24} />
-              </div>
-              <div className="perspectives">
-                {[
-                  [
-                    '01',
-                    'Anatomia em camadas',
-                    'Revele estruturas profundas com os controles de dissecação.',
-                  ],
-                  [
-                    '02',
-                    'Imagem e orientação',
-                    'Relacione os planos sagital, coronal e axial com os exames.',
-                  ],
-                  [
-                    '03',
-                    'Raciocínio progressivo',
-                    'A profundidade da explicação acompanha o seu período.',
-                  ],
-                ].map(([k, t, d]) => (
-                  <article key={k}>
-                    <span>{k}</span>
-                    <h3>{t}</h3>
-                    <p>{d}</p>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
+              <button disabled title="Modelo ainda indisponível">
+                Pediátrico
+              </button>
+            </div>
+          </section>
+          <section className="case-column">
+            <div className="case-switcher">
+              <Select
+                value={caseId}
+                onValueChange={(v) => setCaseId(v || cases[0].id)}
+              >
+                <SelectTrigger>
+                  <SelectValue>{activeCase.title}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {cases.map((c) => (
+                    <SelectItem value={c.id} key={c.id}>
+                      {c.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <CaseStudy
+              key={caseId}
+              item={activeCase}
+              period={n}
+              onLocate={locate}
+              caseIndex={cases.indexOf(activeCase)}
+              caseCount={cases.length}
+              onPreviousCase={() =>
+                setCaseId(
+                  cases[
+                    (cases.indexOf(activeCase) + cases.length - 1) %
+                      cases.length
+                  ].id,
+                )
+              }
+              onNextCase={() =>
+                setCaseId(
+                  cases[(cases.indexOf(activeCase) + 1) % cases.length].id,
+                )
+              }
+            />
+          </section>
+          <section className="publication-column">
+            <Discoveries />
+          </section>
         </main>
       </div>
+      <section className="clinical-bottom">
+        <div>
+          <BookOpen />
+          <span>
+            <strong>Uma estrutura. Muitos caminhos.</strong>
+            <small>Integre anatomia, imagem, casos e evidências.</small>
+          </span>
+        </div>
+        <div>
+          <Layers />
+          <span>
+            <strong>{ATLAS_STRUCTURE_COUNT.toLocaleString('pt-BR')}</strong>
+            <small>Estruturas catalogadas</small>
+          </span>
+        </div>
+        <div>
+          <ScanLine />
+          <span>
+            <strong>{ATLAS_MESH_COUNT.toLocaleString('pt-BR')}</strong>
+            <small>Objetos anatômicos 3D</small>
+          </span>
+        </div>
+        <div>
+          <Newspaper />
+          <span>
+            <strong>PubMed</strong>
+            <small>Publicações atualizadas</small>
+          </span>
+        </div>
+        <b>
+          Conhecimento aplicado
+          <br />
+          para um cuidado melhor.
+        </b>
+      </section>
+      {drawer && (
+        <div className="drawer-backdrop" onClick={() => setDrawer(null)}>
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Painel de estudo"
+            className="feature-drawer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              aria-label="Fechar painel"
+              className="drawer-close"
+              onClick={() => setDrawer(null)}
+            >
+              <X />
+            </button>
+            {drawer === 'lesson' ? (
+              <>
+                <h2>{name}</h2>
+                {lesson ? (
+                  <>
+                    <small>
+                      {lesson.latin} · {period}º período
+                    </small>
+                    <div className="lesson-content">
+                      <p>{lesson[lessonTab]}</p>
+                      <p>
+                        {
+                          lesson.levels[
+                            n <= 2 ? 0 : n <= 4 ? 1 : n <= 8 ? 2 : 3
+                          ]
+                        }
+                      </p>
+                      {lesson.origin && (
+                        <dl>
+                          <dt>Origem</dt>
+                          <dd>{lesson.origin}</dd>
+                          <dt>Inserção</dt>
+                          <dd>{lesson.insertion}</dd>
+                          <dt>Ação</dt>
+                          <dd>{lesson.action}</dd>
+                        </dl>
+                      )}
+                      <h3>Ponte com a radiologia</h3>
+                      <p>{lesson.bridge}</p>
+                      {lesson.audio && (
+                        <>
+                          <small>Ouvir introdução · Voz Faber</small>
+                          <audio
+                            controls
+                            src={'/audio/' + lesson.audio + '.wav'}
+                          />
+                        </>
+                      )}
+                      <a href={lesson.source} target="_blank" rel="noreferrer">
+                        Referência de estudo ↗
+                      </a>
+                    </div>
+                  </>
+                ) : (
+                  <p>
+                    Estrutura disponível no modelo 3D. Ainda não há uma ficha
+                    didática revisada para esta estrutura.
+                  </p>
+                )}
+              </>
+            ) : (
+              <DrawerContent
+                drawer={drawer}
+                results={searchResults}
+                saved={saved}
+                setSaved={setSaved}
+                focus={focusStructure}
+                currentName={name}
+                currentLesson={lesson}
+                selectCase={(id) => {
+                  setCaseId(id);
+                  setDrawer(null);
+                  setTimeout(
+                    () =>
+                      document
+                        .querySelector('.case-column')
+                        ?.scrollIntoView({ behavior: 'smooth' }),
+                    10,
+                  );
+                }}
+              />
+            )}
+          </section>
+        </div>
+      )}
       <Install />
-      <footer>
-        Mapa Clínico · Ensino não comercial · Não é ferramenta de diagnóstico{' '}
-        <a
-          href="https://github.com/vixotic/Vanatome/blob/main/ASSET-LICENSE.md"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Atlas: Vanatome / Z-Anatomy · CC BY-SA 4.0
-        </a>
-      </footer>
     </div>
+  );
+}
+
+function DrawerContent({
+  drawer,
+  results,
+  saved,
+  setSaved,
+  focus,
+  selectCase,
+  currentName,
+  currentLesson,
+}: {
+  currentName: string;
+  currentLesson?: (typeof lessons)[number];
+  drawer: Drawer;
+  results: ReturnType<typeof searchAtlasStructures>;
+  saved: string[];
+  setSaved: (v: string[]) => void;
+  focus: (id: string, name: string) => void;
+  selectCase: (id: string) => void;
+}) {
+  if (drawer === 'questions')
+    return (
+      <>
+        <h2>Simulados e questões</h2>
+        <p>Escolha um caso e responda antes de revelar os achados.</p>
+        <div className="drawer-grid">
+          {cases.map((item) => (
+            <button key={item.id} onClick={() => selectCase(item.id)}>
+              <CircleHelp />
+              {item.title}
+              <ChevronRight />
+            </button>
+          ))}
+        </div>
+      </>
+    );
+  if (drawer === 'protocols')
+    return (
+      <>
+        <h2>Protocolos e referências</h2>
+        <p>Fontes educacionais revisadas por estrutura.</p>
+        <div className="drawer-grid">
+          {lessons.map((item) => (
+            <a
+              key={item.id}
+              href={item.source}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {item.name}
+              <ArrowUpRight />
+            </a>
+          ))}
+        </div>
+      </>
+    );
+  if (drawer === 'maps')
+    return (
+      <>
+        <h2>Mapa de conexões</h2>
+        <p>Conecte anatomia, função, clínica e radiologia.</p>
+        <div className="connection-map">
+          <strong>{currentName}</strong>
+          {currentLesson && (
+            <>
+              {[
+                ['Anatomia', currentLesson.anatomia],
+                ['Função', currentLesson.funcao],
+                ['Clínica', currentLesson.clinica],
+                ['Radiologia', currentLesson.bridge],
+              ].map(([title, text]) => (
+                <article key={title}>
+                  <b>{title}</b>
+                  <p>{text}</p>
+                </article>
+              ))}
+            </>
+          )}
+        </div>
+        <div className="drawer-grid">
+          {lessons.map((item) => (
+            <button key={item.id} onClick={() => focus(item.id, item.name)}>
+              <Brain />
+              {item.name}
+              <ChevronRight />
+            </button>
+          ))}
+        </div>
+      </>
+    );
+  if (drawer === 'lists')
+    return (
+      <>
+        <h2>Minhas listas</h2>
+        <p>Estruturas salvas neste navegador.</p>
+        <div className="drawer-grid">
+          {lessons.map((item) => {
+            const picked = saved.includes(item.id);
+            return (
+              <button
+                className={picked ? 'saved' : ''}
+                key={item.id}
+                onClick={() =>
+                  setSaved(
+                    picked
+                      ? saved.filter((id) => id !== item.id)
+                      : [...saved, item.id],
+                  )
+                }
+              >
+                <Bookmark />
+                {item.name}
+                <span>{picked ? 'Salvo' : 'Salvar'}</span>
+              </button>
+            );
+          })}
+        </div>
+      </>
+    );
+  return (
+    <>
+      <h2>Estruturas do atlas</h2>
+      <p>
+        {results.length
+          ? 'Selecione uma estrutura no catálogo.'
+          : 'Nenhum resultado. Tente outro termo.'}{' '}
+        O acervo atual contém apenas o modelo masculino; as variantes feminina e
+        pediátrica ainda estão indisponíveis.
+      </p>
+      <div className="drawer-grid">
+        {results.map((item) => (
+          <button key={item.id} onClick={() => focus(item.id, item.name)}>
+            {item.name}
+            <small>
+              {item.system} · {item.objectCount} objeto(s)
+            </small>
+            <ChevronRight />
+          </button>
+        ))}
+      </div>
+    </>
   );
 }

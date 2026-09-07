@@ -1,0 +1,1024 @@
+.clinical-dashboard {
+  --ink: #102b48;
+  --teal: #007e88;
+  color: var(--ink);
+  background: #f3f8fa;
+  min-height: 100vh;
+  font:
+    14px/1.5 Inter,
+    Arial,
+    sans-serif;
+}
+.clinical-dashboard button {
+  cursor: pointer;
+}
+.clinical-dashboard button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.clinical-topbar {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #dce8ee;
+}
+.clinical-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 225px;
+  color: #102b48;
+  text-decoration: none;
+}
+.clinical-brand > span {
+  border: 2px solid #07858a;
+  border-radius: 50%;
+  padding: 10px;
+  color: #07858a;
+}
+.clinical-brand strong {
+  font-size: 25px;
+  line-height: 1.2;
+}
+.clinical-brand small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #648298;
+  margin-top: 4px;
+}
+.search-wrap {
+  flex: 1;
+  min-width: 160px;
+  position: relative;
+}
+.search-wrap > button {
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  color: #087e83;
+  background: #e7f7f7;
+  border: 0;
+  border-radius: 5px;
+  padding: 4px;
+}
+.global-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #d8e6ec;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdfe;
+}
+.global-search svg {
+  width: 18px;
+}
+.global-search input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+}
+.saved-button,
+.icon-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d8e6ec;
+  border-radius: 7px;
+  padding: 10px;
+  background: #f7fafc;
+  white-space: nowrap;
+}
+.saved-button svg,
+.icon-button svg {
+  width: 17px;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.profile > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0b233e;
+  color: white;
+}
+.profile small {
+  display: block;
+  color: #67839a;
+  font-weight: 400;
+}
+.clinical-topbar .period {
+  gap: 5px;
+  min-width: 90px;
+}
+.clinical-topbar .period > span {
+  font-size: 10px;
+}
+.clinical-body {
+  display: grid;
+  grid-template-columns: 218px minmax(0, 1fr);
+}
+.clinical-sidebar {
+  background: white;
+  padding: 18px 13px;
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-right: 1px solid #e3edf1;
+}
+.clinical-sidebar > p {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #637f97;
+  margin: 18px 10px 7px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 12px;
+  text-align: left;
+  color: #345371;
+  font-size: 12px;
+}
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.nav-item:hover,
+.nav-item.selected {
+  background: #e0f6f7;
+  color: #007b84;
+}
+.nav-item.active {
+  background: #cfedef;
+  color: #005964;
+  font-weight: 700;
+}
+.side-rule {
+  height: 1px;
+  background: #e6eff3;
+  margin: 15px 0 0;
+}
+.connect-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #e7f5f8;
+  color: #086775;
+  border: 0;
+  border-radius: 8px;
+  padding: 17px 12px;
+  margin-top: auto;
+  text-align: left;
+}
+.connect-card strong {
+  font-size: 11px;
+}
+.connect-card small {
+  display: block;
+  font-size: 10px;
+  color: #53748e;
+}
+.dashboard-stage {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.45fr) minmax(300px, 1fr) minmax(
+      270px,
+      0.9fr
+    );
+  gap: 12px;
+  padding: 12px;
+  min-width: 0;
+  align-items: start;
+}
+.atlas-column {
+  position: relative;
+  background: radial-gradient(ellipse at 50% 45%, #184354, #081b27 72%);
+  border-radius: 10px;
+  min-height: 780px;
+  height: calc(100vh - 170px);
+  overflow: hidden;
+  color: #d7edf4;
+}
+.column-tabs {
+  display: flex;
+  height: 47px;
+  gap: 3px;
+  align-items: center;
+  background: #eaf2f7;
+  padding: 5px 7px;
+  border-radius: 9px 9px 0 0;
+}
+.column-tabs button {
+  flex: 1;
+  padding: 9px 8px;
+  border: 0;
+  background: transparent;
+  color: #335874;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.column-tabs .active {
+  background: white;
+  color: #007983;
+  font-weight: 700;
+}
+.atlas-column > .column-tabs {
+  position: relative;
+  z-index: 4;
+  background: #0b1f2c;
+}
+.atlas-column > .column-tabs button {
+  color: #cce2e9;
+}
+.atlas-column > .column-tabs .active {
+  background: linear-gradient(#098b96, #006573);
+  color: white;
+}
+.atlas-search-row {
+  position: absolute;
+  top: 61px;
+  left: 14px;
+  right: 14px;
+  z-index: 4;
+  display: flex;
+  gap: 8px;
+}
+.atlas-search-row label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid #406071;
+  border-radius: 10px;
+  background: #233d4a;
+  padding: 9px;
+  flex: 1;
+  min-width: 0;
+}
+.atlas-search-row svg {
+  width: 15px;
+}
+.atlas-search-row input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  width: 100%;
+  font-size: 11px;
+  color: white;
+}
+.body-option {
+  width: 34px;
+  border-radius: 7px;
+  border: 1px solid #45616d;
+  background: #13313d;
+  color: #a7c6d0;
+}
+.body-option.active {
+  border-color: #05b3bd;
+  color: white;
+}
+.atlas-system-select {
+  position: absolute;
+  top: 115px;
+  left: 14px;
+  z-index: 4;
+  padding: 9px;
+  background: #0c2531d9;
+  border: 1px solid #284b5b;
+  border-radius: 10px;
+  font-size: 11px;
+  width: 145px;
+}
+.atlas-system-select button {
+  width: 100%;
+  background: #152f3d;
+  color: #e5f6fa;
+  font-size: 11px;
+}
+.atlas-column .atlas-canvas {
+  position: absolute;
+  inset: 100px 0 65px;
+  width: auto;
+  height: auto;
+}
+.atlas-column .atlas-status {
+  left: 15%;
+  right: 15%;
+  top: 43%;
+  text-align: center;
+  font-size: 13px;
+}
+.atlas-float-tools {
+  position: absolute;
+  top: 45%;
+  left: 14px;
+  z-index: 4;
+  background: #102b38c9;
+  border: 1px solid #2d4c5c;
+  border-radius: 12px;
+  padding: 5px;
+}
+.atlas-float-tools button {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  color: #cbe5ed;
+  padding: 10px 3px;
+  width: 51px;
+  font-size: 9px;
+}
+.atlas-float-tools svg {
+  width: 18px;
+}
+.atlas-float-tools .active {
+  color: #54d1cf;
+}
+.atlas-help {
+  position: absolute;
+  bottom: 112px;
+  left: 15px;
+  pointer-events: none;
+  font-size: 10px;
+  color: #99bdca;
+}
+.atlas-help svg {
+  width: 15px;
+  display: inline;
+  margin-right: 5px;
+}
+.atlas-help span {
+  font-size: 9px;
+}
+.model-switch {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #243f4e;
+  background: #0f2834;
+  border-radius: 8px;
+  padding: 3px;
+  z-index: 4;
+}
+.model-switch button {
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a9c4ce;
+  padding: 5px 12px;
+  font-size: 11px;
+}
+.model-switch .active {
+  background: #007782;
+  color: white;
+}
+.dissection-panel {
+  position: absolute;
+  bottom: 52px;
+  left: 14px;
+  right: 14px;
+  z-index: 5;
+  border: 1px solid #305061;
+  background: #102e3cf5;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 11px;
+}
+.dissection-panel summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dissection-panel summary svg {
+  width: 15px;
+}
+.dissection-panel > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 14px;
+  max-height: 300px;
+  overflow: auto;
+}
+.dissection-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dissection-panel button {
+  background: #1e4352;
+  color: #e8faff;
+  font-size: 11px;
+}
+.layout-buttons {
+  display: flex;
+  gap: 3px;
+}
+.layout-buttons button {
+  border: 1px solid #3c6372;
+  border-radius: 4px;
+  padding: 4px;
+}
+.layout-buttons .active {
+  background: #087f88;
+}
+.layout-buttons svg {
+  width: 12px;
+  display: inline;
+}
+.case-column,
+.publication-column {
+  background: #fff;
+  border: 1px solid #e7eff3;
+  border-radius: 9px;
+  min-width: 0;
+  max-height: calc(100vh - 170px);
+  min-height: 780px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.clinical-dashboard .case-detail,
+.clinical-dashboard .discoveries {
+  padding: 14px;
+  margin: 0;
+  border: 0;
+  background: white;
+}
+.clinical-dashboard .panel-tabs {
+  margin: -14px -14px 14px;
+  padding: 3px;
+  background: #eaf2f7;
+  position: sticky;
+  top: -14px;
+  z-index: 7;
+}
+.clinical-dashboard .panel-tabs button {
+  flex: 1;
+  padding: 10px 5px;
+  font-size: 11px;
+}
+.clinical-dashboard .case-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.clinical-dashboard .case-top {
+  gap: 5px;
+  font-size: 10px;
+}
+.clinical-dashboard .case-top a {
+  font-size: 10px;
+}
+.clinical-dashboard .level-badge {
+  font-size: 10px;
+  padding: 5px;
+}
+.clinical-dashboard .case-detail h2 {
+  font-size: 19px;
+  line-height: 1.25;
+  margin: 13px 0;
+}
+.clinical-dashboard .case-detail p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.clinical-dashboard .radiograph {
+  height: 285px;
+  min-height: 0;
+  border-radius: 7px;
+}
+.clinical-dashboard .radiograph img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.clinical-dashboard .radiograph > span {
+  font-size: 10px;
+  padding: 6px;
+}
+.clinical-dashboard .case-pagination {
+  padding-top: 14px;
+  gap: 3px;
+}
+.clinical-dashboard .image-sliders {
+  gap: 8px;
+  margin: 10px 0;
+}
+.clinical-dashboard .image-sliders label {
+  font-size: 10px;
+}
+.clinical-dashboard .image-options {
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 7px;
+}
+.clinical-dashboard .image-options button {
+  font-size: 10px;
+  padding: 5px;
+}
+.clinical-dashboard .attribution {
+  font-size: 9px !important;
+  line-height: 1.4 !important;
+}
+.clinical-dashboard .image-note {
+  font-size: 10px !important;
+}
+.clinical-dashboard .quiz {
+  gap: 7px;
+}
+.clinical-dashboard .quiz button {
+  font-size: 12px;
+  padding: 11px;
+}
+.clinical-dashboard .case-reasoning h3 {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.clinical-dashboard .primary-button {
+  padding: 12px;
+  font-size: 12px;
+  justify-content: center;
+}
+.clinical-dashboard .discoveries .lower-heading {
+  display: block;
+}
+.clinical-dashboard .discoveries h2 {
+  font-size: 14px;
+  margin: 4px 0;
+}
+.clinical-dashboard .discoveries .eyebrow {
+  display: none;
+}
+.clinical-dashboard .discoveries .secondary-button {
+  font-size: 10px;
+  padding: 5px;
+  margin: 8px 0;
+}
+.clinical-dashboard .discoveries > p {
+  font-size: 10px;
+  color: #628091;
+}
+.clinical-dashboard .discovery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.clinical-dashboard .discovery-list > a {
+  padding: 12px;
+  min-height: 0;
+  border: 1px solid #d9e7ed;
+  border-radius: 7px;
+  background: white;
+}
+.clinical-dashboard .discovery-list h3 {
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 5px 0;
+}
+.clinical-dashboard .discovery-list p {
+  font-size: 10px;
+  margin: 0;
+}
+.clinical-dashboard .discovery-list small {
+  font-size: 9px;
+  color: #00878c;
+}
+.clinical-dashboard .discovery-list span {
+  font-size: 9px;
+}
+.clinical-dashboard .publication-search {
+  margin: 10px 0;
+}
+.publication-search input {
+  font-size: 11px;
+}
+.clinical-bottom {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  margin: 0 12px 12px 230px;
+  padding: 12px 18px;
+  border: 1px solid #dce8ee;
+  background: #fff;
+  border-radius: 9px;
+}
+.clinical-bottom > div {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+.clinical-bottom svg {
+  color: #4b6b82;
+  width: 27px;
+  flex-shrink: 0;
+}
+.clinical-bottom strong {
+  font-size: 12px;
+}
+.clinical-bottom small {
+  display: block;
+  color: #6a879d;
+  font-size: 10px;
+}
+.clinical-bottom b {
+  font-size: 11px;
+  padding: 10px;
+  background: #c8edef;
+  border-radius: 8px;
+  color: #006773;
+}
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #071d2c66;
+  backdrop-filter: blur(3px);
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+}
+.feature-drawer {
+  background: white;
+  width: min(540px, 100%);
+  height: 100%;
+  overflow: auto;
+  padding: 35px 25px;
+  box-shadow: -10px 0 50px #102a4433;
+}
+.feature-drawer h2 {
+  font-size: 24px;
+  margin: 15px 0;
+}
+.feature-drawer p {
+  color: #617d8e;
+  font-size: 13px;
+}
+.drawer-close {
+  float: right;
+  background: #edf5f7;
+  border: 0;
+  border-radius: 50%;
+  padding: 8px;
+}
+.drawer-grid {
+  display: grid;
+  gap: 8px;
+  margin-top: 25px;
+}
+.drawer-grid > button,
+.drawer-grid > a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #dfebee;
+  background: #f9fcfd;
+  border-radius: 8px;
+  padding: 13px;
+  text-align: left;
+  font-size: 13px;
+  color: #20465d;
+}
+.drawer-grid svg {
+  width: 17px;
+  flex-shrink: 0;
+}
+.drawer-grid small {
+  font-size: 9px;
+  margin-left: auto;
+}
+.drawer-grid .saved {
+  background: #dff4f4;
+  color: #007f86;
+}
+.mobile-menu {
+  display: none;
+}
+.lesson-card {
+  position: absolute;
+  z-index: 6;
+  top: 110px;
+  left: 15px;
+  right: 15px;
+  bottom: 102px;
+  background: #f8fcfe;
+  color: #193c50;
+  border-radius: 10px;
+  padding: 22px;
+  overflow: auto;
+}
+.lesson-card h2 {
+  font-size: 23px;
+  margin: 8px 0;
+}
+.lesson-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 14px 0;
+}
+.lesson-card small {
+  color: #087f88;
+}
+.lesson-card audio {
+  width: 100%;
+  margin: 14px 0;
+}
+.lesson-card button {
+  background: #007e88;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  padding: 9px;
+  margin: 4px;
+}
+.lesson-card dl {
+  font-size: 12px;
+}
+.lesson-card dt {
+  font-weight: bold;
+  color: #007e88;
+  margin-top: 10px;
+}
+.lesson-card dd {
+  margin: 5px 0;
+}
+.case-switcher {
+  padding: 8px 14px;
+}
+.case-switcher button {
+  width: 100%;
+  font-size: 11px;
+}
+.clinical-dashboard .radiograph.is-fullscreen {
+  position: fixed;
+  inset: 20px;
+  width: auto;
+  height: auto;
+  z-index: 60;
+  background: black;
+}
+.clinical-dashboard .radiograph > button.expand-image {
+  top: auto;
+}
+.clinical-dashboard .radiograph > button:not(.expand-image) {
+  bottom: auto;
+  top: 45px;
+}
+@media (min-width: 1600px) {
+  .atlas-column,
+  .case-column,
+  .publication-column {
+    min-height: 810px;
+  }
+  .clinical-dashboard .radiograph {
+    height: 340px;
+  }
+}
+@media (max-width: 1250px) {
+  .clinical-body {
+    grid-template-columns: 175px minmax(0, 1fr);
+  }
+  .clinical-sidebar {
+    padding: 12px 7px;
+  }
+  .nav-item {
+    font-size: 11px;
+    gap: 8px;
+  }
+  .clinical-topbar {
+    gap: 12px;
+  }
+  .clinical-brand {
+    min-width: 185px;
+  }
+  .clinical-brand strong {
+    font-size: 21px;
+  }
+  .profile {
+    display: none;
+  }
+  .dashboard-stage {
+    grid-template-columns: minmax(340px, 1.2fr) minmax(280px, 1fr);
+  }
+  .publication-column {
+    grid-column: 1/-1;
+    min-height: 0;
+    max-height: 520px;
+  }
+  .clinical-bottom {
+    margin-left: 187px;
+    gap: 15px;
+  }
+  .clinical-bottom b {
+    display: none;
+  }
+}
+@media (max-width: 850px) {
+  .clinical-topbar {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+  .clinical-brand {
+    flex: 1;
+  }
+  .search-wrap {
+    order: 5;
+    flex-basis: 100%;
+  }
+  .profile,
+  .icon-button {
+    display: none;
+  }
+  .mobile-menu {
+    display: block;
+    border: 0;
+    background: transparent;
+  }
+  .clinical-body {
+    display: block;
+  }
+  .clinical-sidebar {
+    display: none;
+  }
+  .clinical-sidebar.open {
+    display: flex;
+    position: fixed;
+    top: 110px;
+    left: 0;
+    width: 220px;
+    bottom: 0;
+    z-index: 30;
+    overflow: auto;
+  }
+  .dashboard-stage {
+    grid-template-columns: 1fr;
+  }
+  .atlas-column {
+    height: 760px;
+    min-height: 760px;
+  }
+  .case-column,
+  .publication-column {
+    min-height: 0;
+    max-height: none;
+    grid-column: auto;
+  }
+  .clinical-dashboard .radiograph {
+    height: 360px;
+  }
+  .clinical-bottom {
+    margin: 0 12px 12px;
+    flex-wrap: wrap;
+  }
+  .clinical-bottom > div {
+    min-width: 40%;
+  }
+  .saved-button {
+    padding: 8px;
+    font-size: 11px;
+  }
+  .clinical-topbar .period > span {
+    display: none;
+  }
+  .clinical-dashboard .case-heading-row {
+    display: flex;
+  }
+}
+.publication-card {
+  position: relative;
+  border: 1px solid #d9e7ed;
+  border-radius: 7px;
+  padding: 12px 28px 12px 12px;
+}
+.publication-card > a {
+  color: inherit;
+  text-decoration: none;
+}
+.publication-card > button {
+  position: absolute;
+  right: 7px;
+  top: 12px;
+  border: 0;
+  background: transparent;
+  color: #00868c;
+}
+.pubmed-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #d7e6ee;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 11px;
+  color: #007d87;
+  border-radius: 6px;
+}
+.case-media[hidden] {
+  display: none;
+}
+.lesson-content audio {
+  width: 100%;
+  margin: 12px 0;
+}
+.lesson-content dt {
+  font-weight: bold;
+  margin-top: 15px;
+  color: #007e88;
+}
+.lesson-content dd {
+  margin: 5px 0;
+  font-size: 13px;
+}
+.lesson-content h3 {
+  font-size: 15px;
+  margin-top: 20px;
+}
+.dissection-panel select {
+  background: #214451;
+  color: white;
+  border: 1px solid #45616c;
+  padding: 5px;
+  border-radius: 5px;
+}
+.dissection-panel small {
+  grid-column: 1/-1;
+  color: #90b3c2;
+  font-size: 10px;
+}
+.clinical-dashboard input:focus-visible,
+.clinical-dashboard button:focus-visible {
+  outline: 2px solid #17a9ad;
+  outline-offset: 2px;
+}
+.atlas-loading {
+  position: absolute;
+  top: 45%;
+  left: 20%;
+  font-size: 13px;
+}
+.clinical-dashboard .case-detail .image-sliders {
+  display: none;
+}
+.clinical-dashboard
+  .case-detail:has([role='tab'][aria-selected='true']:nth-child(2))
+  .image-sliders {
+  display: flex;
+}
+.connection-map {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+  border-left: 2px solid #10a6ad;
+  padding-left: 18px;
+}
+.connection-map > strong {
+  padding: 10px 15px;
+  background: #087e88;
+  color: white;
+  border-radius: 8px;
+}
+.connection-map article {
+  border: 1px solid #d9e8ec;
+  border-radius: 8px;
+  padding: 12px;
+}
+.connection-map b {
+  color: #07818a;
+}
+.connection-map p {
+  font-size: 12px;
+  margin: 5px 0;
+}
+.case-switcher {
+  position: relative;
+  z-index: 8;
+}
+.clinical-topbar {
+  position: relative;
+  z-index: 10;
+}
