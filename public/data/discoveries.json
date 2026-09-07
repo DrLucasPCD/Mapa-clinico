@@ -1,0 +1,223 @@
+{
+  "lastChecked": "2026-09-07T00:50:10.849Z",
+  "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
+  "provider": "NCBI E-utilities",
+  "items": [
+    {
+      "id": "42550573",
+      "title": "Hysteroscopic resection of a submucosal fibroid: hints and tips for a successful procedure.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42550573/",
+      "authors": "Mosedale T, Lim ET, Tsampras N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42462819",
+      "title": "17α-hydroxylase deficiency in a 46,XY individual with a hypoplastic uterus: In vitro functional validation of a CYP17A1 mutation.",
+      "date": "2026 Nov 15",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42462819/",
+      "authors": "Hou Z, Wang X, Fu Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42701448",
+      "title": "An anatomical imposter in the left upper quadrant: Incidental beaver tail liver on chest computed tomography.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42701448/",
+      "authors": "Mirzaei S, Motaghed Z, Naseri R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42701341",
+      "title": "Age-aware multimetric MRI assessment of patellofemoral dysplasia in a symptomatic nine-year-old girl without documented dislocation: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42701341/",
+      "authors": "Choumad S, Ebedda A, Mohamed El Hacen A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699753",
+      "title": "Aortoduodenal syndrome caused by infrarenal abdominal aortic aneurysm: Evolution of CT findings and early imaging clues.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699753/",
+      "authors": "Medina-Siosi AD",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699751",
+      "title": "Characteristic MRI findings of nitrous oxide-induced subacute combined degeneration despite low-normal vitamin B12 levels.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699751/",
+      "authors": "Mustaquim B, Ahmed A, Haque MZ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699746",
+      "title": "Late peritoneal metastases of medulloblastoma following ventriculoperitoneal shunting: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699746/",
+      "authors": "Ouazzani Chahdi H, Akammar A, Chaouche I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699738",
+      "title": "Accessory gallbladder lithiasis presenting as acute cholangitis.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699738/",
+      "authors": "Hamrouni H, Hamrouni H, El Hedhili F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699735",
+      "title": "What's lurking within: When retroperitoneal calciphylaxis goes off-skin.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699735/",
+      "authors": "Cho H, Sommer D, Tran B",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699732",
+      "title": "Concurrent transfusion-related acute lung injury and posterior reversible encephalopathy: A rare multisystem imaging presentation.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699732/",
+      "authors": "Mamodia A, Singhal S, Solanki N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699724",
+      "title": "Pleural desmoid tumor mimicking a myofibroblastic neoplasm: Imaging-pathologic correlation.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699724/",
+      "authors": "Villegas-Albo M, Pacheco-Carrillo AM, Salinas-Rodriguez D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42677174",
+      "title": "Life-threatening hemothorax after radiofrequency ablation for subcapsular hepatocellular carcinoma in a patient with previous rib injury.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42677174/",
+      "authors": "Li GH, Chen TM, Huang PT",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42677171",
+      "title": "Photon-counting detector CT vs energy-integrating detector CT for the diagnosis of arterial dissection in the cervicocerebral region: A single-center case series.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42677171/",
+      "authors": "Matsumoto K, Nakashima M, Kawai T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42676904",
+      "title": "Upright MDCT evaluation of gravity-induced bronchial collapse and paradoxical lung volume reduction in severe thoracic lordoscoliosis: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42676904/",
+      "authors": "Inoue A, Watanabe K, Suzuki S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42676862",
+      "title": "Fulminant emphysematous hepatitis with pneumoperitoneum: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42676862/",
+      "authors": "Perkins JS, Zomorodian P, Rachapalli V",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42676623",
+      "title": "Spontaneous hemorrhage of cavernous malformation in the region of the cochlear nucleus: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42676623/",
+      "authors": "Almaazmi R, Ahmad A, Schlemmer K",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42676604",
+      "title": "A rare complication of pleural drainage: Communicating lung and subcutaneous abscesses.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42676604/",
+      "authors": "Sperling S, Møller LR, Hommelgaard L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42676599",
+      "title": "Renal artery inferior vena cava arteriovenous fistula complicated by renal infarction after difficult inferior vena cava filter retrieval: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42676599/",
+      "authors": "Alzeer MA, AlEhaideb AI, Alzaid HA",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42668604",
+      "title": "Telemedicine-guided management of iodinated contrast media-associated anaphylaxis: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42668604/",
+      "authors": "Soni RV, Beger SB, Ji W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42668586",
+      "title": "Low-grade osteogenic tumor with secondary aneurysmal bone cyst: Distinguishing osteoblastoma from low-grade osteosarcoma in the setting of noncanonical molecular findings.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42668586/",
+      "authors": "Shabbir-Hussain R, Malerba R, Aljohani R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42668561",
+      "title": "Hemorrhagic hepatocellular carcinoma managed with urgent transarterial particle embolization: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42668561/",
+      "authors": "Agwuncha O, Khatri S, Smith M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42668525",
+      "title": "Multimodality imaging diagnosis of congenital absence of the right-sided pericardium presenting with pseudo-ischemic chest pain: A radiology-focused case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42668525/",
+      "authors": "Hussen MD, Nawal CN, Nahiyan CN",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42667101",
+      "title": "Diabetic striatopathy and concurrent peri-ictal cortical diffusion restriction in nonketotic hyperglycemia: A rare stroke mimic.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42667101/",
+      "authors": "Kalali A, Haidar A, Handi O",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42667098",
+      "title": "Fetal cardiac rhabdomyoma: Two prenatally diagnosed cases with contrasting outcomes.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42667098/",
+      "authors": "Ghades S, Ouhibi C, Fatnassi MR",
+      "status": "Descoberta automática • ainda não revisada"
+    }
+  ]
+}

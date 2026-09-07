@@ -1,0 +1,31 @@
+name: Descobrir novos casos clínicos
+on:
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: clinical-discovery
+  cancel-in-progress: false
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Consultar metadados públicos do PubMed
+        run: node scripts/discover-cases.mjs
+        env:
+          NCBI_EMAIL: ${{ vars.NCBI_EMAIL }}
+      - name: Publicar descobertas no repositório
+        run: |
+          git config user.name 'Mapa Clínico Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/discoveries.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Atualizar descobertas clínicas do PubMed'
+            git push
+          fi

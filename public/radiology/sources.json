@@ -1,0 +1,42 @@
+{
+  "license": "Radiopaedia non-commercial attribution and share-alike terms",
+  "licenseUrl": "https://radiopaedia.org/licence",
+  "acquisition": "Individually selected images from publicly rendered case pages; source download attribution panel reviewed. No bulk or scheduled scraping.",
+  "sources": [
+    {
+      "caseId": 2604,
+      "author": "Frank Gaillard",
+      "url": "https://radiopaedia.org/cases/2604",
+      "files": [
+        "ct-admission.jpg",
+        "ct-followup.jpg"
+      ],
+      "imageIds": [
+        606,
+        36
+      ]
+    },
+    {
+      "caseId": 164685,
+      "author": "Jose Rodriguez Vazquez",
+      "url": "https://radiopaedia.org/cases/164685",
+      "files": [
+        "rx-hand.jpg"
+      ],
+      "imageIds": [
+        61598981
+      ]
+    },
+    {
+      "caseId": 87566,
+      "author": "Luu Hanh",
+      "url": "https://radiopaedia.org/cases/87566",
+      "files": [
+        "mri-brain.jpg"
+      ],
+      "imageIds": [
+        54573996
+      ]
+    }
+  ]
+}
