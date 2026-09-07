@@ -796,6 +796,7 @@ export default function App() {
           </section>
         </div>
       )}
+      <footer className="atlas-credits">Atlas: <a href="https://github.com/vixotic/Vanatome/blob/main/ASSET-LICENSE.md" target="_blank" rel="noreferrer">Vanatome / Z-Anatomy · CC BY-SA 4.0</a> · Visualização e organização adaptadas · Ensino não comercial</footer>
       <Install />
     </div>
   );
