@@ -1380,3 +1380,8 @@ button:hover {
     align-items: flex-start;
   }
 }
+
+.atlas-surface { position:absolute; inset:0; width:100%; height:100%; }
+.atlas-surface canvas { display:block; }
+.atlas-status { z-index:2; pointer-events:none; padding:20px; background:rgb(16 30 44 / 92%); border-radius:8px; line-height:1.6; }
+.atlas-surface:focus-visible { outline:2px solid #62c8c8; outline-offset:-3px; }

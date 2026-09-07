@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
 import { matchesStructure } from './anatomy';
+import AtlasSurface from './AtlasSurface';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 export type AtlasProps = {
@@ -137,6 +138,18 @@ export default function Atlas(props: AtlasProps) {
         );
       }
     };
+    const contextLost = (e: Event) => {
+      e.preventDefault();
+      setStatus(
+        'A renderização 3D foi interrompida pelo navegador. Recarregue a página para recuperar o atlas.',
+      );
+    };
+    const contextRestored = () => setStatus('');
+    renderer.domElement.addEventListener('webglcontextlost', contextLost);
+    renderer.domElement.addEventListener(
+      'webglcontextrestored',
+      contextRestored,
+    );
     renderer.domElement.addEventListener('pointerdown', start);
     renderer.domElement.addEventListener('pointerup', pick);
     const keyboard = (e: KeyboardEvent) => {
@@ -241,7 +254,15 @@ export default function Atlas(props: AtlasProps) {
         } else lastFocus = '';
       }
       controls.update();
-      renderer.render(scene, camera);
+      try {
+        renderer.render(scene, camera);
+      } catch (error) {
+        cancelAnimationFrame(frame);
+        console.error('Atlas render failed', error);
+        setStatus(
+          'Não foi possível desenhar o atlas neste navegador. Recarregue a página ou tente outro navegador com suporte a WebGL 2.',
+        );
+      }
     };
     animate(0);
     return () => {
@@ -254,23 +275,14 @@ export default function Atlas(props: AtlasProps) {
         m.geometry.dispose();
         (m.material as T.Material).dispose();
       });
+      renderer.domElement.removeEventListener('webglcontextlost', contextLost);
+      renderer.domElement.removeEventListener(
+        'webglcontextrestored',
+        contextRestored,
+      );
       renderer.dispose();
       renderer.domElement.remove();
     };
   }, []);
-  return (
-    <div
-      className="atlas-canvas"
-      ref={host}
-      tabIndex={0}
-      role="application"
-      aria-label="Atlas anatômico 3D. Arraste para girar ou use as setas do teclado. Use mais e menos para zoom. Clique em uma estrutura ou use a lista de estruturas para selecionar."
-    >
-      {status && (
-        <div className="atlas-status" role="status">
-          {status}
-        </div>
-      )}
-    </div>
-  );
+  return <AtlasSurface surfaceRef={host} status={status} />;
 }
