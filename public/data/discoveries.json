@@ -1,8 +1,26 @@
 {
-  "lastChecked": "2026-09-07T13:51:22.838Z",
+  "lastChecked": "2026-09-08T13:37:02.014Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42707082",
+      "title": "Irreversible vision loss following split lateral rectus nasal transposition for complete oculomotor nerve palsy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707082/",
+      "authors": "Komori M, Sato M, Arakawa A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42579903",
+      "title": "Rupture and dissemination of a mycotic aneurysm caused by the Aspergillus fumigatus complex: A diagnostic challenge posed by a non‑sporulating isolate.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42579903/",
+      "authors": "Zhang W, Wei Z, Liu Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42550573",
       "title": "Hysteroscopic resection of a submucosal fibroid: hints and tips for a successful procedure.",
@@ -19,6 +37,33 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42462819/",
       "authors": "Hou Z, Wang X, Fu Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707075",
+      "title": "Evolving cerebrovascular pathology in fibromuscular dysplasia leading to aneurysmal subarachnoid hemorrhage.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707075/",
+      "authors": "Andrade Melchiori F, Ghazani TE, Alexopoulos D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707067",
+      "title": "Incidental discovery of neglected 11β-hydroxylase deficiency causing 46,XX disorder of sex development in a 35-year-old adult: A radiologically driven diagnosis.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707067/",
+      "authors": "Abouchiba S, Ennejjari N, Ouazzani H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707058",
+      "title": "Intrapancreatic accessory spleen mimicking pancreatic malignancy: Diagnostic role of Tc-99m heat-damaged red blood cell scintigraphy.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707058/",
+      "authors": "Yilmaz F, Perktas L",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -172,51 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42668604/",
       "authors": "Soni RV, Beger SB, Ji W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42668586",
-      "title": "Low-grade osteogenic tumor with secondary aneurysmal bone cyst: Distinguishing osteoblastoma from low-grade osteosarcoma in the setting of noncanonical molecular findings.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42668586/",
-      "authors": "Shabbir-Hussain R, Malerba R, Aljohani R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42668561",
-      "title": "Hemorrhagic hepatocellular carcinoma managed with urgent transarterial particle embolization: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42668561/",
-      "authors": "Agwuncha O, Khatri S, Smith M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42668525",
-      "title": "Multimodality imaging diagnosis of congenital absence of the right-sided pericardium presenting with pseudo-ischemic chest pain: A radiology-focused case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42668525/",
-      "authors": "Hussen MD, Nawal CN, Nahiyan CN",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42667101",
-      "title": "Diabetic striatopathy and concurrent peri-ictal cortical diffusion restriction in nonketotic hyperglycemia: A rare stroke mimic.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42667101/",
-      "authors": "Kalali A, Haidar A, Handi O",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42667098",
-      "title": "Fetal cardiac rhabdomyoma: Two prenatally diagnosed cases with contrasting outcomes.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42667098/",
-      "authors": "Ghades S, Ouhibi C, Fatnassi MR",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
