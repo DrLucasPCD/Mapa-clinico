@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-08T13:37:02.014Z",
+  "lastChecked": "2026-09-09T13:42:36.644Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -37,6 +37,42 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42462819/",
       "authors": "Hou Z, Wang X, Fu Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707180",
+      "title": "The wandering intrauterine contraceptive device: An unusual case of omental IUCD migration with multimodality imaging findings.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707180/",
+      "authors": "Gebresilassie MY, Midekso HD, Mehammed AH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707177",
+      "title": "Atypical presentation of an impending thoracoabdominal aortic aneurysm rupture: The hyperattenuating crescent sign as a life-saving imaging feature.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707177/",
+      "authors": "Bouzid I, Labied M, El Oualladi F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707149",
+      "title": "Successful distal splenic artery embolization in a patient with chronic lymphocytic leukemia complicated by thrombocytopenia and splenic artery aneurysm.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707149/",
+      "authors": "Patel M, Hanna J, Yassine R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42707148",
+      "title": "Multimodality evaluation of bilateral parotid oncocytomas: A rare case report and literature review.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42707148/",
+      "authors": "Anwar S, Mubarak F, Mahmood A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -181,42 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42676862/",
       "authors": "Perkins JS, Zomorodian P, Rachapalli V",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42676623",
-      "title": "Spontaneous hemorrhage of cavernous malformation in the region of the cochlear nucleus: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42676623/",
-      "authors": "Almaazmi R, Ahmad A, Schlemmer K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42676604",
-      "title": "A rare complication of pleural drainage: Communicating lung and subcutaneous abscesses.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42676604/",
-      "authors": "Sperling S, Møller LR, Hommelgaard L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42676599",
-      "title": "Renal artery inferior vena cava arteriovenous fistula complicated by renal infarction after difficult inferior vena cava filter retrieval: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42676599/",
-      "authors": "Alzeer MA, AlEhaideb AI, Alzaid HA",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42668604",
-      "title": "Telemedicine-guided management of iodinated contrast media-associated anaphylaxis: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42668604/",
-      "authors": "Soni RV, Beger SB, Ji W",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
