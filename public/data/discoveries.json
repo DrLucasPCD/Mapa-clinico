@@ -1,8 +1,17 @@
 {
-  "lastChecked": "2026-09-09T13:42:36.644Z",
+  "lastChecked": "2026-09-10T13:35:30.701Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42714310",
+      "title": "Sintilimab‑related cystitis/ureteritis in high‑grade endometrial stromal sarcoma: A case report and structured literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42714310/",
+      "authors": "Yang S, Gao R, Li D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42707082",
       "title": "Irreversible vision loss following split lateral rectus nasal transposition for complete oculomotor nerve palsy.",
@@ -10,6 +19,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42707082/",
       "authors": "Komori M, Sato M, Arakawa A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42580287",
+      "title": "Breast implant-associated squamous cell carcinoma (BIA-SCC): Clinicopathologic analysis of two cases with radiologic-pathologic correlation and a review of the literature.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42580287/",
+      "authors": "Clarke-Brodber AL, Chen PL, Ulhaque A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -31,12 +49,66 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "42462588",
+      "title": "From the archives of MD Anderson Cancer Center: Crystal-storing histiocytosis associated with B-cell lymphoma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42462588/",
+      "authors": "Al-Rusan O, Shen Q, Medeiros LJ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42462819",
       "title": "17α-hydroxylase deficiency in a 46,XY individual with a hypoplastic uterus: In vitro functional validation of a CYP17A1 mutation.",
       "date": "2026 Nov 15",
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42462819/",
       "authors": "Hou Z, Wang X, Fu Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42713259",
+      "title": "Large periampullary mass with vascular contact: Diagnostic and surgical decision-making in a solid pseudopapillary neoplasm.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42713259/",
+      "authors": "Ben Ismail I, Karray K, Mlika M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42713247",
+      "title": "Anterior cervical abscess caused by migration of an ingested fish bone in a child: A case report.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42713247/",
+      "authors": "Faye I, Aidara CM, Niang FG",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42712970",
+      "title": "Simultaneous DOTATATE uptake in three non-neuroendocrine pathologies: Follicular lymphoma, Crohn's disease, and vertebral hemangioma.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42712970/",
+      "authors": "Khabaz K, Said JW, Chiang J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42712964",
+      "title": "Cholecystogastric fistula presenting with transient gallstone ileus and incidental Fitz-Hugh-Curtis syndrome: A rare radiological and intraoperative association.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42712964/",
+      "authors": "Li Y, Jayasekera H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42712942",
+      "title": "Dual-tracer (18)F-FDG and (18)F-FLT PET/CT for differentiating metastatic lymph nodes from sarcoid involvement in a patient with vulvar squamous cell carcinoma and coexisting pulmonary sarcoidosis.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42712942/",
+      "authors": "Tsuchiya J, Wu X, Tabei A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42699746/",
       "authors": "Ouazzani Chahdi H, Akammar A, Chaouche I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42699738",
-      "title": "Accessory gallbladder lithiasis presenting as acute cholangitis.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42699738/",
-      "authors": "Hamrouni H, Hamrouni H, El Hedhili F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42699735",
-      "title": "What's lurking within: When retroperitoneal calciphylaxis goes off-skin.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42699735/",
-      "authors": "Cho H, Sommer D, Tran B",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42699732",
-      "title": "Concurrent transfusion-related acute lung injury and posterior reversible encephalopathy: A rare multisystem imaging presentation.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42699732/",
-      "authors": "Mamodia A, Singhal S, Solanki N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42699724",
-      "title": "Pleural desmoid tumor mimicking a myofibroblastic neoplasm: Imaging-pathologic correlation.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42699724/",
-      "authors": "Villegas-Albo M, Pacheco-Carrillo AM, Salinas-Rodriguez D",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42677174",
-      "title": "Life-threatening hemothorax after radiofrequency ablation for subcapsular hepatocellular carcinoma in a patient with previous rib injury.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42677174/",
-      "authors": "Li GH, Chen TM, Huang PT",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42677171",
-      "title": "Photon-counting detector CT vs energy-integrating detector CT for the diagnosis of arterial dissection in the cervicocerebral region: A single-center case series.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42677171/",
-      "authors": "Matsumoto K, Nakashima M, Kawai T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42676904",
-      "title": "Upright MDCT evaluation of gravity-induced bronchial collapse and paradoxical lung volume reduction in severe thoracic lordoscoliosis: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42676904/",
-      "authors": "Inoue A, Watanabe K, Suzuki S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42676862",
-      "title": "Fulminant emphysematous hepatitis with pneumoperitoneum: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42676862/",
-      "authors": "Perkins JS, Zomorodian P, Rachapalli V",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
