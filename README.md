@@ -5,7 +5,9 @@
 ## O que esta versão faz
 
 - Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
-- Atlas humano masculino 3D real (Vanatome / Z-Anatomy), com 749 estruturas e 984 malhas, busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
+- Atlas masculino detalhado (Z-Anatomy / BodyParts3D), com 3.478 estruturas, e atlas feminino real do NIH Human Reference Atlas com 264 estruturas do tronco/pelve; busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
+- Roteiro com 33 temas e 33 questões autorais a partir de seis materiais acadêmicos, além de árvore de 92 vasos com 70 correspondências no modelo masculino. Os ramos ausentes são identificados como conteúdo didático sem malha correspondente.
+- Leitor local de séries DICOM CT/MR nativas, monocromáticas e de um quadro por arquivo, com navegação física de cortes e plano relativo no Atlas. Arquivos importados não são enviados nem persistidos.
 - Módulos explicativos de coração, encéfalo, pulmões, fígado, metacarpos e seis músculos com origem, inserção e ação.
 - Seleção de 1º a 12º período, agrupados em quatro níveis didáticos: fundamentos, integração, ciclo clínico e internato.
 - Corpo montado, camadas separadas e grade de estruturas; filtros regionais de braço e tornozelo.
@@ -55,18 +57,22 @@ Não houve importação integral de todas as pastas. Os PDFs, livros, fotos e gr
 
 ## Limites didáticos explícitos
 
-Esta é uma primeira versão funcional; não é um atlas médico completo nem ferramenta diagnóstica. Os 12 períodos usam quatro faixas, não uma grade curricular individual completa. As fichas específicas abrangem 11 módulos; estruturas adicionais preservam os nomes originais e podem não ter explicação didática própria. O atlas utilizado não inclui bíceps braquial individualizado; não foi inventada geometria substituta.
+Esta é uma primeira versão funcional; não é um atlas médico completo nem ferramenta diagnóstica. Os 12 períodos usam quatro faixas, não uma grade curricular individual completa. Há 11 fichas introdutórias e 33 temas no roteiro dos materiais. Estruturas adicionais preservam nomes da fonte e podem não ter explicação didática própria. A versão feminina disponível é limitada ao tronco e à pelve, sem cabeça e membros completos; não é um corpo feminino integral. Os modelos de fontes distintas não são combinados.
 
 Cortes são planos de visualização sem superfície de fechamento. Afastamento separa estruturas e altera suas relações originais. A pulsação é uma ilustração geométrica, não simulação hemodinâmica. O cotovelo usa uma articulação aproximada e não deforma músculos ou simula ligamentos. A origem/inserção são descrições textuais; não foram demarcados pontos de fixação em todas as malhas.
 
-Destaques de casos localizam regiões/ossos de referência em um corpo genérico. **Não são segmentações, reconstruções DICOM ou representações exatas da lesão do paciente.** As imagens JPEG oferecem zoom, brilho e contraste, não janelamento diagnóstico nem a série DICOM completa. A fonte do caso de abscesso considera o diagnóstico “quase certo”, não confirmado definitivamente.
+Destaques de casos localizam regiões/ossos de referência em um corpo genérico. **Não são segmentações, reconstruções DICOM ou representações exatas da lesão do paciente.** As imagens JPEG dos casos oferecem zoom, brilho e contraste, não a série DICOM completa. O leitor separado permite importar séries locais não comprimidas. O plano se desloca relativamente à região escolhida e à posição física das fatias: não é registro anatômico ao paciente, reconstrução multiplanar ou segmentação. Séries oblíquas não são associadas a um plano ortogonal do atlas. Foram usados arquivos sintéticos para os testes do leitor. A fonte do caso de abscesso considera o diagnóstico “quase certo”, não confirmado definitivamente.
 
 A descoberta automatizada usa metadados públicos do PubMed. Não há crawler da Radiopaedia. Imagens Radiopaedia são seleções pontuais obtidas da interface pública após leitura do painel de licença; a atribuição permanece junto de cada caso. Não usar esta distribuição de imagens em projeto comercial sem licença adequada.
 
 ## Licenças e atribuições
 
-Veja `THIRD_PARTY_NOTICES.md`, `public/models/LICENSE.md` e `public/radiology/sources.json`. Código próprio: MIT. Atlas: CC BY-SA 4.0 conforme distribuição Vanatome; imagens/casos Radiopaedia: condições próprias de uso não comercial, atribuição e compartilhamento. Voz: CC0 1.0. A licença do código não substitui as licenças dos assets.
+Veja `THIRD_PARTY_NOTICES.md`, `public/models/detailed/LICENSE`, `public/models/detailed/NOTICE`, `public/models/LICENSE.md` e `public/radiology/sources.json`. Código próprio: MIT. Atlas masculino: CC BY-SA 4.0, Z-Anatomy / BodyParts3D; feminino: CC BY 4.0, NIH HRA / Visible Human Female; imagens/casos Radiopaedia: condições próprias de uso não comercial, atribuição e compartilhamento. Voz: CC0 1.0. A licença do código não substitui as licenças dos assets.
 
 ## Verificação
 
 Build TypeScript/Vite e testes de geometria real, lateralidade, referências, arquivos de imagens, níveis didáticos, áudio WAV, feed e contrato de ferramenta. Não foi feita auditoria médica independente nem teste visual completo em navegadores. A ferramenta WebMCP é opcional e passa pelo teste de contrato; registro em um navegador com suporte deve ser confirmado antes de depender dela. Nenhuma imagem foi gerada artificialmente para representar exames reais.
+
+### Roteiro dos seis materiais
+
+Foram extraídos os textos das duas apostilas teóricas (neuroanatomia e digestório), três avaliações e do material de vascularização da cabeça/pescoço: 127 páginas no conjunto. Cada tema indica material e páginas de origem. Questões são autorais, e marcações de respostas nos PDFs não foram tratadas como gabarito oficial. Correções de inconsistências das apostilas aparecem junto dos temas vasculares. Os arquivos pessoais não foram publicados.

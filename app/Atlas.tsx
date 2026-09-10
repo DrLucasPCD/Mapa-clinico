@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
-import { matchesStructure } from './anatomy';
 import {
   catalogueLayout,
   inAtlasRegion,
@@ -8,9 +7,12 @@ import {
   type AtlasGroup,
 } from './atlas-layout';
 import AtlasSurface from './AtlasSurface';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadDetailedModel, detailedStructureMatches } from './detailed-models';
+import { relativeSlice, type AtlasSlice } from './atlas-slice';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 export type AtlasProps = {
+  modelVariant?: 'male' | 'female';
+  slice?: AtlasSlice | null;
   system: string;
   selected: string;
   isolate: boolean;
@@ -42,6 +44,7 @@ export default function Atlas(props: AtlasProps) {
     let disposed = false,
       frame = 0;
     const el = host.current;
+    setStatus('Carregando modelo anatômico detalhado…');
     let renderer: T.WebGLRenderer;
     try {
       renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
@@ -70,10 +73,14 @@ export default function Atlas(props: AtlasProps) {
     const rim = new T.DirectionalLight(0x72e1e2, 2);
     rim.position.set(-2, 1, -2);
     scene.add(rim);
+    const slicePlane = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0x32dced, transparent: true, opacity: 0.25, side: T.DoubleSide, depthWrite: false }));
+    slicePlane.visible = false;
+    scene.add(slicePlane);
     const meshes: T.Mesh[] = [],
       clip = new T.Plane(new T.Vector3(1, 0, 0), 10),
       ray = new T.Raycaster(),
       pointer = new T.Vector2();
+    let lastEmpty: boolean | undefined;
     let lastReset = -1,
       lastFocus = '',
       model: T.Group;
@@ -81,12 +88,11 @@ export default function Atlas(props: AtlasProps) {
       gridOffsets = new Map<string, T.Vector3>(),
       anklePivots = new Map<'left' | 'right', T.Vector3>();
     const match = (m: T.Mesh, id: string) =>
-      matchesStructure(String(m.userData.anatomyId || ''), id);
-    new GLTFLoader().load(
-      '/models/body.glb',
-      (g) => {
-        if (disposed) return;
-        model = g.scene;
+      detailedStructureMatches(m, id);
+    loadDetailedModel(props.modelVariant ?? 'male', (message) => { if (!disposed) setStatus(message); }).then(
+      (group) => {
+        if (disposed) { group.traverse((o) => { if (o instanceof T.Mesh) { o.geometry.dispose(); (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose()); } }); return; }
+        model = group;
         scene.add(model);
         model.updateMatrixWorld(true);
         model.traverse((o) => {
@@ -143,17 +149,10 @@ export default function Atlas(props: AtlasProps) {
         });
         setStatus('');
       },
-      (e) => {
-        if (e.total)
-          setStatus(
-            `Carregando atlas • ${Math.round((e.loaded / e.total) * 100)}%`,
-          );
-      },
-      () =>
-        setStatus(
-          'Não foi possível carregar o atlas. Recarregue a página para tentar novamente.',
-        ),
-    );
+    ).catch((error) => {
+      console.error('Falha no modelo anatômico', error);
+      if (!disposed) setStatus('Não foi possível carregar o modelo. Verifique a conexão e tente novamente.');
+    });
     const resize = () => {
       const w = el.clientWidth,
         h = el.clientHeight;
@@ -259,6 +258,15 @@ export default function Atlas(props: AtlasProps) {
           : p.plane === 'axial'
             ? -((p.cut / 100) * 1.8)
             : 0.4 - (p.cut / 100) * 0.8;
+      slicePlane.visible = Boolean(p.slice) && (!p.layoutMode || p.layoutMode === 'assembled');
+      if (p.slice) {
+        const { axis, position, bounds } = relativeSlice(p.slice);
+        const center = new T.Vector3((bounds.x[0]+bounds.x[1])/2, (bounds.y[0]+bounds.y[1])/2, (bounds.z[0]+bounds.z[1])/2);
+        center[axis] = position;
+        slicePlane.position.copy(center);
+        slicePlane.rotation.set(axis === 'y' ? -Math.PI/2 : 0, axis === 'x' ? Math.PI/2 : 0, 0);
+        slicePlane.scale.set(axis === 'x' ? bounds.z[1]-bounds.z[0] : bounds.x[1]-bounds.x[0], axis === 'y' ? bounds.z[1]-bounds.z[0] : bounds.y[1]-bounds.y[0], 1);
+      }
       for (const m of meshes) {
         const id = String(m.userData.anatomyId),
           sys = m.userData.anatomySystem,
@@ -266,7 +274,7 @@ export default function Atlas(props: AtlasProps) {
           center = groupCenters.get(id) ?? (m.userData.center as T.Vector3),
           inRegion = inAtlasRegion(p.region, id, center);
         m.visible =
-          (p.system === 'all' ? sys !== 'regional' : sys === p.system) &&
+          (p.system === 'all' ? (!m.userData.isEnvelope || p.isolate) : sys === p.system) &&
           inRegion &&
           (!p.isolate || match(m, p.selected)) &&
           !p.hidden.some((id) => match(m, id));
@@ -294,7 +302,7 @@ export default function Atlas(props: AtlasProps) {
           // remains intact even when it is made of many GLB mesh fragments.
           m.position.add(gridOffsets.get(id) ?? new T.Vector3());
         }
-        if (p.beating && id.startsWith('heart-')) {
+        if (p.beating && match(m, 'heart-')) {
           const scale =
             1 + Math.pow(Math.max(0, Math.sin(time * 0.00754)), 4) * 0.06;
           m.scale.multiplyScalar(scale);
@@ -349,6 +357,10 @@ export default function Atlas(props: AtlasProps) {
             mat.emissiveIntensity = 0.35 + 0.15 * Math.sin(time * 0.003);
           }
         });
+      }
+      if (meshes.length) {
+        const empty = !meshes.some(m => m.visible);
+        if (empty !== lastEmpty) { lastEmpty = empty; setStatus(empty ? 'Nenhuma estrutura disponível com estes filtros. Use Resetar ou escolha outro sistema/modelo.' : ''); }
       }
       if (lastReset !== p.reset) {
         lastReset = p.reset;
@@ -411,9 +423,11 @@ export default function Atlas(props: AtlasProps) {
         'webglcontextrestored',
         contextRestored,
       );
+      slicePlane.geometry.dispose();
+      slicePlane.material.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, []);
-  return <AtlasSurface surfaceRef={host} status={status} />;
+  }, [props.modelVariant]);
+  return <><AtlasSurface surfaceRef={host} status={status} />{props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane} · posição relativa {Math.round(props.slice.fraction * 100)}%<br/>Referência didática, sem registro ao paciente</div>}</>;
 }

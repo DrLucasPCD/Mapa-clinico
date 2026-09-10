@@ -5,6 +5,7 @@ export type AtlasStructure = {
   name: string;
   system: string;
   objectCount: number;
+  aliases?: string[];
 };
 export const ATLAS_STRUCTURE_COUNT = entries.length;
 export const ATLAS_MESH_COUNT = entries.reduce(
@@ -54,9 +55,10 @@ export function searchAtlasStructures(
   query: string,
   system = 'all',
   limit = 30,
+  catalogue: AtlasStructure[] = entries,
 ): AtlasStructure[] {
   const words = normalize(query).split(/\s+/).filter(Boolean);
-  return entries
+  return catalogue
     .filter((item) => {
       if (system !== 'all' && item.system !== system) return false;
       const lesson = lessons.find((l) => item.id === l.id);
@@ -65,7 +67,7 @@ export function searchAtlasStructures(
         item.name,
       );
       const text = normalize(
-        [item.id, item.name, translated, aliases[item.id], lesson?.name]
+        [item.id, item.name, translated, aliases[item.id], lesson?.name, ...(item.aliases ?? [])]
           .filter(Boolean)
           .join(' '),
       );

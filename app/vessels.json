@@ -1,0 +1,1121 @@
+[
+  {
+    "id": "aorta",
+    "name": "Aorta",
+    "parent": "",
+    "territory": "Circulação sistêmica",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "abdominal_aorta",
+      "ascending_aorta",
+      "thoracic_aorta",
+      "aortic_arch"
+    ]
+  },
+  {
+    "id": "braquiocefalico",
+    "name": "Tronco braquiocefálico",
+    "parent": "aorta",
+    "territory": "Cabeça, pescoço e membro superior direitos",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "brachiocephalic_trunk"
+    ]
+  },
+  {
+    "id": "carotida-comum",
+    "name": "Artéria carótida comum",
+    "parent": "aorta",
+    "territory": "Sistemas carotídeos interno e externo; à direita origina-se do tronco braquiocefálico",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "right_common_carotid_artery",
+      "left_common_carotid_artery"
+    ]
+  },
+  {
+    "id": "carotida-externa",
+    "name": "Artéria carótida externa",
+    "parent": "carotida-comum",
+    "territory": "Grande parte da face, couro cabeludo e pescoço",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "external_carotid_artery_l",
+      "external_carotid_artery_r"
+    ]
+  },
+  {
+    "id": "carotida-interna",
+    "name": "Artéria carótida interna",
+    "parent": "carotida-comum",
+    "territory": "Circulação anterior do encéfalo e órbita; normalmente sem ramos cervicais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "internal_carotid_artery_l",
+      "internal_carotid_artery_r"
+    ]
+  },
+  {
+    "id": "tireoidea-superior",
+    "name": "Artéria tireóidea superior",
+    "parent": "carotida-externa",
+    "territory": "Polo superior da tireoide e contribuições laríngeas",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "faringea-ascendente",
+    "name": "Artéria faríngea ascendente",
+    "parent": "carotida-externa",
+    "territory": "Faringe e contribuições meníngeas",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "ascending_pharyngeal_artery_l",
+      "ascending_pharyngeal_artery_r"
+    ]
+  },
+  {
+    "id": "lingual",
+    "name": "Artéria lingual",
+    "parent": "carotida-externa",
+    "territory": "Língua e assoalho oral",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "dorsais-lingua",
+    "name": "Ramos dorsais da língua",
+    "parent": "lingual",
+    "territory": "Porção posterior da língua",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "sublingual",
+    "name": "Artéria sublingual",
+    "parent": "lingual",
+    "territory": "Glândula sublingual e assoalho da boca",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "profunda-lingua",
+    "name": "Artéria profunda da língua",
+    "parent": "lingual",
+    "territory": "Corpo e ápice da língua",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "facial",
+    "name": "Artéria facial",
+    "parent": "carotida-externa",
+    "territory": "Face, lábios e região submandibular",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "facial_artery_l",
+      "facial_artery_r"
+    ]
+  },
+  {
+    "id": "palatina-ascendente",
+    "name": "Artéria palatina ascendente",
+    "parent": "facial",
+    "territory": "Palato mole e região tonsilar",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "submentual",
+    "name": "Artéria submentual",
+    "parent": "facial",
+    "territory": "Região submentual",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "submental_artery_l",
+      "submental_artery_r"
+    ]
+  },
+  {
+    "id": "labial-superior",
+    "name": "Artéria labial superior",
+    "parent": "facial",
+    "territory": "Lábio superior e contribuição ao septo nasal anterior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "superior_labial_artery_l",
+      "superior_labial_artery_r"
+    ]
+  },
+  {
+    "id": "labial-inferior",
+    "name": "Artéria labial inferior",
+    "parent": "facial",
+    "territory": "Lábio inferior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "inferior_labial_artery_l",
+      "inferior_labial_artery_r"
+    ]
+  },
+  {
+    "id": "nasal-lateral",
+    "name": "Ramo nasal lateral",
+    "parent": "facial",
+    "territory": "Asa e face lateral do nariz",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "angular",
+    "name": "Artéria angular",
+    "parent": "facial",
+    "territory": "Região medial da órbita; anastomoses com o sistema oftálmico",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "angular_artery_l",
+      "angular_artery_r"
+    ]
+  },
+  {
+    "id": "occipital",
+    "name": "Artéria occipital",
+    "parent": "carotida-externa",
+    "territory": "Couro cabeludo posterior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "occipital_artery_l",
+      "occipital_artery_r"
+    ]
+  },
+  {
+    "id": "auricular-posterior",
+    "name": "Artéria auricular posterior",
+    "parent": "carotida-externa",
+    "territory": "Orelha e couro cabeludo adjacente",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "temporal-superficial",
+    "name": "Artéria temporal superficial",
+    "parent": "carotida-externa",
+    "territory": "Couro cabeludo temporal, frontal e parietal",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "superficial_temporal_artery_l",
+      "superficial_temporal_artery_r"
+    ]
+  },
+  {
+    "id": "transversa-face",
+    "name": "Artéria transversa da face",
+    "parent": "temporal-superficial",
+    "territory": "Parótida, ducto parotídeo e tecidos laterais da face",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "transverse_facial_artery_l",
+      "transverse_facial_artery_r"
+    ]
+  },
+  {
+    "id": "maxilar",
+    "name": "Artéria maxilar",
+    "parent": "carotida-externa",
+    "territory": "Estruturas profundas da face, cavidade nasal e regiões associadas",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "maxillary_artery_l",
+      "maxillary_artery_r"
+    ]
+  },
+  {
+    "id": "meningea-media",
+    "name": "Artéria meníngea média",
+    "parent": "maxilar",
+    "territory": "Dura-máter; relação com forame espinhoso",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "middle_meningeal_artery_l",
+      "middle_meningeal_artery_r"
+    ]
+  },
+  {
+    "id": "alveolar-inferior",
+    "name": "Artéria alveolar inferior",
+    "parent": "maxilar",
+    "territory": "Dentes mandibulares; ramo mentual para o mento",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "inferior_alveolar_artery_l",
+      "inferior_alveolar_artery_r"
+    ]
+  },
+  {
+    "id": "mentual",
+    "name": "Artéria mentual",
+    "parent": "alveolar-inferior",
+    "territory": "Mento e lábio inferior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "mental_branch_of_inferior_alveolar_artery_l",
+      "mental_branch_of_inferior_alveolar_artery_r"
+    ]
+  },
+  {
+    "id": "temporais-profundas",
+    "name": "Artérias temporais profundas",
+    "parent": "maxilar",
+    "territory": "Músculo temporal",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_deep_temporal_artery_l",
+      "anterior_deep_temporal_artery_r",
+      "posterior_deep_temporal_artery_l",
+      "posterior_deep_temporal_artery_r"
+    ]
+  },
+  {
+    "id": "masseterica",
+    "name": "Artéria massetérica",
+    "parent": "maxilar",
+    "territory": "Músculo masseter",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "bucal",
+    "name": "Artéria bucal",
+    "parent": "maxilar",
+    "territory": "Bucinador e mucosa da bochecha",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "buccal_artery_l",
+      "buccal_artery_r"
+    ]
+  },
+  {
+    "id": "alveolar-superior-posterior",
+    "name": "Artéria alveolar superior posterior",
+    "parent": "maxilar",
+    "territory": "Dentes superiores posteriores e seio maxilar",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "posterior_superior_alveolar_artery_l",
+      "posterior_superior_alveolar_artery_r"
+    ]
+  },
+  {
+    "id": "infraorbital",
+    "name": "Artéria infraorbital",
+    "parent": "maxilar",
+    "territory": "Região infraorbital e contribuições dentárias",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "infra_orbital_artery_l",
+      "infra_orbital_artery_r"
+    ]
+  },
+  {
+    "id": "palatina-descendente",
+    "name": "Artéria palatina descendente",
+    "parent": "maxilar",
+    "territory": "Palato, por seus ramos maior e menores",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "descending_palatine_artery_l",
+      "descending_palatine_artery_r"
+    ]
+  },
+  {
+    "id": "palatina-maior",
+    "name": "Artéria palatina maior",
+    "parent": "palatina-descendente",
+    "territory": "Palato duro",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "greater_palatine_artery_l",
+      "greater_palatine_artery_r"
+    ]
+  },
+  {
+    "id": "palatinas-menores",
+    "name": "Artérias palatinas menores",
+    "parent": "palatina-descendente",
+    "territory": "Palato mole",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "esfenopalatina",
+    "name": "Artéria esfenopalatina",
+    "parent": "maxilar",
+    "territory": "Cavidade nasal posterior: ramos septais e laterais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "oftalmica",
+    "name": "Artéria oftálmica",
+    "parent": "carotida-interna",
+    "territory": "Órbita, olho e contribuições nasais e frontais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "ophthalmic_artery_l",
+      "ophthalmic_artery_r"
+    ]
+  },
+  {
+    "id": "central-retina",
+    "name": "Artéria central da retina",
+    "parent": "oftalmica",
+    "territory": "Camadas internas da retina",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "central_retinal_artery_l",
+      "central_retinal_artery_r"
+    ]
+  },
+  {
+    "id": "lacrimal",
+    "name": "Artéria lacrimal",
+    "parent": "oftalmica",
+    "territory": "Glândula lacrimal e pálpebras",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "lacrimal_artery_l",
+      "lacrimal_artery_r"
+    ]
+  },
+  {
+    "id": "supraorbital",
+    "name": "Artéria supraorbital",
+    "parent": "oftalmica",
+    "territory": "Fronte e couro cabeludo",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "supra_orbital_artery_l",
+      "supra_orbital_artery_r"
+    ]
+  },
+  {
+    "id": "supratroclear",
+    "name": "Artéria supratroclear",
+    "parent": "oftalmica",
+    "territory": "Fronte medial e glabela",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "supratrochlear_artery_l",
+      "supratrochlear_artery_r"
+    ]
+  },
+  {
+    "id": "etmoidal-anterior",
+    "name": "Artéria etmoidal anterior",
+    "parent": "oftalmica",
+    "territory": "Etmoide anterior e cavidade nasal",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_ethmoidal_artery_l",
+      "anterior_ethmoidal_artery_r"
+    ]
+  },
+  {
+    "id": "etmoidal-posterior",
+    "name": "Artéria etmoidal posterior",
+    "parent": "oftalmica",
+    "territory": "Etmoide posterior e contribuições nasais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "posterior_ethmoidal_artery_l",
+      "posterior_ethmoidal_artery_r"
+    ]
+  },
+  {
+    "id": "cerebral-anterior",
+    "name": "Artéria cerebral anterior",
+    "parent": "carotida-interna",
+    "territory": "Face medial frontal e parietal; representação de membro inferior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_cerebral_artery_l",
+      "anterior_cerebral_artery_r"
+    ]
+  },
+  {
+    "id": "comunicante-anterior",
+    "name": "Artéria comunicante anterior",
+    "parent": "cerebral-anterior",
+    "territory": "Conexão entre as cerebrais anteriores",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_communicating_artery"
+    ]
+  },
+  {
+    "id": "pericalosa",
+    "name": "Artéria pericalosa",
+    "parent": "cerebral-anterior",
+    "territory": "Região pericalosa e face medial do hemisfério",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "pericallosal_artery_l",
+      "pericallosal_artery_r"
+    ]
+  },
+  {
+    "id": "calosomarginal",
+    "name": "Artéria calosomarginal",
+    "parent": "cerebral-anterior",
+    "territory": "Face medial frontal e paracentral; ramo variável",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "callosomarginal_artery_l",
+      "callosomarginal_artery_r"
+    ]
+  },
+  {
+    "id": "cerebral-media",
+    "name": "Artéria cerebral média",
+    "parent": "carotida-interna",
+    "territory": "Grande parte da face lateral do hemisfério e ínsula",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "middle_cerebral_artery_m1_segment_l",
+      "middle_cerebral_artery_m1_segment_r",
+      "middle_cerebral_artery_m3_segment_r"
+    ]
+  },
+  {
+    "id": "lenticuloestriadas",
+    "name": "Artérias lenticuloestriadas laterais",
+    "parent": "cerebral-media",
+    "territory": "Núcleos da base e cápsula interna, com territórios variáveis",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "coroidea-anterior",
+    "name": "Artéria coróidea anterior",
+    "parent": "carotida-interna",
+    "territory": "Estruturas profundas e plexo coroide do ventrículo lateral",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "comunicante-posterior",
+    "name": "Artéria comunicante posterior",
+    "parent": "carotida-interna",
+    "territory": "Conexão com a cerebral posterior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "posterior_communicating_artery_l",
+      "posterior_communicating_artery_r"
+    ]
+  },
+  {
+    "id": "subclavia",
+    "name": "Artéria subclávia",
+    "parent": "aorta",
+    "territory": "Membro superior, parede torácica e ramos cervicais; à direita vem do braquiocefálico",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "right_subclavian_artery",
+      "left_subclavian_artery"
+    ]
+  },
+  {
+    "id": "vertebral",
+    "name": "Artéria vertebral",
+    "parent": "subclavia",
+    "territory": "Circulação posterior e ramos espinhais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "vertebral_artery_l",
+      "vertebral_artery_r"
+    ]
+  },
+  {
+    "id": "pica",
+    "name": "Artéria cerebelar inferior posterior (PICA)",
+    "parent": "vertebral",
+    "territory": "Cerebelo posteroinferior e bulbo lateral; origem e território variam",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "posterior_inferior_cerebellar_artery_l",
+      "posterior_inferior_cerebellar_artery_r"
+    ]
+  },
+  {
+    "id": "espinhal-anterior",
+    "name": "Artéria espinhal anterior",
+    "parent": "vertebral",
+    "territory": "Território anterior da medula, com reforço segmentar",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_spinal_artery_l",
+      "anterior_spinal_artery_r"
+    ]
+  },
+  {
+    "id": "basilar",
+    "name": "Artéria basilar",
+    "parent": "vertebral",
+    "territory": "Formada pela união das vertebrais; contribui à irrigação do tronco e cerebelo",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "basilar_artery"
+    ]
+  },
+  {
+    "id": "aica",
+    "name": "Artéria cerebelar inferior anterior (AICA)",
+    "parent": "basilar",
+    "territory": "Ponte lateral inferior e cerebelo anteroinferior",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "anterior_inferior_cerebellar_artery_l",
+      "anterior_inferior_cerebellar_artery_r"
+    ]
+  },
+  {
+    "id": "pontinas",
+    "name": "Artérias pontinas",
+    "parent": "basilar",
+    "territory": "Ponte",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "lateral_pontine_branches_of_basilar_artery_l",
+      "lateral_pontine_branches_of_basilar_artery_r",
+      "medial_pontine_branches_of_basilar_artery_l",
+      "medial_pontine_branches_of_basilar_artery_r"
+    ]
+  },
+  {
+    "id": "cerebelar-superior",
+    "name": "Artéria cerebelar superior",
+    "parent": "basilar",
+    "territory": "Cerebelo superior e regiões associadas",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "superior_cerebellar_artery_l",
+      "superior_cerebellar_artery_r"
+    ]
+  },
+  {
+    "id": "cerebral-posterior",
+    "name": "Artéria cerebral posterior",
+    "parent": "basilar",
+    "territory": "Córtex occipital e temporal inferomedial",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "posterior_cerebral_artery_l",
+      "posterior_cerebral_artery_r"
+    ]
+  },
+  {
+    "id": "calcarina",
+    "name": "Artéria calcarina",
+    "parent": "cerebral-posterior",
+    "territory": "Córtex visual em torno do sulco calcarino",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "tireocervical",
+    "name": "Tronco tireocervical",
+    "parent": "subclavia",
+    "territory": "Ramos para pescoço, tireoide e região escapular",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "thyrocervical_trunk_l",
+      "thyrocervical_trunk_r"
+    ]
+  },
+  {
+    "id": "tireoidea-inferior",
+    "name": "Artéria tireóidea inferior",
+    "parent": "tireocervical",
+    "territory": "Polo inferior da tireoide e estruturas cervicais",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "inferior_thyroid_artery_l",
+      "inferior_thyroid_artery_r"
+    ]
+  },
+  {
+    "id": "toracica-interna",
+    "name": "Artéria torácica interna",
+    "parent": "subclavia",
+    "territory": "Parede torácica anterior e contribuições diafragmáticas",
+    "group": "Cabeça e pescoço",
+    "source": 3,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "internal_thoracic_artery_l",
+      "internal_thoracic_artery_r"
+    ]
+  },
+  {
+    "id": "celiaco",
+    "name": "Tronco celíaco",
+    "parent": "aorta",
+    "territory": "Território do intestino anterior abdominal",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "coeliac_trunk"
+    ]
+  },
+  {
+    "id": "gastrica-esquerda",
+    "name": "Artéria gástrica esquerda",
+    "parent": "celiaco",
+    "territory": "Curvatura menor e esôfago distal",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "left_gastric_artery"
+    ]
+  },
+  {
+    "id": "esplenica",
+    "name": "Artéria esplênica",
+    "parent": "celiaco",
+    "territory": "Baço, pâncreas e ramos gástricos",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "splenic_artery"
+    ]
+  },
+  {
+    "id": "hepática-comum",
+    "name": "Artéria hepática comum",
+    "parent": "celiaco",
+    "territory": "Origina os eixos hepático e gastroduodenal",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "common_hepatic_artery"
+    ]
+  },
+  {
+    "id": "hepatica-propria",
+    "name": "Artéria hepática própria",
+    "parent": "hepática-comum",
+    "territory": "Fígado por ramos direito e esquerdo",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "proper_hepatic_artery"
+    ]
+  },
+  {
+    "id": "hepatica-direita",
+    "name": "Artéria hepática direita",
+    "parent": "hepatica-propria",
+    "territory": "Território hepático direito; anatomia variável",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "cistica",
+    "name": "Artéria cística",
+    "parent": "hepatica-direita",
+    "territory": "Vesícula biliar; frequentemente origina-se da hepática direita",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "gastroduodenal",
+    "name": "Artéria gastroduodenal",
+    "parent": "hepática-comum",
+    "territory": "Duodeno proximal e ramos pancreáticos e gastro-omentais",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "gastroduodenal_artery"
+    ]
+  },
+  {
+    "id": "gastrica-direita",
+    "name": "Artéria gástrica direita",
+    "parent": "hepatica-propria",
+    "territory": "Curvatura menor; origem variável",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "gastro-omental-direita",
+    "name": "Artéria gastro-omental direita",
+    "parent": "gastroduodenal",
+    "territory": "Curvatura maior e omento maior",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "gastro-omental-esquerda",
+    "name": "Artéria gastro-omental esquerda",
+    "parent": "esplenica",
+    "territory": "Curvatura maior e omento maior",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "gastricas-curtas",
+    "name": "Artérias gástricas curtas",
+    "parent": "esplenica",
+    "territory": "Fundo gástrico",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "pancreaticoduodenal-superior",
+    "name": "Artérias pancreaticoduodenais superiores",
+    "parent": "gastroduodenal",
+    "territory": "Cabeça pancreática e duodeno",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "mesenterica-superior",
+    "name": "Artéria mesentérica superior",
+    "parent": "aorta",
+    "territory": "Intestino médio: duodeno distal até porção proximal do cólon transverso",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "superior_mesenteric_artery"
+    ]
+  },
+  {
+    "id": "pancreaticoduodenal-inferior",
+    "name": "Artéria pancreaticoduodenal inferior",
+    "parent": "mesenterica-superior",
+    "territory": "Cabeça pancreática e duodeno; anastomoses com arcadas superiores",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "inferior_pancreaticoduodenal_artery",
+      "anterior_inferior_pancreaticoduodenal_artery"
+    ]
+  },
+  {
+    "id": "jejunais-ileais",
+    "name": "Artérias jejunais e ileais",
+    "parent": "mesenterica-superior",
+    "territory": "Jejuno e íleo por arcadas e vasos retos",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Sem malha individual correspondente neste catálogo; disponível na árvore didática.",
+    "geometryIds": []
+  },
+  {
+    "id": "ileocolica",
+    "name": "Artéria ileocólica",
+    "parent": "mesenterica-superior",
+    "territory": "Íleo terminal, ceco e região apendicular",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "ileocolic_artery"
+    ]
+  },
+  {
+    "id": "apendicular",
+    "name": "Artéria apendicular",
+    "parent": "ileocolica",
+    "territory": "Apêndice vermiforme",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "appendicular_artery"
+    ]
+  },
+  {
+    "id": "colica-direita",
+    "name": "Artéria cólica direita",
+    "parent": "mesenterica-superior",
+    "territory": "Cólon ascendente; origem variável",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "right_colic_artery"
+    ]
+  },
+  {
+    "id": "colica-media",
+    "name": "Artéria cólica média",
+    "parent": "mesenterica-superior",
+    "territory": "Grande parte do cólon transverso",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "middle_colic_artery"
+    ]
+  },
+  {
+    "id": "mesenterica-inferior",
+    "name": "Artéria mesentérica inferior",
+    "parent": "aorta",
+    "territory": "Intestino posterior: porção distal do transverso até reto superior",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "inferior_mesenteric_artery"
+    ]
+  },
+  {
+    "id": "colica-esquerda",
+    "name": "Artéria cólica esquerda",
+    "parent": "mesenterica-inferior",
+    "territory": "Cólon descendente e região da flexura esquerda",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "left_colic_artery"
+    ]
+  },
+  {
+    "id": "sigmoideas",
+    "name": "Artérias sigmoideas",
+    "parent": "mesenterica-inferior",
+    "territory": "Cólon sigmoide",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "sigmoid_arteries"
+    ]
+  },
+  {
+    "id": "retal-superior",
+    "name": "Artéria retal superior",
+    "parent": "mesenterica-inferior",
+    "territory": "Porção superior do reto",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "superior_anorectal_artery"
+    ]
+  },
+  {
+    "id": "renal",
+    "name": "Artéria renal",
+    "parent": "aorta",
+    "territory": "Rim; ramos segmentares e variantes frequentes",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "left_renal_artery",
+      "right_renal_artery"
+    ]
+  },
+  {
+    "id": "iliaca-comum",
+    "name": "Artéria ilíaca comum",
+    "parent": "aorta",
+    "territory": "Divide-se nos eixos interno e externo",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "common_iliac_artery_l",
+      "common_iliac_artery_r"
+    ]
+  },
+  {
+    "id": "iliaca-interna",
+    "name": "Artéria ilíaca interna",
+    "parent": "iliaca-comum",
+    "territory": "Pelve, períneo e regiões glúteas",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "internal_iliac_artery_l",
+      "internal_iliac_artery_r"
+    ]
+  },
+  {
+    "id": "pudenda-interna",
+    "name": "Artéria pudenda interna",
+    "parent": "iliaca-interna",
+    "territory": "Períneo e genitais externos",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "internal_pudendal_artery_l",
+      "internal_pudendal_artery_r"
+    ]
+  },
+  {
+    "id": "iliaca-externa",
+    "name": "Artéria ilíaca externa",
+    "parent": "iliaca-comum",
+    "territory": "Continua como femoral após o ligamento inguinal",
+    "group": "Abdome e pelve",
+    "source": 0,
+    "representation": "Malhas identificadas no atlas masculino; variações e ramos podem não estar completos.",
+    "geometryIds": [
+      "external_iliac_artery_l",
+      "external_iliac_artery_r"
+    ]
+  }
+]

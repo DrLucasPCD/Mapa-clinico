@@ -27,3 +27,12 @@ Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-
 OpenStax, _Anatomy and Physiology 2e_ — https://openstax.org/details/books/anatomy-and-physiology-2e . Fontes específicas são vinculadas nas fichas. NCBI Bookshelf/StatPearls: anatomia do ombro (NBK482410), glúteo médio (NBK557509), reto abdominal (NBK538328). Textos do aplicativo são sínteses, não reprodução integral desses capítulos.
 
 PubMed/NCBI E-utilities — https://www.ncbi.nlm.nih.gov/home/develop/api/ . A indexação não significa licença das figuras de artigos. A descoberta automática mostra apenas metadados e links, mantendo o status “não revisada”.
+
+## Atlas detalhados adicionais
+
+Arquivos em `public/models/detailed`: distribuição de https://github.com/Nurkan1/Anatria-3D, com LICENSE e NOTICE preservados.
+
+- Masculino (`*_male.glb`, `manifest.json`): Z-Anatomy / BodyParts3D, DBCLS, CC BY-SA 4.0 conforme a distribuição; atribuições de origem completas no NOTICE.
+- Feminino (`*_female.glb`, `manifest_female.json`): NIH Human Reference Atlas / Visible Human Female, CC BY 4.0. Abrangência: tronco e pelve.
+- Os arquivos não foram mesclados entre sexos/fontes. O aplicativo adapta coordenadas e interação em memória; as licenças dos ativos permanecem independentes da licença do código.
+- Decodificadores Draco: distribuídos com Three.js; licença Apache 2.0 do Draco preservada na pasta de decodificadores.

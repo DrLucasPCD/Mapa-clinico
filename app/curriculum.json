@@ -1,0 +1,795 @@
+{
+  "sources": [
+    {
+      "id": 0,
+      "title": "2MA segunda avaliação (20211 - ANATOMIA DOS SISTEMAS (MEDICINA) (BBV0700102NMA)) (Visualização) Microsoft Forms(1).pdf",
+      "pages": 10
+    },
+    {
+      "id": 1,
+      "title": "APOSTILA TEÓRICA 25.1 2.pdf",
+      "pages": 17
+    },
+    {
+      "id": 2,
+      "title": "APOSTILA TEÓRICA - DIGESTÓRIO 2025.1.pdf",
+      "pages": 6
+    },
+    {
+      "id": 3,
+      "title": "Anatomizando vascularização da cabeça e pescoço _20250417_204135_0000.pdf",
+      "pages": 77
+    },
+    {
+      "id": 4,
+      "title": "2MC 2021.1 segunda avaliação (2021.1 - ANATOMIA DOS SISTEMAS- BBV0700102NMC) (Visualização) Microsoft Forms(1).pdf",
+      "pages": 9
+    },
+    {
+      "id": 5,
+      "title": "2021.1 2MA primeira avaliação de neur... (20211 - ANATOMIA DOS SISTEMAS (MEDICINA) (BBV0700102NMA)) (Visualização) Microsoft Forms.pdf",
+      "pages": 8
+    }
+  ],
+  "modules": [
+    {
+      "id": "neuro-organizacao",
+      "group": "Neuroanatomia",
+      "title": "Organização do sistema nervoso",
+      "structure": "cerebr",
+      "source": 1,
+      "pages": "2–3",
+      "points": [
+        "Diferencie SNC e SNP; aferência conduz informação ao SNC, eferência conduz comandos aos efetores.",
+        "Neurônios e células gliais têm funções distintas; mielina é produzida por oligodendrócitos no SNC e células de Schwann no SNP.",
+        "Núcleos são agrupamentos de corpos neuronais no SNC; gânglios, no SNP. Tratos e nervos não são sinônimos."
+      ],
+      "clinic": "Conecte sintomas motores, sensitivos e autonômicos antes de atribuí-los a uma única estrutura.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual célula forma a mielina do SNC?",
+      "options": [
+        "Oligodendrócito",
+        "Célula de Schwann",
+        "Micróglia"
+      ],
+      "correct": 0,
+      "explanation": "Diferencie SNC e SNP; aferência conduz informação ao SNC, eferência conduz comandos aos efetores. Conecte sintomas motores, sensitivos e autonômicos antes de atribuí-los a uma única estrutura."
+    },
+    {
+      "id": "medula",
+      "group": "Neuroanatomia",
+      "title": "Medula, raízes e meninges",
+      "structure": "spinal-cord",
+      "source": 1,
+      "pages": "3–5",
+      "points": [
+        "A medula adulta termina habitualmente em L1–L2; as raízes inferiores seguem no canal como cauda equina.",
+        "A raiz dorsal é aferente e possui gânglio; a ventral é eferente. O nervo espinhal formado pela união é misto.",
+        "O líquor circula no espaço subaracnóideo. O espaço epidural espinhal contém gordura e plexos venosos."
+      ],
+      "clinic": "Localize o nível neurológico e diferencie medula, cone e raízes; a topografia óssea não corresponde sempre ao segmento medular.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Onde circula o líquor ao redor da medula?",
+      "options": [
+        "Espaço epidural",
+        "Interior da dura-máter",
+        "Espaço subaracnóideo"
+      ],
+      "correct": 2,
+      "explanation": "A medula adulta termina habitualmente em L1–L2; as raízes inferiores seguem no canal como cauda equina. Localize o nível neurológico e diferencie medula, cone e raízes; a topografia óssea não corresponde sempre ao segmento medular."
+    },
+    {
+      "id": "vias",
+      "group": "Neuroanatomia",
+      "title": "Vias sensitivas e motoras",
+      "structure": "medullary-pyramids",
+      "source": 1,
+      "pages": "4–6",
+      "points": [
+        "Colunas dorsais conduzem vibração, propriocepção consciente e tato discriminativo; suas fibras cruzam no bulbo após a primeira sinapse central.",
+        "A via anterolateral conduz dor e temperatura e cruza na medula, tipicamente próximo ao nível de entrada.",
+        "A maior parte das fibras corticoespinhais cruza na decussação das pirâmides e desce no trato lateral."
+      ],
+      "clinic": "Na hemissecção medular, procure perda motora e proprioceptiva ipsilateral e perda de dor/temperatura contralateral abaixo da lesão.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual modalidade sobe pelas colunas dorsais?",
+      "options": [
+        "Comando motor voluntário",
+        "Propriocepção consciente",
+        "Olfação"
+      ],
+      "correct": 1,
+      "explanation": "Colunas dorsais conduzem vibração, propriocepção consciente e tato discriminativo; suas fibras cruzam no bulbo após a primeira sinapse central. Na hemissecção medular, procure perda motora e proprioceptiva ipsilateral e perda de dor/temperatura contralateral abaixo da lesão."
+    },
+    {
+      "id": "rexed",
+      "group": "Neuroanatomia",
+      "title": "Corno anterior e lâminas de Rexed",
+      "structure": "spinal-cord",
+      "source": 1,
+      "pages": "4–5",
+      "points": [
+        "A substância cinzenta medular organiza-se em lâminas I–X, definidas por características celulares.",
+        "A lâmina IX contém grupos de motoneurônios somáticos no corno anterior; a lâmina X circunda o canal central.",
+        "O corno dorsal participa do processamento sensitivo, sem equivaler a toda e qualquer modalidade ascendente."
+      ],
+      "clinic": "Uma lesão do motoneurônio inferior pode produzir fraqueza flácida, atrofia e redução dos reflexos no território afetado.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual lâmina contém grupos de motoneurônios somáticos?",
+      "options": [
+        "IX",
+        "I",
+        "X"
+      ],
+      "correct": 0,
+      "explanation": "A substância cinzenta medular organiza-se em lâminas I–X, definidas por características celulares. Uma lesão do motoneurônio inferior pode produzir fraqueza flácida, atrofia e redução dos reflexos no território afetado."
+    },
+    {
+      "id": "sindromes-medulares",
+      "group": "Neuroanatomia",
+      "title": "Síndromes medulares",
+      "structure": "spinal-cord",
+      "source": 5,
+      "pages": "6–8",
+      "points": [
+        "Compare padrões de síndrome anterior, posterior, central e hemissecção; cada um combina vias preservadas e comprometidas.",
+        "A síndrome central cervical pode afetar mais membros superiores que inferiores.",
+        "Na hemissecção, a lateralidade depende do cruzamento de cada via e do nível da lesão."
+      ],
+      "clinic": "Evite deduzir prognóstico ou integridade medular por um único sinal; compare força, modalidades sensitivas e função sacral.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual padrão sugere hemissecção medular?",
+      "options": [
+        "Perda isolada do olfato",
+        "Somente amnésia",
+        "Fraqueza ipsilateral e perda contralateral de dor abaixo da lesão"
+      ],
+      "correct": 2,
+      "explanation": "Compare padrões de síndrome anterior, posterior, central e hemissecção; cada um combina vias preservadas e comprometidas. Evite deduzir prognóstico ou integridade medular por um único sinal; compare força, modalidades sensitivas e função sacral."
+    },
+    {
+      "id": "tronco",
+      "group": "Neuroanatomia",
+      "title": "Bulbo, ponte e mesencéfalo",
+      "structure": "brainstem",
+      "source": 1,
+      "pages": "6–8",
+      "points": [
+        "O tronco encefálico compreende mesencéfalo, ponte e bulbo; nele passam vias longas e localizam-se núcleos de nervos cranianos.",
+        "O hipoglosso emerge entre a pirâmide e a oliva; IX e X emergem posteriormente à oliva.",
+        "O sulco basilar está na superfície ventral da ponte. O pedúnculo cerebelar médio conecta a ponte ao cerebelo."
+      ],
+      "clinic": "Déficit de nervo craniano de um lado com alteração corporal do lado oposto pode sugerir uma lesão do tronco.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "O sulco basilar fica na face ventral de qual estrutura?",
+      "options": [
+        "Corpo caloso",
+        "Ponte",
+        "Tálamo"
+      ],
+      "correct": 1,
+      "explanation": "O tronco encefálico compreende mesencéfalo, ponte e bulbo; nele passam vias longas e localizam-se núcleos de nervos cranianos. Déficit de nervo craniano de um lado com alteração corporal do lado oposto pode sugerir uma lesão do tronco."
+    },
+    {
+      "id": "cerebelo",
+      "group": "Neuroanatomia",
+      "title": "Cerebelo e coordenação",
+      "structure": "cerebell",
+      "source": 1,
+      "pages": "8–10",
+      "points": [
+        "Reconheça vermis, hemisférios, lobos anterior, posterior e floculonodular e os pedúnculos.",
+        "Os núcleos profundos incluem denteado, emboliforme, globoso e fastigial.",
+        "O vestibulocerebelo participa de equilíbrio e movimentos oculares; coordenação não é o mesmo que produção de força."
+      ],
+      "clinic": "Dismetria e disdiadococinesia ajudam a examinar coordenação; os sinais apendiculares cerebelares são frequentemente ipsilaterais.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual lobo se relaciona especialmente ao sistema vestibular?",
+      "options": [
+        "Floculonodular",
+        "Frontal",
+        "Occipital"
+      ],
+      "correct": 0,
+      "explanation": "Reconheça vermis, hemisférios, lobos anterior, posterior e floculonodular e os pedúnculos. Dismetria e disdiadococinesia ajudam a examinar coordenação; os sinais apendiculares cerebelares são frequentemente ipsilaterais."
+    },
+    {
+      "id": "liquor",
+      "group": "Neuroanatomia",
+      "title": "Ventrículos e circulação do líquor",
+      "structure": "fourth-ventricle",
+      "source": 1,
+      "pages": "7–11",
+      "points": [
+        "O líquor segue dos ventrículos laterais pelos forames interventriculares ao III ventrículo.",
+        "O aqueduto cerebral conecta o III ao IV ventrículo, que comunica-se com o espaço subaracnóideo por aberturas mediana e laterais.",
+        "Os plexos coroides participam da produção do líquor; o sistema não deve ser confundido com circulação arterial."
+      ],
+      "clinic": "Uma obstrução do aqueduto pode dilatar os ventrículos situados a montante. Relacione o ponto de bloqueio ao padrão da imagem.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "O aqueduto cerebral conecta quais ventrículos?",
+      "options": [
+        "Os dois ventrículos laterais diretamente",
+        "IV e canal carotídeo",
+        "III e IV"
+      ],
+      "correct": 2,
+      "explanation": "O líquor segue dos ventrículos laterais pelos forames interventriculares ao III ventrículo. Uma obstrução do aqueduto pode dilatar os ventrículos situados a montante. Relacione o ponto de bloqueio ao padrão da imagem."
+    },
+    {
+      "id": "diencefalo",
+      "group": "Neuroanatomia",
+      "title": "Diencéfalo e região selar",
+      "structure": "thalam",
+      "source": 1,
+      "pages": "10–11",
+      "points": [
+        "Diferencie tálamo, hipotálamo, epitálamo e subtálamo e sua relação com o III ventrículo.",
+        "O hipotálamo integra funções autonômicas e endócrinas; a hipófise relaciona-se ao infundíbulo e à sela turca.",
+        "O quiasma óptico é uma relação relevante da região suprasselar."
+      ],
+      "clinic": "Uma massa selar pode produzir alterações hormonais e do campo visual; a topografia orienta a investigação.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual estrutura integra funções autonômicas e endócrinas?",
+      "options": [
+        "Giro pré-central exclusivamente",
+        "Hipotálamo",
+        "Pirâmide bulbar"
+      ],
+      "correct": 1,
+      "explanation": "Diferencie tálamo, hipotálamo, epitálamo e subtálamo e sua relação com o III ventrículo. Uma massa selar pode produzir alterações hormonais e do campo visual; a topografia orienta a investigação."
+    },
+    {
+      "id": "homunculo",
+      "group": "Neuroanatomia",
+      "title": "Córtex e homúnculo",
+      "structure": "cerebrum-precentral",
+      "source": 5,
+      "pages": "1, 5",
+      "points": [
+        "O giro pré-central abriga córtex motor primário; o pós-central, córtex somatossensitivo primário.",
+        "A representação de perna e pé é predominantemente medial; mão e face ocupam regiões laterais extensas.",
+        "A área representada reflete especialização funcional, não apenas tamanho corporal."
+      ],
+      "clinic": "Déficit predominante em membro inferior e déficit face-braço sugerem topografias corticais diferentes.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "O homúnculo motor situa-se em relação ao sensitivo:",
+      "options": [
+        "Anteriormente",
+        "Posteriormente",
+        "No mesmo giro"
+      ],
+      "correct": 0,
+      "explanation": "O giro pré-central abriga córtex motor primário; o pós-central, córtex somatossensitivo primário. Déficit predominante em membro inferior e déficit face-braço sugerem topografias corticais diferentes."
+    },
+    {
+      "id": "fibras",
+      "group": "Neuroanatomia",
+      "title": "Fibras de associação, comissurais e projeção",
+      "structure": "cerebrum-corpus-callosum",
+      "source": 5,
+      "pages": "2–3",
+      "points": [
+        "Fibras de associação conectam áreas do mesmo hemisfério.",
+        "Fibras comissurais conectam os hemisférios; o corpo caloso é um exemplo.",
+        "Fibras de projeção conectam córtex e estruturas subcorticais; a cápsula interna concentra muitas dessas vias."
+      ],
+      "clinic": "Não use a alternativa marcada em uma avaliação como gabarito automático: o corpo caloso não é um feixe de associação intra-hemisférica.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "O corpo caloso é formado principalmente por fibras:",
+      "options": [
+        "De associação intra-hemisférica",
+        "De nervos espinhais",
+        "Comissurais"
+      ],
+      "correct": 2,
+      "explanation": "Fibras de associação conectam áreas do mesmo hemisfério. Não use a alternativa marcada em uma avaliação como gabarito automático: o corpo caloso não é um feixe de associação intra-hemisférica."
+    },
+    {
+      "id": "base-limbico",
+      "group": "Neuroanatomia",
+      "title": "Núcleos da base, hipocampo e amígdala",
+      "structure": "cerebrum-hippocampus",
+      "source": 1,
+      "pages": "14–15",
+      "points": [
+        "Caudado, putâmen e globo pálido integram circuitos motores com outras estruturas subcorticais.",
+        "O hipocampo participa da formação de memórias declarativas; a amígdala participa de processamento emocional.",
+        "Circuitos límbicos e motores interagem, mas não devem ter suas funções reduzidas a uma única emoção ou movimento."
+      ],
+      "clinic": "Relacione amnésia anterógrada ao sistema temporal medial e diferencie-a de perda motora por lesão capsular.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Qual estrutura participa da formação de novas memórias declarativas?",
+      "options": [
+        "Concha nasal inferior",
+        "Hipocampo",
+        "Oliva bulbar"
+      ],
+      "correct": 1,
+      "explanation": "Caudado, putâmen e globo pálido integram circuitos motores com outras estruturas subcorticais. Relacione amnésia anterógrada ao sistema temporal medial e diferencie-a de perda motora por lesão capsular."
+    },
+    {
+      "id": "via-optica",
+      "group": "Neuroanatomia",
+      "title": "Via óptica e campos visuais",
+      "structure": "optic",
+      "source": 0,
+      "pages": "5, 9",
+      "points": [
+        "No quiasma cruzam as fibras das hemirretinas nasais; as temporais permanecem ipsilaterais.",
+        "Lesões retroquiasmáticas produzem defeitos homônimos contralaterais; lesões centrais do quiasma podem afetar campos temporais de ambos os olhos.",
+        "Fibras temporais das radiações ópticas relacionam-se ao campo visual superior contralateral."
+      ],
+      "clinic": "Uma lesão do trato óptico esquerdo pode produzir hemianopsia homônima direita; descreva o campo perdido, não o lado da retina.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Compressão central do quiasma pode produzir:",
+      "options": [
+        "Hemianopsia bitemporal",
+        "Perda isolada de força da mão",
+        "Surdez condutiva"
+      ],
+      "correct": 0,
+      "explanation": "No quiasma cruzam as fibras das hemirretinas nasais; as temporais permanecem ipsilaterais. Uma lesão do trato óptico esquerdo pode produzir hemianopsia homônima direita; descreva o campo perdido, não o lado da retina."
+    },
+    {
+      "id": "facial",
+      "group": "Neuroanatomia",
+      "title": "Nervo facial e paralisia",
+      "structure": "facial-motor-nuclei",
+      "source": 0,
+      "pages": "4",
+      "points": [
+        "O VII nervo conduz fibras motoras para mímica, gustativas dos dois terços anteriores da língua e parassimpáticas.",
+        "A corda do tímpano relaciona-se ao paladar e às glândulas submandibular e sublingual; o nervo petroso maior participa da via lacrimal.",
+        "A sensibilidade geral dos dois terços anteriores da língua é conduzida principalmente pelo nervo lingual, ramo de V3."
+      ],
+      "clinic": "O padrão supranuclear típico poupa relativamente a fronte; lesão periférica pode comprometer toda a hemiface ipsilateral.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/13-2-the-central-nervous-system",
+      "question": "Lesão do nervo petroso maior pode reduzir:",
+      "options": [
+        "Força do quadríceps",
+        "Produção de bile",
+        "Lacrimejamento"
+      ],
+      "correct": 2,
+      "explanation": "O VII nervo conduz fibras motoras para mímica, gustativas dos dois terços anteriores da língua e parassimpáticas. O padrão supranuclear típico poupa relativamente a fronte; lesão periférica pode comprometer toda a hemiface ipsilateral."
+    },
+    {
+      "id": "cabeca-vasos",
+      "group": "Vascularização",
+      "title": "Carótidas e seus territórios",
+      "structure": "cerebr",
+      "source": 3,
+      "pages": "3–13",
+      "points": [
+        "O arco aórtico normalmente origina tronco braquiocefálico, carótida comum esquerda e subclávia esquerda.",
+        "A carótida externa possui oito ramos clássicos; facial cervical e facial na face são segmentos do mesmo vaso.",
+        "A carótida interna habitualmente não emite ramos cervicais; a oftálmica costuma originar-se dela."
+      ],
+      "clinic": "Compare circulação extracraniana, ocular e cerebral antes de associar uma lesão vascular a um território.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways",
+      "question": "A artéria oftálmica origina-se habitualmente da:",
+      "options": [
+        "Facial",
+        "Carótida interna",
+        "Cerebral média"
+      ],
+      "correct": 1,
+      "explanation": "O arco aórtico normalmente origina tronco braquiocefálico, carótida comum esquerda e subclávia esquerda. Compare circulação extracraniana, ocular e cerebral antes de associar uma lesão vascular a um território."
+    },
+    {
+      "id": "willis",
+      "group": "Vascularização",
+      "title": "Circulação cerebral e círculo arterial",
+      "structure": "cerebr",
+      "source": 3,
+      "pages": "9–13, 53–68",
+      "points": [
+        "Carótidas internas e sistema vertebrobasilar sustentam os principais territórios encefálicos.",
+        "A comunicante anterior une as cerebrais anteriores; as comunicantes posteriores conectam os sistemas carotídeo e posterior.",
+        "A cerebral média não compõe o anel clássico do círculo arterial; variantes são frequentes."
+      ],
+      "clinic": "Compare déficit face-braço, perna e campo visual com os territórios das cerebrais média, anterior e posterior.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways",
+      "question": "Qual artéria não integra o anel clássico de Willis?",
+      "options": [
+        "Cerebral média",
+        "Comunicante anterior",
+        "Comunicante posterior"
+      ],
+      "correct": 0,
+      "explanation": "Carótidas internas e sistema vertebrobasilar sustentam os principais territórios encefálicos. Compare déficit face-braço, perna e campo visual com os territórios das cerebrais média, anterior e posterior."
+    },
+    {
+      "id": "face-nariz",
+      "group": "Vascularização",
+      "title": "Face, órbita e cavidade nasal",
+      "structure": "nasal",
+      "source": 3,
+      "pages": "4–7, 18–46",
+      "points": [
+        "A facial cruza a margem mandibular e emite ramos para lábios, nariz e região angular.",
+        "A maxilar fornece ramos profundos; a esfenopalatina entra na cavidade nasal pelo forame homônimo.",
+        "A circulação nasal recebe contribuições de sistemas carotídeos interno e externo."
+      ],
+      "clinic": "Epistaxe é uma correlação para estudar anastomoses; não confunda o ducto nasolacrimal no meato inferior com drenagem do seio maxilar.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways",
+      "question": "A artéria esfenopalatina é ramo da:",
+      "options": [
+        "Lingual",
+        "Cerebral anterior",
+        "Maxilar"
+      ],
+      "correct": 2,
+      "explanation": "A facial cruza a margem mandibular e emite ramos para lábios, nariz e região angular. Epistaxe é uma correlação para estudar anastomoses; não confunda o ducto nasolacrimal no meato inferior com drenagem do seio maxilar."
+    },
+    {
+      "id": "seios",
+      "group": "Vascularização",
+      "title": "Veias da face e seios durais",
+      "structure": "cerebr",
+      "source": 3,
+      "pages": "14–16, 69–76",
+      "points": [
+        "As jugulares internas recebem drenagem intracraniana; as externas participam da drenagem superficial.",
+        "Seios transversos continuam nos sigmoides, que chegam às jugulares internas.",
+        "As comunicações entre veias faciais, orbitárias e seios ajudam a explicar disseminação de infecções."
+      ],
+      "clinic": "O seio cavernoso tem relações com a carótida interna e nervos oculomotores; a posição de cada nervo não é idêntica.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways",
+      "question": "O seio sigmoide continua principalmente na:",
+      "options": [
+        "Veia porta",
+        "Veia jugular interna",
+        "Artéria carótida externa"
+      ],
+      "correct": 1,
+      "explanation": "As jugulares internas recebem drenagem intracraniana; as externas participam da drenagem superficial. O seio cavernoso tem relações com a carótida interna e nervos oculomotores; a posição de cada nervo não é idêntica."
+    },
+    {
+      "id": "boca",
+      "group": "Digestório",
+      "title": "Boca, língua e glândulas salivares",
+      "structure": "mandible",
+      "source": 2,
+      "pages": "2–3",
+      "points": [
+        "Diferencie vestíbulo bucal e cavidade bucal própria, palatos duro e mole e istmo das fauces.",
+        "Papilas filiformes têm função mecânica; não constituem papilas gustativas típicas.",
+        "O ducto parotídeo atravessa o bucinador; o facial passa pela parótida, mas não fornece sua inervação secretomotora."
+      ],
+      "clinic": "Relacione obstrução ductal à glândula afetada e diferencie paladar, sensibilidade geral e motricidade da língua.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "As papilas filiformes têm função principalmente:",
+      "options": [
+        "Mecânica",
+        "Exclusivamente gustativa",
+        "Secretora de bile"
+      ],
+      "correct": 0,
+      "explanation": "Diferencie vestíbulo bucal e cavidade bucal própria, palatos duro e mole e istmo das fauces. Relacione obstrução ductal à glândula afetada e diferencie paladar, sensibilidade geral e motricidade da língua."
+    },
+    {
+      "id": "esofago",
+      "group": "Digestório",
+      "title": "Esôfago, diafragma e constrições",
+      "structure": "oesophagus",
+      "source": 2,
+      "pages": "3",
+      "points": [
+        "O esôfago tem porções cervical, torácica e abdominal e relações variáveis com traqueia, aorta e diafragma.",
+        "As constrições relacionam-se à transição faringoesofágica, arco aórtico/brônquio esquerdo e hiato diafragmático.",
+        "A drenagem do esôfago distal conecta sistema porta e sistema venoso sistêmico."
+      ],
+      "clinic": "Varizes esofágicas são uma conexão anatômica importante da hipertensão portal; não equivalem a refluxo gastroesofágico.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "Qual região reúne conexão portossistêmica relevante?",
+      "options": [
+        "Papila duodenal menor",
+        "Cartilagem cricoide",
+        "Esôfago distal"
+      ],
+      "correct": 2,
+      "explanation": "O esôfago tem porções cervical, torácica e abdominal e relações variáveis com traqueia, aorta e diafragma. Varizes esofágicas são uma conexão anatômica importante da hipertensão portal; não equivalem a refluxo gastroesofágico."
+    },
+    {
+      "id": "peritonio",
+      "group": "Digestório",
+      "title": "Peritônio, omentos e bolsa omental",
+      "structure": "stomach",
+      "source": 2,
+      "pages": "4",
+      "points": [
+        "Peritônio parietal reveste a parede e visceral recobre superfícies de órgãos.",
+        "O omento menor inclui ligamentos hepatogástrico e hepatoduodenal; o maior relaciona-se à curvatura maior.",
+        "A borda livre do hepatoduodenal contém a tríade portal; a veia cava inferior é relação posterior do forame omental."
+      ],
+      "clinic": "Reconheça compartimentos e pedículos antes de estudar propagação de líquido ou abordagem cirúrgica.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "Qual ligamento contém a tríade portal?",
+      "options": [
+        "Ligamento vocal",
+        "Hepatoduodenal",
+        "Ligamento patelar"
+      ],
+      "correct": 1,
+      "explanation": "Peritônio parietal reveste a parede e visceral recobre superfícies de órgãos. Reconheça compartimentos e pedículos antes de estudar propagação de líquido ou abordagem cirúrgica."
+    },
+    {
+      "id": "estomago",
+      "group": "Digestório",
+      "title": "Estômago e vascularização",
+      "structure": "stomach",
+      "source": 2,
+      "pages": "4",
+      "points": [
+        "Identifique cárdia, fundo, corpo, antro e canal pilórico, além das duas curvaturas.",
+        "Gástricas percorrem a curvatura menor; gastro-omentais percorrem a maior; gástricas curtas alcançam o fundo.",
+        "A parede posterior do estômago relaciona-se à bolsa omental e, mais profundamente, ao pâncreas."
+      ],
+      "clinic": "Na lesão vascular, identifique ramo de origem e território; não atribua todo o estômago a uma única artéria.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "As artérias gástricas direita e esquerda acompanham:",
+      "options": [
+        "Curvatura menor",
+        "Curvatura maior exclusivamente",
+        "Mesocólon sigmoide"
+      ],
+      "correct": 0,
+      "explanation": "Identifique cárdia, fundo, corpo, antro e canal pilórico, além das duas curvaturas. Na lesão vascular, identifique ramo de origem e território; não atribua todo o estômago a uma única artéria."
+    },
+    {
+      "id": "duodeno",
+      "group": "Digestório",
+      "title": "Duodeno e relações pancreáticas",
+      "structure": "small-intestine-duodenum",
+      "source": 0,
+      "pages": "4, 9",
+      "points": [
+        "Reconheça as porções superior, descendente, horizontal e ascendente.",
+        "A papila maior recebe usualmente a ampola formada por colédoco e ducto pancreático principal; o acessório relaciona-se à papila menor.",
+        "Os vasos mesentéricos superiores passam anteriormente à terceira porção do duodeno."
+      ],
+      "clinic": "Uma lesão da parede posterior do bulbo duodenal pode envolver a gastroduodenal; a topografia é relevante para hemorragia.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "O ducto pancreático acessório desemboca habitualmente na:",
+      "options": [
+        "Papila parotídea",
+        "Valva ileocecal",
+        "Papila duodenal menor"
+      ],
+      "correct": 2,
+      "explanation": "Reconheça as porções superior, descendente, horizontal e ascendente. Uma lesão da parede posterior do bulbo duodenal pode envolver a gastroduodenal; a topografia é relevante para hemorragia."
+    },
+    {
+      "id": "intestino",
+      "group": "Digestório",
+      "title": "Jejuno, íleo e cólon",
+      "structure": "small-intestine-jejunum",
+      "source": 2,
+      "pages": "5",
+      "points": [
+        "Compare pregas, arcadas e vasos retos de jejuno e íleo; o íleo terminal participa da absorção de vitamina B12 e sais biliares.",
+        "O cólon apresenta tênias, haustra e apêndices omentais, com variações conforme o segmento.",
+        "A mesentérica superior e a inferior nutrem territórios diferentes e conectados por anastomoses."
+      ],
+      "clinic": "Não reduza a função do íleo à absorção de água; associe ressecção ileal à função específica perdida.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "A absorção de vitamina B12 ocorre principalmente no:",
+      "options": [
+        "Cólon sigmoide",
+        "Íleo terminal",
+        "Esôfago"
+      ],
+      "correct": 1,
+      "explanation": "Compare pregas, arcadas e vasos retos de jejuno e íleo; o íleo terminal participa da absorção de vitamina B12 e sais biliares. Não reduza a função do íleo à absorção de água; associe ressecção ileal à função específica perdida."
+    },
+    {
+      "id": "apendice",
+      "group": "Digestório",
+      "title": "Apêndice e dor abdominal",
+      "structure": "large-intestine-vermiform-appendix",
+      "source": 0,
+      "pages": "3",
+      "points": [
+        "O apêndice origina-se no ceco; sua posição distal varia.",
+        "A convergência das tênias ajuda a localizar sua base; o mesoapêndice conduz vasos apendiculares.",
+        "O ponto de McBurney relaciona-se à linha entre umbigo e espinha ilíaca anterossuperior direita."
+      ],
+      "clinic": "A migração da dor de visceral para localizada pode refletir envolvimento peritoneal; nenhum ponto isolado confirma diagnóstico.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "O apêndice origina-se no:",
+      "options": [
+        "Ceco",
+        "Jejuno",
+        "Estômago"
+      ],
+      "correct": 0,
+      "explanation": "O apêndice origina-se no ceco; sua posição distal varia. A migração da dor de visceral para localizada pode refletir envolvimento peritoneal; nenhum ponto isolado confirma diagnóstico."
+    },
+    {
+      "id": "pancreas",
+      "group": "Digestório",
+      "title": "Pâncreas e pedículos",
+      "structure": "pancreas",
+      "source": 2,
+      "pages": "5–6",
+      "points": [
+        "Reconheça cabeça, processo uncinado, colo, corpo e cauda.",
+        "Arcadas pancreaticoduodenais conectam territórios celíaco e mesentérico superior; ramos esplênicos participam da irrigação de corpo e cauda.",
+        "A veia porta forma-se usualmente posterior ao colo pancreático pela união de mesentérica superior e esplênica."
+      ],
+      "clinic": "Na imagem, procure relações com duodeno, vasos mesentéricos e baço antes de localizar a lesão.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "A união que geralmente forma a veia porta é:",
+      "options": [
+        "Jugular interna e subclávia",
+        "Renal direita e cava inferior",
+        "Mesentérica superior e esplênica"
+      ],
+      "correct": 2,
+      "explanation": "Reconheça cabeça, processo uncinado, colo, corpo e cauda. Na imagem, procure relações com duodeno, vasos mesentéricos e baço antes de localizar a lesão."
+    },
+    {
+      "id": "hepatobiliar",
+      "group": "Digestório",
+      "title": "Fígado, vesícula e vias biliares",
+      "structure": "gallbladder",
+      "source": 2,
+      "pages": "6",
+      "points": [
+        "Os ductos hepáticos direito e esquerdo formam o hepático comum; a junção com o cístico forma o colédoco.",
+        "O ligamento redondo é remanescente da veia umbilical esquerda; não é uma artéria funcional adulta.",
+        "A vesícula armazena e concentra bile; diferencie cálculos na vesícula e no colédoco."
+      ],
+      "clinic": "Dor no hipocôndrio direito, febre e sinais inflamatórios exigem distinguir colelitíase sintomática, colecistite e outras hipóteses; uma imagem de cálculo isolada não resolve o diagnóstico.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/23-1-overview-of-the-digestive-system",
+      "question": "A união do ducto cístico com o hepático comum forma o:",
+      "options": [
+        "Ducto ejaculatório",
+        "Colédoco",
+        "Ducto pancreático acessório"
+      ],
+      "correct": 1,
+      "explanation": "Os ductos hepáticos direito e esquerdo formam o hepático comum; a junção com o cístico forma o colédoco. Dor no hipocôndrio direito, febre e sinais inflamatórios exigem distinguir colelitíase sintomática, colecistite e outras hipóteses; uma imagem de cálculo isolada não resolve o diagnóstico."
+    },
+    {
+      "id": "porta",
+      "group": "Vascularização",
+      "title": "Sistema porta e anastomoses",
+      "structure": "liver",
+      "source": 0,
+      "pages": "2–3",
+      "points": [
+        "O sistema porta conduz sangue de grande parte do tubo digestivo e órgãos associados ao fígado.",
+        "A gástrica esquerda participa de conexões esofágicas com o sistema ázigos.",
+        "Veias hepáticas drenam do fígado para a cava inferior; não são afluentes da porta."
+      ],
+      "clinic": "Compare circulação portal, hepática arterial e drenagem hepática venosa. São circuitos distintos.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways",
+      "question": "As veias hepáticas drenam para a:",
+      "options": [
+        "Veia cava inferior",
+        "Veia porta",
+        "Artéria hepática própria"
+      ],
+      "correct": 0,
+      "explanation": "O sistema porta conduz sangue de grande parte do tubo digestivo e órgãos associados ao fígado. Compare circulação portal, hepática arterial e drenagem hepática venosa. São circuitos distintos."
+    },
+    {
+      "id": "rins",
+      "group": "Urinário",
+      "title": "Rins, hilo e relações",
+      "structure": "kidneys",
+      "source": 4,
+      "pages": "7, 9",
+      "points": [
+        "Os rins são retroperitoneais; o direito costuma ser mais inferior em relação ao esquerdo.",
+        "No hilo, a disposição anteroposterior clássica é veia, artéria e pelve.",
+        "O duodeno descendente é relação anterior do rim direito; as relações dos rins não são simétricas."
+      ],
+      "clinic": "Localize rim, pelve, ureter e vasos separadamente e use relações anatômicas para interpretar cortes.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/25-3-gross-anatomy-of-the-kidney",
+      "question": "Qual estrutura é relação anterior do rim direito?",
+      "options": [
+        "Cólon sigmoide exclusivamente",
+        "Estômago exclusivamente",
+        "Duodeno descendente"
+      ],
+      "correct": 2,
+      "explanation": "Os rins são retroperitoneais; o direito costuma ser mais inferior em relação ao esquerdo. Localize rim, pelve, ureter e vasos separadamente e use relações anatômicas para interpretar cortes."
+    },
+    {
+      "id": "bexiga-prostata",
+      "group": "Urinário",
+      "title": "Bexiga, próstata e uretra",
+      "structure": "prostate",
+      "source": 4,
+      "pages": "3",
+      "points": [
+        "A próstata circunda a porção prostática da uretra; aumento da glândula pode dificultar a saída de urina.",
+        "Ductos ejaculatórios desembocam na uretra prostática; ductos bulbouretrais desembocam na uretra esponjosa.",
+        "No homem, vesículas seminais e ampolas dos ductos deferentes relacionam-se posteriormente à bexiga."
+      ],
+      "clinic": "Diferencie a causa anatômica de obstrução e a localização da retenção; procedimentos exigem avaliação e supervisão clínica.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/25-3-gross-anatomy-of-the-kidney",
+      "question": "Os ductos ejaculatórios desembocam na uretra:",
+      "options": [
+        "Feminina",
+        "Prostática",
+        "Esponjosa distal"
+      ],
+      "correct": 1,
+      "explanation": "A próstata circunda a porção prostática da uretra; aumento da glândula pode dificultar a saída de urina. Diferencie a causa anatômica de obstrução e a localização da retenção; procedimentos exigem avaliação e supervisão clínica."
+    },
+    {
+      "id": "gonadas",
+      "group": "Reprodutor",
+      "title": "Testículo, drenagem e períneo",
+      "structure": "testes",
+      "source": 0,
+      "pages": "1, 7–8",
+      "points": [
+        "A veia testicular direita drena usualmente na cava inferior; a esquerda, na renal esquerda.",
+        "O plexo pampiniforme relaciona-se à drenagem testicular e à termorregulação.",
+        "A irrigação do períneo não deve ser confundida com a irrigação gonadal; anatomia feminina exige modelo específico ausente neste atlas."
+      ],
+      "clinic": "Uma varicocele direita de aparecimento recente pode motivar investigação de obstrução; a anatomia orienta, mas não determina sozinha a causa.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/27-1-anatomy-and-physiology-of-the-male-reproductive-system",
+      "question": "A veia testicular esquerda drena usualmente na:",
+      "options": [
+        "Veia renal esquerda",
+        "Veia porta",
+        "Veia cava superior"
+      ],
+      "correct": 0,
+      "explanation": "A veia testicular direita drena usualmente na cava inferior; a esquerda, na renal esquerda. Uma varicocele direita de aparecimento recente pode motivar investigação de obstrução; a anatomia orienta, mas não determina sozinha a causa."
+    },
+    {
+      "id": "laringe",
+      "group": "Respiratório",
+      "title": "Laringe, nervos e fáscias cervicais",
+      "structure": "trachea",
+      "source": 4,
+      "pages": "2, 8",
+      "points": [
+        "A cricoide possui arco anterior e lâmina posterior; as aritenoides articulam-se superiormente à lâmina.",
+        "O ligamento cricotireóideo situa-se entre tireoide e cricoide; a membrana tireo-hióidea fica superior à cartilagem tireoide.",
+        "Nervos laríngeos recorrentes têm relação importante com a região traqueoesofágica e a tireoide."
+      ],
+      "clinic": "Compare os marcos anatômicos e os nervos em risco; estudar a anatomia de um acesso não substitui treinamento do procedimento.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/22-1-organs-and-structures-of-the-respiratory-system",
+      "question": "A membrana cricotireóidea fica entre:",
+      "options": [
+        "Hioide e tireoide",
+        "Cricoide e primeira costela",
+        "Cartilagens tireoide e cricoide"
+      ],
+      "correct": 2,
+      "explanation": "A cricoide possui arco anterior e lâmina posterior; as aritenoides articulam-se superiormente à lâmina. Compare os marcos anatômicos e os nervos em risco; estudar a anatomia de um acesso não substitui treinamento do procedimento."
+    },
+    {
+      "id": "pleura",
+      "group": "Respiratório",
+      "title": "Pleura e parede torácica",
+      "structure": "lungs",
+      "source": 0,
+      "pages": "2, 8",
+      "points": [
+        "A pleura visceral recobre pulmão e a parietal reveste a parede e outras superfícies torácicas.",
+        "O feixe intercostal principal acompanha o sulco costal junto à borda inferior da costela.",
+        "Diafragma e vísceras abdominais são relações importantes da base torácica."
+      ],
+      "clinic": "Diferencie pneumotórax e hemotórax pela estrutura comprometida e pelo conteúdo pleural; a escolha do acesso depende do contexto clínico.",
+      "reference": "https://openstax.org/books/anatomy-and-physiology-2e/pages/22-1-organs-and-structures-of-the-respiratory-system",
+      "question": "O feixe intercostal principal acompanha a borda:",
+      "options": [
+        "Medial do esterno exclusivamente",
+        "Inferior da costela",
+        "Superior da clavícula"
+      ],
+      "correct": 1,
+      "explanation": "A pleura visceral recobre pulmão e a parietal reveste a parede e outras superfícies torácicas. Diferencie pneumotórax e hemotórax pela estrutura comprometida e pelo conteúdo pleural; a escolha do acesso depende do contexto clínico."
+    }
+  ]
+}

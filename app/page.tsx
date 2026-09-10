@@ -44,6 +44,11 @@ import Discoveries from './Discoveries';
 import Install from './Install';
 import { registerStudyTool, type Context } from './webmcp';
 import './dashboard.css';
+import './study.css';
+import StudyPanel from './StudyPanel';
+import ImagingWorkbench from './ImagingWorkbench';
+import type { AtlasSlice } from './atlas-slice';
+import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 
 const Atlas = lazy(() => import('./Atlas'));
 const systems = [
@@ -55,6 +60,10 @@ const systems = [
   ['respiratory', 'Respiratório', Activity],
   ['digestive', 'Digestório', Layers],
   ['urinary', 'Urinário', Layers],
+  ['reproductive', 'Reprodutor', Activity],
+  ['endocrine', 'Endócrino', Activity],
+  ['lymphatic', 'Linfático', Layers],
+  ['integumentary', 'Tegumentar', Layers],
 ] as const;
 type Drawer =
   | 'lesson'
@@ -66,6 +75,14 @@ type Drawer =
   | null;
 
 export default function App() {
+  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging'>('case');
+  const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
+  const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
+  const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
+  useEffect(() => { let active = true; setModelCatalog([]); getDetailedCatalog(modelVariant).then(items => { if (active) setModelCatalog(items); }).catch(console.error); return () => { active = false; }; }, [modelVariant]);
+  const [slice, setSlice] = useState<AtlasSlice | null>(null);
+  const openStudy = (tab: typeof studyTab) => { setStudyTab(tab); setWorkspaceMode('study'); setMobileNav(false); };
+  const changeModel = (variant: typeof modelVariant) => { setModelVariant(variant); resetAtlas(); setSelected(''); setName(variant === 'female' ? 'Tronco feminino' : 'Corpo masculino'); };
   const [lessonTab, setLessonTab] = useState<'anatomia' | 'funcao' | 'clinica'>(
     'anatomia',
   );
@@ -105,8 +122,8 @@ export default function App() {
     lesson = lessons.find((l) => selected.includes(l.id)),
     activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
   const searchResults = useMemo(
-    () => searchAtlasStructures(query, system, 30),
-    [query, system],
+    () => searchAtlasStructures(query, system, 60, modelCatalog),
+    [query, system, modelCatalog],
   );
 
   useEffect(() => {
@@ -215,7 +232,7 @@ export default function App() {
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => query && setDrawer('structures')}
               aria-label="Buscar no catálogo"
-              placeholder="Buscar nas 749 estruturas do atlas…"
+              placeholder="Buscar estruturas do atlas…"
             />
           </label>
           {query && (
@@ -262,6 +279,7 @@ export default function App() {
             className="nav-item active"
             onClick={() => {
               resetAtlas();
+              setWorkspaceMode('case');
               setMobileNav(false);
             }}
           >
@@ -282,21 +300,13 @@ export default function App() {
           </button>
           <button
             className="nav-item"
-            onClick={() =>
-              document
-                .querySelector('.case-column')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => { setWorkspaceMode('case'); setMobileNav(false); }}
           >
             <Focus /> Casos clínicos
           </button>
           <button
             className="nav-item"
-            onClick={() =>
-              document
-                .querySelector('.radiograph')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => { setWorkspaceMode('imaging'); setMobileNav(false); resetAtlas(); }}
           >
             <ScanLine /> Imagens (TC, RM, RX)
           </button>
@@ -316,9 +326,11 @@ export default function App() {
           <button className="nav-item" onClick={() => setDrawer('protocols')}>
             <Library /> Protocolos e diretrizes
           </button>
-          <button className="nav-item" onClick={() => setDrawer('questions')}>
+          <button className="nav-item" onClick={() => openStudy('quiz')}>
             <ListChecks /> Simulados e questões
           </button>
+          <button className="nav-item" onClick={() => openStudy('topics')}><BookOpen /> Roteiro da faculdade</button>
+          <button className="nav-item" onClick={() => openStudy('vessels')}><Activity /> Artérias e territórios</button>
           <div className="side-rule" />
           <p>SISTEMAS</p>
           {systems.slice(1).map(([id, label, Icon]) => (
@@ -384,14 +396,8 @@ export default function App() {
                   placeholder="Buscar estrutura + Enter…"
                 />
               </label>
-              <button className="body-option active">♂</button>
-              <button
-                disabled
-                className="body-option"
-                title="Modelo feminino ainda indisponível"
-              >
-                ♀
-              </button>
+              <button className={'body-option ' + (modelVariant === 'male' ? 'active' : '')} aria-label="Modelo masculino" onClick={() => changeModel('male')}>♂</button>
+              <button className={'body-option ' + (modelVariant === 'female' ? 'active' : '')} aria-label="Modelo feminino: tronco" onClick={() => changeModel('female')}>♀</button>
             </div>
             <div className="atlas-system-select">
               <span>Sistema</span>
@@ -422,6 +428,8 @@ export default function App() {
               }
             >
               <Atlas
+                modelVariant={modelVariant}
+                slice={workspaceMode === 'imaging' ? slice : null}
                 system={system}
                 selected={selected}
                 isolate={isolate}
@@ -615,17 +623,19 @@ export default function App() {
                 </small>
               </div>
             </details>
+            <div className="atlas-selection" aria-live="polite">{name}<small>{modelVariant === 'female' ? 'Modelo feminino real · tronco e pelve' : 'Modelo masculino detalhado'}</small></div>
             <div className="model-switch">
-              <button className="active">Masculino</button>
-              <button disabled title="Modelo ainda indisponível">
-                Feminino
-              </button>
-              <button disabled title="Modelo ainda indisponível">
-                Pediátrico
-              </button>
+              <button className={modelVariant === 'male' ? 'active' : ''} onClick={() => changeModel('male')}>Masculino</button>
+              <button className={modelVariant === 'female' ? 'active' : ''} onClick={() => changeModel('female')}>Feminino · tronco</button>
             </div>
           </section>
           <section className="case-column">
+            <nav className="workspace-tabs" aria-label="Área de estudo">
+              <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => setWorkspaceMode('case')}>Casos</button>
+              <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
+              <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
+            </nav>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}
@@ -664,6 +674,7 @@ export default function App() {
                 )
               }
             />
+            </>}
           </section>
           <section className="publication-column">
             <Discoveries />
@@ -681,14 +692,14 @@ export default function App() {
         <div>
           <Layers />
           <span>
-            <strong>{ATLAS_STRUCTURE_COUNT.toLocaleString('pt-BR')}</strong>
+            <strong>{modelCatalog.length.toLocaleString('pt-BR')}</strong>
             <small>Estruturas catalogadas</small>
           </span>
         </div>
         <div>
           <ScanLine />
           <span>
-            <strong>{ATLAS_MESH_COUNT.toLocaleString('pt-BR')}</strong>
+            <strong>{modelCatalog.reduce((sum, item) => sum + item.objectCount, 0).toLocaleString('pt-BR')}</strong>
             <small>Objetos anatômicos 3D</small>
           </span>
         </div>
@@ -782,6 +793,7 @@ export default function App() {
                 currentLesson={lesson}
                 selectCase={(id) => {
                   setCaseId(id);
+                  setWorkspaceMode('case');
                   setDrawer(null);
                   setTimeout(
                     () =>
@@ -796,7 +808,7 @@ export default function App() {
           </section>
         </div>
       )}
-      <footer className="atlas-credits">Atlas: <a href="https://github.com/vixotic/Vanatome/blob/main/ASSET-LICENSE.md" target="_blank" rel="noreferrer">Vanatome / Z-Anatomy · CC BY-SA 4.0</a> · Visualização e organização adaptadas · Ensino não comercial</footer>
+      <footer className="atlas-credits">Atlas: <a href="/models/detailed/LICENSE" target="_blank" rel="noreferrer">Z-Anatomy / BodyParts3D · CC BY-SA 4.0; feminino NIH HRA · CC BY 4.0</a> · Visualização e organização adaptadas · Ensino não comercial</footer>
       <Install />
     </div>
   );
