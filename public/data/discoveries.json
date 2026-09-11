@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-10T13:35:30.701Z",
+  "lastChecked": "2026-09-11T13:34:01.595Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,15 +46,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42550573/",
       "authors": "Mosedale T, Lim ET, Tsampras N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42462588",
-      "title": "From the archives of MD Anderson Cancer Center: Crystal-storing histiocytosis associated with B-cell lymphoma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42462588/",
-      "authors": "Al-Rusan O, Shen Q, Medeiros LJ",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -217,6 +208,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42699746/",
       "authors": "Ouazzani Chahdi H, Akammar A, Chaouche I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42699738",
+      "title": "Accessory gallbladder lithiasis presenting as acute cholangitis.",
+      "date": "2026 Nov",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42699738/",
+      "authors": "Hamrouni H, Hamrouni H, El Hedhili F",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
