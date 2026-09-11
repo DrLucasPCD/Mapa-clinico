@@ -25,14 +25,14 @@ function element(group, element, vr, value) {
   const long = ['OB', 'OD', 'OF', 'OL', 'OW', 'SQ', 'UC', 'UR', 'UT', 'UN'].includes(vr);
   return join(u16(group), u16(element), enc.encode(vr), long ? new Uint8Array(2) : new Uint8Array(), long ? u32(bytes.length) : u16(bytes.length), bytes);
 }
-function dicom({ position = '0\\0\\0', orientation = '1\\0\\0\\0\\1\\0', series = '1.2.3', pixels = [-1000, 0, 500, 1000], samples = 1, frames = '1', syntax = '1.2.840.10008.1.2.1', signed = 1 } = {}) {
+function dicom({ position = '0\\0\\0', orientation = '1\\0\\0\\0\\1\\0', spacing = '0.8\\0.8', series = '1.2.3', pixels = [-1000, 0, 500, 1000], samples = 1, frames = '1', syntax = '1.2.840.10008.1.2.1', signed = 1 } = {}) {
   const pixelBytes = new Uint8Array(8); pixels.forEach((value, i) => { pixelBytes[i * 2] = value & 255; pixelBytes[i * 2 + 1] = (value >> 8) & 255; });
   return join(new Uint8Array(128), enc.encode('DICM'),
     element(2, 0x0010, 'UI', syntax),
     element(8, 0x0060, 'CS', 'CT'), element(0x20, 0x000e, 'UI', series), element(0x20, 0x0013, 'IS', '2'),
     element(0x20, 0x0032, 'DS', position), element(0x20, 0x0037, 'DS', orientation),
     element(0x28, 0x0002, 'US', u16(samples)), element(0x28, 0x0004, 'CS', samples === 1 ? 'MONOCHROME2' : 'RGB'), element(0x28, 0x0008, 'IS', frames),
-    element(0x28, 0x0010, 'US', u16(2)), element(0x28, 0x0011, 'US', u16(2)), element(0x28, 0x0100, 'US', u16(16)), element(0x28, 0x0101, 'US', u16(16)), element(0x28, 0x0102, 'US', u16(15)), element(0x28, 0x0103, 'US', u16(signed)),
+    element(0x28, 0x0010, 'US', u16(2)), element(0x28, 0x0011, 'US', u16(2)), element(0x28, 0x0030, 'DS', spacing), element(0x28, 0x0100, 'US', u16(16)), element(0x28, 0x0101, 'US', u16(16)), element(0x28, 0x0102, 'US', u16(15)), element(0x28, 0x0103, 'US', u16(signed)),
     element(0x28, 0x1052, 'DS', '-1024'), element(0x28, 0x1053, 'DS', '1'), element(0x28, 0x1050, 'DS', '40'), element(0x28, 0x1051, 'DS', '400'), element(0x7fe0, 0x0010, 'OW', pixelBytes));
 }
 
@@ -42,6 +42,7 @@ test('reads native single-frame monochrome CT pixels without retaining patient t
   assert.deepEqual([...image.pixels], [-1000, 0, 500, 1000]);
   assert.equal(image.intercept, -1024);
   assert.equal(image.windowWidth, 400);
+  assert.deepEqual(image.pixelSpacing, [0.8, 0.8]);
   assert.equal(planeForSlice(image), 'axial');
   assert.equal('patientName' in image, false);
 });

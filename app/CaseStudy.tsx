@@ -11,6 +11,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import type { ClinicalCase } from './content';
 import './panels.css';
+import { imageIntegration } from './image-integration';
 export default function CaseStudy({
   item,
   period,
@@ -19,7 +20,9 @@ export default function CaseStudy({
   caseCount,
   onPreviousCase,
   onNextCase,
+  onOpenDicom,
 }: {
+  onOpenDicom?: () => void;
   item: ClinicalCase;
   period: number;
   onLocate: () => void;
@@ -43,6 +46,7 @@ export default function CaseStudy({
     window.addEventListener('keydown', close);
     return () => window.removeEventListener('keydown', close);
   }, []);
+  const integration = imageIntegration(item.images, item.acquisition);
   const image = item.images[index] || item.images[0];
   return (
     <section className="case-detail clinical-panel">
@@ -115,6 +119,13 @@ export default function CaseStudy({
           </button>
         </div>
       </div>
+      <aside className="integration-card" aria-label="Integração da imagem com o Atlas">
+        <strong><ScanLine size={16} /> {integration.title}</strong>
+        <p>{integration.description}</p>
+        <div><button onClick={onLocate}>Mostrar região no Atlas</button>{onOpenDicom && <button onClick={onOpenDicom}>{integration.mode === 'dicom' ? 'Carregar 3D deste exame' : 'Abrir DICOM local / 3D do exame'}</button>}</div>
+        <details><summary>Como o aplicativo escolhe a integração?</summary><p>A classificação usa os arquivos disponíveis neste caso. Uma sequência só é tratada como cortes quando sua ordem de aquisição foi verificada. Datas diferentes, modalidades diferentes ou várias imagens não comprovam uma série. Para posicionamento espacial das fatias, são necessárias posição, orientação e espaçamento DICOM. Isso não cria uma segmentação de órgãos.</p></details>
+      </aside>
+      {integration.mode === 'sequence' && <label className="sequence-navigation">Corte {index + 1} de {item.images.length}<input aria-label="Corte da sequência" type="range" min={0} max={item.images.length - 1} value={index} onChange={e => {setIndex(Number(e.target.value));setZoom(1)}} /></label>}
       <div className="case-layout">
         <div className="case-media" hidden={panel === 'questions'}>
           <div

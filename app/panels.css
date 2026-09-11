@@ -137,3 +137,6 @@
     padding-top: 0;
   }
 }
+.integration-card{margin:0 18px 18px;padding:13px;background:#ecf7f8;border:1px solid #c4e1e6;border-radius:8px;color:#245466;font-size:12px}.integration-card strong{display:flex;align-items:center;gap:7px;color:#007e89}.integration-card p{line-height:1.6;margin:9px 0}.integration-card>div{display:flex;flex-wrap:wrap;gap:7px}.integration-card button{border:1px solid #b2d6db;background:white;color:#007881;border-radius:5px;padding:8px;font-size:11px}.integration-card details{margin-top:10px;font-size:11px}.integration-card summary{cursor:pointer}.sequence-navigation{display:grid;gap:8px;margin:15px 18px;font-size:12px}.sequence-navigation input{accent-color:#007e89;width:100%}.patient-space-view{height:300px;position:relative;background:#071d28;border-radius:8px;overflow:hidden}.patient-space-view canvas{display:block;width:100%;height:100%}
+
+.patient-slices>small{display:block!important;white-space:normal;line-height:1.6;font-size:11px!important;color:#b8dce2!important;padding:10px}.patient-slices>.image-tools{padding:0 10px}

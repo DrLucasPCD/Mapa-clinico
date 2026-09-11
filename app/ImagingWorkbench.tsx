@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { groupDicomSeries, parseDicomFiles, sliceFraction, type DicomSeries, type Plane, type Region } from './dicom';
 import './study.css';
 
 type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
-type Props = { onSlice: (location: SliceLocation) => void };
+type Props = { dicomFiles?: string[]; onSlice: (location: SliceLocation) => void };
+const PatientSlices = lazy(() => import('./PatientSlices'));
+const MAX_DICOM_BYTES = 500 * 1024 * 1024;
 
 function intensityRange(series: DicomSeries) {
   let low = Infinity, high = -Infinity;
@@ -15,7 +17,7 @@ function intensityRange(series: DicomSeries) {
   return [low, high] as const;
 }
 
-export default function ImagingWorkbench({ onSlice }: Props) {
+export default function ImagingWorkbench({ onSlice, dicomFiles }: Props) {
   const [series, setSeries] = useState<DicomSeries[]>([]);
   const [seriesIndex, setSeriesIndex] = useState(0);
   const [sliceIndex, setSliceIndex] = useState(0);
@@ -25,6 +27,8 @@ export default function ImagingWorkbench({ onSlice }: Props) {
   const [center, setCenter] = useState<number | null>(null);
   const [width, setWidth] = useState<number | null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const loadRevision = useRef(0);
+  const automaticLoad = useRef<AbortController | null>(null);
   const current = series[seriesIndex];
   const selected = current?.slices[sliceIndex];
   const range = useMemo(() => current ? intensityRange(current) : [0, 1] as const, [current]);
@@ -67,15 +71,67 @@ export default function ImagingWorkbench({ onSlice }: Props) {
 
   const openFiles = async (fileList: FileList | null) => {
     if (!fileList?.length) return;
+    automaticLoad.current?.abort();
+    automaticLoad.current = null;
+    const revision = ++loadRevision.current;
     setLoading(true);
     try {
       const result = await parseDicomFiles(Array.from(fileList));
+      if (revision !== loadRevision.current) return;
       setSeries(result.series);
       setSeriesIndex(0);
       setErrors(result.errors);
-    } finally { setLoading(false); }
+    } catch (error) {
+      if (revision === loadRevision.current)
+        setErrors([error instanceof Error ? error.message : 'Falha ao carregar os arquivos.']);
+    } finally { if (revision === loadRevision.current) setLoading(false); }
   };
-  const clear = () => { setSeries([]); setSeriesIndex(0); setSliceIndex(0); setErrors([]); setCenter(null); setWidth(null); };
+  useEffect(() => {
+    const revision = ++loadRevision.current;
+    automaticLoad.current?.abort();
+    automaticLoad.current = null;
+    if (!dicomFiles?.length) { setLoading(false); return; }
+    const controller = new AbortController();
+    automaticLoad.current = controller;
+    let active = true;
+    setLoading(true); setErrors([]); setSeries([]); setSliceIndex(0);
+    void (async () => {
+      try {
+        if (dicomFiles.length > 400 || !dicomFiles.every(path => /^\/radiology\/[a-zA-Z0-9/_-]+\.dcm$/.test(path))) throw new Error('Lista de arquivos DICOM inválida.');
+        const files: File[] = []; let total = 0;
+        for (const path of dicomFiles) {
+          const response = await fetch(path, { signal: controller.signal });
+          if (!response.ok) throw new Error('Não foi possível carregar a série deste caso.');
+          const declared = Number(response.headers.get('content-length'));
+          if (Number.isFinite(declared) && declared > MAX_DICOM_BYTES - total) throw new Error('A série excede o limite de 500 MB.');
+          if (!response.body) {
+            const bytes = await response.arrayBuffer(); total += bytes.byteLength;
+            if (total > MAX_DICOM_BYTES) throw new Error('A série excede o limite de 500 MB.');
+            files.push(new File([bytes], path.split('/').pop()!, {type:'application/dicom'}));
+            continue;
+          }
+          const reader = response.body.getReader(); const chunks: Uint8Array<ArrayBuffer>[] = [];
+          while (true) { const {done, value} = await reader.read(); if (done) break; total += value.byteLength; if (total > MAX_DICOM_BYTES) { await reader.cancel(); throw new Error('A série excede o limite de 500 MB.'); } chunks.push(value as Uint8Array<ArrayBuffer>); }
+          files.push(new File(chunks, path.split('/').pop()!, {type:'application/dicom'}));
+        }
+        const result = await parseDicomFiles(files);
+        if (active && revision === loadRevision.current) { setSeries(result.series); setSeriesIndex(0); setErrors(result.errors); }
+      } catch (error) { if (active && revision === loadRevision.current && !(error instanceof DOMException && error.name === 'AbortError')) setErrors([error instanceof Error ? error.message : 'Falha ao carregar a série.']); }
+      finally { if (active && revision === loadRevision.current) setLoading(false); }
+    })();
+    return () => {
+      active = false;
+      controller.abort();
+      if (automaticLoad.current === controller) automaticLoad.current = null;
+    };
+  }, [dicomFiles]);
+  const clear = () => {
+    ++loadRevision.current;
+    automaticLoad.current?.abort();
+    automaticLoad.current = null;
+    setLoading(false); setSeries([]); setSeriesIndex(0); setSliceIndex(0);
+    setErrors([]); setCenter(null); setWidth(null);
+  };
   const move = (delta: number) => setSliceIndex((value) => Math.max(0, Math.min((current?.slices.length ?? 1) - 1, value + delta)));
 
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
@@ -91,6 +147,7 @@ export default function ImagingWorkbench({ onSlice }: Props) {
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
       <div className="series-image" onWheel={(event) => { event.preventDefault(); move(event.deltaY > 0 ? 1 : -1); }}>
+        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} /></Suspense>
         <canvas className="dicom-canvas" ref={canvas} aria-label={`Imagem ${current.modality}, corte ${sliceIndex + 1} de ${current.slices.length}`} />
       </div>
       <div className="slice-controls">

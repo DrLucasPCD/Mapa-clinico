@@ -16,6 +16,8 @@ export type DicomSlice = {
   invert: boolean;
   position?: [number, number, number];
   orientation?: [number, number, number, number, number, number];
+  /** DICOM Pixel Spacing: row spacing, then column spacing, in millimetres. */
+  pixelSpacing?: [number, number];
   instance?: number;
   sourceName: string;
 };
@@ -111,9 +113,12 @@ export function parseDicomImage(bytes: Uint8Array, sourceName = 'imagem.dcm'): D
   if ((center !== undefined && !Number.isFinite(center)) || (width !== undefined && (!Number.isFinite(width) || width <= 0))) fail('Janela DICOM inválida.');
   const position = decimalList(ds, 'x00200032', 3) as DicomSlice['position'] | undefined;
   const orientation = decimalList(ds, 'x00200037', 6) as DicomSlice['orientation'] | undefined;
+  const spacingValues = decimalList(ds, 'x00280030', 2);
+  const pixelSpacing = spacingValues && spacingValues[0] > 0 && spacingValues[1] > 0
+    ? spacingValues as DicomSlice['pixelSpacing'] : undefined;
   const seriesId = text(ds, 'x0020000e') || 'sem-serie';
   const instance = ds.intString('x00200013');
-  return { seriesId, modality, rows: rows!, columns: columns!, pixels: readPixels(ds, rows!, columns!, bitsAllocated!, bitsStored!, highBit!, representation === 1), slope: slope!, intercept: intercept!, windowCenter: center, windowWidth: width, invert: photometric === 'MONOCHROME1', position, orientation, instance: Number.isFinite(instance) ? instance : undefined, sourceName };
+  return { seriesId, modality, rows: rows!, columns: columns!, pixels: readPixels(ds, rows!, columns!, bitsAllocated!, bitsStored!, highBit!, representation === 1), slope: slope!, intercept: intercept!, windowCenter: center, windowWidth: width, invert: photometric === 'MONOCHROME1', position, orientation, pixelSpacing, instance: Number.isFinite(instance) ? instance : undefined, sourceName };
 }
 
 function normal(slice: DicomSlice): [number, number, number] | undefined {

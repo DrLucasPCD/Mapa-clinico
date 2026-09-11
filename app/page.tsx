@@ -635,7 +635,7 @@ export default function App() {
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} /> : <>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}
@@ -657,6 +657,7 @@ export default function App() {
               key={caseId}
               item={activeCase}
               period={n}
+              onOpenDicom={() => { setWorkspaceMode('imaging'); resetAtlas(); }}
               onLocate={locate}
               caseIndex={cases.indexOf(activeCase)}
               caseCount={cases.length}

@@ -1,3 +1,4 @@
+import type { Acquisition } from './image-integration';
 export type Lesson = {
   id: string;
   name: string;
@@ -289,6 +290,7 @@ export type ClinicalCase = {
   system: string;
   regionLabel: string;
   images: { src: string; label: string }[];
+  acquisition?: Acquisition;
   question: string;
   options: string[];
   correct: number;

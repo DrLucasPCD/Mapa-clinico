@@ -76,3 +76,9 @@ Build TypeScript/Vite e testes de geometria real, lateralidade, referências, ar
 ### Roteiro dos seis materiais
 
 Foram extraídos os textos das duas apostilas teóricas (neuroanatomia e digestório), três avaliações e do material de vascularização da cabeça/pescoço: 127 páginas no conjunto. Cada tema indica material e páginas de origem. Questões são autorais, e marcações de respostas nos PDFs não foram tratadas como gabarito oficial. Correções de inconsistências das apostilas aparecem junto dos temas vasculares. Os arquivos pessoais não foram publicados.
+
+### Integração por dados disponíveis
+
+Cada caso classifica sua mídia antes de oferecer integração: imagens selecionadas recebem referência anatômica; sequências só habilitam navegação de cortes quando a ordem foi verificada; arquivos DICOM locais do catálogo podem ser carregados pelo leitor. A lista precisa apontar para ativos `.dcm` publicados em `/radiology/`, previamente autorizados para reutilização. Não há busca automática de DICOM na Radiopaedia nem dedução de coordenadas a partir de JPEGs.
+
+O leitor posiciona as fatias no espaço do próprio exame quando posição, orientação e espaçamento dos pixels são válidos. Esse posicionamento não é registro do Atlas genérico e não segmenta órgãos. Os casos atuais da Radiopaedia continuam sendo imagens selecionadas, sem séries DICOM completas.
