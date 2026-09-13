@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -41,6 +41,8 @@ export default function CaseStudy({
     [reveal, setReveal] = useState(false),
     [panel, setPanel] = useState<'cases' | 'images' | 'questions'>('cases'),
     [fullscreen, setFullscreen] = useState(false);
+  const radiograph = useRef<HTMLDivElement>(null);
+  const wheelDistance = useRef(0);
   const integration = imageIntegration(item.images, item.acquisition);
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
@@ -54,6 +56,24 @@ export default function CaseStudy({
       onSequenceSlice?.(index, item.images.length);
     }
   }, [index, integration.mode, item.images.length, onSequenceSlice]);
+  useEffect(() => {
+    const target = radiograph.current;
+    if (!target || integration.mode !== 'sequence') return;
+    const navigate = (event: WheelEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      wheelDistance.current += event.deltaY;
+      if (Math.abs(wheelDistance.current) < 24) return;
+      const direction = wheelDistance.current > 0 ? 1 : -1;
+      wheelDistance.current = 0;
+      setIndex((value) =>
+        Math.max(0, Math.min(item.images.length - 1, value + direction)),
+      );
+      setZoom(1);
+    };
+    target.addEventListener('wheel', navigate, { passive: false });
+    return () => target.removeEventListener('wheel', navigate);
+  }, [integration.mode, item.images.length]);
   const image = item.images[index] || item.images[0];
   return (
     <section className="case-detail clinical-panel">
@@ -136,16 +156,11 @@ export default function CaseStudy({
       <div className="case-layout">
         <div className="case-media" hidden={panel === 'questions'}>
           <div
+            ref={radiograph}
             role={fullscreen ? 'dialog' : undefined}
             aria-modal={fullscreen ? true : undefined}
             aria-label={fullscreen ? 'Imagem ampliada' : undefined}
             className={'radiograph' + (fullscreen ? ' is-fullscreen' : '')}
-            onWheel={(event) => {
-              if (integration.mode !== 'sequence' || event.deltaY === 0) return;
-              event.preventDefault();
-              setIndex((value) => Math.max(0, Math.min(item.images.length - 1, value + (event.deltaY > 0 ? 1 : -1))));
-              setZoom(1);
-            }}
           >
             <img
               src={image.src}

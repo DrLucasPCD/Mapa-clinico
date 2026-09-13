@@ -111,6 +111,24 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
       context.moveTo(col + .5, row + .5 - arm); context.lineTo(col + .5, row + .5 + arm); context.stroke();
     }
   }, [selected, wc, ww, targetPixel]);
+  useEffect(() => {
+    const target = canvas.current;
+    if (!target || !current) return;
+    const navigate = (event: WheelEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const delta = event.deltaY || event.deltaX;
+      if (!delta) return;
+      setSliceIndex((value) =>
+        Math.max(
+          0,
+          Math.min(current.slices.length - 1, value + (delta > 0 ? 1 : -1)),
+        ),
+      );
+    };
+    target.addEventListener('wheel', navigate, { passive: false });
+    return () => target.removeEventListener('wheel', navigate);
+  }, [current]);
 
   const openFiles = async (fileList: FileList | null) => {
     if (!fileList?.length) return;
@@ -191,7 +209,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
       <div className="series-image">
         <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} /></Suspense>
-        <canvas className="dicom-canvas" ref={canvas} onWheel={(event) => { event.preventDefault(); move(event.deltaY > 0 ? 1 : -1); }} onClick={event => {
+        <canvas className="dicom-canvas" ref={canvas} onClick={event => {
           if (!selected || !sliceFrame(selected)) return;
           const bounds = event.currentTarget.getBoundingClientRect();
           const col = Math.max(0, Math.min(selected.columns-1, Math.floor((event.clientX-bounds.left)/bounds.width*selected.columns)));
