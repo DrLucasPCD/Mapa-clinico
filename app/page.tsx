@@ -77,7 +77,7 @@ type Drawer =
   | null;
 
 export default function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging'>('case');
+  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging'>('imaging');
   const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
   const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
   const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
@@ -107,7 +107,7 @@ export default function App() {
   );
   const [region, setRegion] = useState<'all' | 'arm' | 'ankle'>('all');
   const [reset, setReset] = useState(0),
-    [caseId, setCaseId] = useState('2604');
+    [caseId, setCaseId] = useState('87566');
   const [pathology, setPathology] = useState(''),
     [query, setQuery] = useState(''),
     [hidden, setHidden] = useState<string[]>([]);
@@ -285,7 +285,7 @@ export default function App() {
       <div className="clinical-body">
         <aside className={'clinical-sidebar ' + (mobileNav ? 'open' : '')}>
           <button
-            className="nav-item active"
+            className="nav-item"
             onClick={() => {
               resetAtlas();
               setWorkspaceMode('case');
@@ -295,7 +295,7 @@ export default function App() {
             <Home /> Início
           </button>
           <p>EXPLORAR</p>
-          <button className="nav-item selected" onClick={resetAtlas}>
+          <button className="nav-item" onClick={resetAtlas}>
             <Layers /> Corpo integrado
           </button>
           <button
@@ -308,13 +308,13 @@ export default function App() {
             <Layers /> Atlas 3D
           </button>
           <button
-            className="nav-item"
+            className={`nav-item ${workspaceMode === 'case' ? 'active' : ''}`}
             onClick={() => { setWorkspaceMode('case'); setMobileNav(false); }}
           >
             <Focus /> Casos clínicos
           </button>
           <button
-            className="nav-item"
+            className={`nav-item ${workspaceMode === 'imaging' ? 'active' : ''}`}
             onClick={() => { setWorkspaceMode('imaging'); setMobileNav(false); resetAtlas(); }}
           >
             <ScanLine /> Imagens (TC, RM, RX)
@@ -645,7 +645,7 @@ export default function App() {
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}

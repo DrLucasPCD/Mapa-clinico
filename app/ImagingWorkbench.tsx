@@ -1,5 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { groupDicomSeries, parseDicomFiles, sliceFraction, type DicomSeries, type Plane, type Region } from './dicom';
+import type { ClinicalCase } from './content';
+import { atlasSliceForSequence } from './image-integration';
 import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
@@ -8,7 +10,7 @@ import type { OverlayClip, OverlaySystem } from './registered-overlay';
 
 type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
-type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; onSlice: (location: SliceLocation) => void };
+type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: SliceLocation) => void };
 const PatientSlices = lazy(() => import('./PatientSlices'));
 const TriPlanarViewer = lazy(() => import('./TriPlanarViewer'));
 const MAX_DICOM_BYTES = 500 * 1024 * 1024;
@@ -23,7 +25,7 @@ function intensityRange(series: DicomSeries) {
   return [low, high] as const;
 }
 
-export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, modelVariant = 'male' }: Props) {
+export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, onPreviewModality, atlasPoint, modelVariant = 'male' }: Props) {
   const [series, setSeries] = useState<DicomSeries[]>([]);
   const [seriesIndex, setSeriesIndex] = useState(0);
   const [sliceIndex, setSliceIndex] = useState(0);
@@ -42,6 +44,8 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   const [registration, setRegistration] = useState<{matrix:number[];modelVariant:'male'|'female'}|null>(null);
   const [overlaySystems, setOverlaySystems] = useState<OverlaySystem[]>(['nervous', 'cardiovascular']);
   const [overlayClip, setOverlayClip] = useState<OverlayClip>('volume');
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const previewHost = useRef<HTMLDivElement>(null);
   const worker = useRef<Worker|null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const loadRevision = useRef(0);
@@ -87,9 +91,26 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   }, [seriesIndex, current?.id]);
   useEffect(() => {
     const fraction = current && selected ? sliceFraction(current.slices, selected) : undefined;
-    if (!selected || !current?.plane || fraction === undefined) { onSlice(null); return; }
+    if (!selected || !current?.plane || fraction === undefined) {
+      onSlice(atlasSliceForSequence(casePreview?.acquisition, previewIndex, casePreview?.images.length ?? 0));
+      return;
+    }
     onSlice({ plane: current.plane, fraction, region });
-  }, [current, onSlice, region, selected, sliceIndex]);
+  }, [casePreview, current, onSlice, previewIndex, region, selected, sliceIndex]);
+  useEffect(() => { setPreviewIndex(0); }, [casePreview?.id]);
+  useEffect(() => {
+    const target = previewHost.current;
+    if (!target || current || !casePreview?.images.length) return;
+    let distance = 0;
+    const navigate = (event: WheelEvent) => {
+      event.preventDefault(); event.stopPropagation(); distance += event.deltaY || event.deltaX;
+      if (Math.abs(distance) < 24) return;
+      const direction = distance > 0 ? 1 : -1; distance = 0;
+      setPreviewIndex(value => Math.max(0, Math.min(casePreview.images.length - 1, value + direction)));
+    };
+    target.addEventListener('wheel', navigate, {passive:false});
+    return () => target.removeEventListener('wheel', navigate);
+  }, [casePreview, current]);
   useEffect(() => {
     const target = canvas.current;
     if (!target || !selected) return;
@@ -204,7 +225,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   );
 
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
-    <header><small>DO CORPO À IMAGEM</small><h2>Atlas e reconstruções</h2><p>Explore os cortes e a anatomia no mesmo espaço de estudo. Importe uma série DICOM de TC ou RM para começar.</p></header>
+    <header><small>DO CORPO À IMAGEM</small><h2>Atlas e imagens integrados</h2><p>Explore o caso e a anatomia lado a lado. Importe uma série DICOM completa para liberar as reconstruções axial, coronal e sagital.</p></header>
     <div className="image-tools">
       <label>Selecionar série<input aria-label="Selecionar arquivos DICOM" type="file" accept=".dcm,application/dicom" multiple onChange={(event) => void openFiles(event.target.files)} /></label>
       {loading && <span>Processando localmente…</span>}
@@ -212,7 +233,18 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
       {current && <><button onClick={() => move(-1)} disabled={sliceIndex === 0}>← Corte anterior</button><button onClick={() => move(1)} disabled={sliceIndex === current.slices.length - 1}>Próximo corte →</button></>}
     </div>
     {errors.length > 0 && <div className="error" role="alert">{errors.map((error) => <div key={error}>{error}</div>)}</div>}
-    {!current && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
+    {!current && casePreview && <section className="case-imaging-preview" aria-label="Imagens do caso selecionado">
+      <nav className="modality-tabs" aria-label="Modalidades">{(['TC','RM','RX'] as const).map(modality => <button key={modality} className={casePreview.modality === modality ? 'active' : ''} onClick={() => onPreviewModality?.(modality)}>{modality}</button>)}<button disabled>USG</button><button disabled>PET</button></nav>
+      <div className="preview-title"><div><small>CASO REAL · RADIOPAEDIA</small><h3>{casePreview.title}</h3></div><span>{previewIndex + 1} / {casePreview.images.length}</span></div>
+      <div className="preview-stage" ref={previewHost}>
+        <img src={casePreview.images[previewIndex]?.src} alt={`${casePreview.images[previewIndex]?.label}. Caso ${casePreview.id}, ${casePreview.author}, Radiopaedia.org.`} />
+        <span className="preview-plane">{casePreview.images[previewIndex]?.label}</span>
+        <span className="preview-orientation top">A</span><span className="preview-orientation bottom">P</span><span className="preview-orientation left">R</span><span className="preview-orientation right">L</span>
+      </div>
+      <div className="preview-filmstrip">{casePreview.images.map((image, index) => <button key={image.src} className={index === previewIndex ? 'active' : ''} onClick={() => setPreviewIndex(index)} aria-label={`Abrir ${image.label}`}><img src={image.src} alt="" /><span>{index + 1}</span></button>)}</div>
+      <div className="preview-notice"><strong>{casePreview.acquisition?.kind === 'ordered-series' ? 'Pilha navegável sincronizada ao Atlas' : 'Imagem clínica de referência'}</strong><p>{casePreview.acquisition?.kind === 'ordered-series' ? 'Role sobre a imagem para percorrer os cortes. O plano do Atlas acompanha a posição relativa desta pilha renderizada.' : 'Esta seleção não contém geometria suficiente para reconstrução multiplanar.'}</p><a href={casePreview.source} target="_blank" rel="noreferrer">Abrir caso original ↗</a></div>
+    </section>}
+    {!current && !casePreview && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
       <details className="source-image-panel"><summary>Imagem adquirida · selecionar marco para alinhamento</summary><div className="series-image">
