@@ -81,6 +81,7 @@ export default function App() {
   const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
   useEffect(() => { let active = true; setModelCatalog([]); getDetailedCatalog(modelVariant).then(items => { if (active) setModelCatalog(items); }).catch(console.error); return () => { active = false; }; }, [modelVariant]);
   const [slice, setSlice] = useState<AtlasSlice | null>(null);
+  const [atlasPoint, setAtlasPoint] = useState<{ point: number[]; label: string; variant: 'male' | 'female' } | null>(null);
   const openStudy = (tab: typeof studyTab) => { setStudyTab(tab); setWorkspaceMode('study'); setMobileNav(false); };
   const changeModel = (variant: typeof modelVariant) => { setModelVariant(variant); resetAtlas(); setSelected(''); setName(variant === 'female' ? 'Tronco feminino' : 'Corpo masculino'); };
   const [lessonTab, setLessonTab] = useState<'anatomia' | 'funcao' | 'clinica'>(
@@ -442,6 +443,7 @@ export default function App() {
                 hidden={hidden}
                 reset={reset}
                 onSelect={choose}
+                onLandmark={workspaceMode === 'imaging' ? setAtlasPoint : undefined}
                 transparency={transparency}
                 layoutMode={layoutMode}
                 region={region}
@@ -635,7 +637,7 @@ export default function App() {
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} /> : <>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}

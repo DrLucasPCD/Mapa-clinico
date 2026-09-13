@@ -33,6 +33,7 @@ export type AtlasProps = {
   /** Inversion/eversion of the foot, in degrees. */
   ankleInversion?: number;
   onSelect: (id: string, name: string) => void;
+  onLandmark?: (landmark: { point: number[]; label: string; variant: 'male' | 'female' }) => void;
 };
 export default function Atlas(props: AtlasProps) {
   const host = useRef<HTMLDivElement>(null),
@@ -106,6 +107,7 @@ export default function Atlas(props: AtlasProps) {
             return cloned;
           });
           m.material = Array.isArray(m.material) ? material : material[0];
+          m.userData.referenceMatrix = m.matrixWorld.clone();
           m.userData.original = m.position.clone();
           m.userData.scale = m.scale.clone();
           m.userData.quaternion = m.quaternion.clone();
@@ -181,6 +183,12 @@ export default function Atlas(props: AtlasProps) {
         .find((h) => clip.distanceToPoint(h.point) >= 0);
       if (hit) {
         const m = hit.object;
+        const referencePoint = m.worldToLocal(hit.point.clone()).applyMatrix4(m.userData.referenceMatrix);
+        current.current.onLandmark?.({
+          point: [referencePoint.x * 1000, -referencePoint.z * 1000, referencePoint.y * 1000],
+          label: m.userData.sourceName || m.name,
+          variant: current.current.modelVariant ?? 'male',
+        });
         current.current.onSelect(
           m.userData.anatomyId,
           m.userData.sourceName || m.name,

@@ -82,3 +82,12 @@ Foram extraídos os textos das duas apostilas teóricas (neuroanatomia e digest�
 Cada caso classifica sua mídia antes de oferecer integração: imagens selecionadas recebem referência anatômica; sequências só habilitam navegação de cortes quando a ordem foi verificada; arquivos DICOM locais do catálogo podem ser carregados pelo leitor. A lista precisa apontar para ativos `.dcm` publicados em `/radiology/`, previamente autorizados para reutilização. Não há busca automática de DICOM na Radiopaedia nem dedução de coordenadas a partir de JPEGs.
 
 O leitor posiciona as fatias no espaço do próprio exame quando posição, orientação e espaçamento dos pixels são válidos. Esse posicionamento não é registro do Atlas genérico e não segmenta órgãos. Os casos atuais da Radiopaedia continuam sendo imagens selecionadas, sem séries DICOM completas.
+
+
+### Superfície da TC e ajuste manual do Atlas
+
+Em **TC / RM**, importe os arquivos de uma aquisição e escolha **Gerar superfície 3D**. O processamento ocorre em um Web Worker local, sem enviar imagens. O limiar em HU seleciona densidades altas (osso, contraste e outros materiais); não identifica órgãos. A grade deve ser CT nativa monocromática, regular, sem deslocamento entre cortes, com ao menos três cortes e metadados espaciais completos. O aplicativo não consegue confirmar se arquivos ausentes foram omitidos de uma aquisição. Cada eixo é reduzido a até 128 células por agregação de máximo: regiões pequenas podem se fundir ou aumentar. Superfícies acima de um milhão de triângulos são recusadas.
+
+Para comparar com o esqueleto genérico, clique no mesmo marco anatômico no Atlas e no corte 2D, pressione **Adicionar par** e repita em pelo menos três pontos não colineares e bem distribuídos. **Ajustar** calcula escala uniforme, rotação e translação e mostra a sobreposição no visor espacial. A distância RMS informa apenas o desvio nos marcos escolhidos, não a precisão nas outras estruturas. Os pares e o ajuste são descartados ao trocar de série ou de modelo. A superfície CT e as fatias compartilham LPS em milímetros; o Atlas exige esse ajuste adicional.
+
+Validação: testes com volumes sintéticos e transformações conhecidas; teste no navegador da importação, geração da superfície e seleção de ponto. Não houve validação em série clínica real com referência anatômica revisada. Ainda não estão implementados segmentação automática de todos os órgãos, registro deformável nem obtenção de séries DICOM completas da Radiopaedia. JPEGs continuam recebendo apenas referência anatômica.
