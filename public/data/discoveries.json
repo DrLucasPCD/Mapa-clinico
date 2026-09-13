@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-12T12:50:56.739Z",
+  "lastChecked": "2026-09-13T13:48:05.875Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -157,66 +157,66 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42725073",
-      "title": "Ileal tuberculosis presenting with severe unexplained anemia and unusual pseudo-tumoral imaging features: A case report.",
+      "id": "42729599",
+      "title": "Agenesis of the left pulmonary artery and cardiac hydatid cysts: A dual rarity.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42725073/",
-      "authors": "Abourak C, Ouskri S, Benayada B",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729599/",
+      "authors": "Benaazza S, Belkouchi L, Elhaddad S",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42724669",
-      "title": "Internal carotid artery-middle cerebral artery junction small arterial ring: A report of two cases diagnosed by magnetic resonance angiography.",
+      "id": "42729593",
+      "title": "Percutaneous transosseous approach for type II endoleak repair of common iliac artery aneurysm.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724669/",
-      "authors": "Uchino A, Andoh S, Tsuzuki N",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729593/",
+      "authors": "Casey B, Sexton M, Moore K",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42724619",
-      "title": "Imaging findings of an obturator hernia: A rare cause of small bowel obstruction.",
+      "id": "42729587",
+      "title": "Infected splenic artery pseudoaneurysm within a complex splenic cystic lesion: CT angiography pitfalls and surgical correlation.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724619/",
-      "authors": "Tarasova A, Miller R, Samofalova M",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729587/",
+      "authors": "Amara R, Chyabri N, Mouna N",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42713259",
-      "title": "Large periampullary mass with vascular contact: Diagnostic and surgical decision-making in a solid pseudopapillary neoplasm.",
+      "id": "42729553",
+      "title": "MRI appearance of a hemorrhagic external hemorrhoid at the anal verge with concomitant low anal fistula: A case report.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42713259/",
-      "authors": "Ben Ismail I, Karray K, Mlika M",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729553/",
+      "authors": "Liu X, Cao W, An X",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42713247",
-      "title": "Anterior cervical abscess caused by migration of an ingested fish bone in a child: A case report.",
+      "id": "42729547",
+      "title": "Trauma-induced crown dilaceration of permanent maxillary central incisors: A case report with CBCT follow-up.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42713247/",
-      "authors": "Faye I, Aidara CM, Niang FG",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729547/",
+      "authors": "Hayatimotlagh F, Khorram S, Sadeghi Z",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42712970",
-      "title": "Simultaneous DOTATATE uptake in three non-neuroendocrine pathologies: Follicular lymphoma, Crohn's disease, and vertebral hemangioma.",
+      "id": "42729420",
+      "title": "Fibrothecoma with pseudo-carcinomatosis in a young woman: The radiologic pitfalls of Meigs syndrome and the importance of fertility-sparing surgery.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42712970/",
-      "authors": "Khabaz K, Said JW, Chiang J",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729420/",
+      "authors": "Amara R, Tahouna MY, Kourchi H",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42712964",
-      "title": "Cholecystogastric fistula presenting with transient gallstone ileus and incidental Fitz-Hugh-Curtis syndrome: A rare radiological and intraoperative association.",
+      "id": "42729416",
+      "title": "Ectopic thyroid tissue in the breast mimicking a breast lesion: A rare case report.",
       "date": "2026 Nov",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42712964/",
-      "authors": "Li Y, Jayasekera H",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42729416/",
+      "authors": "Holmesi H, Taghavi M, Rahmani S",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
