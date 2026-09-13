@@ -1,7 +1,7 @@
 {
   "license": "Radiopaedia non-commercial attribution and share-alike terms",
   "licenseUrl": "https://radiopaedia.org/licence",
-  "acquisition": "Individually selected images from publicly rendered case pages; source download attribution panel reviewed. No bulk or scheduled scraping.",
+  "acquisition": "Selected images and one verified ordered FLAIR stack from publicly rendered case pages; source attribution reviewed. No scheduled scraping.",
   "sources": [
     {
       "caseId": 2604,
@@ -32,11 +32,62 @@
       "author": "Luu Hanh",
       "url": "https://radiopaedia.org/cases/87566",
       "files": [
-        "mri-brain.jpg"
+        "cases/87566/flair/flair-01.jpg",
+        "cases/87566/flair/flair-02.jpg",
+        "cases/87566/flair/flair-03.jpg",
+        "cases/87566/flair/flair-04.jpg",
+        "cases/87566/flair/flair-05.jpg",
+        "cases/87566/flair/flair-06.jpg",
+        "cases/87566/flair/flair-07.jpg",
+        "cases/87566/flair/flair-08.jpg",
+        "cases/87566/flair/flair-09.jpg",
+        "cases/87566/flair/flair-10.jpg",
+        "cases/87566/flair/flair-11.jpg",
+        "cases/87566/flair/flair-12.jpg",
+        "cases/87566/flair/flair-13.jpg",
+        "cases/87566/flair/flair-14.jpg",
+        "cases/87566/flair/flair-15.jpg",
+        "cases/87566/flair/flair-16.jpg",
+        "cases/87566/flair/flair-17.jpg",
+        "cases/87566/flair/flair-18.jpg",
+        "cases/87566/flair/flair-19.jpg",
+        "cases/87566/flair/flair-20.jpg",
+        "cases/87566/flair/flair-21.jpg",
+        "cases/87566/flair/flair-22.jpg",
+        "cases/87566/flair/flair-23.jpg",
+        "cases/87566/flair/flair-24.jpg"
       ],
       "imageIds": [
-        54573996
-      ]
+        54570326,
+        54570327,
+        54570328,
+        54570329,
+        54570330,
+        54570331,
+        54570332,
+        54570333,
+        54570334,
+        54570335,
+        54570336,
+        54570337,
+        54570338,
+        54570339,
+        54570340,
+        54570341,
+        54570342,
+        54570343,
+        54570344,
+        54570345,
+        54570346,
+        54570347,
+        54570348,
+        54570349
+      ],
+      "studyId": 103938,
+      "seriesId": 453841,
+      "series": "FLAIR axial",
+      "order": "inferior-to-superior",
+      "dicomGeometryAvailable": false
     }
   ]
 }

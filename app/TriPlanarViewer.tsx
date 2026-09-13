@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type WheelEvent } from 'react';
 import type { DicomSeries } from './dicom';
 import { pixelCenter } from './patient-geometry';
 import { cursorFromView, mprGeometry, viewDimensions, viewVoxel, type MprCursor, type MprView } from './mpr';
@@ -55,6 +55,21 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     const point = pixelCenter(series.slices[next.slice], next.row, next.column);
     if (point) onPatientPoint(point);
   };
+  const scroll = (view: MprView, event: WheelEvent<HTMLCanvasElement>) => {
+    if (event.deltaY === 0) return;
+    event.preventDefault();
+    const step = event.deltaY > 0 ? 1 : -1;
+    const next = {
+      ...cursor,
+      slice: view === 'source' ? Math.max(0, Math.min(series.slices.length - 1, cursor.slice + step)) : cursor.slice,
+      row: view === 'row' ? Math.max(0, Math.min(series.rows - 1, cursor.row + step)) : cursor.row,
+      column: view === 'column' ? Math.max(0, Math.min(series.columns - 1, cursor.column + step)) : cursor.column,
+    };
+    setCursor(next);
+    onSlice(next.slice);
+    const point = pixelCenter(series.slices[next.slice], next.row, next.column);
+    if (point) onPatientPoint(point);
+  };
   const first = series.slices[0];
   const ratios: Record<MprView, number> = {
     source: series.columns * first.pixelSpacing![1] / (series.rows * first.pixelSpacing![0]),
@@ -62,9 +77,9 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     column: series.rows * first.pixelSpacing![0] / (series.slices.length * geometry.stepMm),
   };
   return <section className="mpr-viewer" aria-label="Reconstruções multiplanares sincronizadas">
-    <header><small>RECONSTRUÇÃO MULTIPLANAR</small><h3>Três planos sincronizados</h3><p>Clique em qualquer imagem para mover a mira nas três vistas e o corte correspondente no volume 3D.</p></header>
+    <header><small>RECONSTRUÇÃO MULTIPLANAR</small><h3>Três planos sincronizados</h3><p>Clique para mover a mira. Role o mouse sobre uma imagem para navegar pelos cortes daquele plano; as três vistas e o volume 3D acompanham.</p></header>
     <div className="mpr-grid">{views.map(view => <figure key={view}>
-      <canvas ref={node => { canvases.current[view] = node; }} onClick={event => select(view, event)} style={{ aspectRatio: String(ratios[view]) }} aria-label={`Reconstrução ${geometry.labels[view]}`} />
+      <canvas ref={node => { canvases.current[view] = node; }} onClick={event => select(view, event)} onWheel={event => scroll(view, event)} style={{ aspectRatio: String(ratios[view]) }} aria-label={`Reconstrução ${geometry.labels[view]}; use o scroll para navegar pelos cortes`} />
       <figcaption>{geometry.labels[view]} · {view === 'source' ? 'adquirida' : 'reconstruída'}</figcaption>
     </figure>)}</div>
     <small>Reconstrução por vizinho mais próximo, sem interpolação diagnóstica. O aspecto usa o espaçamento físico dos voxels.</small>

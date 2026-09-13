@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import {
   Activity,
@@ -49,6 +49,7 @@ import StudyPanel from './StudyPanel';
 import ImagingWorkbench from './ImagingWorkbench';
 import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
+import { atlasSliceForSequence } from './image-integration';
 
 const Atlas = lazy(() => import('./Atlas'));
 const systems = [
@@ -122,6 +123,12 @@ export default function App() {
   const n = Number(period),
     lesson = lessons.find((l) => selected.includes(l.id)),
     activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
+  const showAtlasSlice = workspaceMode === 'imaging' ||
+    (workspaceMode === 'case' && activeCase.acquisition?.kind === 'ordered-series');
+  const syncSequenceSlice = useCallback((index: number, total: number) => {
+    const next = atlasSliceForSequence(activeCase.acquisition, index, total);
+    if (next) setSlice(next);
+  }, [activeCase]);
   const searchResults = useMemo(
     () => searchAtlasStructures(query, system, 60, modelCatalog),
     [query, system, modelCatalog],
@@ -430,7 +437,7 @@ export default function App() {
             >
               <Atlas
                 modelVariant={modelVariant}
-                slice={workspaceMode === 'imaging' ? slice : null}
+                slice={showAtlasSlice ? slice : null}
                 system={system}
                 selected={selected}
                 isolate={isolate}
@@ -676,6 +683,7 @@ export default function App() {
                   cases[(cases.indexOf(activeCase) + 1) % cases.length].id,
                 )
               }
+              onSequenceSlice={syncSequenceSlice}
             />
             </>}
           </section>

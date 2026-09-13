@@ -21,6 +21,7 @@ export default function CaseStudy({
   onPreviousCase,
   onNextCase,
   onOpenDicom,
+  onSequenceSlice,
 }: {
   onOpenDicom?: () => void;
   item: ClinicalCase;
@@ -30,6 +31,7 @@ export default function CaseStudy({
   caseCount?: number;
   onPreviousCase?: () => void;
   onNextCase?: () => void;
+  onSequenceSlice?: (index: number, total: number) => void;
 }) {
   const [index, setIndex] = useState(0),
     [zoom, setZoom] = useState(1),
@@ -39,6 +41,7 @@ export default function CaseStudy({
     [reveal, setReveal] = useState(false),
     [panel, setPanel] = useState<'cases' | 'images' | 'questions'>('cases'),
     [fullscreen, setFullscreen] = useState(false);
+  const integration = imageIntegration(item.images, item.acquisition);
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setFullscreen(false);
@@ -46,7 +49,11 @@ export default function CaseStudy({
     window.addEventListener('keydown', close);
     return () => window.removeEventListener('keydown', close);
   }, []);
-  const integration = imageIntegration(item.images, item.acquisition);
+  useEffect(() => {
+    if (integration.mode === 'sequence') {
+      onSequenceSlice?.(index, item.images.length);
+    }
+  }, [index, integration.mode, item.images.length, onSequenceSlice]);
   const image = item.images[index] || item.images[0];
   return (
     <section className="case-detail clinical-panel">
@@ -125,7 +132,7 @@ export default function CaseStudy({
         <div><button onClick={onLocate}>Mostrar região no Atlas</button>{onOpenDicom && <button onClick={onOpenDicom}>{integration.mode === 'dicom' ? 'Carregar 3D deste exame' : 'Abrir DICOM local / 3D do exame'}</button>}</div>
         <details><summary>Como o aplicativo escolhe a integração?</summary><p>A classificação usa os arquivos disponíveis neste caso. Uma sequência só é tratada como cortes quando sua ordem de aquisição foi verificada. Datas diferentes, modalidades diferentes ou várias imagens não comprovam uma série. Para posicionamento espacial das fatias, são necessárias posição, orientação e espaçamento DICOM. Isso não cria uma segmentação de órgãos.</p></details>
       </aside>
-      {integration.mode === 'sequence' && <label className="sequence-navigation">Corte {index + 1} de {item.images.length}<input aria-label="Corte da sequência" type="range" min={0} max={item.images.length - 1} value={index} onChange={e => {setIndex(Number(e.target.value));setZoom(1)}} /></label>}
+      {integration.mode === 'sequence' && <div className="sequence-navigation"><div><strong>FLAIR axial · corte {index + 1} de {item.images.length}</strong><span><button aria-label="Corte anterior" disabled={index === 0} onClick={() => { setIndex(value => Math.max(0, value - 1)); setZoom(1); }}>←</button><button aria-label="Próximo corte" disabled={index === item.images.length - 1} onClick={() => { setIndex(value => Math.min(item.images.length - 1, value + 1)); setZoom(1); }}>→</button></span></div><input aria-label="Corte da sequência" type="range" min={0} max={item.images.length - 1} value={index} onChange={e => {setIndex(Number(e.target.value));setZoom(1)}} /><small>O plano axial no Atlas acompanha este controle pela posição relativa da pilha.</small></div>}
       <div className="case-layout">
         <div className="case-media" hidden={panel === 'questions'}>
           <div
@@ -133,6 +140,12 @@ export default function CaseStudy({
             aria-modal={fullscreen ? true : undefined}
             aria-label={fullscreen ? 'Imagem ampliada' : undefined}
             className={'radiograph' + (fullscreen ? ' is-fullscreen' : '')}
+            onWheel={(event) => {
+              if (integration.mode !== 'sequence' || event.deltaY === 0) return;
+              event.preventDefault();
+              setIndex((value) => Math.max(0, Math.min(item.images.length - 1, value + (event.deltaY > 0 ? 1 : -1))));
+              setZoom(1);
+            }}
           >
             <img
               src={image.src}
@@ -163,7 +176,7 @@ export default function CaseStudy({
               <Expand size={17} />
             </button>
           </div>
-          <div className="image-options">
+          {integration.mode !== 'sequence' && <div className="image-options">
             {item.images.map((im, i) => (
               <button
                 key={im.src}
@@ -176,7 +189,7 @@ export default function CaseStudy({
                 {im.label}
               </button>
             ))}
-          </div>
+          </div>}
           <div className="image-sliders">
             <label>
               Zoom{' '}
@@ -213,8 +226,7 @@ export default function CaseStudy({
             </label>
           </div>
           <p className="image-note">
-            Imagem JPEG de ensino. Brilho e contraste não equivalem a
-            janelamento DICOM.
+            {integration.mode === 'sequence' ? 'Role o mouse sobre a imagem para percorrer os cortes. Esta pilha JPEG de ensino não contém os metadados geométricos DICOM necessários para MPR ou registro exato.' : 'Imagem JPEG de ensino. Brilho e contraste não equivalem a janelamento DICOM.'}
           </p>
           <p className="attribution">
             Caso cortesia de {item.author},{' '}

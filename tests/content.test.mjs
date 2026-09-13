@@ -69,6 +69,18 @@ test('Cases retain attribution, imaging files, and valid answer keys', async () 
     }
   }
 });
+test('Radiopaedia ordered stacks declare their acquisition and contain unique local frames', () => {
+  const ordered = cases.filter((item) => item.acquisition?.kind === 'ordered-series');
+  assert(ordered.length > 0);
+  for (const item of ordered) {
+    assert.equal(item.acquisition.orderVerified, true);
+    assert(item.acquisition.seriesId);
+    assert(item.acquisition.plane);
+    assert(item.acquisition.region);
+    assert(item.images.length > 1);
+    assert.equal(new Set(item.images.map((image) => image.src)).size, item.images.length);
+  }
+});
 test('Lessons have distinct depth and muscle origin/insertion/action', () => {
   for (const l of lessons) {
     assert.equal(new Set(l.levels).size, 4);

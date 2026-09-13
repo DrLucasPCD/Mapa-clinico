@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import ts from 'typescript';
 const js=ts.transpileModule(await readFile('app/image-integration.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
-const {imageIntegration}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const {imageIntegration,atlasSliceForSequence}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
 test('multiple selected images and unverified sequences never imply exact geometry',()=>{
  assert.equal(imageIntegration([{},{}]).mode,'reference');
  assert.equal(imageIntegration([{},{}],{kind:'ordered-series',seriesId:'x'}).mode,'reference');
@@ -13,6 +13,13 @@ test('multiple selected images and unverified sequences never imply exact geomet
 test('only a verified multiframe sequence enables slice navigation, not patient registration',()=>{
  const r=imageIntegration([{},{}],{kind:'ordered-series',seriesId:'x',orderVerified:true});
  assert.equal(r.mode,'sequence');assert.match(r.description,/aproximada/);
+});
+test('every verified ordered series maps its slice to a relative Atlas plane',()=>{
+ const acquisition={kind:'ordered-series',seriesId:'rp-87566-flair',orderVerified:true,plane:'axial',region:'head'};
+ assert.deepEqual(atlasSliceForSequence(acquisition,0,24),{plane:'axial',fraction:0,region:'head'});
+ assert.deepEqual(atlasSliceForSequence(acquisition,23,24),{plane:'axial',fraction:1,region:'head'});
+ assert.equal(atlasSliceForSequence({...acquisition,orderVerified:false},3,24),null);
+ assert.equal(atlasSliceForSequence(acquisition,0,1),null);
 });
 test('DICOM integration accepts only local radiology files with the expected extension',()=>{
  const r=imageIntegration([],{kind:'dicom-series',files:['/radiology/admission/series-01.dcm','/radiology/follow-up_2.dcm']});

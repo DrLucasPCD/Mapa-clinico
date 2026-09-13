@@ -7,13 +7,13 @@
 - Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
 - Atlas masculino detalhado (Z-Anatomy / BodyParts3D), com 3.478 estruturas, e atlas feminino real do NIH Human Reference Atlas com 264 estruturas do tronco/pelve; busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
 - Roteiro com 33 temas e 33 questões autorais a partir de seis materiais acadêmicos, além de árvore de 92 vasos com 70 correspondências no modelo masculino. Os ramos ausentes são identificados como conteúdo didático sem malha correspondente.
-- Leitor local de séries DICOM CT/MR nativas, monocromáticas e de um quadro por arquivo, com navegação física de cortes e plano relativo no Atlas. Arquivos importados não são enviados nem persistidos.
+- Leitor local de séries DICOM CT/MR nativas, monocromáticas e de um quadro por arquivo, com navegação física de cortes, scroll sobre as vistas axial/coronal/sagital e plano relativo no Atlas. Arquivos importados não são enviados nem persistidos.
 - Módulos explicativos de coração, encéfalo, pulmões, fígado, metacarpos e seis músculos com origem, inserção e ação.
 - Seleção de 1º a 12º período, agrupados em quatro níveis didáticos: fundamentos, integração, ciclo clínico e internato.
 - Corpo montado, camadas separadas e grade de estruturas; filtros regionais de braço e tornozelo.
 - Pulsação cardíaca ilustrativa, flexão do cotovelo esquerdo e movimentos aproximados do pé (flexão e inversão/eversão), em modelo cinemático simplificado.
 - Fichas por período, mapa de conexões com conteúdo existente, listas de estruturas e favoritos de publicações armazenados no dispositivo.
-- Três casos reais da Radiopaedia com imagens locais de RX, TC e RM, autoria, links, perguntas e discussão; localização de referência no atlas com lateralidade.
+- Três casos reais da Radiopaedia com imagens locais de RX, TC e RM, autoria, links, perguntas e discussão. O caso rID 87566 inclui a pilha axial FLAIR de 24 cortes, navegável pelo scroll, e move um plano relativo no Atlas durante a navegação.
 - Introduções narradas com a voz exata `Trelis/piper-pt-br-faber-medium`, sem substituição pela voz do navegador.
 - PWA com ícones, manifesto e cache offline. O atlas, imagens e narrações ficam disponíveis offline após serem carregados online. A instalação depende do suporte do navegador.
 - Descoberta diária de relatos de caso pelo PubMed / NCBI E-utilities. Novos resultados são identificados como **não revisados**; não viram aulas ou recomendações clínicas automaticamente.
@@ -61,9 +61,9 @@ Esta é uma primeira versão funcional; não é um atlas médico completo nem fe
 
 Cortes são planos de visualização sem superfície de fechamento. Afastamento separa estruturas e altera suas relações originais. A pulsação é uma ilustração geométrica, não simulação hemodinâmica. O cotovelo usa uma articulação aproximada e não deforma músculos ou simula ligamentos. A origem/inserção são descrições textuais; não foram demarcados pontos de fixação em todas as malhas.
 
-Destaques de casos localizam regiões/ossos de referência em um corpo genérico. **Não são segmentações, reconstruções DICOM ou representações exatas da lesão do paciente.** As imagens JPEG dos casos oferecem zoom, brilho e contraste, não a série DICOM completa. O leitor separado permite importar séries locais não comprimidas. O plano se desloca relativamente à região escolhida e à posição física das fatias: não é registro anatômico ao paciente, reconstrução multiplanar ou segmentação. Séries oblíquas não são associadas a um plano ortogonal do atlas. Foram usados arquivos sintéticos para os testes do leitor. A fonte do caso de abscesso considera o diagnóstico “quase certo”, não confirmado definitivamente.
+Destaques de casos localizam regiões/ossos de referência em um corpo genérico. **Não são segmentações, reconstruções DICOM ou representações exatas da lesão do paciente.** As pilhas JPEG verificadas permitem percorrer cortes e mover um plano relativo no Atlas, mas não carregam orientação, posição ou espaçamento DICOM. O leitor separado permite importar séries locais não comprimidas. Nele, o plano se desloca conforme a posição física das fatias; ainda assim, o registro ao Atlas genérico precisa de marcos anatômicos. Séries oblíquas não são associadas a um plano ortogonal do atlas. Foram usados arquivos sintéticos para os testes do leitor. A fonte do caso de abscesso considera o diagnóstico “quase certo”, não confirmado definitivamente.
 
-A descoberta automatizada usa metadados públicos do PubMed. Não há crawler da Radiopaedia. Imagens Radiopaedia são seleções pontuais obtidas da interface pública após leitura do painel de licença; a atribuição permanece junto de cada caso. Não usar esta distribuição de imagens em projeto comercial sem licença adequada.
+A descoberta automatizada usa metadados públicos do PubMed. Não há crawler agendado da Radiopaedia. Imagens Radiopaedia são seleções pontuais ou pilhas explicitamente verificadas na interface pública após leitura do painel de licença; a atribuição permanece junto de cada caso. Não usar esta distribuição de imagens em projeto comercial sem licença adequada.
 
 ## Licenças e atribuições
 
@@ -79,9 +79,9 @@ Foram extraídos os textos das duas apostilas teóricas (neuroanatomia e digest�
 
 ### Integração por dados disponíveis
 
-Cada caso classifica sua mídia antes de oferecer integração: imagens selecionadas recebem referência anatômica; sequências só habilitam navegação de cortes quando a ordem foi verificada; arquivos DICOM locais do catálogo podem ser carregados pelo leitor. A lista precisa apontar para ativos `.dcm` publicados em `/radiology/`, previamente autorizados para reutilização. Não há busca automática de DICOM na Radiopaedia nem dedução de coordenadas a partir de JPEGs.
+Cada caso classifica sua mídia antes de oferecer integração: imagens selecionadas recebem referência anatômica; sequências só habilitam navegação e sincronização relativa quando a ordem foi verificada; arquivos DICOM locais do catálogo podem ser carregados pelo leitor. A lista precisa apontar para ativos `.dcm` publicados em `/radiology/`, previamente autorizados para reutilização. Não há dedução de coordenadas a partir de JPEGs.
 
-O leitor posiciona as fatias no espaço do próprio exame quando posição, orientação e espaçamento dos pixels são válidos. Esse posicionamento não é registro do Atlas genérico e não segmenta órgãos. Os casos atuais da Radiopaedia continuam sendo imagens selecionadas, sem séries DICOM completas.
+O leitor posiciona as fatias no espaço do próprio exame quando posição, orientação e espaçamento dos pixels são válidos. Esse posicionamento não é registro do Atlas genérico e não segmenta órgãos. O caso Radiopaedia rID 87566 oferece uma pilha renderizada FLAIR; ela não é uma série DICOM e, por isso, não habilita MPR ou alinhamento exato.
 
 
 ### Superfície da TC e ajuste manual do Atlas
@@ -92,4 +92,4 @@ Para comparar com o esqueleto genérico, clique no mesmo marco anatômico no Atl
 
 O leitor também reconstrói vistas ortogonais axial, coronal e sagital quando a pilha é paralela, regular e contém geometria completa. Uma mira compartilhada sincroniza as três imagens e o corte exibido no volume. A reconstrução atual usa vizinho mais próximo; não substitui um visualizador diagnóstico validado.
 
-Validação: testes com volumes sintéticos e transformações conhecidas; teste no navegador da importação, geração da superfície e seleção de ponto. Não houve validação em série clínica real com referência anatômica revisada. Ainda não estão implementados segmentação automática de todos os órgãos, registro deformável nem obtenção de séries DICOM completas da Radiopaedia. JPEGs continuam recebendo apenas referência anatômica.
+Validação: testes com volumes sintéticos e transformações conhecidas; teste no navegador da importação, geração da superfície, seleção de ponto e sincronização da pilha FLAIR. Não houve validação em série clínica real com referência anatômica revisada. Ainda não estão implementados segmentação automática de todos os órgãos, registro deformável nem obtenção de séries DICOM completas da Radiopaedia. JPEGs isolados continuam recebendo apenas referência anatômica; pilhas verificadas recebem sincronização relativa.

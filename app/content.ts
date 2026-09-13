@@ -367,12 +367,17 @@ export const cases: ClinicalCase[] = [
     system: 'nervous',
     regionLabel:
       'Hemisfério esquerdo como referência anatômica; os abscessos não foram segmentados em 3D.',
-    images: [
-      {
-        src: '/radiology/mri-brain.jpg',
-        label: 'FLAIR · detalhe anotado do duplo halo',
-      },
-    ],
+    images: Array.from({ length: 24 }, (_, index) => ({
+      src: `/radiology/cases/87566/flair/flair-${String(index + 1).padStart(2, '0')}.jpg`,
+      label: `FLAIR axial · corte ${index + 1} de 24`,
+    })),
+    acquisition: {
+      kind: 'ordered-series',
+      seriesId: 'Radiopaedia study 103938 · series 453841',
+      orderVerified: true,
+      plane: 'axial',
+      region: 'head',
+    },
     question: 'Qual combinação de achados favorece abscesso neste contexto?',
     options: [
       'Somente o tamanho da lesão',
