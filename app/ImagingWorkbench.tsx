@@ -9,6 +9,7 @@ type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
 type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; onSlice: (location: SliceLocation) => void };
 const PatientSlices = lazy(() => import('./PatientSlices'));
+const TriPlanarViewer = lazy(() => import('./TriPlanarViewer'));
 const MAX_DICOM_BYTES = 500 * 1024 * 1024;
 
 function intensityRange(series: DicomSeries) {
@@ -36,6 +37,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   const [segmentationError, setSegmentationError] = useState('');
   const [targetPixel, setTargetPixel] = useState<{slice:typeof selected; row:number;col:number}|null>(null);
   const [targetPoint, setTargetPoint] = useState<number[]|null>(null);
+  const [mprPoint, setMprPoint] = useState<number[]|null>(null);
   const [registration, setRegistration] = useState<{matrix:number[];modelVariant:'male'|'female'}|null>(null);
   const worker = useRef<Worker|null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -46,7 +48,8 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   const eligibility = useMemo(() => current ? validateCtSegmentation(current) : {eligible:false}, [current]);
   useEffect(() => {
     worker.current?.terminate(); worker.current = null;
-    setSurface(null); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setRegistration(null);
+    const middle = current ? pixelCenter(current.slices[Math.floor(current.slices.length / 2)], Math.floor(current.rows / 2), Math.floor(current.columns / 2)) ?? null : null;
+    setSurface(null); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
     return () => { worker.current?.terminate(); worker.current = null; };
   }, [current]);
   useEffect(() => { setRegistration(null); }, [modelVariant]);
@@ -75,7 +78,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   const ww = Math.max(1, width ?? defaultWindow.width);
 
   useEffect(() => {
-    setSliceIndex(0);
+    setSliceIndex(Math.floor((current?.slices.length ?? 1) / 2));
     setCenter(null);
     setWidth(null);
   }, [seriesIndex, current?.id]);
@@ -187,14 +190,15 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
       <div className="series-image">
-        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} /></Suspense>
+        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} /></Suspense>
         <canvas className="dicom-canvas" ref={canvas} onWheel={(event) => { event.preventDefault(); move(event.deltaY > 0 ? 1 : -1); }} onClick={event => {
           if (!selected || !sliceFrame(selected)) return;
           const bounds = event.currentTarget.getBoundingClientRect();
           const col = Math.max(0, Math.min(selected.columns-1, Math.floor((event.clientX-bounds.left)/bounds.width*selected.columns)));
           const row = Math.max(0, Math.min(selected.rows-1, Math.floor((event.clientY-bounds.top)/bounds.height*selected.rows)));
           setTargetPixel({slice:selected, row, col});
-          setTargetPoint(pixelCenter(selected, row, col) ?? null);
+          const point = pixelCenter(selected, row, col) ?? null;
+          setTargetPoint(point); setMprPoint(point);
         }} aria-label={`Imagem ${current.modality}, corte ${sliceIndex + 1} de ${current.slices.length}`} />
       </div>
       <div className="slice-controls">
@@ -202,6 +206,9 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
         <label>Centro da janela {Math.round(wc)}<input aria-label="Centro da janela" type="range" min={Math.floor(range[0])} max={Math.ceil(range[1])} value={wc} onChange={(event) => setCenter(Number(event.target.value))} /></label>
         <label>Largura da janela {Math.round(ww)}<input aria-label="Largura da janela" type="range" min="1" max={Math.max(1, Math.ceil(range[1] - range[0]))} value={ww} onChange={(event) => setWidth(Number(event.target.value))} /></label>
       </div>
+      <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
+        <TriPlanarViewer series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex} onPatientPoint={point => { setTargetPoint(point); setMprPoint(point); }} />
+      </Suspense>
       <div className="segmentation-panel">
         <h3>Superfície 3D da TC</h3>
         <p>Separa voxels de alta densidade, como osso. Contraste e outros materiais também podem aparecer. A superfície acompanha as coordenadas dos cortes; não identifica órgãos automaticamente.</p>
@@ -215,7 +222,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
       </div>
       <LandmarkPanel series={current} atlasPoint={atlasPoint} targetPoint={targetPoint} modelVariant={modelVariant} onRegistration={setRegistration} />
       <label>Região de referência no atlas<select aria-label="Selecionar região no atlas" value={region} onChange={(event) => setRegion(event.target.value as Region)}><option value="head">Cabeça</option><option value="thorax">Tórax</option><option value="abdomen">Abdome</option><option value="body">Corpo</option></select></label>
-      <p className="plane-status">Plano adquirido: {current.plane ?? 'não determinável'}. O atlas lateral usa uma referência anatômica genérica. O ajuste manual, quando aplicado, aparece apenas no visor espacial dos cortes e tem precisão limitada aos pontos escolhidos. Não são gerados planos reconstruídos.</p>
+      <p className="plane-status">Plano adquirido: {current.plane ?? 'não determinável'}. O atlas lateral usa uma referência anatômica genérica. O ajuste manual, quando aplicado, aparece apenas no visor espacial dos cortes e tem precisão limitada aos pontos escolhidos. As reconstruções ortogonais usam os voxels da série carregada.</p>
     </>}
   </section>;
 }

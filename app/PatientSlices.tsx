@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { DicomSeries, DicomSlice } from './dicom';
-import { hasPatientGeometry, sliceCorners } from './patient-geometry';
+import { hasPatientGeometry, sliceCorners, sliceFrame } from './patient-geometry';
 import { loadDetailedModel } from './detailed-models';
+import { mprGeometry } from './mpr';
 
 type Props = {
   series: DicomSeries;
@@ -13,6 +14,7 @@ type Props = {
   onIndex: (index: number) => void;
   surface?: { positions: Float32Array; indices: Uint32Array } | null;
   registration?: { matrix: number[]; modelVariant: 'male' | 'female' } | null;
+  cursorPoint?: number[] | null;
 };
 
 const detailedCache = new Map<'male' | 'female', Promise<T.Group>>();
@@ -69,7 +71,7 @@ function outline(slice: DicomSlice) {
   return new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: 0x75e7e7, transparent: true, opacity: 0.22 }));
 }
 
-export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, registration = null }: Props) {
+export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, registration = null, cursorPoint = null }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const view = useRef<{series: DicomSeries; position: T.Vector3; target: T.Vector3; revision:number} | null>(null);
   const [status, setStatus] = useState('');
@@ -107,6 +109,27 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
     camera.far = radius * 1000;
     camera.updateProjectionMatrix();
     scene.add(new T.AmbientLight(0xffffff, 1));
+    const mpr = mprGeometry(series);
+    if (mpr && cursorPoint?.length === 3 && cursorPoint.every(Number.isFinite)) {
+      const frame = sliceFrame(series.slices[0])!;
+      const origin = new T.Vector3(...frame.origin), point = new T.Vector3(cursorPoint[0], cursorPoint[1], cursorPoint[2]);
+      const u = new T.Vector3(...frame.rowDirection), v = new T.Vector3(...frame.columnDirection), w = new T.Vector3(...frame.normal);
+      const relative = point.clone().sub(origin), uAt = relative.dot(u), vAt = relative.dot(v);
+      const u0 = -frame.columnSpacing / 2, u1 = (series.columns - .5) * frame.columnSpacing;
+      const v0 = -frame.rowSpacing / 2, v1 = (series.rows - .5) * frame.rowSpacing;
+      const w0 = -mpr.stepMm / 2, w1 = (series.slices.length - .5) * mpr.stepMm;
+      const physical = (uValue:number, vValue:number, wValue:number) => origin.clone().addScaledVector(u,uValue).addScaledVector(v,vValue).addScaledVector(w,wValue);
+      const addGuide = (corners:T.Vector3[], color:number) => {
+        const guideGeometry = new T.BufferGeometry().setFromPoints([corners[0],corners[1],corners[2],corners[0],corners[2],corners[3]]);
+        const guideMaterial = new T.MeshBasicMaterial({color,transparent:true,opacity:.14,side:T.DoubleSide,depthWrite:false});
+        resources.push(guideGeometry,guideMaterial); scene.add(new T.Mesh(guideGeometry,guideMaterial));
+        const lineGeometry = new T.BufferGeometry().setFromPoints([...corners,corners[0]]);
+        const lineMaterial = new T.LineBasicMaterial({color,transparent:true,opacity:.85});
+        resources.push(lineGeometry,lineMaterial); scene.add(new T.Line(lineGeometry,lineMaterial));
+      };
+      addGuide([physical(u0,vAt,w0),physical(u1,vAt,w0),physical(u1,vAt,w1),physical(u0,vAt,w1)],0x39ffbd);
+      addGuide([physical(uAt,v0,w0),physical(uAt,v1,w0),physical(uAt,v1,w1),physical(uAt,v0,w1)],0xff5a86);
+    }
     if (surface && surface.positions.length && surface.indices.length) {
       const geometry = new T.BufferGeometry();
       geometry.setAttribute('position', new T.BufferAttribute(surface.positions, 3));
@@ -195,12 +218,12 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, registration, resetView]);
+  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, registration, cursorPoint, resetView]);
 
   if (!usable) return <p className="plane-status">Visualização espacial indisponível: esta série precisa de posição, orientação e espaçamento de pixel DICOM válidos em todos os cortes.</p>;
   return <section className="patient-slices" aria-label="Pilhas de cortes no espaço do paciente">
     <div ref={host} style={{ height: 300, borderRadius: 8, overflow: 'hidden', background: '#06131c' }} />
-    {(surface || registration) && <small>{surface && "Ciano: superfície de alta densidade da TC. "}{registration && "Marfim: esqueleto genérico ajustado pelos marcos."}</small>}
+    {(surface || registration || cursorPoint) && <small>{surface && "Ciano: superfície de alta densidade da TC. "}{registration && "Marfim: esqueleto genérico ajustado pelos marcos. "}{cursorPoint && "Verde e rosa: planos ortogonais na posição da mira."}</small>}
     {status && <p className="plane-status">{status}</p>}
     <div className="image-tools"><button onClick={() => setResetView(value => value + 1)}>Resetar vista 3D</button><button disabled={safeIndex === 0} onClick={() => onIndex(safeIndex - 1)}>← Corte anterior</button><button disabled={safeIndex === series.slices.length - 1} onClick={() => onIndex(safeIndex + 1)}>Próximo corte →</button></div>
     <small>Geometria espacial dos cortes DICOM no sistema LPS do paciente. {surface && 'A superfície mostra apenas densidade alta aproximada por limiar; não identifica órgãos nem estabelece diagnóstico. '}{registration && 'A referência esquelética é um atlas ajustado manualmente; não é segmentação do paciente. '}Mostra pixels adquiridos e seus planos físicos.</small>
