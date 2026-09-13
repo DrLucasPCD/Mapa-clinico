@@ -5,6 +5,12 @@ import type { DicomSeries, DicomSlice } from './dicom';
 import { hasPatientGeometry, sliceCorners, sliceFrame } from './patient-geometry';
 import { loadDetailedModel } from './detailed-models';
 import { mprGeometry } from './mpr';
+import {
+  overlayStyle,
+  slabPlaneEquations,
+  type OverlayClip,
+  type OverlaySystem,
+} from './registered-overlay';
 
 type Props = {
   series: DicomSeries;
@@ -15,6 +21,8 @@ type Props = {
   surface?: { positions: Float32Array; indices: Uint32Array } | null;
   registration?: { matrix: number[]; modelVariant: 'male' | 'female' } | null;
   cursorPoint?: number[] | null;
+  overlaySystems?: OverlaySystem[];
+  overlayClip?: OverlayClip;
 };
 
 const detailedCache = new Map<'male' | 'female', Promise<T.Group>>();
@@ -71,7 +79,7 @@ function outline(slice: DicomSlice) {
   return new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: 0x75e7e7, transparent: true, opacity: 0.22 }));
 }
 
-export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, registration = null, cursorPoint = null }: Props) {
+export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, registration = null, cursorPoint = null, overlaySystems = ['nervous', 'cardiovascular'], overlayClip = 'volume' }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const view = useRef<{series: DicomSeries; position: T.Vector3; target: T.Vector3; revision:number} | null>(null);
   const [status, setStatus] = useState('');
@@ -161,24 +169,35 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       if (registration.matrix.length !== 16 || !registration.matrix.every(Number.isFinite)) {
         setStatus('A matriz de registro manual é inválida.');
       } else {
-        setStatus('Carregando referência esquelética registrada…');
+        setStatus('Carregando sobreposição anatômica registrada…');
         void cachedDetailedModel(registration.modelVariant).then((source) => {
           if (cancelled) return;
           const model = source.clone(true);
-          const clippingPlanes = [
+          const clippingPlanes: T.Plane[] = [
             new T.Plane(new T.Vector3(1, 0, 0), -box.min.x), new T.Plane(new T.Vector3(-1, 0, 0), box.max.x),
             new T.Plane(new T.Vector3(0, 1, 0), -box.min.y), new T.Plane(new T.Vector3(0, -1, 0), box.max.y),
             new T.Plane(new T.Vector3(0, 0, 1), -box.min.z), new T.Plane(new T.Vector3(0, 0, -1), box.max.z),
           ];
+          const frame = sliceFrame(series.slices[0])!;
+          for (const equation of slabPlaneEquations(frame, cursorPoint, overlayClip, mpr?.stepMm ?? 0)) {
+            clippingPlanes.push(new T.Plane(new T.Vector3(...equation.normal), equation.constant));
+          }
           model.traverse((object) => {
             if (!(object instanceof T.Mesh)) return;
-            object.visible = object.userData.anatomySystem === 'skeletal';
-            if (!object.visible) return;
+            const style = overlayStyle(
+              String(object.userData.anatomySystem ?? ''),
+              String(object.userData.anatomyId ?? ''),
+              overlaySystems,
+            );
+            object.visible = Boolean(style);
+            if (!style) return;
             const material = (Array.isArray(object.material) ? object.material[0] : object.material).clone() as T.MeshStandardMaterial;
+            material.color.set(style.color);
             material.clippingPlanes = clippingPlanes;
             material.transparent = true;
-            material.opacity = 0.52;
+            material.opacity = style.opacity;
             material.depthWrite = false;
+            material.side = T.DoubleSide;
             object.material = material;
             object.userData.patientSliceMaterial = true;
           });
@@ -189,7 +208,7 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
           registeredAtlas = model;
           scene.add(model);
           setStatus('');
-        }).catch(() => { if (!cancelled) setStatus('Não foi possível carregar a referência esquelética registrada.'); });
+        }).catch(() => { if (!cancelled) setStatus('Não foi possível carregar a sobreposição anatômica registrada.'); });
       }
     }
     const resize = () => {
@@ -218,14 +237,14 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, registration, cursorPoint, resetView]);
+  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, registration, cursorPoint, resetView, overlaySystems, overlayClip]);
 
   if (!usable) return <p className="plane-status">Visualização espacial indisponível: esta série precisa de posição, orientação e espaçamento de pixel DICOM válidos em todos os cortes.</p>;
   return <section className="patient-slices" aria-label="Pilhas de cortes no espaço do paciente">
     <div ref={host} style={{ height: 300, borderRadius: 8, overflow: 'hidden', background: '#06131c' }} />
-    {(surface || registration || cursorPoint) && <small>{surface && "Ciano: superfície de alta densidade da TC. "}{registration && "Marfim: esqueleto genérico ajustado pelos marcos. "}{cursorPoint && "Verde e rosa: planos ortogonais na posição da mira."}</small>}
+    {(surface || registration || cursorPoint) && <small>{surface && "Ciano: superfície de alta densidade da TC. "}{registration && "Ciano: sistema nervoso; vermelho/azul: vasos; marfim: esqueleto, conforme as camadas escolhidas. "}{cursorPoint && "Verde e rosa: planos ortogonais na posição da mira."}</small>}
     {status && <p className="plane-status">{status}</p>}
     <div className="image-tools"><button onClick={() => setResetView(value => value + 1)}>Resetar vista 3D</button><button disabled={safeIndex === 0} onClick={() => onIndex(safeIndex - 1)}>← Corte anterior</button><button disabled={safeIndex === series.slices.length - 1} onClick={() => onIndex(safeIndex + 1)}>Próximo corte →</button></div>
-    <small>Geometria espacial dos cortes DICOM no sistema LPS do paciente. {surface && 'A superfície mostra apenas densidade alta aproximada por limiar; não identifica órgãos nem estabelece diagnóstico. '}{registration && 'A referência esquelética é um atlas ajustado manualmente; não é segmentação do paciente. '}Mostra pixels adquiridos e seus planos físicos.</small>
+    <small>Geometria espacial dos cortes DICOM no sistema LPS do paciente. {surface && 'A superfície mostra apenas densidade alta aproximada por limiar; não identifica órgãos nem estabelece diagnóstico. '}{registration && `A anatomia colorida é um atlas genérico ajustado manualmente${overlayClip === 'volume' ? '' : ` e recortado no plano ${overlayClip}`}; não é segmentação do paciente. `}Mostra pixels adquiridos e seus planos físicos.</small>
   </section>;
 }

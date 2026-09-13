@@ -4,6 +4,7 @@ import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
 import LandmarkPanel from './LandmarkPanel';
+import type { OverlayClip, OverlaySystem } from './registered-overlay';
 
 type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
@@ -39,6 +40,8 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   const [targetPoint, setTargetPoint] = useState<number[]|null>(null);
   const [mprPoint, setMprPoint] = useState<number[]|null>(null);
   const [registration, setRegistration] = useState<{matrix:number[];modelVariant:'male'|'female'}|null>(null);
+  const [overlaySystems, setOverlaySystems] = useState<OverlaySystem[]>(['nervous', 'cardiovascular']);
+  const [overlayClip, setOverlayClip] = useState<OverlayClip>('volume');
   const worker = useRef<Worker|null>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const loadRevision = useRef(0);
@@ -194,6 +197,11 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
     setErrors([]); setCenter(null); setWidth(null);
   };
   const move = (delta: number) => setSliceIndex((value) => Math.max(0, Math.min((current?.slices.length ?? 1) - 1, value + delta)));
+  const toggleOverlay = (system: OverlaySystem) => setOverlaySystems((currentSystems) =>
+    currentSystems.includes(system)
+      ? currentSystems.filter((item) => item !== system)
+      : [...currentSystems, system],
+  );
 
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
     <header><small>IMAGENS LOCAIS · CT E RM</small><h2>Leitor de séries DICOM</h2><p>Os arquivos são lidos somente neste dispositivo e não são enviados. Este leitor aceita imagens monocromáticas, sem compressão e de um quadro.</p></header>
@@ -208,7 +216,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
       <div className="series-image">
-        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} /></Suspense>
+        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} /></Suspense>
         <canvas className="dicom-canvas" ref={canvas} onClick={event => {
           if (!selected || !sliceFrame(selected)) return;
           const bounds = event.currentTarget.getBoundingClientRect();
@@ -227,6 +235,16 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
         <TriPlanarViewer series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex} onPatientPoint={point => { setTargetPoint(point); setMprPoint(point); }} />
       </Suspense>
+      <section className="overlay-panel" aria-label="Sobreposição anatômica registrada">
+        <h3>Sobreposição neurovascular 3D</h3>
+        <p>Escolha as estruturas do atlas que aparecerão no espaço do exame após o ajuste por marcos.</p>
+        <div className="overlay-systems">
+          {([['nervous', 'Encéfalo e nervos'], ['cardiovascular', 'Artérias e vasos'], ['skeletal', 'Esqueleto']] as const).map(([system, label]) => <button key={system} aria-pressed={overlaySystems.includes(system)} className={overlaySystems.includes(system) ? `active ${system}` : ''} onClick={() => toggleOverlay(system)}>{label}</button>)}
+        </div>
+        <label>Recorte anatômico<select aria-label="Plano de recorte da sobreposição" value={overlayClip} onChange={(event) => setOverlayClip(event.target.value as OverlayClip)}><option value="volume">Volume completo</option><option value="axial">Lâmina axial</option><option value="coronal">Lâmina coronal</option><option value="sagital">Lâmina sagital</option></select></label>
+        {!registration && <p className="plane-status">Adicione três ou mais pares de marcos abaixo e faça o ajuste para posicionar a anatomia no exame.</p>}
+        {registration && <p className="plane-status">Sobreposição ativa. Mova a mira nas reconstruções para deslocar o recorte selecionado.</p>}
+      </section>
       <div className="segmentation-panel">
         <h3>Superfície 3D da TC</h3>
         <p>Separa voxels de alta densidade, como osso. Contraste e outros materiais também podem aparecer. A superfície acompanha as coordenadas dos cortes; não identifica órgãos automaticamente.</p>
