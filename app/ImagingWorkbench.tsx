@@ -204,7 +204,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
   );
 
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
-    <header><small>IMAGENS LOCAIS · CT E RM</small><h2>Leitor de séries DICOM</h2><p>Os arquivos são lidos somente neste dispositivo e não são enviados. Este leitor aceita imagens monocromáticas, sem compressão e de um quadro.</p></header>
+    <header><small>DO CORPO À IMAGEM</small><h2>Atlas e reconstruções</h2><p>Explore os cortes e a anatomia no mesmo espaço de estudo. Importe uma série DICOM de TC ou RM para começar.</p></header>
     <div className="image-tools">
       <label>Selecionar série<input aria-label="Selecionar arquivos DICOM" type="file" accept=".dcm,application/dicom" multiple onChange={(event) => void openFiles(event.target.files)} /></label>
       {loading && <span>Processando localmente…</span>}
@@ -215,8 +215,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
     {!current && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}
-      <div className="series-image">
-        <Suspense fallback={null}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} /></Suspense>
+      <details className="source-image-panel"><summary>Imagem adquirida · selecionar marco para alinhamento</summary><div className="series-image">
         <canvas className="dicom-canvas" ref={canvas} onClick={event => {
           if (!selected || !sliceFrame(selected)) return;
           const bounds = event.currentTarget.getBoundingClientRect();
@@ -226,14 +225,14 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
           const point = pixelCenter(selected, row, col) ?? null;
           setTargetPoint(point); setMprPoint(point);
         }} aria-label={`Imagem ${current.modality}, corte ${sliceIndex + 1} de ${current.slices.length}`} />
-      </div>
+      </div></details>
       <div className="slice-controls">
         <label>Corte {sliceIndex + 1} de {current.slices.length}<input aria-label="Selecionar corte" type="range" min="0" max={Math.max(0, current.slices.length - 1)} value={sliceIndex} onChange={(event) => setSliceIndex(Number(event.target.value))} /></label>
         <label>Centro da janela {Math.round(wc)}<input aria-label="Centro da janela" type="range" min={Math.floor(range[0])} max={Math.ceil(range[1])} value={wc} onChange={(event) => setCenter(Number(event.target.value))} /></label>
         <label>Largura da janela {Math.round(ww)}<input aria-label="Largura da janela" type="range" min="1" max={Math.max(1, Math.ceil(range[1] - range[0]))} value={ww} onChange={(event) => setWidth(Number(event.target.value))} /></label>
       </div>
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
-        <TriPlanarViewer series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex} onPatientPoint={point => { setTargetPoint(point); setMprPoint(point); }} />
+        <TriPlanarViewer series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex} onPatientPoint={point => { setTargetPoint(point); setMprPoint(point); }} spatialView={<Suspense fallback={<p>Preparando volume…</p>}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} /></Suspense>} />
       </Suspense>
       <section className="overlay-panel" aria-label="Sobreposição anatômica registrada">
         <h3>Sobreposição neurovascular 3D</h3>
@@ -245,7 +244,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
         {!registration && <p className="plane-status">Adicione três ou mais pares de marcos abaixo e faça o ajuste para posicionar a anatomia no exame.</p>}
         {registration && <p className="plane-status">Sobreposição ativa. Mova a mira nas reconstruções para deslocar o recorte selecionado.</p>}
       </section>
-      <div className="segmentation-panel">
+      <details className="advanced-imaging"><summary>Superfície de alta densidade · ajustes</summary><div className="segmentation-panel">
         <h3>Superfície 3D da TC</h3>
         <p>Separa voxels de alta densidade, como osso. Contraste e outros materiais também podem aparecer. A superfície acompanha as coordenadas dos cortes; não identifica órgãos automaticamente.</p>
         <label>Limiar de densidade (HU) <input aria-label="Limiar de densidade" type="number" min="-1000" max="3000" value={threshold} onChange={event => setThreshold(Number(event.target.value))} /></label>
@@ -255,7 +254,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, atlasPoint, mode
         {!eligibility.eligible && <p>{eligibility.reason}</p>}
         {segmentationError && <p role="alert">{segmentationError}</p>}
         {surface && <p>Superfície gerada · {(surface.indices.length/3).toLocaleString('pt-BR')} triângulos. Amostragem limitada a 128 voxels por eixo; detalhes pequenos podem se fundir ou aumentar.</p>}
-      </div>
+      </div></details>
       <LandmarkPanel series={current} atlasPoint={atlasPoint} targetPoint={targetPoint} modelVariant={modelVariant} onRegistration={setRegistration} />
       <label>Região de referência no atlas<select aria-label="Selecionar região no atlas" value={region} onChange={(event) => setRegion(event.target.value as Region)}><option value="head">Cabeça</option><option value="thorax">Tórax</option><option value="abdomen">Abdome</option><option value="body">Corpo</option></select></label>
       <p className="plane-status">Plano adquirido: {current.plane ?? 'não determinável'}. O atlas lateral usa uma referência anatômica genérica. O ajuste manual, quando aplicado, aparece apenas no visor espacial dos cortes e tem precisão limitada aos pontos escolhidos. As reconstruções ortogonais usam os voxels da série carregada.</p>

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import type { DicomSeries } from './dicom';
 import { pixelCenter } from './patient-geometry';
 import { cursorFromView, mprGeometry, viewDimensions, viewVoxel, type MprCursor, type MprView } from './mpr';
 
 type Props = {
+  spatialView?: ReactNode;
   series: DicomSeries;
   slice: number;
   windowCenter: number;
@@ -14,7 +15,7 @@ type Props = {
 
 const views: MprView[] = ['source', 'row', 'column'];
 
-export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint }: Props) {
+export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, spatialView }: Props) {
   const geometry = useMemo(() => mprGeometry(series), [series]);
   const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice });
   const canvases = useRef<Record<MprView, HTMLCanvasElement | null>>({ source: null, row: null, column: null });
@@ -85,7 +86,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     return () => listeners.forEach(([canvas, navigate]) => canvas.removeEventListener('wheel', navigate));
   }, [cursor, geometry, onPatientPoint, onSlice, series]);
 
-  if (!geometry) return <p className="plane-status">Reconstruções ortogonais indisponíveis: a série precisa de ao menos dois cortes paralelos, regulares e com geometria DICOM completa.</p>;
+  if (!geometry) return <><p className="plane-status">Reconstruções ortogonais indisponíveis: a série precisa de ao menos dois cortes paralelos, regulares e com geometria DICOM completa.</p>{spatialView}</>;
   const first = series.slices[0];
   const ratios: Record<MprView, number> = {
     source: series.columns * first.pixelSpacing![1] / (series.rows * first.pixelSpacing![0]),
@@ -97,7 +98,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     <div className="mpr-grid">{views.map(view => <figure key={view}>
       <canvas ref={node => { canvases.current[view] = node; }} onClick={event => select(view, event)} style={{ aspectRatio: String(ratios[view]) }} aria-label={`Reconstrução ${geometry.labels[view]}; use o scroll para navegar pelos cortes`} />
       <figcaption>{geometry.labels[view]} · {view === 'source' ? 'adquirida' : 'reconstruída'}</figcaption>
-    </figure>)}</div>
+    </figure>)}{spatialView && <div className="mpr-spatial"><div className="spatial-heading">Espaço do exame · 3D</div>{spatialView}</div>}</div>
     <small>Reconstrução por vizinho mais próximo, sem interpolação diagnóstica. O aspecto usa o espaçamento físico dos voxels.</small>
   </section>;
 }

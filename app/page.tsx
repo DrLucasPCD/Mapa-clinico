@@ -44,6 +44,7 @@ import Discoveries from './Discoveries';
 import Install from './Install';
 import { registerStudyTool, type Context } from './webmcp';
 import './dashboard.css';
+import './workspace.css';
 import './study.css';
 import StudyPanel from './StudyPanel';
 import ImagingWorkbench from './ImagingWorkbench';
@@ -367,7 +368,7 @@ export default function App() {
             </span>
           </button>
         </aside>
-        <main className="dashboard-stage">
+        <main className={`dashboard-stage workspace-${workspaceMode}`}>
           <section className="atlas-column">
             <div className="column-tabs">
               <button className="active" onClick={() => setDrawer(null)}>
