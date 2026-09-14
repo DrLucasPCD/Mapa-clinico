@@ -1,8 +1,80 @@
 {
-  "lastChecked": "2026-09-13T13:48:05.875Z",
+  "lastChecked": "2026-09-14T15:53:07.609Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42733938",
+      "title": "Perigastric appendagitis mimicking biliary colic: Recognition of the central dot sign on CT.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733938/",
+      "authors": "Nalla S, Patil PS, Gangapatnam V",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733932",
+      "title": "Transethmoidal encephalocele associated with granulomatosis with polyangiitis: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733932/",
+      "authors": "Siabatto-Cleves VS, Sisa-Rodríguez JA, Cortés-Ortega CA",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733930",
+      "title": "SPECT/CT confirms metastatic pulmonary calcification on bone scintigraphy: Directing management in a dialysis patient.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733930/",
+      "authors": "Su X, Li W, He J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733923",
+      "title": "MRI assessment of locoregional extent in a Buschke-Löwenstein tumor with histopathologically confirmed malignant transformation: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733923/",
+      "authors": "El Bqaq I, Houssaini ZI, Ajerame A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733761",
+      "title": "Exogenous lipoid pneumonia from chronic mineral oil aspiration complicated by cavitary Mycobacterium abscessus infection.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733761/",
+      "authors": "Salem MB, Abubaker K, Alzoubi Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733751",
+      "title": "Eight months of misdiagnosis: Intra-articular osteoid osteoma in a 48-year-old woman.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733751/",
+      "authors": "Satilmis AB",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733747",
+      "title": "Obturator nerve schwannoma presenting as a laterovesical pelvic mass: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733747/",
+      "authors": "El Bqaq I, Messaoud O, Ajerame A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42733698",
+      "title": "Diffuse leptomeningeal glioneuronal tumor mimicking chronic inflammatory and tuberculous meningitis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42733698/",
+      "authors": "Alshehri A, Kashgari A, Bukhari S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42725055",
       "title": "Mycotic pulmonary artery aneurysms and septic pulmonary emboli in infective endocarditis: A rare case report and review of imaging findings.",
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42550573/",
       "authors": "Mosedale T, Lim ET, Tsampras N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42462819",
-      "title": "17α-hydroxylase deficiency in a 46,XY individual with a hypoplastic uterus: In vitro functional validation of a CYP17A1 mutation.",
-      "date": "2026 Nov 15",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42462819/",
-      "authors": "Hou Z, Wang X, Fu Z",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729599",
-      "title": "Agenesis of the left pulmonary artery and cardiac hydatid cysts: A dual rarity.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729599/",
-      "authors": "Benaazza S, Belkouchi L, Elhaddad S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729593",
-      "title": "Percutaneous transosseous approach for type II endoleak repair of common iliac artery aneurysm.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729593/",
-      "authors": "Casey B, Sexton M, Moore K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729587",
-      "title": "Infected splenic artery pseudoaneurysm within a complex splenic cystic lesion: CT angiography pitfalls and surgical correlation.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729587/",
-      "authors": "Amara R, Chyabri N, Mouna N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729553",
-      "title": "MRI appearance of a hemorrhagic external hemorrhoid at the anal verge with concomitant low anal fistula: A case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729553/",
-      "authors": "Liu X, Cao W, An X",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729547",
-      "title": "Trauma-induced crown dilaceration of permanent maxillary central incisors: A case report with CBCT follow-up.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729547/",
-      "authors": "Hayatimotlagh F, Khorram S, Sadeghi Z",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729420",
-      "title": "Fibrothecoma with pseudo-carcinomatosis in a young woman: The radiologic pitfalls of Meigs syndrome and the importance of fertility-sparing surgery.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729420/",
-      "authors": "Amara R, Tahouna MY, Kourchi H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42729416",
-      "title": "Ectopic thyroid tissue in the breast mimicking a breast lesion: A rare case report.",
-      "date": "2026 Nov",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42729416/",
-      "authors": "Holmesi H, Taghavi M, Rahmani S",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
