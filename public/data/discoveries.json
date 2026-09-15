@@ -1,8 +1,26 @@
 {
-  "lastChecked": "2026-09-14T15:53:07.609Z",
+  "lastChecked": "2026-09-15T14:19:42.532Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42740920",
+      "title": "Orbital tumor in DICER1 syndrome (embryonal tumor with multilayered rosettes) successfully treated with intraarterial chemotherapy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42740920/",
+      "authors": "Abramson DH, Wexler L, Maeng M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42740849",
+      "title": "Reversal of aqueous flow in myopic, vitrectomized eyes with scleral-fixated intraocular lenses: A proposed mechanism underlying reverse pupillary block.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42740849/",
+      "authors": "Safran SG, Smith BM, Coroneo MT",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42733938",
       "title": "Perigastric appendagitis mimicking biliary colic: Recognition of the central dot sign on CT.",
@@ -199,24 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42580287/",
       "authors": "Clarke-Brodber AL, Chen PL, Ulhaque A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42579903",
-      "title": "Rupture and dissemination of a mycotic aneurysm caused by the Aspergillus fumigatus complex: A diagnostic challenge posed by a non‑sporulating isolate.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42579903/",
-      "authors": "Zhang W, Wei Z, Liu Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42550573",
-      "title": "Hysteroscopic resection of a submucosal fibroid: hints and tips for a successful procedure.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42550573/",
-      "authors": "Mosedale T, Lim ET, Tsampras N",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
