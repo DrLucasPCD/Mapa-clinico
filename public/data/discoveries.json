@@ -1,8 +1,17 @@
 {
-  "lastChecked": "2026-09-15T14:19:42.532Z",
+  "lastChecked": "2026-09-16T14:11:47.034Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42740952",
+      "title": "Unilateral childhood-onset glaucoma associated with Phelan-McDermid syndrome.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42740952/",
+      "authors": "Faust J, Ely AL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42740920",
       "title": "Orbital tumor in DICER1 syndrome (embryonal tumor with multilayered rosettes) successfully treated with intraarterial chemotherapy.",
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42707082/",
       "authors": "Komori M, Sato M, Arakawa A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42580287",
-      "title": "Breast implant-associated squamous cell carcinoma (BIA-SCC): Clinicopathologic analysis of two cases with radiologic-pathologic correlation and a review of the literature.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42580287/",
-      "authors": "Clarke-Brodber AL, Chen PL, Ulhaque A",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
