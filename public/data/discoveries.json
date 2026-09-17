@@ -1,8 +1,116 @@
 {
-  "lastChecked": "2026-09-16T14:11:47.034Z",
+  "lastChecked": "2026-09-17T14:17:34.066Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42750758",
+      "title": "Hemicerebral atrophy as an unusual central nervous system manifestation of Neurofibromatosis type 1: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750758/",
+      "authors": "Abera B, Belachew B, Ahmed HT",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750750",
+      "title": "Effective amyloid clearance with lecanemab in a female with Alzheimer's disease: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750750/",
+      "authors": "Noguchi-Shinohara M, Ono K",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750743",
+      "title": "Ultrasound-guided percutaneous retrieval of an ischiorectal impacted ingested fish bone after failed surgical exploration: A case report and review of the literature.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750743/",
+      "authors": "Bellam Premnath KP, Shariq M, Bansode S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750734",
+      "title": "Symmetrical basal ganglia involvement in pediatric neuropsychiatric lupus: MRI findings in a rare presentation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750734/",
+      "authors": "Rehman A, Ahmed ZS, Khandwala K",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750725",
+      "title": "Intestinal nonrotation with left-sided appendiceal microperforation mimicking colonic perforation: CT diagnostic pitfall and successful conservative treatment.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750725/",
+      "authors": "Han WX, Wang L, Huang JL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750721",
+      "title": "\"Ears of the lynx\" sign on MRI: A radiologic clue to hereditary spastic paraplegia.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750721/",
+      "authors": "El Bqaq I, Izi Z, Ech-Cherif Kettani N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750720",
+      "title": "Paralabral cyst of the hip leading to common femoral vein compression.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750720/",
+      "authors": "Sellwood JE, Billings S, Spencer-Gardner L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750710",
+      "title": "Chronic dorsal pain revealing an osteoblastoma with costo-vertebral extension: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750710/",
+      "authors": "El Bqaq I, El Harras Y, Lasri L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750688",
+      "title": "Inguinal endometriosis mimicking an inguinal hernia: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750688/",
+      "authors": "El Bqaq I, Ait Belhaj E, Ehirchiou Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750685",
+      "title": "Simultaneous idiopathic mediastinal and retroperitoneal fibrosis presenting with acute respiratory failure: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750685/",
+      "authors": "El Aidouni G, El Aissaouy M, Merbouh M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750684",
+      "title": "Simultaneous calcified and noncalcified fibrotic splenic nodules in systemic lupus erythematosus.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750684/",
+      "authors": "Kurashima J, Koshino S, Gonoi W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750675",
+      "title": "Posterior reversible encephalopathy syndrome following eclampsia in a primigravida at 35 weeks of gestation: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750675/",
+      "authors": "Chowdhury A, Khan AT, Zahan ZA",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42740952",
       "title": "Unilateral childhood-onset glaucoma associated with Phelan-McDermid syndrome.",
@@ -109,114 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42725055/",
       "authors": "El Bqaq I, Lasri L, El Harras Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42725017",
-      "title": "A dual-table technique facilitates vascular control and successful repair of a suprarenal inferior vena cava injury.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42725017/",
-      "authors": "Kilada C, Robitsek J, McKenzie K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42725006",
-      "title": "CT imaging-led diagnosis of Parry-Romberg syndrome: A case report and literature review highlighting craniofacial and neurologic involvement.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42725006/",
-      "authors": "Ahmed AD, Saliha HN, Nuguse MK",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724900",
-      "title": "Indirect traumatic optic neuropathy in a high-risk diabetic adolescent: A rare clinical presentation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724900/",
-      "authors": "El Azzouzi R, Boukhlouf O, Dani B",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724876",
-      "title": "Multifocal osseous and cutaneous Rosai-Dorfman-Destombes disease presenting as an aggressive intramedullary femoral lesion.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724876/",
-      "authors": "Aldubaiyan KW, AlRehaily HA, AlJarie MA",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724633",
-      "title": "Open surgical management of multiple mycotic superior mesenteric artery aneurysms following staphylococcal infective endocarditis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724633/",
-      "authors": "Chowdhury MM, Navi A, Winterbottom A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724631",
-      "title": "Use of methylene blue discography in transforaminal endoscopic discectomy for cranially migrated lumbar disc herniation: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724631/",
-      "authors": "Marques MVB, Machado FG, Ponte JLM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724629",
-      "title": "Diffuse high-grade glioma with gliomatosis cerebri pattern mimicking symmetric white matter disease.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724629/",
-      "authors": "Abouchiba S, Ennasery Z, Ouazzani H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724593",
-      "title": "Small ethmoid mucocele with intracranial extension associated with fibrous dysplasia: A rare case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724593/",
-      "authors": "Vu LT, Dao DT, Dinh LC",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724537",
-      "title": "Staged surgical management of multiple arterial aneurysms in aneurysms osteoarthritis syndrome with a novel SMAD3 mutation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724537/",
-      "authors": "Qing S, Tang Z, Wang R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42724491",
-      "title": "Spinal hydatid disease with epidural extension and spinal cord compression: A radiology case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42724491/",
-      "authors": "Ulaganathan B, Pandian ASP, Sellamuthu E",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42714310",
-      "title": "Sintilimab‑related cystitis/ureteritis in high‑grade endometrial stromal sarcoma: A case report and structured literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42714310/",
-      "authors": "Yang S, Gao R, Li D",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42707082",
-      "title": "Irreversible vision loss following split lateral rectus nasal transposition for complete oculomotor nerve palsy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42707082/",
-      "authors": "Komori M, Sato M, Arakawa A",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
