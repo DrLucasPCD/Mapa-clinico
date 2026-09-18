@@ -1,8 +1,44 @@
 {
-  "lastChecked": "2026-09-17T14:17:34.066Z",
+  "lastChecked": "2026-09-18T13:35:41.364Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42751125",
+      "title": "Infected thoracoabdominal aortic aneurysm with vertebral osteomyelitis caused by invasive pneumococcal disease successfully managed with rifampicin-soaked in situ graft replacement.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42751125/",
+      "authors": "Itoda Y, Hasegawa Y, Morishita H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42751063",
+      "title": "Hybrid repair of Kommerell diverticulum associated with severe aberrant left subclavian artery stenosis and poststenotic aneurysmal degeneration: 2-year outcomes.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42751063/",
+      "authors": "Shen F, Habib SG, Weger NS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750923",
+      "title": "Magnetic resonance arthrographic demonstration of knee joint communication in isolated popliteal artery cystic adventitial disease.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750923/",
+      "authors": "Piyawattanametha N, Gogoi R, Marek T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42750858",
+      "title": "Sharp recanalization of extensive multilevel central venous occlusions in a young patient with familial Mediterranean fever: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42750858/",
+      "authors": "Turkistani F, Aldeen WS, Algain AH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42750758",
       "title": "Hemicerebral atrophy as an unusual central nervous system manifestation of Neurofibromatosis type 1: A case report.",
@@ -181,42 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42733761/",
       "authors": "Salem MB, Abubaker K, Alzoubi Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733751",
-      "title": "Eight months of misdiagnosis: Intra-articular osteoid osteoma in a 48-year-old woman.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733751/",
-      "authors": "Satilmis AB",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733747",
-      "title": "Obturator nerve schwannoma presenting as a laterovesical pelvic mass: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733747/",
-      "authors": "El Bqaq I, Messaoud O, Ajerame A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733698",
-      "title": "Diffuse leptomeningeal glioneuronal tumor mimicking chronic inflammatory and tuberculous meningitis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733698/",
-      "authors": "Alshehri A, Kashgari A, Bukhari S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42725055",
-      "title": "Mycotic pulmonary artery aneurysms and septic pulmonary emboli in infective endocarditis: A rare case report and review of imaging findings.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42725055/",
-      "authors": "El Bqaq I, Lasri L, El Harras Y",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
