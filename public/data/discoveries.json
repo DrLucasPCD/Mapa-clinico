@@ -1,8 +1,80 @@
 {
-  "lastChecked": "2026-09-18T13:35:41.364Z",
+  "lastChecked": "2026-09-19T13:09:14.497Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42757092",
+      "title": "Case report on complex jewelry foreign body ingestion in pediatric population: When watchful waiting prevails over intervention.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42757092/",
+      "authors": "Kc S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42757062",
+      "title": "Cerebellar abscess complicating chronic suppurative otitis media: An unusual route of intracranial spread.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42757062/",
+      "authors": "Soldo L, Grgić S, Pehar I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42757018",
+      "title": "Giant retroperitoneal dedifferentiated liposarcoma with intraperitoneal extension: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42757018/",
+      "authors": "Hlioui K, Messari L, El Mabrouk F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42756690",
+      "title": "Sacral benign notochordal cell tumor with atypical imaging features and 16-year spontaneous partial regression: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42756690/",
+      "authors": "Shahsavari N, Ng NN, Fischbein N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42756684",
+      "title": "Invasive fungal laryngitis: A rare mimic of laryngeal cancer.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42756684/",
+      "authors": "Gudla SK, Vasireddi A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42756530",
+      "title": "Flexible cystoscopy-guided realignment of traumatic urethral disruption in pelvic fracture: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42756530/",
+      "authors": "Park E, Muchard R, Fada L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42755950",
+      "title": "Duplicated left renal vein with aberrant inferior drainage to left common iliac vein: A rare anomaly of left renal vein.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42755950/",
+      "authors": "Esfandiary R, Moghadam MBS, Sefidbakht S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42755831",
+      "title": "Primary pancreatic squamous cell carcinoma with duodenal invasion: Literature review and a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42755831/",
+      "authors": "Fatah FH, Hofmann A, Crane A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42751125",
       "title": "Infected thoracoabdominal aortic aneurysm with vertebral osteomyelitis caused by invasive pneumococcal disease successfully managed with rifampicin-soaked in situ graft replacement.",
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42750675/",
       "authors": "Chowdhury A, Khan AT, Zahan ZA",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42740952",
-      "title": "Unilateral childhood-onset glaucoma associated with Phelan-McDermid syndrome.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42740952/",
-      "authors": "Faust J, Ely AL",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42740920",
-      "title": "Orbital tumor in DICER1 syndrome (embryonal tumor with multilayered rosettes) successfully treated with intraarterial chemotherapy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42740920/",
-      "authors": "Abramson DH, Wexler L, Maeng M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42740849",
-      "title": "Reversal of aqueous flow in myopic, vitrectomized eyes with scleral-fixated intraocular lenses: A proposed mechanism underlying reverse pupillary block.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42740849/",
-      "authors": "Safran SG, Smith BM, Coroneo MT",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733938",
-      "title": "Perigastric appendagitis mimicking biliary colic: Recognition of the central dot sign on CT.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733938/",
-      "authors": "Nalla S, Patil PS, Gangapatnam V",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733932",
-      "title": "Transethmoidal encephalocele associated with granulomatosis with polyangiitis: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733932/",
-      "authors": "Siabatto-Cleves VS, Sisa-Rodríguez JA, Cortés-Ortega CA",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733930",
-      "title": "SPECT/CT confirms metastatic pulmonary calcification on bone scintigraphy: Directing management in a dialysis patient.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733930/",
-      "authors": "Su X, Li W, He J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733923",
-      "title": "MRI assessment of locoregional extent in a Buschke-Löwenstein tumor with histopathologically confirmed malignant transformation: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733923/",
-      "authors": "El Bqaq I, Houssaini ZI, Ajerame A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42733761",
-      "title": "Exogenous lipoid pneumonia from chronic mineral oil aspiration complicated by cavitary Mycobacterium abscessus infection.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42733761/",
-      "authors": "Salem MB, Abubaker K, Alzoubi Y",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
