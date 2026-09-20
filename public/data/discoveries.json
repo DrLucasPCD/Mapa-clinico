@@ -1,8 +1,98 @@
 {
-  "lastChecked": "2026-09-19T13:09:14.497Z",
+  "lastChecked": "2026-09-20T13:34:43.308Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42761520",
+      "title": "Aneurysmal Bone Cyst of the Distal Phalanx: A Case Report.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
+      "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761842",
+      "title": "Posterior reversible encephalopathy syndrome associated with Rickettsia conorii infection: a rare case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761842/",
+      "authors": "Naderi H, Sedaghat A, Sobhi A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761644",
+      "title": "Pitfall in necrotizing pancreatitis: Organized hematoma with arteriovenous fistula mimicking a splenic artery pseudoaneurysm.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761644/",
+      "authors": "López Gordo S, Torra N, Bernabeu A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761632",
+      "title": "A rare guest in the hernia sac: Preoperatively diagnosed Amyand's hernia with gangrenous appendicitis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761632/",
+      "authors": "Baz C, Connors K, Siddiqui S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761530",
+      "title": "Early vascular lesion tracking in moyamoya disease: A case report with serial findings.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761530/",
+      "authors": "Yokoyama S, Miyasaka T, Nakano R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761344",
+      "title": "Kidney and inferior vena cava abnormalities with leg thrombosis (KILT) syndrome presenting as extensive iliofemoral deep vein thrombosis in a young patient.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761344/",
+      "authors": "Sayed M, Mohandes M, Al Abdin MG",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761323",
+      "title": "Diffuse midline glioma, H3 K27-altered, forming a suprasellar mass: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761323/",
+      "authors": "Nakazato R, Shimizu T, Teshigawara A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761299",
+      "title": "Reversed intestinal malrotation with volvulus in an adult: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761299/",
+      "authors": "Cravcenco D, Crivceanschii M, Secrieru M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761293",
+      "title": "Multimodality imaging localization of a giant functional parathyroid adenoma in a young fitness trainer with delayed recognition of hypercalcemia: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761293/",
+      "authors": "Banka D, Sharma N, Sarin D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42761277",
+      "title": "A sonographic pitfall in penile fracture: Spongiosal displacement mimicking urethral injury, with surgical correlation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42761277/",
+      "authors": "Ravuri SK",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42757092",
       "title": "Case report on complex jewelry foreign body ingestion in pediatric population: When watchful waiting prevails over intervention.",
@@ -127,96 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42750750/",
       "authors": "Noguchi-Shinohara M, Ono K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750743",
-      "title": "Ultrasound-guided percutaneous retrieval of an ischiorectal impacted ingested fish bone after failed surgical exploration: A case report and review of the literature.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750743/",
-      "authors": "Bellam Premnath KP, Shariq M, Bansode S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750734",
-      "title": "Symmetrical basal ganglia involvement in pediatric neuropsychiatric lupus: MRI findings in a rare presentation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750734/",
-      "authors": "Rehman A, Ahmed ZS, Khandwala K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750725",
-      "title": "Intestinal nonrotation with left-sided appendiceal microperforation mimicking colonic perforation: CT diagnostic pitfall and successful conservative treatment.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750725/",
-      "authors": "Han WX, Wang L, Huang JL",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750721",
-      "title": "\"Ears of the lynx\" sign on MRI: A radiologic clue to hereditary spastic paraplegia.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750721/",
-      "authors": "El Bqaq I, Izi Z, Ech-Cherif Kettani N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750720",
-      "title": "Paralabral cyst of the hip leading to common femoral vein compression.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750720/",
-      "authors": "Sellwood JE, Billings S, Spencer-Gardner L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750710",
-      "title": "Chronic dorsal pain revealing an osteoblastoma with costo-vertebral extension: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750710/",
-      "authors": "El Bqaq I, El Harras Y, Lasri L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750688",
-      "title": "Inguinal endometriosis mimicking an inguinal hernia: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750688/",
-      "authors": "El Bqaq I, Ait Belhaj E, Ehirchiou Z",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750685",
-      "title": "Simultaneous idiopathic mediastinal and retroperitoneal fibrosis presenting with acute respiratory failure: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750685/",
-      "authors": "El Aidouni G, El Aissaouy M, Merbouh M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750684",
-      "title": "Simultaneous calcified and noncalcified fibrotic splenic nodules in systemic lupus erythematosus.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750684/",
-      "authors": "Kurashima J, Koshino S, Gonoi W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750675",
-      "title": "Posterior reversible encephalopathy syndrome following eclampsia in a primigravida at 35 weeks of gestation: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750675/",
-      "authors": "Chowdhury A, Khan AT, Zahan ZA",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
