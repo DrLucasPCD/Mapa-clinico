@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-20T13:34:43.308Z",
+  "lastChecked": "2026-09-21T15:53:20.284Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42765095",
+      "title": "Intra-abdominal torsion of a cryptorchid testicle associated with teratoma in a rabbit (Oryctolagus cuniculus): A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42765095/",
+      "authors": "Jacik SCC, da Silva DL, de Souza AJS",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42750758/",
       "authors": "Abera B, Belachew B, Ahmed HT",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750750",
-      "title": "Effective amyloid clearance with lecanemab in a female with Alzheimer's disease: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750750/",
-      "authors": "Noguchi-Shinohara M, Ono K",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
