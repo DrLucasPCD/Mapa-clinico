@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-23T14:13:55.466Z",
+  "lastChecked": "2026-09-24T14:12:18.809Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,33 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42774674",
+      "title": "Myomatous erythrocytosis syndrome associated with an 8-kg uterine leiomyoma: a case report of diagnostic evaluation and perioperative management.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42774674/",
+      "authors": "Ida N, Nagao S, Ueki I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42774672",
+      "title": "A case of multiple evanescent white dot syndrome as epiphenomenon of cytomegalovirus infection.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42774672/",
+      "authors": "Wu JH, Meduri E, Chen RWS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42774666",
+      "title": "Ocular adnexal plasmacytoma presenting as a lesion of the plica semilunaris and caruncle in a 21-year-old male.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42774666/",
+      "authors": "Al-Kaylani HM, Torres G, Holman CJ",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42751063/",
       "authors": "Shen F, Habib SG, Weger NS",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750923",
-      "title": "Magnetic resonance arthrographic demonstration of knee joint communication in isolated popliteal artery cystic adventitial disease.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750923/",
-      "authors": "Piyawattanametha N, Gogoi R, Marek T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750858",
-      "title": "Sharp recanalization of extensive multilevel central venous occlusions in a young patient with familial Mediterranean fever: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750858/",
-      "authors": "Turkistani F, Aldeen WS, Algain AH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42750758",
-      "title": "Hemicerebral atrophy as an unusual central nervous system manifestation of Neurofibromatosis type 1: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42750758/",
-      "authors": "Abera B, Belachew B, Ahmed HT",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
