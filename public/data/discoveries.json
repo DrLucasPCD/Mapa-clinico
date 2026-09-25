@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-09-24T14:12:18.809Z",
+  "lastChecked": "2026-09-25T14:35:57.263Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,69 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781443",
+      "title": "Vaginal insertion of ureter with uterus didelphys and ipsilateral renal agenesis: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781443/",
+      "authors": "Ho A, Gomez EN",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781278",
+      "title": "Giant right atrial thrombus unmasking Behçet's disease: A rare cardiovascular manifestation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781278/",
+      "authors": "Ait Boutargante H, Eddakhche H, El Houari A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781268",
+      "title": "Pediatric button battery associated spondylodiscitis after delayed endoscopic removal: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781268/",
+      "authors": "Husson C, Sensbach J, Guo G",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781245",
+      "title": "Radiological and multidisciplinary management of extraskeletal myxoid chondrosarcoma: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781245/",
+      "authors": "Septiani F, Chandra LA, Sugito W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781221",
+      "title": "Multimodality imaging of high-grade prostate adenocarcinoma with diffusion MRI, PSMA PET and dual-layer spectral CT: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781221/",
+      "authors": "Sherif Z, Sherif K, Forbes A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42781195",
+      "title": "Solitary nodular pulmonary amyloidosis mimicking primary lung cancer: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42781195/",
+      "authors": "Hashimoto R, Nakagawa T, Kurebayashi Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42780591",
+      "title": "SMARCB1-deficient sinonasal carcinoma in a pediatric patient: Imaging findings and differential diagnosis of a rare entity.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42780591/",
+      "authors": "Yoon J, Aguilera A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -154,69 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42757018/",
       "authors": "Hlioui K, Messari L, El Mabrouk F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42756690",
-      "title": "Sacral benign notochordal cell tumor with atypical imaging features and 16-year spontaneous partial regression: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42756690/",
-      "authors": "Shahsavari N, Ng NN, Fischbein N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42756684",
-      "title": "Invasive fungal laryngitis: A rare mimic of laryngeal cancer.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42756684/",
-      "authors": "Gudla SK, Vasireddi A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42756530",
-      "title": "Flexible cystoscopy-guided realignment of traumatic urethral disruption in pelvic fracture: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42756530/",
-      "authors": "Park E, Muchard R, Fada L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42755950",
-      "title": "Duplicated left renal vein with aberrant inferior drainage to left common iliac vein: A rare anomaly of left renal vein.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42755950/",
-      "authors": "Esfandiary R, Moghadam MBS, Sefidbakht S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42755831",
-      "title": "Primary pancreatic squamous cell carcinoma with duodenal invasion: Literature review and a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42755831/",
-      "authors": "Fatah FH, Hofmann A, Crane A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42751125",
-      "title": "Infected thoracoabdominal aortic aneurysm with vertebral osteomyelitis caused by invasive pneumococcal disease successfully managed with rifampicin-soaked in situ graft replacement.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42751125/",
-      "authors": "Itoda Y, Hasegawa Y, Morishita H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42751063",
-      "title": "Hybrid repair of Kommerell diverticulum associated with severe aberrant left subclavian artery stenosis and poststenotic aneurysmal degeneration: 2-year outcomes.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42751063/",
-      "authors": "Shen F, Habib SG, Weger NS",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
