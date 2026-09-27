@@ -645,7 +645,7 @@ export default function App() {
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}

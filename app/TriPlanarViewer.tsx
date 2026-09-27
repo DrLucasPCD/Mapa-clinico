@@ -14,12 +14,16 @@ type Props = {
 };
 
 const views: MprView[] = ['source', 'row', 'column'];
+type MeasurePoint = { view: MprView; index: number; x: number; y: number; patient: number[] };
 
 export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, spatialView }: Props) {
   const geometry = useMemo(() => mprGeometry(series), [series]);
   const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice });
+  const [measureMode, setMeasureMode] = useState(false);
+  const [measureStart, setMeasureStart] = useState<MeasurePoint | null>(null);
+  const [measureEnd, setMeasureEnd] = useState<MeasurePoint | null>(null);
   const canvases = useRef<Record<MprView, HTMLCanvasElement | null>>({ source: null, row: null, column: null });
-  useEffect(() => setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice }), [series]);
+  useEffect(() => { setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice }); setMeasureStart(null); setMeasureEnd(null); }, [series]);
   useEffect(() => setCursor(current => current.slice === slice ? current : { ...current, slice }), [slice]);
 
   useEffect(() => {
@@ -45,18 +49,42 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
       context.strokeStyle = '#19f4f4'; context.lineWidth = Math.max(.5, size.width / 450);
       context.beginPath(); context.moveTo(cross[0] + .5, 0); context.lineTo(cross[0] + .5, size.height);
       context.moveTo(0, cross[1] + .5); context.lineTo(size.width, cross[1] + .5); context.stroke();
+      if (measureStart?.view === view) {
+        const startX = measureStart.x * size.width, startY = measureStart.y * size.height;
+        context.fillStyle = '#ffe06d'; context.strokeStyle = '#ffe06d'; context.lineWidth = Math.max(1, size.width / 300);
+        context.beginPath(); context.arc(startX, startY, Math.max(2, size.width / 130), 0, 2 * Math.PI); context.fill();
+        if (measureEnd?.view === view) {
+          const endX = measureEnd.x * size.width, endY = measureEnd.y * size.height;
+          context.beginPath(); context.moveTo(startX, startY); context.lineTo(endX, endY); context.stroke();
+          context.beginPath(); context.arc(endX, endY, Math.max(2, size.width / 130), 0, 2 * Math.PI); context.fill();
+        }
+      }
     }
-  }, [cursor, geometry, series, windowCenter, windowWidth]);
+  }, [cursor, geometry, measureEnd, measureStart, series, windowCenter, windowWidth]);
 
   const select = (view: MprView, event: MouseEvent<HTMLCanvasElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect();
-    const next = cursorFromView(series, view, cursor, (event.clientX - bounds.left) / bounds.width, (event.clientY - bounds.top) / bounds.height);
+    const imageScale = Math.min(bounds.width / event.currentTarget.width, bounds.height / event.currentTarget.height);
+    const imageWidth = event.currentTarget.width * imageScale, imageHeight = event.currentTarget.height * imageScale;
+    const left = bounds.left + (bounds.width - imageWidth) / 2, top = bounds.top + (bounds.height - imageHeight) / 2;
+    if (event.clientX < left || event.clientX > left + imageWidth || event.clientY < top || event.clientY > top + imageHeight) return;
+    const x = Math.max(0, Math.min(1, (event.clientX - left) / imageWidth));
+    const y = Math.max(0, Math.min(1, (event.clientY - top) / imageHeight));
+    const next = cursorFromView(series, view, cursor, x, y);
     setCursor(next); onSlice(next.slice);
     const point = pixelCenter(series.slices[next.slice], next.row, next.column);
-    if (point) onPatientPoint(point);
+    if (point) {
+      onPatientPoint(point);
+      if (measureMode) {
+        const mark = { view, index: view === 'source' ? next.slice : view === 'row' ? next.row : next.column, x, y, patient: point };
+        if (!measureStart || measureEnd || measureStart.view !== view || measureStart.index !== mark.index) { setMeasureStart(mark); setMeasureEnd(null); }
+        else setMeasureEnd(mark);
+      }
+    }
   };
   const scroll = (view: MprView, delta: number) => {
     if (!delta) return;
+    if (measureMode) { setMeasureStart(null); setMeasureEnd(null); }
     const step = delta > 0 ? 1 : -1;
     const next = {
       ...cursor,
@@ -93,8 +121,10 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     row: series.columns * first.pixelSpacing![1] / (series.slices.length * geometry.stepMm),
     column: series.rows * first.pixelSpacing![0] / (series.slices.length * geometry.stepMm),
   };
+  const distance = measureStart && measureEnd ? Math.hypot(...measureStart.patient.map((value, index) => value - measureEnd.patient[index])) : null;
   return <section className="mpr-viewer" aria-label="Reconstruções multiplanares sincronizadas">
     <header><small>RECONSTRUÇÃO MULTIPLANAR</small><h3>Três planos sincronizados</h3><p>Clique para mover a mira. Role o mouse sobre uma imagem para navegar pelos cortes daquele plano; as três vistas e o volume 3D acompanham.</p></header>
+    <div className="mpr-measure-tools"><button aria-pressed={measureMode} onClick={() => { setMeasureMode(value => !value); setMeasureStart(null); setMeasureEnd(null); }}>{measureMode ? '✓ Medir distância' : 'Medir distância'}</button>{measureStart && <button onClick={() => { setMeasureStart(null); setMeasureEnd(null); }}>Limpar medida</button>}<span role="status">{distance !== null ? `${distance.toFixed(1)} mm entre os pontos` : measureMode ? 'Clique em dois pontos no mesmo plano.' : 'Geometria DICOM em milímetros.'}</span></div>
     <div className="mpr-grid">{views.map(view => <figure key={view}>
       <canvas ref={node => { canvases.current[view] = node; }} onClick={event => select(view, event)} style={{ aspectRatio: String(ratios[view]) }} aria-label={`Reconstrução ${geometry.labels[view]}; use o scroll para navegar pelos cortes`} />
       <figcaption>{geometry.labels[view]} · {view === 'source' ? 'adquirida' : 'reconstruída'}</figcaption>

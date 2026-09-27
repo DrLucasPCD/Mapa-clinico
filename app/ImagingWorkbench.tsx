@@ -6,11 +6,12 @@ import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
 import LandmarkPanel from './LandmarkPanel';
+import CaseJourney from './CaseJourney';
 import type { OverlayClip, OverlaySystem } from './registered-overlay';
 
 type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
-type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: SliceLocation) => void };
+type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; period?: number; onLocateCase?: () => void; onSelectCase?: (id: string) => void; onFocusStructure?: (id: string, label: string) => void; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: SliceLocation) => void };
 const PatientSlices = lazy(() => import('./PatientSlices'));
 const TriPlanarViewer = lazy(() => import('./TriPlanarViewer'));
 const MAX_DICOM_BYTES = 500 * 1024 * 1024;
@@ -25,7 +26,7 @@ function intensityRange(series: DicomSeries) {
   return [low, high] as const;
 }
 
-export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, onPreviewModality, atlasPoint, modelVariant = 'male' }: Props) {
+export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, period = 2, onLocateCase, onSelectCase, onFocusStructure, onPreviewModality, atlasPoint, modelVariant = 'male' }: Props) {
   const [series, setSeries] = useState<DicomSeries[]>([]);
   const [seriesIndex, setSeriesIndex] = useState(0);
   const [sliceIndex, setSliceIndex] = useState(0);
@@ -235,7 +236,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, onP
     {errors.length > 0 && <div className="error" role="alert">{errors.map((error) => <div key={error}>{error}</div>)}</div>}
     {!current && casePreview && <section className="case-imaging-preview" aria-label="Imagens do caso selecionado">
       <nav className="modality-tabs" aria-label="Modalidades">{(['TC','RM','RX'] as const).map(modality => <button key={modality} className={casePreview.modality === modality ? 'active' : ''} onClick={() => onPreviewModality?.(modality)}>{modality}</button>)}<button disabled>USG</button><button disabled>PET</button></nav>
-      <div className="preview-title"><div><small>CASO REAL · RADIOPAEDIA</small><h3>{casePreview.title}</h3></div><span>{previewIndex + 1} / {casePreview.images.length}</span></div>
+      <div className="preview-title"><div><small>CASO REAL · RADIOPAEDIA</small><h3>{casePreview.title}</h3></div><button onClick={() => document.getElementById('case-journey')?.scrollIntoView({behavior:'smooth',block:'start'})}>Estudar este caso ↓</button><span>{previewIndex + 1} / {casePreview.images.length}</span></div>
       <div className="preview-stage" ref={previewHost}>
         <img src={casePreview.images[previewIndex]?.src} alt={`${casePreview.images[previewIndex]?.label}. Caso ${casePreview.id}, ${casePreview.author}, Radiopaedia.org.`} />
         <span className="preview-plane">{casePreview.images[previewIndex]?.label}</span>
@@ -244,6 +245,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, onP
       <div className="preview-filmstrip">{casePreview.images.map((image, index) => <button key={image.src} className={index === previewIndex ? 'active' : ''} onClick={() => setPreviewIndex(index)} aria-label={`Abrir ${image.label}`}><img src={image.src} alt="" /><span>{index + 1}</span></button>)}</div>
       <div className="preview-notice"><strong>{casePreview.acquisition?.kind === 'ordered-series' ? 'Pilha navegável sincronizada ao Atlas' : 'Imagem clínica de referência'}</strong><p>{casePreview.acquisition?.kind === 'ordered-series' ? 'Role sobre a imagem para percorrer os cortes. O plano do Atlas acompanha a posição relativa desta pilha renderizada.' : 'Esta seleção não contém geometria suficiente para reconstrução multiplanar.'}</p><a href={casePreview.source} target="_blank" rel="noreferrer">Abrir caso original ↗</a></div>
     </section>}
+    {!current && casePreview && onLocateCase && onSelectCase && onFocusStructure && <CaseJourney item={casePreview} period={period} onLocate={onLocateCase} onSelectCase={onSelectCase} onFocusStructure={onFocusStructure} />}
     {!current && !casePreview && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
     {current && <>
       {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} cortes</option>)}</select></label>}

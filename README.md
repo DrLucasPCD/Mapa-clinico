@@ -6,9 +6,11 @@
 
 - Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
 - A abertura mostra o Atlas ao lado de uma pilha FLAIR real da Radiopaedia, com 24 miniaturas e navegação por scroll; a posição relativa do corte acompanha o plano didático do Atlas.
+- Trilha guiada nos três casos: apresentação, estruturas reais do Atlas relacionadas ao caso, leitura da imagem e pergunta com explicação. Respostas erradas e notas ficam em uma revisão local no dispositivo.
 - Atlas masculino detalhado (Z-Anatomy / BodyParts3D), com 3.478 estruturas, e atlas feminino real do NIH Human Reference Atlas com 264 estruturas do tronco/pelve; busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
 - Roteiro com 33 temas e 33 questões autorais a partir de seis materiais acadêmicos, além de árvore de 92 vasos com 70 correspondências no modelo masculino. Os ramos ausentes são identificados como conteúdo didático sem malha correspondente.
 - Leitor local de séries DICOM CT/MR nativas, monocromáticas e de um quadro por arquivo, com navegação física de cortes, scroll sobre as vistas axial/coronal/sagital e plano relativo no Atlas. Após o ajuste por marcos, encéfalo/nervos, vasos e esqueleto podem ser sobrepostos no espaço do exame como volume ou lâmina ligada à mira MPR. Arquivos importados não são enviados nem persistidos.
+- Medida de distância entre dois pontos no mesmo plano reconstruído, calculada em milímetros a partir da geometria DICOM; esta ferramenta não aparece nas imagens JPEG dos casos.
 - Módulos explicativos de coração, encéfalo, pulmões, fígado, metacarpos e seis músculos com origem, inserção e ação.
 - Seleção de 1º a 12º período, agrupados em quatro níveis didáticos: fundamentos, integração, ciclo clínico e internato.
 - Corpo montado, camadas separadas e grade de estruturas; filtros regionais de braço e tornozelo.
