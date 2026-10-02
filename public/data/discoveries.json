@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-01T16:26:24.232Z",
+  "lastChecked": "2026-10-02T15:47:43.377Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42823971",
+      "title": "Extensive dystrophic calcinosis in dermatomyositis with concurrent breast carcinoma: an imaging pitfall.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42823971/",
+      "authors": "El Bqaq I, Zamani O, Lasri L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42819408",
+      "title": "Recovery course of photoreceptor damage in a patient with cat scratch disease neuroretinitis: 2.5-year observation using adaptive optics retinal imaging.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42819408/",
+      "authors": "Aoyama R, Sakai D, Ito SI",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -199,24 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761344/",
       "authors": "Sayed M, Mohandes M, Al Abdin MG",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761323",
-      "title": "Diffuse midline glioma, H3 K27-altered, forming a suprasellar mass: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761323/",
-      "authors": "Nakazato R, Shimizu T, Teshigawara A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761299",
-      "title": "Reversed intestinal malrotation with volvulus in an adult: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761299/",
-      "authors": "Cravcenco D, Crivceanschii M, Secrieru M",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
