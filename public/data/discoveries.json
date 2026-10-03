@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-02T15:47:43.377Z",
+  "lastChecked": "2026-10-03T14:18:42.657Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,51 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42824994",
+      "title": "Combined hepatocellular cholangiocarcinoma: A rare hepatic malignancy exhibiting concurrent imaging features of hepatocellular carcinoma and intrahepatic cholangiocarcinoma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42824994/",
+      "authors": "Qian XJ, Girgis S, Wilson MP",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42824415",
+      "title": "Gluteal compartment syndrome following prolonged immobilization in the setting of polysubstance use: A two-patient case series.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42824415/",
+      "authors": "Gamadia M, Garner R, Sauce D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42824197",
+      "title": "Spinal Subdural Abscess in the Emergency Department: A Rare Diagnosis in an Immunocompetent Host.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42824197/",
+      "authors": "Nassereddine H, Richardson J, Sobin MF",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42824038",
+      "title": "Diagnostic utility of delayed cerebral angiography in suspected artery of Percheron infarction presenting as bilateral paramedian thalamic infarction: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42824038/",
+      "authors": "Shimoi A, Noguchi S, Ichikawa S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42824026",
+      "title": "Fused right S-shaped kidney incidentally detected on multidetector CT during staging of periampullary adenocarcinoma: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42824026/",
+      "authors": "Shukla S, Sirohi T, Singh SN",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -172,51 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42765095/",
       "authors": "Jacik SCC, da Silva DL, de Souza AJS",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761842",
-      "title": "Posterior reversible encephalopathy syndrome associated with Rickettsia conorii infection: a rare case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761842/",
-      "authors": "Naderi H, Sedaghat A, Sobhi A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761644",
-      "title": "Pitfall in necrotizing pancreatitis: Organized hematoma with arteriovenous fistula mimicking a splenic artery pseudoaneurysm.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761644/",
-      "authors": "López Gordo S, Torra N, Bernabeu A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761632",
-      "title": "A rare guest in the hernia sac: Preoperatively diagnosed Amyand's hernia with gangrenous appendicitis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761632/",
-      "authors": "Baz C, Connors K, Siddiqui S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761530",
-      "title": "Early vascular lesion tracking in moyamoya disease: A case report with serial findings.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761530/",
-      "authors": "Yokoyama S, Miyasaka T, Nakano R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42761344",
-      "title": "Kidney and inferior vena cava abnormalities with leg thrombosis (KILT) syndrome presenting as extensive iliofemoral deep vein thrombosis in a young patient.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761344/",
-      "authors": "Sayed M, Mohandes M, Al Abdin MG",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
