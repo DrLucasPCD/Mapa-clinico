@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-03T14:18:42.657Z",
+  "lastChecked": "2026-10-04T14:47:04.528Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,78 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42828179",
+      "title": "A rare traumatic triad: Open bicondylar non-conjoint Hoffa fracture with partial tibial tubercle and medial epicondyle avulsions - A case report and biomechanical analysis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42828179/",
+      "authors": "Soleh A, Chabihi Z, Fath El Khir Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42828146",
+      "title": "Severe fat embolism syndrome following minor trauma in a child with Duchenne muscular dystrophy: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42828146/",
+      "authors": "Montero-Yéboles R, López-Prats JL, Barrés-Fernández A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42828113",
+      "title": "Recurrent thoracic aortic stent graft thrombosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42828113/",
+      "authors": "Valdes YC, Khan F, Abbruzzese T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42828066",
+      "title": "Spontaneous resolution of cerebrospinal fluid obstruction due to intraventricular hemorrhage: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42828066/",
+      "authors": "Shrestha S, Davila-Siliezar P, Duarte-Celada W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42827682",
+      "title": "Giant neglected cutaneous squamous cell carcinoma of the scalp with full-thickness calvarial erosion and early fatal outcome: CT findings and treatment-planning implications.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42827682/",
+      "authors": "El Hassani N, Amar S, Jroundi L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42827648",
+      "title": "Adenoid cystic carcinoma of the breast: A rare manifestation of a rare malignancy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42827648/",
+      "authors": "Weingartz L, Hammad S, Khasawneh A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42827646",
+      "title": "Focal periphyseal edema with atypical MRI features: Biopsy findings and imaging follow-up.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42827646/",
+      "authors": "Santamaria R, Muramatsu K, Gabriel Distor M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42827640",
+      "title": "Giant expansile humeral lesion with soap-bubble appearance mimicking a primary bone tumor: Multiple myeloma as the final diagnosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42827640/",
+      "authors": "Khor ZX",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42781268/",
       "authors": "Husson C, Sensbach J, Guo G",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781245",
-      "title": "Radiological and multidisciplinary management of extraskeletal myxoid chondrosarcoma: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781245/",
-      "authors": "Septiani F, Chandra LA, Sugito W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781221",
-      "title": "Multimodality imaging of high-grade prostate adenocarcinoma with diffusion MRI, PSMA PET and dual-layer spectral CT: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781221/",
-      "authors": "Sherif Z, Sherif K, Forbes A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781195",
-      "title": "Solitary nodular pulmonary amyloidosis mimicking primary lung cancer: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781195/",
-      "authors": "Hashimoto R, Nakagawa T, Kurebayashi Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42780591",
-      "title": "SMARCB1-deficient sinonasal carcinoma in a pediatric patient: Imaging findings and differential diagnosis of a rare entity.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42780591/",
-      "authors": "Yoon J, Aguilera A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42774674",
-      "title": "Myomatous erythrocytosis syndrome associated with an 8-kg uterine leiomyoma: a case report of diagnostic evaluation and perioperative management.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42774674/",
-      "authors": "Ida N, Nagao S, Ueki I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42774672",
-      "title": "A case of multiple evanescent white dot syndrome as epiphenomenon of cytomegalovirus infection.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42774672/",
-      "authors": "Wu JH, Meduri E, Chen RWS",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42774666",
-      "title": "Ocular adnexal plasmacytoma presenting as a lesion of the plica semilunaris and caruncle in a 21-year-old male.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42774666/",
-      "authors": "Al-Kaylani HM, Torres G, Holman CJ",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42765095",
-      "title": "Intra-abdominal torsion of a cryptorchid testicle associated with teratoma in a rabbit (Oryctolagus cuniculus): A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42765095/",
-      "authors": "Jacik SCC, da Silva DL, de Souza AJS",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
