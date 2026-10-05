@@ -1,8 +1,17 @@
 {
-  "lastChecked": "2026-10-04T14:47:04.528Z",
+  "lastChecked": "2026-10-05T18:26:29.095Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42831063",
+      "title": "Use of a Medial Femoral Condyle Free Flap for Metacarpal Reconstruction of Type IIIC Congenital Thumb Hypoplasia.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831063/",
+      "authors": "Allen BE, Pawlak N, Smith AC",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42761520",
       "title": "Aneurysmal Bone Cyst of the Distal Phalanx: A Case Report.",
@@ -10,6 +19,78 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42831149",
+      "title": "Ruptured intracranial dermoid cyst as an incidental finding: Case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831149/",
+      "authors": "Mosquera-López J, Pérez-Barón L, Olarte Bermúdez LM",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42831138",
+      "title": "Iatrogenic portobiliary fistula treated with covered stent following percutaneous transhepatic biliary drainage.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831138/",
+      "authors": "Scott E, Forsberg C, Lancaster W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42831135",
+      "title": "Aortic coarctation revealed by subarachnoid hemorrhage in a 17-year-old patient: A rare association with multiple basilar trunk aneurysms.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831135/",
+      "authors": "Mahfoud C, Messari L, Houssaini AS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42831025",
+      "title": "Spontaneous dissolution of a renal pelvic stone with intrastone gas: A case report with serial CT findings.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831025/",
+      "authors": "Yamamoto N, Akao S, Yamashita T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42830989",
+      "title": "Diagnostic challenges in an adult patient with Fanconi Anemia: Neuroinflammatory Syndrome (FANS) intertwined with infectious processes.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42830989/",
+      "authors": "Dur Ince M, Cuce F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42830760",
+      "title": "Penetrating cardiac injury with no initial radiological findings and negative E-FAST: The critical role of clinical judgment.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42830760/",
+      "authors": "Kajama A, Correia A, Chimbalanha R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42830757",
+      "title": "Novel treatment of celiac trunk and proximal splenic artery aneurysms in vascular Ehlers-Danlos patient with combined Onyx and coil embolization.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42830757/",
+      "authors": "Politano A, Lian T, Krishnamoorthi H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42830746",
+      "title": "From imaging to impact: A case of renal arteriovenous malformation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42830746/",
+      "authors": "Nazir N, Zafar U, Baluch F",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -136,87 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42823971/",
       "authors": "El Bqaq I, Zamani O, Lasri L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42819408",
-      "title": "Recovery course of photoreceptor damage in a patient with cat scratch disease neuroretinitis: 2.5-year observation using adaptive optics retinal imaging.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42819408/",
-      "authors": "Aoyama R, Sakai D, Ito SI",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42788797",
-      "title": "Contrast-Enhanced Ultrasound Evaluation of Papillary Renal Cell Carcinoma.",
-      "date": "2026 Dec 1",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42788797/",
-      "authors": "Garton LE, Caserta MP, Bhatt S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42788792",
-      "title": "A Novel Ultrasonographic Approach to Baastrup Disease (Kissing Spines Syndrome).",
-      "date": "2026 Dec 1",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42788792/",
-      "authors": "Yalçınkaya B, Çolak AF, Abacıoğlu HB",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42787934",
-      "title": "Peripheral inner retinal dimples observed on ultrawide field optical coherence tomography angiography in X-linked retinoschisis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42787934/",
-      "authors": "Miere A, Souied EH, Atef Tawfik C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42787841",
-      "title": "Nutcracker syndrome with pelvic congestion syndrome: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42787841/",
-      "authors": "Sah D, Pandey A, Rijal S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42787562",
-      "title": "Inguinal kimura disease misdiagnosed as Castleman disease: A case report and analysis of ultrasonographic features.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42787562/",
-      "authors": "Tan J, Zhao L, Zhao Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781443",
-      "title": "Vaginal insertion of ureter with uterus didelphys and ipsilateral renal agenesis: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781443/",
-      "authors": "Ho A, Gomez EN",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781278",
-      "title": "Giant right atrial thrombus unmasking Behçet's disease: A rare cardiovascular manifestation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781278/",
-      "authors": "Ait Boutargante H, Eddakhche H, El Houari A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42781268",
-      "title": "Pediatric button battery associated spondylodiscitis after delayed endoscopic removal: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42781268/",
-      "authors": "Husson C, Sensbach J, Guo G",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
