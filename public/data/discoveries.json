@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-05T18:26:29.095Z",
+  "lastChecked": "2026-10-06T15:56:14.884Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,42 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42835848",
+      "title": "Aortic elongation with prosthetic graft followed by aortopexy for fixed left main bronchial compression in an adolescent with severe thoracic deformity: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42835848/",
+      "authors": "Nishino T, Ando M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42835443",
+      "title": "True brachial artery aneurysm secondary to arterial wall infiltration by Langerhans cell histiocytosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42835443/",
+      "authors": "Ricciardi PF, Roesti A, Saglietti C",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42835439",
+      "title": "Phlegmasia alba dolens caused by external iliac vein compression from inflatable penile prosthesis reservoir malposition.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42835439/",
+      "authors": "Attia M, Hayson A, Brumberg R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42835319",
+      "title": "Conjoined lumbar nerve roots: A potential cause of lumbosciatica and an incidental finding-A three-case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42835319/",
+      "authors": "Aidara CM, Sakho MG, Diallo TB",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -181,42 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42824415/",
       "authors": "Gamadia M, Garner R, Sauce D",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42824197",
-      "title": "Spinal Subdural Abscess in the Emergency Department: A Rare Diagnosis in an Immunocompetent Host.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42824197/",
-      "authors": "Nassereddine H, Richardson J, Sobin MF",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42824038",
-      "title": "Diagnostic utility of delayed cerebral angiography in suspected artery of Percheron infarction presenting as bilateral paramedian thalamic infarction: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42824038/",
-      "authors": "Shimoi A, Noguchi S, Ichikawa S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42824026",
-      "title": "Fused right S-shaped kidney incidentally detected on multidetector CT during staging of periampullary adenocarcinoma: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42824026/",
-      "authors": "Shukla S, Sirohi T, Singh SN",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42823971",
-      "title": "Extensive dystrophic calcinosis in dermatomyositis with concurrent breast carcinoma: an imaging pitfall.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42823971/",
-      "authors": "El Bqaq I, Zamani O, Lasri L",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
