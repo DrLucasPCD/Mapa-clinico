@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-06T15:56:14.884Z",
+  "lastChecked": "2026-10-07T16:27:08.836Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,42 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42840732",
+      "title": "Granulomatosis with polyangiitis-associated choroiditis simulating serpiginous choroiditis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42840732/",
+      "authors": "Lin M, Schlaen A, Moorthy R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42840661",
+      "title": "Spontaneous retroperitoneal haematoma in pregnancy secondary to ruptured ovarian artery aneurysm: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42840661/",
+      "authors": "van der Klein M, Juhl Jensen R, Pihl K",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42840549",
+      "title": "The gland that never descended: Preoperative transarterial embolization of a symptomatic lingual thyroid.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42840549/",
+      "authors": "Díaz O, García H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42840513",
+      "title": "High-speed electric-scooter crash causing a tibial spine fracture with physeal extension in an adolescent: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42840513/",
+      "authors": "Manni A, Zouirech Y, Kisra M",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -103,15 +139,6 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42830760",
-      "title": "Penetrating cardiac injury with no initial radiological findings and negative E-FAST: The critical role of clinical judgment.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42830760/",
-      "authors": "Kajama A, Correia A, Chimbalanha R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
       "id": "42830757",
       "title": "Novel treatment of celiac trunk and proximal splenic artery aneurysms in vascular Ehlers-Danlos patient with combined Onyx and coil embolization.",
       "date": "2026 Dec",
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42827646/",
       "authors": "Santamaria R, Muramatsu K, Gabriel Distor M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42827640",
-      "title": "Giant expansile humeral lesion with soap-bubble appearance mimicking a primary bone tumor: Multiple myeloma as the final diagnosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42827640/",
-      "authors": "Khor ZX",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42824994",
-      "title": "Combined hepatocellular cholangiocarcinoma: A rare hepatic malignancy exhibiting concurrent imaging features of hepatocellular carcinoma and intrahepatic cholangiocarcinoma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42824994/",
-      "authors": "Qian XJ, Girgis S, Wilson MP",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42824415",
-      "title": "Gluteal compartment syndrome following prolonged immobilization in the setting of polysubstance use: A two-patient case series.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42824415/",
-      "authors": "Gamadia M, Garner R, Sauce D",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
