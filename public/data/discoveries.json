@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-10T15:22:10.684Z",
+  "lastChecked": "2026-10-11T15:39:08.450Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,33 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42859770",
+      "title": "Presumed Herpesviridae-associated acute retinal necrosis in a monocular adult: A case highlighting postpartum risk.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42859770/",
+      "authors": "Amuzie C, Yohannes G, Zhang C",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42859627",
+      "title": "Unilateral 'cheetah-like' endotheliopathy: A rare endothelial phenotype regressing after phacoemulsification.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42859627/",
+      "authors": "Poinard S, Dorado-Cortez O, He Z",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42857628",
+      "title": "Late breast recurrence of plasmablastic lymphoma with apparent partial spontaneous regression.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42857628/",
+      "authors": "Alheddi M, Alomani N, Mohammed A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42828066/",
       "authors": "Shrestha S, Davila-Siliezar P, Duarte-Celada W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42827682",
-      "title": "Giant neglected cutaneous squamous cell carcinoma of the scalp with full-thickness calvarial erosion and early fatal outcome: CT findings and treatment-planning implications.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42827682/",
-      "authors": "El Hassani N, Amar S, Jroundi L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42827648",
-      "title": "Adenoid cystic carcinoma of the breast: A rare manifestation of a rare malignancy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42827648/",
-      "authors": "Weingartz L, Hammad S, Khasawneh A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42827646",
-      "title": "Focal periphyseal edema with atypical MRI features: Biopsy findings and imaging follow-up.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42827646/",
-      "authors": "Santamaria R, Muramatsu K, Gabriel Distor M",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
