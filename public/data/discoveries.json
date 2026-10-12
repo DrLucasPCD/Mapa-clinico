@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-11T15:39:08.450Z",
+  "lastChecked": "2026-10-12T19:01:39.451Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42861355",
+      "title": "Bilateral transient osteoporosis of the hip with asynchronous onset during pregnancy: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42861355/",
+      "authors": "Inoue K, Gomi Y, Takai Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42861343",
+      "title": "The radiologist's dilemma: Differentiating non-ischemic pneumatosis intestinalis from ischemic bowel necrosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42861343/",
+      "authors": "Khadka A, Pant S, Karki S",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -199,24 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42828146/",
       "authors": "Montero-Yéboles R, López-Prats JL, Barrés-Fernández A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42828113",
-      "title": "Recurrent thoracic aortic stent graft thrombosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42828113/",
-      "authors": "Valdes YC, Khan F, Abbruzzese T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42828066",
-      "title": "Spontaneous resolution of cerebrospinal fluid obstruction due to intraventricular hemorrhage: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42828066/",
-      "authors": "Shrestha S, Davila-Siliezar P, Duarte-Celada W",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
