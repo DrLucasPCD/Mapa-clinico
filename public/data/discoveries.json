@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-13T16:56:17.596Z",
+  "lastChecked": "2026-10-14T14:29:59.583Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -121,15 +121,6 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42835439",
-      "title": "Phlegmasia alba dolens caused by external iliac vein compression from inflatable penile prosthesis reservoir malposition.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42835439/",
-      "authors": "Attia M, Hayson A, Brumberg R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
       "id": "42835319",
       "title": "Conjoined lumbar nerve roots: A potential cause of lumbosciatica and an incidental finding-A three-case report.",
       "date": "2026 Dec",
@@ -217,6 +208,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42828146/",
       "authors": "Montero-Yéboles R, López-Prats JL, Barrés-Fernández A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42828113",
+      "title": "Recurrent thoracic aortic stent graft thrombosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42828113/",
+      "authors": "Valdes YC, Khan F, Abbruzzese T",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
