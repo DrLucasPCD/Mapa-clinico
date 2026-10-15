@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-14T14:29:59.583Z",
+  "lastChecked": "2026-10-15T14:09:31.958Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,78 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42872187",
+      "title": "Traumatic pneumatoceles in adulthood: A case highlighting the limitations of supine chest radiography in trauma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42872187/",
+      "authors": "Rao AD",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42872089",
+      "title": "Aggressive primary mediastinal synovial sarcoma resulting in catastrophic airway compromise and fatal hemoptysis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42872089/",
+      "authors": "Liu S, Malpani R, Lubrin S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42872084",
+      "title": "Computed tomography findings of a retroperitoneal chronic expanding hematoma with multiple hemangiomas: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42872084/",
+      "authors": "Shinya T, Yoshida K, Iwasa T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42871978",
+      "title": "Presumed right atrial myxoma causing mechanical inflow obstruction and a heart-failure-with-preserved-ejection-fraction-mimicking phenotype in a resource-limited setting: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42871978/",
+      "authors": "Botan N, Ali ASO, Madar KH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42871955",
+      "title": "Extrauterine adenomyoma of the liver: A case report with a review of the literature.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42871955/",
+      "authors": "Parandoush B, Koohi H, Ayoobi Yazdi N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42871735",
+      "title": "Cerebellar Ataxia, Neuropathy, and Vestibular Areflexia Syndrome (CANVAS): A case report of RFC1-associated disease.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42871735/",
+      "authors": "Amin D, Deep R, Dhaduk V",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42871577",
+      "title": "High intestinal obstruction secondary to peritoneal metastases from invasive lobular breast carcinoma: A case report of an unusual presentation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42871577/",
+      "authors": "Testini V, Tupputi U, Roberto L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42871432",
+      "title": "Dual-site concurrent abdominal wall and lower uterine cesarean scar endometriosis: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42871432/",
+      "authors": "Lacsamana JM, Genobaga S, Genobaga C",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42831138/",
       "authors": "Scott E, Forsberg C, Lancaster W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42831135",
-      "title": "Aortic coarctation revealed by subarachnoid hemorrhage in a 17-year-old patient: A rare association with multiple basilar trunk aneurysms.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42831135/",
-      "authors": "Mahfoud C, Messari L, Houssaini AS",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42831025",
-      "title": "Spontaneous dissolution of a renal pelvic stone with intrastone gas: A case report with serial CT findings.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42831025/",
-      "authors": "Yamamoto N, Akao S, Yamashita T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42830989",
-      "title": "Diagnostic challenges in an adult patient with Fanconi Anemia: Neuroinflammatory Syndrome (FANS) intertwined with infectious processes.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42830989/",
-      "authors": "Dur Ince M, Cuce F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42830757",
-      "title": "Novel treatment of celiac trunk and proximal splenic artery aneurysms in vascular Ehlers-Danlos patient with combined Onyx and coil embolization.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42830757/",
-      "authors": "Politano A, Lian T, Krishnamoorthi H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42830746",
-      "title": "From imaging to impact: A case of renal arteriovenous malformation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42830746/",
-      "authors": "Nazir N, Zafar U, Baluch F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42828179",
-      "title": "A rare traumatic triad: Open bicondylar non-conjoint Hoffa fracture with partial tibial tubercle and medial epicondyle avulsions - A case report and biomechanical analysis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42828179/",
-      "authors": "Soleh A, Chabihi Z, Fath El Khir Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42828146",
-      "title": "Severe fat embolism syndrome following minor trauma in a child with Duchenne muscular dystrophy: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42828146/",
-      "authors": "Montero-Yéboles R, López-Prats JL, Barrés-Fernández A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42828113",
-      "title": "Recurrent thoracic aortic stent graft thrombosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42828113/",
-      "authors": "Valdes YC, Khan F, Abbruzzese T",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
