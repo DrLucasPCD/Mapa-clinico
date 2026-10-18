@@ -1,8 +1,17 @@
 {
-  "lastChecked": "2026-10-17T12:58:08.116Z",
+  "lastChecked": "2026-10-18T13:16:17.369Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "42890219",
+      "title": "\"The box\" allograft augmentation for at risk rotator cuff repairs.",
+      "date": "2027 Feb",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42890219/",
+      "authors": "Faith H, Baker T, Williamson M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42831063",
       "title": "Use of a Medial Femoral Condyle Free Flap for Metacarpal Reconstruction of Type IIIC Congenital Thumb Hypoplasia.",
@@ -19,6 +28,114 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42893000",
+      "title": "Delayed deterioration after surgical treatment of a spinal dural arteriovenous fistula detected by three spinal angiographies: Case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42893000/",
+      "authors": "Feng Q, Xu C, Niu X",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42892982",
+      "title": "Nasopharyngeal diffuse large b-cell lymphoma in a teenage presenting with cavernous sinus syndrome: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42892982/",
+      "authors": "Afzal F, Nazir N, Tahir MJ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42892981",
+      "title": "Chorea-Acanthocytosis Without Chorea: VPS13A Disease Manifesting as Parkinsonism.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42892981/",
+      "authors": "Pecha TA, Dewey CD, Eidelman BH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42892970",
+      "title": "Multifocal intracranial aneurysms and a clinical diagnosis of ruptured retinal arterial macroaneurysm in presumed hepatitis B-associated polyarteritis nodosa: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42892970/",
+      "authors": "Mbongo A, Otieno F, Mavuti J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42892871",
+      "title": "Arterial tortuosity syndrome with coronary artery involvement in a middle-aged female: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42892871/",
+      "authors": "Shrestha P, Shah A, Gc S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42891093",
+      "title": "Diagnostic challenges of masked arginine vasopressin deficiency in neurosarcoidosis complicated by sodium-glucose cotransporter 2 inhibitor use.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42891093/",
+      "authors": "Nonaka R, Tanaka K, Tomimoto A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42891013",
+      "title": "Not always cancer-Probable Lyme disease mimicking squamous cell carcinoma: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42891013/",
+      "authors": "Nagano SY, Tavares MW, Chojniak R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42891000",
+      "title": "Malignant cerebral edema secondary to herpes simplex virus encephalitis requiring decompressive hemicraniectomy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42891000/",
+      "authors": "Konney E, Forrest JR, Thaker T",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42890998",
+      "title": "Near-total splenic infarction with pseudocystic transformation due to combined splenic artery and splenic vein thrombosis: CT-based diagnosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42890998/",
+      "authors": "Nalla S, Patil PS, Maydari S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42890963",
+      "title": "Purulent cardiac tamponade associated with necrotic mediastinal lymphadenopathy: Multimodality imaging of a presumed mediastinal-pericardial pathway.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42890963/",
+      "authors": "Montatore M, Zito M, Sfregola G",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42890331",
+      "title": "Chagas disease across pregnancy and early infancy: Leukoencephalomalacia and achondroplasia in two unusual cases.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42890331/",
+      "authors": "Villamil-Gómez WE, Barahona-Escobar GE, Moisa-Martínez MA",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42890330",
+      "title": "Fatal complications in a young adult with large Ewing sarcoma of the chest wall.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42890330/",
+      "authors": "Smith A, Gaetano A, Sager E",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -100,123 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42861355/",
       "authors": "Inoue K, Gomi Y, Takai Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42861343",
-      "title": "The radiologist's dilemma: Differentiating non-ischemic pneumatosis intestinalis from ischemic bowel necrosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42861343/",
-      "authors": "Khadka A, Pant S, Karki S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42859770",
-      "title": "Presumed Herpesviridae-associated acute retinal necrosis in a monocular adult: A case highlighting postpartum risk.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42859770/",
-      "authors": "Amuzie C, Yohannes G, Zhang C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42859627",
-      "title": "Unilateral 'cheetah-like' endotheliopathy: A rare endothelial phenotype regressing after phacoemulsification.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42859627/",
-      "authors": "Poinard S, Dorado-Cortez O, He Z",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42857628",
-      "title": "Late breast recurrence of plasmablastic lymphoma with apparent partial spontaneous regression.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42857628/",
-      "authors": "Alheddi M, Alomani N, Mohammed A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42840732",
-      "title": "Granulomatosis with polyangiitis-associated choroiditis simulating serpiginous choroiditis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42840732/",
-      "authors": "Lin M, Schlaen A, Moorthy R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42840661",
-      "title": "Spontaneous retroperitoneal haematoma in pregnancy secondary to ruptured ovarian artery aneurysm: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42840661/",
-      "authors": "van der Klein M, Juhl Jensen R, Pihl K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42840549",
-      "title": "The gland that never descended: Preoperative transarterial embolization of a symptomatic lingual thyroid.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42840549/",
-      "authors": "Díaz O, García H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42840513",
-      "title": "High-speed electric-scooter crash causing a tibial spine fracture with physeal extension in an adolescent: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42840513/",
-      "authors": "Manni A, Zouirech Y, Kisra M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42835848",
-      "title": "Aortic elongation with prosthetic graft followed by aortopexy for fixed left main bronchial compression in an adolescent with severe thoracic deformity: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42835848/",
-      "authors": "Nishino T, Ando M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42835443",
-      "title": "True brachial artery aneurysm secondary to arterial wall infiltration by Langerhans cell histiocytosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42835443/",
-      "authors": "Ricciardi PF, Roesti A, Saglietti C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42835319",
-      "title": "Conjoined lumbar nerve roots: A potential cause of lumbosciatica and an incidental finding-A three-case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42835319/",
-      "authors": "Aidara CM, Sakho MG, Diallo TB",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42831149",
-      "title": "Ruptured intracranial dermoid cyst as an incidental finding: Case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42831149/",
-      "authors": "Mosquera-López J, Pérez-Barón L, Olarte Bermúdez LM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42831138",
-      "title": "Iatrogenic portobiliary fistula treated with covered stent following percutaneous transhepatic biliary drainage.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42831138/",
-      "authors": "Scott E, Forsberg C, Lancaster W",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
