@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-18T13:16:17.369Z",
+  "lastChecked": "2026-10-19T16:27:20.162Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -28,6 +28,78 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42894785",
+      "title": "Constipation Not So Vibrant: A Case Report of Colonic Obstruction From Capsule Retention.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42894785/",
+      "authors": "Ertem M, Rampersad A, Rochester A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42894778",
+      "title": "Inflammatory myofibroblastic tumor masquerading as carcinoma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42894778/",
+      "authors": "Srivastava H, Canaan L, Ross JM",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42894678",
+      "title": "Capillary hemangioma of the breast presenting as a new mass on screening mammography: A case report with imaging-pathology correlation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42894678/",
+      "authors": "Ferre R, Bartels A, Kuzmiak CM",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42894557",
+      "title": "Intraparotid lipoma in a 15-year-old girl: MRI-based diagnosis of a rare parotid lesion.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42894557/",
+      "authors": "Mahfoud C, Bouayad H, Houssaini AS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42893112",
+      "title": "Delayed radiographic diagnosis of distal femoral metastases in breast cancer: A case report from Cocody University Teaching Hospital (Côte d'ivoire).",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42893112/",
+      "authors": "Coulibaly Y, Kpami YNC, Aboubakar B",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42893106",
+      "title": "Giant infected splenic pseudocyst complicated by rupture in a patient with chronic Q fever.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42893106/",
+      "authors": "Lee J, Chen M, Smith TH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42893098",
+      "title": "Bilateral multifocal water-clear cell parathyroid adenoma: A case report with literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42893098/",
+      "authors": "Salih AM, Qaradakhy AJ, Abdullah AM",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42893076",
+      "title": "Duplex ultrasound as an initial imaging clue to spontaneous isolated celiac artery dissection: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42893076/",
+      "authors": "Wu C, Zheng B, Wu J",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42872187/",
       "authors": "Rao AD",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42872089",
-      "title": "Aggressive primary mediastinal synovial sarcoma resulting in catastrophic airway compromise and fatal hemoptysis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42872089/",
-      "authors": "Liu S, Malpani R, Lubrin S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42872084",
-      "title": "Computed tomography findings of a retroperitoneal chronic expanding hematoma with multiple hemangiomas: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42872084/",
-      "authors": "Shinya T, Yoshida K, Iwasa T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42871978",
-      "title": "Presumed right atrial myxoma causing mechanical inflow obstruction and a heart-failure-with-preserved-ejection-fraction-mimicking phenotype in a resource-limited setting: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42871978/",
-      "authors": "Botan N, Ali ASO, Madar KH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42871955",
-      "title": "Extrauterine adenomyoma of the liver: A case report with a review of the literature.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42871955/",
-      "authors": "Parandoush B, Koohi H, Ayoobi Yazdi N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42871735",
-      "title": "Cerebellar Ataxia, Neuropathy, and Vestibular Areflexia Syndrome (CANVAS): A case report of RFC1-associated disease.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42871735/",
-      "authors": "Amin D, Deep R, Dhaduk V",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42871577",
-      "title": "High intestinal obstruction secondary to peritoneal metastases from invasive lobular breast carcinoma: A case report of an unusual presentation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42871577/",
-      "authors": "Testini V, Tupputi U, Roberto L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42871432",
-      "title": "Dual-site concurrent abdominal wall and lower uterine cesarean scar endometriosis: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42871432/",
-      "authors": "Lacsamana JM, Genobaga S, Genobaga C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42861355",
-      "title": "Bilateral transient osteoporosis of the hip with asynchronous onset during pregnancy: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42861355/",
-      "authors": "Inoue K, Gomi Y, Takai Y",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
