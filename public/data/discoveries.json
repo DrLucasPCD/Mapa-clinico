@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-19T16:27:20.162Z",
+  "lastChecked": "2026-10-20T14:17:43.744Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -28,6 +28,33 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
       "authors": "Razavipour M, Ghadiri SA, Fateh S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42896046",
+      "title": "Pacak-Zhuang syndrome with EPAS1 p.Pro531Leu somatic variant: one case report and literature review.",
+      "date": "2026 Dec 31",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
+      "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42898055",
+      "title": "Advanced vulvar adenocarcinoma of mammary gland type: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42898055/",
+      "authors": "Levin L, Reeson M, Hoekstra A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42895781",
+      "title": "High-Resolution Ultrasound in the Evaluation of Median and Superficial Radial Nerve Involvement in Neurofibromatosis Type 1.",
+      "date": "2026 Dec 1",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42895781/",
+      "authors": "Yalçınkaya B, Çolak AF, Abacıoğlu HB",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42890963/",
       "authors": "Montatore M, Zito M, Sfregola G",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42890331",
-      "title": "Chagas disease across pregnancy and early infancy: Leukoencephalomalacia and achondroplasia in two unusual cases.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42890331/",
-      "authors": "Villamil-Gómez WE, Barahona-Escobar GE, Moisa-Martínez MA",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42890330",
-      "title": "Fatal complications in a young adult with large Ewing sarcoma of the chest wall.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42890330/",
-      "authors": "Smith A, Gaetano A, Sager E",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42872187",
-      "title": "Traumatic pneumatoceles in adulthood: A case highlighting the limitations of supine chest radiography in trauma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42872187/",
-      "authors": "Rao AD",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
