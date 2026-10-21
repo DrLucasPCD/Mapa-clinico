@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-20T14:17:43.744Z",
+  "lastChecked": "2026-10-21T14:28:33.740Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -10,6 +10,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42890219/",
       "authors": "Faith H, Baker T, Williamson M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42898351",
+      "title": "Capitate Reconstruction Using the Second Metatarsal Head for Avascular Necrosis: Long-Term Clinical Validation of an Anatomically Matched Osteochondral Reconstruction.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42898351/",
+      "authors": "Kuno H",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -37,6 +46,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42898565",
+      "title": "Intravascular ultrasound-guided repair of delayed traumatic popliteal artery occlusion using an interwoven nitinol stent.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42898565/",
+      "authors": "Otsuji J, Imai Y, Sato F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42898152",
+      "title": "Late-onset hypothalamic-pituitary dysfunction in a childhood cancer survivor treated with cranial irradiation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42898152/",
+      "authors": "Takamura Y, Inoue R, Takeuchi K",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42891013/",
       "authors": "Nagano SY, Tavares MW, Chojniak R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42891000",
-      "title": "Malignant cerebral edema secondary to herpes simplex virus encephalitis requiring decompressive hemicraniectomy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42891000/",
-      "authors": "Konney E, Forrest JR, Thaker T",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42890998",
-      "title": "Near-total splenic infarction with pseudocystic transformation due to combined splenic artery and splenic vein thrombosis: CT-based diagnosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42890998/",
-      "authors": "Nalla S, Patil PS, Maydari S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42890963",
-      "title": "Purulent cardiac tamponade associated with necrotic mediastinal lymphadenopathy: Multimodality imaging of a presumed mediastinal-pericardial pathway.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42890963/",
-      "authors": "Montatore M, Zito M, Sfregola G",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
