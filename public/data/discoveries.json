@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-23T14:13:43.069Z",
+  "lastChecked": "2026-10-24T13:19:05.687Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,51 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42911554",
+      "title": "From metastatic disease to no evidence of disease after conversion liver surgery in advanced gastric cancer with liver metastases: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42911554/",
+      "authors": "Chen D, Wang H, Xu L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42910303",
+      "title": "Autotransplantation for circum-aortic left renal vein compression after failed left renal vein transposition.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42910303/",
+      "authors": "Rosenberg J, Quackenbush J, Jreij G",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42910059",
+      "title": "Adult intestinal malrotation: A rare incidental finding in trauma imaging.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42910059/",
+      "authors": "Mirzaei S, Eghbalian S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42909378",
+      "title": "Interventricular septal fat-containing mass most consistent with cardiac lipoma in an adult with tuberous sclerosis complex.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42909378/",
+      "authors": "Dhakal S, Savoia P, Yasmine N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42909375",
+      "title": "Primary isolated thoracic vertebral hydatid disease with multicompartment extension: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42909375/",
+      "authors": "Ouiam T, Bennani H, Retal H",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -172,51 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42893076/",
       "authors": "Wu C, Zheng B, Wu J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42893000",
-      "title": "Delayed deterioration after surgical treatment of a spinal dural arteriovenous fistula detected by three spinal angiographies: Case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42893000/",
-      "authors": "Feng Q, Xu C, Niu X",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42892982",
-      "title": "Nasopharyngeal diffuse large b-cell lymphoma in a teenage presenting with cavernous sinus syndrome: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42892982/",
-      "authors": "Afzal F, Nazir N, Tahir MJ",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42892981",
-      "title": "Chorea-Acanthocytosis Without Chorea: VPS13A Disease Manifesting as Parkinsonism.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42892981/",
-      "authors": "Pecha TA, Dewey CD, Eidelman BH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42892970",
-      "title": "Multifocal intracranial aneurysms and a clinical diagnosis of ruptured retinal arterial macroaneurysm in presumed hepatitis B-associated polyarteritis nodosa: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42892970/",
-      "authors": "Mbongo A, Otieno F, Mavuti J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42892871",
-      "title": "Arterial tortuosity syndrome with coronary artery involvement in a middle-aged female: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42892871/",
-      "authors": "Shrestha P, Shah A, Gc S",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
