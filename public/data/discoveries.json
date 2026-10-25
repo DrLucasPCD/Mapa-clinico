@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-24T13:19:05.687Z",
+  "lastChecked": "2026-10-25T13:42:15.913Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,60 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42926903",
+      "title": "Multiple recurrence of type III endoleak due to junctional component uncoupling of the AFX2 endograft accompanied with continuous aneurysmal sac regression.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42926903/",
+      "authors": "Tada H, Marumoto A, Yamada Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42923588",
+      "title": "Multiple acute vertebral fractures during recovery from myxedema coma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42923588/",
+      "authors": "Chipier L, Nachef C, Richette P",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42923282",
+      "title": "Imaging evolution of pancreatic intraductal oncocytic papillary neoplasm presenting with recurrent pancreatitis: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42923282/",
+      "authors": "Liu Y, Yu H, Zhou L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42921241",
+      "title": "Balloon-occluded ethylene vinyl alcohol copolymer embolization of a hemorrhagic renal mass in an octogenarian initially unfit for nephrectomy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42921241/",
+      "authors": "Mohabir AD, Mirsadraei L, Corcoran A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42921231",
+      "title": "Urologically silent intravesical migration of a copper intrauterine device presenting as chronic pelvic pain: CT features and comparison with reported cases.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42921231/",
+      "authors": "Hafsi M, Zouaghi A, Yaich O",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42921016",
+      "title": "Right double inferior vena cava with a retrocaval ureter and preaortic iliac venous confluence: A case report with embryological considerations.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42921016/",
+      "authors": "Kanagawa A, Katada Y, Kokubo R",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -163,60 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42894778/",
       "authors": "Srivastava H, Canaan L, Ross JM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42894678",
-      "title": "Capillary hemangioma of the breast presenting as a new mass on screening mammography: A case report with imaging-pathology correlation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42894678/",
-      "authors": "Ferre R, Bartels A, Kuzmiak CM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42894557",
-      "title": "Intraparotid lipoma in a 15-year-old girl: MRI-based diagnosis of a rare parotid lesion.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42894557/",
-      "authors": "Mahfoud C, Bouayad H, Houssaini AS",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42893112",
-      "title": "Delayed radiographic diagnosis of distal femoral metastases in breast cancer: A case report from Cocody University Teaching Hospital (Côte d'ivoire).",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42893112/",
-      "authors": "Coulibaly Y, Kpami YNC, Aboubakar B",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42893106",
-      "title": "Giant infected splenic pseudocyst complicated by rupture in a patient with chronic Q fever.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42893106/",
-      "authors": "Lee J, Chen M, Smith TH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42893098",
-      "title": "Bilateral multifocal water-clear cell parathyroid adenoma: A case report with literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42893098/",
-      "authors": "Salih AM, Qaradakhy AJ, Abdullah AM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42893076",
-      "title": "Duplex ultrasound as an initial imaging clue to spontaneous isolated celiac artery dissection: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42893076/",
-      "authors": "Wu C, Zheng B, Wu J",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
