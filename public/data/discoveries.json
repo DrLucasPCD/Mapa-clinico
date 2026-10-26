@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-25T13:42:15.913Z",
+  "lastChecked": "2026-10-26T16:06:43.218Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,42 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42927242",
+      "title": "Multimodality imaging of lithopedion in a postmenopausal woman: A case report emphasizing the diagnostic role of noncontrast computed tomography.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42927242/",
+      "authors": "Singh Maharjan S, Sitaula S, Dawadi P",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42927236",
+      "title": "Intravenous leiomyomatosis with marked edematous degeneration mimicking IVC thrombus: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42927236/",
+      "authors": "Wada K, Yamada S, Takahata A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42927182",
+      "title": "A rare cause of post-traumatic low back pain: Lumbar Morel-Lavallée lesion in a collegiate athlete - A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42927182/",
+      "authors": "Thomas R, Huynh L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42927162",
+      "title": "Klebsiella pneumoniae pyogenic liver abscess mimicking hepatic malignancy in a non-diabetic patient: A case report from Kazakhstan.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42927162/",
+      "authors": "Medetova G, Abduvaliyev D, Kizayeva A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -181,42 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42898152/",
       "authors": "Takamura Y, Inoue R, Takeuchi K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42898055",
-      "title": "Advanced vulvar adenocarcinoma of mammary gland type: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42898055/",
-      "authors": "Levin L, Reeson M, Hoekstra A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42895781",
-      "title": "High-Resolution Ultrasound in the Evaluation of Median and Superficial Radial Nerve Involvement in Neurofibromatosis Type 1.",
-      "date": "2026 Dec 1",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42895781/",
-      "authors": "Yalçınkaya B, Çolak AF, Abacıoğlu HB",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42894785",
-      "title": "Constipation Not So Vibrant: A Case Report of Colonic Obstruction From Capsule Retention.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42894785/",
-      "authors": "Ertem M, Rampersad A, Rochester A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42894778",
-      "title": "Inflammatory myofibroblastic tumor masquerading as carcinoma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42894778/",
-      "authors": "Srivastava H, Canaan L, Ross JM",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
