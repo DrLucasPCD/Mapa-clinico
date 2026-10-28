@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-27T15:22:56.957Z",
+  "lastChecked": "2026-10-28T15:59:51.362Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,33 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42948683",
+      "title": "Long-term follow-up revealed hypocalciuric hypercalcemia in a patient initially treated for primary hyperparathyroidism.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42948683/",
+      "authors": "Araya AV, Dupouy J, Gac P",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42936440",
+      "title": "Bilateral synchronous juvenile breast papillomatosis: A case report and review of the literature.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42936440/",
+      "authors": "Lahlali K, Lahjouji O, Ouazzani H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42935812",
+      "title": "Giant focal nodular hyperplasia with atypical imaging due to absent central scar: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42935812/",
+      "authors": "El Bqaq I, Ehirchiou Z, Izi Z",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42904195/",
       "authors": "Dhakal S, Savoia P, Mitra S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42903859",
-      "title": "Unexpected para-aortic venous migration of n-butyl cyanoacrylate during transarterial sac embolization for a type II endoleak: A technical pitfall.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42903859/",
-      "authors": "Hamamoto K, Chiba E, Kojima S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42898565",
-      "title": "Intravascular ultrasound-guided repair of delayed traumatic popliteal artery occlusion using an interwoven nitinol stent.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42898565/",
-      "authors": "Otsuji J, Imai Y, Sato F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42898152",
-      "title": "Late-onset hypothalamic-pituitary dysfunction in a childhood cancer survivor treated with cranial irradiation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42898152/",
-      "authors": "Takamura Y, Inoue R, Takeuchi K",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
