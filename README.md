@@ -4,6 +4,8 @@
 
 ## O que esta versão faz
 
+- Simulador de USG com escolha entre três casos verificados da Radiopaedia, transdutor arrastável sobre um mapa anterior do tronco, rotação para alternar vistas documentadas, ganho visual e destaque do órgão no Atlas. As imagens são quadros reais selecionados, não uma simulação ultrassonográfica volumétrica. A busca por outros casos abre a Radiopaedia; a API pública atual não fornece download automático de casos para importação arbitrária.
+
 - Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
 - A abertura mostra o Atlas ao lado de uma pilha FLAIR real da Radiopaedia, com 24 miniaturas e navegação por scroll; a posição relativa do corte acompanha o plano didático do Atlas.
 - Trilha guiada nos três casos: apresentação, estruturas reais do Atlas relacionadas ao caso, leitura da imagem e pergunta com explicação. Respostas erradas e notas ficam em uma revisão local no dispositivo.

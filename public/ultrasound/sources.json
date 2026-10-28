@@ -1,0 +1,28 @@
+{
+  "source": "Radiopaedia.org",
+  "licence": "https://radiopaedia.org/licence",
+  "use": "Curated educational still images. Each case remains attributed to its contributor. No continuous probe position or volumetric ultrasound data were provided.",
+  "cases": [
+    {
+      "id": 148000,
+      "title": "Normal upper abdominal ultrasound",
+      "author": "Dennis Odhiambo Agolah",
+      "url": "https://radiopaedia.org/cases/148000",
+      "images": [58956756, 58956757, 58956759, 58956762, 58956763, 58956767, 58957335]
+    },
+    {
+      "id": 27525,
+      "title": "Cholelithiasis - acoustic shadowing",
+      "author": "Andrew Dixon",
+      "url": "https://radiopaedia.org/cases/27525",
+      "images": [5834137, 5834145]
+    },
+    {
+      "id": 64279,
+      "title": "FAST exam - normal (ultrasonography)",
+      "author": "David Carroll",
+      "url": "https://radiopaedia.org/cases/64279",
+      "images": [43769767, 43769759]
+    }
+  ]
+}

@@ -16,6 +16,14 @@ Casos e imagens selecionados para ensino não comercial, consultados em 7 de set
 2. **Jose Rodriguez Vazquez**, Boxer's fracture. Radiopaedia.org, rID 164685. https://doi.org/10.53347/rID-164685 . Imagem 61598981 (frontal).
 3. **Luu Hanh**, Brain abscess with dual rim sign. Radiopaedia.org, rID 87566. https://doi.org/10.53347/rID-87566 . Imagem anotada 54573996 (FLAIR, detalhe do duplo halo).
 
+Imagens de ultrassom selecionadas para o simulador didático, consultadas em 28 de outubro de 2026:
+
+4. **Dennis Odhiambo Agolah**, Normal upper abdominal ultrasound. Radiopaedia.org, rID 148000. https://radiopaedia.org/cases/148000 . Imagens 58956756, 58956757, 58956759, 58956762, 58956763, 58956767 e 58957335.
+5. **Andrew Dixon**, Cholelithiasis - acoustic shadowing. Radiopaedia.org, rID 27525. https://radiopaedia.org/cases/27525 . Imagens 5834137 e 5834145.
+6. **David Carroll**, FAST exam - normal (ultrasonography). Radiopaedia.org, rID 64279. https://radiopaedia.org/cases/64279 . Imagens 43769767 e 43769759.
+
+O simulador só alterna entre imagens documentadas do caso escolhido. A posição do transdutor é esquemática, sem dados espaciais para reconstruir vistas contínuas. O catálogo e os créditos por arquivo constam de `public/ultrasound/sources.json`.
+
 O painel “Download Image” da própria fonte informa que o uso não requer pedido de permissão quando é não comercial, atribui o contribuinte e não reivindica copyright do material. As condições completas prevalecem: https://radiopaedia.org/licence e https://radiopaedia.org/terms . Regime de referência: CC BY-NC-SA 3.0 — https://creativecommons.org/licenses/by-nc-sa/3.0/ . Não se concede sublicença comercial. Sínteses em português dos casos são adaptações didáticas, preservadas sob as condições aplicáveis à fonte. As imagens não foram alteradas; brilho, contraste e zoom são transformações temporárias da interface. Não foram copiadas séries completas ou feito scraping periódico.
 
 ## Voz

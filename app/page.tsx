@@ -48,6 +48,8 @@ import './workspace.css';
 import './study.css';
 import StudyPanel from './StudyPanel';
 import ImagingWorkbench from './ImagingWorkbench';
+import UltrasoundSimulator from './UltrasoundSimulator';
+import { ultrasoundZones, type UltrasoundZone } from './ultrasound-data';
 import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
@@ -77,7 +79,7 @@ type Drawer =
   | null;
 
 export default function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging'>('imaging');
+  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging' | 'ultrasound'>('imaging');
   const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
   const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
   const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
@@ -165,6 +167,16 @@ export default function App() {
     setDrawer(null);
     setMobileNav(false);
   };
+  const syncUltrasoundRegion = useCallback((zone: UltrasoundZone) => {
+    const target = ultrasoundZones[zone];
+    setSystem('all');
+    setSelected(target.atlasId);
+    setName(target.label);
+    setRegion('all');
+    setIsolate(true);
+    setPathology('');
+    setHidden([]);
+  }, []);
   const resetAtlas = () => {
     setReset((v) => v + 1);
     setIsolate(false);
@@ -319,6 +331,7 @@ export default function App() {
           >
             <ScanLine /> Imagens (TC, RM, RX)
           </button>
+          <button className={`nav-item ${workspaceMode === 'ultrasound' ? 'active' : ''}`} onClick={() => { setWorkspaceMode('ultrasound'); setMobileNav(false); setSlice(null); }}><Activity /> Simulador USG</button>
           <button
             className="nav-item"
             onClick={() =>
@@ -644,8 +657,9 @@ export default function App() {
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => setWorkspaceMode('case')}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
+              <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => { setWorkspaceMode('ultrasound'); setSlice(null); }}>USG</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : <>
+            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator onSelectRegion={syncUltrasoundRegion} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}
