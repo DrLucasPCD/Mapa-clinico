@@ -13,10 +13,13 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
   const [showGuide, setShowGuide] = useState(true);
   const [dragging, setDragging] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const rotating = useRef(false);
   const zone = useMemo(() => ultrasoundZoneAt(position, caseId), [position, caseId]);
   const view = ultrasoundViewFor(caseId, zone, angle);
   const region = zone ? ultrasoundZones[zone] : null;
   const clinicalCase = ultrasoundCases[caseId];
+  const availableViews = zone ? clinicalCase.zoneViews[zone] ?? [] : [];
+  const viewNumber = view ? availableViews.findIndex(item => item.image === view.image) + 1 : 0;
 
   useEffect(() => { if (zone) onSelectRegion?.(zone); }, [zone, onSelectRegion]);
 
@@ -24,6 +27,14 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
     const bounds = bodyRef.current?.getBoundingClientRect();
     if (!bounds) return;
     setPosition({ x: clamp((clientX - bounds.left) / bounds.width), y: clamp((clientY - bounds.top) / bounds.height) });
+  };
+  const rotateProbe = (clientX: number, clientY: number) => {
+    const bounds = bodyRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const x = bounds.left + position.x * bounds.width;
+    const y = bounds.top + position.y * bounds.height;
+    const degrees = Math.atan2(clientX - x, y - clientY) * 180 / Math.PI;
+    setAngle(Math.round(Math.max(-90, Math.min(90, degrees))));
   };
   const chooseZone = (id: UltrasoundZone) => {
     setPosition({ x: ultrasoundZones[id].x, y: ultrasoundZones[id].y });
@@ -37,7 +48,7 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
   };
 
   return <section className="ultrasound-simulator" aria-label="Simulador de ultrassom">
-    <header className="us-heading"><div><small>SIMULADOR INTERATIVO · USG</small><h2>Explore a janela acústica</h2><p>Arraste o transdutor sobre o abdome e gire para comparar as vistas disponíveis. Selecione um órgão para destacá-lo no atlas.</p></div><span>USG · modo B</span></header>
+    <header className="us-heading"><div><small>SIMULADOR INTERATIVO · USG</small><h2>Explore a janela acústica</h2><p>Arraste sobre o abdome para posicionar a sonda. Gire a alça do próprio transdutor para comparar as vistas disponíveis do caso.</p></div><span>USG · modo B</span></header>
     <div className="us-case-picker"><label>Escolha um caso real da Radiopaedia<select aria-label="Caso de ultrassom da Radiopaedia" value={caseId} onChange={event => chooseCase(event.target.value as UltrasoundCaseId)}>{ultrasoundCaseOrder.map(id => <option key={id} value={id}>{ultrasoundCases[id].title} · rID {id}</option>)}</select></label><p>{clinicalCase.description} <a href={clinicalCase.source} target="_blank" rel="noreferrer">Ver caso ↗</a></p><a className="us-search-link" href="https://radiopaedia.org/search?scope=cases&q=ultrasound" target="_blank" rel="noreferrer">Buscar mais casos na Radiopaedia ↗</a></div>
     <div className="us-layout">
       <div className="us-body-panel">
@@ -51,25 +62,24 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
             <text x="42" y="126" fill="#bdd9dd" fontSize="10">D</text><text x="249" y="126" fill="#bdd9dd" fontSize="10">E</text>
           </svg>
           {showGuide && ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button key={id} type="button" className={'us-hotspot ' + (zone === id ? 'active' : '')} style={{ left: `${ultrasoundZones[id].x * 100}%`, top: `${ultrasoundZones[id].y * 100}%` }} onClick={() => chooseZone(id)} title={ultrasoundZones[id].label} aria-label={`Selecionar ${ultrasoundZones[id].label}`}>{ultrasoundZones[id].label}</button>)}
-          <div className={'us-probe ' + (dragging ? 'dragging' : '')} style={{ left: `${position.x * 100}%`, top: `${position.y * 100}%`, transform: `translate(-50%, -48%) rotate(${angle}deg)` }} aria-hidden="true"><span className="us-probe-handle"/><span className="us-probe-head"/><span className="us-beam"/></div>
+          <div className={'us-probe ' + (dragging ? 'dragging' : '')} style={{ left: `${position.x * 100}%`, top: `${position.y * 100}%`, transform: `translate(-50%, -48%) rotate(${angle}deg)` }}><button className="us-probe-handle" type="button" role="slider" aria-label="Girar transdutor" aria-valuemin={-90} aria-valuemax={90} aria-valuenow={angle} aria-valuetext={`${angle} graus; ${availableViews.length} ${availableViews.length === 1 ? 'vista real' : 'vistas reais'} nesta região`} title="Arraste para girar o transdutor" onPointerDown={event => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); rotating.current = true; rotateProbe(event.clientX, event.clientY); }} onPointerMove={event => { if (rotating.current) rotateProbe(event.clientX, event.clientY); }} onPointerUp={() => { rotating.current = false; }} onPointerCancel={() => { rotating.current = false; }} onKeyDown={event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') { event.preventDefault(); setAngle(value => Math.max(-90, value - 10)); } if (event.key === 'ArrowRight' || event.key === 'ArrowUp') { event.preventDefault(); setAngle(value => Math.min(90, value + 10)); } if (event.key === 'Home') { event.preventDefault(); setAngle(-90); } if (event.key === 'End') { event.preventDefault(); setAngle(90); } }}><span>↻</span></button><span className="us-probe-head"/><span className="us-beam"/></div>
         </div>
-        <div className="us-map-help">Arraste sobre o tronco · toque nos rótulos para posicionar</div>
+        <div className="us-map-help">Arraste no tronco para mover · arraste a alça ↻ para girar · {angle}°</div>
       </div>
       <div className="us-image-panel">
         <div className="us-panel-title"><strong>{region?.label ?? 'Fora da janela documentada'}</strong><small>{view?.label ?? 'Posicione o transdutor sobre uma região marcada'}</small></div>
         <div className="us-image-stage" aria-live="polite">
           {view ? <img key={view.image} src={view.image} alt={`Imagem real de ultrassom: ${view.organ}. ${view.label}. Caso da Radiopaedia por ${view.author}.`} style={{ filter: `brightness(${gain}%)` }} /> : <div className="us-no-window"><span>◉</span><strong>Sem imagem nesta posição</strong><p>Desloque o transdutor até uma das regiões marcadas.</p></div>}
-          <div className="us-scan-label">{view ? `US · ${view.organ.toUpperCase()}` : 'US · SEM JANELA'}</div>
+          <div className="us-scan-label">{view ? `US · ${view.organ.toUpperCase()} · VISTA ${viewNumber}/${availableViews.length}` : 'US · SEM JANELA'}</div>
         </div>
-        <div className="us-image-caption">{view ? <><strong>{view.label}</strong><p>{view.note}</p><span>Caso cortesia de {view.author}, <a href="https://radiopaedia.org" target="_blank" rel="noreferrer">Radiopaedia.org</a>, <a href={view.source} target="_blank" rel="noreferrer">rID {caseId} ↗</a></span></> : <p>A posição indicada é um guia anatômico esquemático.</p>}</div>
+        <div className="us-image-caption">{view ? <><strong>{view.label}</strong><p>{view.note}</p>{availableViews.length === 1 && <p className="us-view-limit">Só há uma imagem dessa região neste caso. Girar a sonda não cria outro corte real.</p>}<span>Caso cortesia de {view.author}, <a href="https://radiopaedia.org" target="_blank" rel="noreferrer">Radiopaedia.org</a>, <a href={view.source} target="_blank" rel="noreferrer">rID {caseId} ↗</a></span></> : <p>A posição indicada é um guia anatômico esquemático.</p>}</div>
       </div>
     </div>
     <div className="us-controls">
-      <label>Rotação do transdutor <strong>{angle}°</strong><input type="range" min="-90" max="90" value={angle} onChange={event => setAngle(Number(event.target.value))} aria-label="Rotação do transdutor" /></label>
       <label>Ganho da imagem <strong>{gain}%</strong><input type="range" min="65" max="140" value={gain} onChange={event => setGain(Number(event.target.value))} aria-label="Ganho da imagem" /></label>
       <button type="button" onClick={() => setShowGuide(value => !value)} aria-pressed={showGuide}>{showGuide ? 'Ocultar' : 'Mostrar'} regiões</button>
     </div>
     <div className="us-region-list" aria-label="Regiões para explorar">{ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button type="button" key={id} className={zone === id ? 'active' : ''} onClick={() => chooseZone(id)}>{ultrasoundZones[id].label}</button>)}</div>
-    <p className="us-limitation"><strong>Como funciona:</strong> escolha um dos casos verificados acima. Posição e rotação selecionam apenas as vistas disponíveis naquele caso. A troca é discreta: as imagens não são uma sequência contínua nem têm coordenadas do transdutor. A inclinação não reconstrói tecido que não foi adquirido. O ganho altera apenas a visualização. A Radiopaedia informa que sua API não oferece download de conteúdo; novos casos precisam ser revisados e adicionados ao catálogo.</p>
+    <p className="us-limitation"><strong>Como funciona:</strong> escolha um dos casos verificados acima. A rotação na alça do transdutor alterna as vistas reais disponíveis daquele órgão. A troca é discreta: as imagens não são uma sequência contínua nem têm coordenadas do transdutor. O ganho altera apenas a visualização.</p>
   </section>;
 }
