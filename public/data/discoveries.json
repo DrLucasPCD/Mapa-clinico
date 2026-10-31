@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-30T15:55:23.751Z",
+  "lastChecked": "2026-10-31T15:19:01.523Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42964301",
+      "title": "Spontaneous spinal cerebrospinal fluid leak in very early pregnancy following frozen embryo transfer: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42964301/",
+      "authors": "Salam Y, El Moussa H, Obeid M",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42927182/",
       "authors": "Thomas R, Huynh L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42927162",
-      "title": "Klebsiella pneumoniae pyogenic liver abscess mimicking hepatic malignancy in a non-diabetic patient: A case report from Kazakhstan.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42927162/",
-      "authors": "Medetova G, Abduvaliyev D, Kizayeva A",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
