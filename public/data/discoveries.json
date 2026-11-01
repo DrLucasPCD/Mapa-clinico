@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-10-31T15:19:01.523Z",
+  "lastChecked": "2026-11-01T16:00:15.118Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,60 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42966973",
+      "title": "Necrotizing abdominal wall infection along a prior drain pathway: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42966973/",
+      "authors": "Leary RHO, Kleiner D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42966959",
+      "title": "Left spheno-orbital en plaque meningioma revealed by progressive exophthalmos: imaging features and a compartment-based approach to spheno-orbital hyperostosis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42966959/",
+      "authors": "Babbar N, Edderai M, Zamani O",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42965176",
+      "title": "Automated detection and quantification of bone disorganization in hypophosphatasia before and after asfotase alfa: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42965176/",
+      "authors": "Zhang S, Shore-Lorenti C, Chiang C",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42965087",
+      "title": "Contralateral atypical femoral fracture following a single dose of denosumab after incomplete teriparatide therapy in a patient with long-term bisphosphonate exposure: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42965087/",
+      "authors": "Lee DH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42965011",
+      "title": "Post-ischemic enteritis mimicking Crohn's disease with complex entero-enteric fistulization.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42965011/",
+      "authors": "Salahshour F, Yaghoubi S, Khajavirad N",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42964642",
+      "title": "False patency, true occlusion: perfusion imaging and dual stent-retriever thrombectomy for a calcified carotid terminus embolus.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42964642/",
+      "authors": "Huang M, Gan S, Miao J",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -163,60 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42954286/",
       "authors": "Liang Y, Wei Y, Jing F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42948683",
-      "title": "Long-term follow-up revealed hypocalciuric hypercalcemia in a patient initially treated for primary hyperparathyroidism.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42948683/",
-      "authors": "Araya AV, Dupouy J, Gac P",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42936440",
-      "title": "Bilateral synchronous juvenile breast papillomatosis: A case report and review of the literature.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42936440/",
-      "authors": "Lahlali K, Lahjouji O, Ouazzani H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42935812",
-      "title": "Giant focal nodular hyperplasia with atypical imaging due to absent central scar: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42935812/",
-      "authors": "El Bqaq I, Ehirchiou Z, Izi Z",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42927242",
-      "title": "Multimodality imaging of lithopedion in a postmenopausal woman: A case report emphasizing the diagnostic role of noncontrast computed tomography.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42927242/",
-      "authors": "Singh Maharjan S, Sitaula S, Dawadi P",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42927236",
-      "title": "Intravenous leiomyomatosis with marked edematous degeneration mimicking IVC thrombus: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42927236/",
-      "authors": "Wada K, Yamada S, Takahata A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42927182",
-      "title": "A rare cause of post-traumatic low back pain: Lumbar Morel-Lavallée lesion in a collegiate athlete - A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42927182/",
-      "authors": "Thomas R, Huynh L",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
