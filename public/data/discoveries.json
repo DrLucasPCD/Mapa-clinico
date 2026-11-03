@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-02T19:29:00.640Z",
+  "lastChecked": "2026-11-03T17:01:34.209Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -46,6 +46,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42896046/",
       "authors": "Li X, Song S, Wang L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42970742",
+      "title": "Pearls & Oy-sters: The Price of Patency: Intractable Headache Subsequent to Fourth Ventricular Recanalization.",
+      "date": "2026 Dec 8",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
+      "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42973940",
+      "title": "Bladder metastasis from cutaneous melanoma during adjuvant immunotherapy: A case report and literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42973940/",
+      "authors": "Marafioti M, Musarra M, Pepe L",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -199,24 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42959745/",
       "authors": "Toulali F, Laaboudi R, Mahfoud H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959744",
-      "title": "Imaging-based diagnosis of cryptic foreign body aspiration in a toddler with normal clinical presentation: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959744/",
-      "authors": "Appiah Kubi SM, Idun EA, Amedi MK",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42954286",
-      "title": "High-intensity focused ultrasound as a bridging vascular-modulating therapy for fertility-sparing management of placental site trophoblastic tumor complicated by uterine arteriovenous fistula: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42954286/",
-      "authors": "Liang Y, Wei Y, Jing F",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
