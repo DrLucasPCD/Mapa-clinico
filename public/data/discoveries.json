@@ -1,17 +1,8 @@
 {
-  "lastChecked": "2026-11-03T17:01:34.209Z",
+  "lastChecked": "2026-11-04T17:14:08.923Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
-    {
-      "id": "42890219",
-      "title": "\"The box\" allograft augmentation for at risk rotator cuff repairs.",
-      "date": "2027 Feb",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42890219/",
-      "authors": "Faith H, Baker T, Williamson M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
     {
       "id": "42898351",
       "title": "Capitate Reconstruction Using the Second Metatarsal Head for Avascular Necrosis: Long-Term Clinical Validation of an Anatomically Matched Osteochondral Reconstruction.",
@@ -217,6 +208,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42959745/",
       "authors": "Toulali F, Laaboudi R, Mahfoud H",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42959744",
+      "title": "Imaging-based diagnosis of cryptic foreign body aspiration in a toddler with normal clinical presentation: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42959744/",
+      "authors": "Appiah Kubi SM, Idun EA, Amedi MK",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
