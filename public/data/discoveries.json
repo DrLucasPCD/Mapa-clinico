@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-05T17:22:41.375Z",
+  "lastChecked": "2026-11-06T16:44:42.013Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -40,12 +40,111 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "42987243",
+      "title": "Pearls & Oy-sters: Trace Visualization of the Central Retinal Artery: A Favorable Sign for Late-Window Endovascular Therapy in Central Retinal Artery Occlusion.",
+      "date": "2026 Dec 8",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42987243/",
+      "authors": "Du Y, Qi Z, Cong L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42970742",
       "title": "Pearls & Oy-sters: The Price of Patency: Intractable Headache Subsequent to Fourth Ventricular Recanalization.",
       "date": "2026 Dec 8",
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42991644",
+      "title": "Isolated vocal cord aspergillosis in an immunocompetent 60-year-old woman: A rare case report with radiological findings.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42991644/",
+      "authors": "Belkacemi A, Bellarbi S, Jbara A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42991066",
+      "title": "Traumatic lumbar hernia: A case series.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42991066/",
+      "authors": "Corkery L, Kelly D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990978",
+      "title": "Radiopaque orbital foreign bodies from retained infant brachytherapy seeds.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990978/",
+      "authors": "Jung M, Mishra K, Ediriwickrema LS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990910",
+      "title": "Reversible cervical cord compression in Hirayama disease: Three-position dynamic MRI in a single session.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990910/",
+      "authors": "Kumar A, Chaturvedi P, Gulati S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990814",
+      "title": "Silicone breast implant rupture mimicking inflammatory breast cancer: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990814/",
+      "authors": "Zaazoue KA, Lotfalla M, Letter HP",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990778",
+      "title": "Angioleiomyoma Masquerading as a lacrimal sac swelling.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990778/",
+      "authors": "Maddi L, Jakati S, Ali MJ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990753",
+      "title": "Schaalia odontolytica causing primary intraventricular brain abscess in a child- A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990753/",
+      "authors": "Acquah F, Semevor GO, Aggrey I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990693",
+      "title": "Anterior annular disruption presenting as hip pain: A case report of iliopsoas contrast extravasation during lumbar discography.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990693/",
+      "authors": "Sultan W, Napolitano J, Morales R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990655",
+      "title": "Foveal hypoplasia in Myhre syndrome associated with a pathogenic SMAD4 variant: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990655/",
+      "authors": "Alcoreza AAD, Lee J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42990587",
+      "title": "Recurrent papillary thyroid carcinoma with brachiocephalic vein tumor thrombus: A rare case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42990587/",
+      "authors": "Seyedjavadeyn SZ, Shirkhoda M, Jalaeefar A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -118,105 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42964301/",
       "authors": "Salam Y, El Moussa H, Obeid M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960276",
-      "title": "One-stop photon-counting CT angiography for simultaneous assessment of cardio-cerebrovascular lesions: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960276/",
-      "authors": "Wan Y, Zou D, Lan J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960255",
-      "title": "Infective endocarditis presenting as febrile stroke and complicated with multi-territorial systemic embolization in a young woman: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960255/",
-      "authors": "Hmidouch M, Ejjebli HE, Boulouiz S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960248",
-      "title": "Clear cell carcinoma of the uterine corpus arising in long-standing adenomyosis after menopause: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960248/",
-      "authors": "To G, Shinto A, Fukuda A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960138",
-      "title": "Cortical and basal ganglia diffusion restriction following benzodiazepine overdose: An unusual MRI pattern of evolving hypoxic-ischemic encephalopathy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960138/",
-      "authors": "Abourak C, El Harras Y, Nassar I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960128",
-      "title": "Cuboid stress fracture as an uncommon cause of lateral foot pain: Correlation between magnetic resonance imaging and photon-counting computed tomography - A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960128/",
-      "authors": "Schumacher M, Bokwa-Dąbrowska K, Szaro P",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42960114",
-      "title": "Hyperbaric oxygen therapy for cervical spinal cord injury.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42960114/",
-      "authors": "Daulat SR, Scarsbrook MW, Dholaria N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959941",
-      "title": "Adult-onset chronic nonbacterial osteitis mimicking refractory axial psoriatic arthritis: successful treatment with combined IL-1/IL-17 inhibition: a case report and brief literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959941/",
-      "authors": "Karakoc A, Wirsching A, Bucci L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959795",
-      "title": "Pancreatic involvement in lung cancer: Imaging findings and diagnostic challenges in two cases.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959795/",
-      "authors": "Bouziane A, Essâdi B, Bekhakh C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959783",
-      "title": "Lenticulostriate vasculopathy in neonates: An imaging marker with heterogeneous clinical significance.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959783/",
-      "authors": "El Azouzi M, Belkouchi L, El Haddad S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959745",
-      "title": "Kallmann syndrome revealed by primary amenorrhea: Phenotypic variability and diagnostic challenges-A report of three cases.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959745/",
-      "authors": "Toulali F, Laaboudi R, Mahfoud H",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42959744",
-      "title": "Imaging-based diagnosis of cryptic foreign body aspiration in a toddler with normal clinical presentation: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42959744/",
-      "authors": "Appiah Kubi SM, Idun EA, Amedi MK",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
