@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-06T16:44:42.013Z",
+  "lastChecked": "2026-11-07T15:39:09.806Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -19,6 +19,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42831063/",
       "authors": "Allen BE, Pawlak N, Smith AC",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42815744",
+      "title": "Cardiac paroxysmal orthodeoxia syndrome: A comprehensive process of this challenging disease starting from the clinical suspicion till the therapeutic procedure.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42815744/",
+      "authors": "Youssef P, Broussous F",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42964642/",
       "authors": "Huang M, Gan S, Miao J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42964301",
-      "title": "Spontaneous spinal cerebrospinal fluid leak in very early pregnancy following frozen embryo transfer: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42964301/",
-      "authors": "Salam Y, El Moussa H, Obeid M",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
