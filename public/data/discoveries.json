@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-07T15:39:09.806Z",
+  "lastChecked": "2026-11-08T15:57:21.112Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -64,6 +64,60 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42999753",
+      "title": "Systemic cardiac microcoil migration: A rare complication of CT-guided lung localization.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42999753/",
+      "authors": "Almutairi A, AlHarbi H, Aldayhani A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42999720",
+      "title": "A rare neurovascular complication of Lemierre syndrome: Skull base pachymeningitis and reversible inflammatory stenosis of the petrous-cavernous internal carotid artery.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42999720/",
+      "authors": "Tsioukaka GD, Traoré WM, Ye DDL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42997830",
+      "title": "Joubert syndrome with hippocampal malrotation in a 4-month-old male: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42997830/",
+      "authors": "Rutta CA, Kamuzora MCK",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42997629",
+      "title": "Fetal goiter treated antenatally with intra-amniotic thyroxine: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42997629/",
+      "authors": "Fux-Otta C, Chedraui P, Testa G",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42996579",
+      "title": "Delayed recognition of primary thyroid lymphoma with progressive thyroid enlargement and cardiopulmonary symptoms.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42996579/",
+      "authors": "Tovar YE, Elsayed AG, Pragani M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42996503",
+      "title": "Pediatric gigantism due to ectopic growth hormone releasing hormone secretion from a metastatic bronchial neuroendocrine tumor.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42996503/",
+      "authors": "Vidal-Ostos De Lara F, Sanchis-Pascual D, Hernández-Rienda L",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -163,60 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42973940/",
       "authors": "Marafioti M, Musarra M, Pepe L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42966973",
-      "title": "Necrotizing abdominal wall infection along a prior drain pathway: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42966973/",
-      "authors": "Leary RHO, Kleiner D",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42966959",
-      "title": "Left spheno-orbital en plaque meningioma revealed by progressive exophthalmos: imaging features and a compartment-based approach to spheno-orbital hyperostosis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42966959/",
-      "authors": "Babbar N, Edderai M, Zamani O",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42965176",
-      "title": "Automated detection and quantification of bone disorganization in hypophosphatasia before and after asfotase alfa: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42965176/",
-      "authors": "Zhang S, Shore-Lorenti C, Chiang C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42965087",
-      "title": "Contralateral atypical femoral fracture following a single dose of denosumab after incomplete teriparatide therapy in a patient with long-term bisphosphonate exposure: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42965087/",
-      "authors": "Lee DH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42965011",
-      "title": "Post-ischemic enteritis mimicking Crohn's disease with complex entero-enteric fistulization.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42965011/",
-      "authors": "Salahshour F, Yaghoubi S, Khajavirad N",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42964642",
-      "title": "False patency, true occlusion: perfusion imaging and dual stent-retriever thrombectomy for a calcified carotid terminus embolus.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42964642/",
-      "authors": "Huang M, Gan S, Miao J",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
