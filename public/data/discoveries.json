@@ -1,8 +1,26 @@
 {
-  "lastChecked": "2026-11-08T15:57:21.112Z",
+  "lastChecked": "2026-11-09T19:47:09.139Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "43001225",
+      "title": "Intraosseous venous malformation of the distal fibula treated with image-guided sclerotherapy and embolization.",
+      "date": "2027 Feb",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43001225/",
+      "authors": "Sebastian Lopez-McCormick J, Montoya C, Kably I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43001215",
+      "title": "Giant splenic arteriovenous shunt with arterial and venous aneurysmal dilatation causing portal hypertension and gastric varices.",
+      "date": "2027 Feb",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
+      "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "42898351",
       "title": "Capitate Reconstruction Using the Second Metatarsal Head for Avascular Necrosis: Long-Term Clinical Validation of an Anatomically Matched Osteochondral Reconstruction.",
@@ -64,6 +82,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43001301",
+      "title": "Twenty-five-year imaging follow-up of an untreated giant Spetzler-Martin grade V Brain arteriovenous malformation associated with cerebral infarction and epilepsy.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43001301/",
+      "authors": "Jiang F, Zhang M, Yang C",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42990693/",
       "authors": "Sultan W, Napolitano J, Morales R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42990655",
-      "title": "Foveal hypoplasia in Myhre syndrome associated with a pathogenic SMAD4 variant: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42990655/",
-      "authors": "Alcoreza AAD, Lee J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42990587",
-      "title": "Recurrent papillary thyroid carcinoma with brachiocephalic vein tumor thrombus: A rare case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42990587/",
-      "authors": "Seyedjavadeyn SZ, Shirkhoda M, Jalaeefar A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42973940",
-      "title": "Bladder metastasis from cutaneous melanoma during adjuvant immunotherapy: A case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42973940/",
-      "authors": "Marafioti M, Musarra M, Pepe L",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
