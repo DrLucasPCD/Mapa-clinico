@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-09T19:47:09.139Z",
+  "lastChecked": "2026-11-10T17:01:27.929Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -49,15 +49,6 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42761520",
-      "title": "Aneurysmal Bone Cyst of the Distal Phalanx: A Case Report.",
-      "date": "2027 Jan",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42761520/",
-      "authors": "Razavipour M, Ghadiri SA, Fateh S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
       "id": "42896046",
       "title": "Pacak-Zhuang syndrome with EPAS1 p.Pro531Leu somatic variant: one case report and literature review.",
       "date": "2026 Dec 31",
@@ -82,6 +73,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43006045",
+      "title": "Novel Use of Augmented Reality-Guided Ventriculoperitoneal Shunt Proximal Catheter Placement Using the VisAR System: A Case Report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43006045/",
+      "authors": "Charcos I, Ifrach J, Thomas AJ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43005707",
+      "title": "Combined Transnasal and Transcranial Approach for a Complex Type IV Nasal Dermoid Sinus Cyst.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43005707/",
+      "authors": "Peron S, Palopoli A, Scalise M",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42990753/",
       "authors": "Acquah F, Semevor GO, Aggrey I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42990693",
-      "title": "Anterior annular disruption presenting as hip pain: A case report of iliopsoas contrast extravasation during lumbar discography.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42990693/",
-      "authors": "Sultan W, Napolitano J, Morales R",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
