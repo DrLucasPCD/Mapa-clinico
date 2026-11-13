@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-12T17:34:33.094Z",
+  "lastChecked": "2026-11-13T17:11:27.496Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -22,6 +22,15 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "42914833",
+      "title": "Disseminated cryptococcosis with extensive cutaneous involvement in a previously healthy adult: a rare case report.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42914833/",
+      "authors": "Ferreira JM, Silva RM, Leite VRB",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42898351",
       "title": "Capitate Reconstruction Using the Second Metatarsal Head for Avascular Necrosis: Long-Term Clinical Validation of an Anatomically Matched Osteochondral Reconstruction.",
       "date": "2027 Jan",
@@ -37,6 +46,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42831063/",
       "authors": "Allen BE, Pawlak N, Smith AC",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42822153",
+      "title": "Case Report : Streptococcus equi subspecies zooepidemicus bacteriemia and spondylodiscitis following direct contact with a horse.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42822153/",
+      "authors": "Potvin É, De Rico L",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -73,6 +91,42 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43023183",
+      "title": "Epivascular glia mimicking drusen in dry age related macular degeneration.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43023183/",
+      "authors": "Bagheri S, Quarta A, Abbasgholizadeh R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43022765",
+      "title": "Non-traumatic vitreous base detachment in an adult with neurofibromatosis type 1: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43022765/",
+      "authors": "Asadigandomani H, Chen X, Stewart JM",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43022680",
+      "title": "Pimitespib-associated retinal dysfunction with longitudinal multimodal imaging and electroretinography: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43022680/",
+      "authors": "Mashiko N, Aoki S, Saeki Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43022299",
+      "title": "Spontaneous complete regression of a cervical macrocystic lymphatic malformation following infection in an infant: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43022299/",
+      "authors": "Mohamed L, Kassimi M, Essamoud S",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -163,60 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42999753/",
       "authors": "Almutairi A, AlHarbi H, Aldayhani A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42999720",
-      "title": "A rare neurovascular complication of Lemierre syndrome: Skull base pachymeningitis and reversible inflammatory stenosis of the petrous-cavernous internal carotid artery.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42999720/",
-      "authors": "Tsioukaka GD, Traoré WM, Ye DDL",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42997830",
-      "title": "Joubert syndrome with hippocampal malrotation in a 4-month-old male: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42997830/",
-      "authors": "Rutta CA, Kamuzora MCK",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42997629",
-      "title": "Fetal goiter treated antenatally with intra-amniotic thyroxine: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42997629/",
-      "authors": "Fux-Otta C, Chedraui P, Testa G",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42996579",
-      "title": "Delayed recognition of primary thyroid lymphoma with progressive thyroid enlargement and cardiopulmonary symptoms.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42996579/",
-      "authors": "Tovar YE, Elsayed AG, Pragani M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42996503",
-      "title": "Pediatric gigantism due to ectopic growth hormone releasing hormone secretion from a metastatic bronchial neuroendocrine tumor.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42996503/",
-      "authors": "Vidal-Ostos De Lara F, Sanchis-Pascual D, Hernández-Rienda L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42991644",
-      "title": "Isolated vocal cord aspergillosis in an immunocompetent 60-year-old woman: A rare case report with radiological findings.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42991644/",
-      "authors": "Belkacemi A, Bellarbi S, Jbara A",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
