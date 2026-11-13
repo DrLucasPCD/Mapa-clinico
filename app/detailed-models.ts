@@ -121,10 +121,12 @@ function loadGlb(loader: GLTFLoader, url: string): Promise<THREE.Group> {
 export async function loadDetailedModel(
   variant: DetailedModelVariant,
   onProgress?: (message: string) => void,
+  only?: readonly string[],
 ): Promise<THREE.Group> {
   onProgress?.('Carregando catálogo anatômico…');
   const manifest = await loadDetailedManifest(variant);
-  const files = [...new Set(manifest.organs.map((organ) => organ.mesh_file))].sort();
+  const organs = only ? manifest.organs.filter(organ => only.includes(organ.organ_id)) : manifest.organs;
+  const files = [...new Set(organs.map((organ) => organ.mesh_file))].sort();
   const draco = new DRACOLoader();
   draco.setDecoderPath(`${BASE}draco/`);
   draco.preload();
@@ -166,7 +168,7 @@ export async function loadDetailedModel(
   };
 
   const missing: string[] = [];
-  for (const organ of manifest.organs) {
+  for (const organ of organs) {
     const source = nodes.get(`${organ.mesh_file}\0${organ.node}`)
       ?? nodes.get(`${organ.mesh_file}\0${THREE.PropertyBinding.sanitizeNodeName(organ.node)}`);
     if (!source) {

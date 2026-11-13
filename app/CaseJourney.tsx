@@ -3,7 +3,7 @@ import { cases, type ClinicalCase } from './content';
 
 type RecordEntry = { answer?: number; wrong?: boolean; note?: string; completed?: boolean };
 type Records = Record<string, RecordEntry>;
-const STORAGE_KEY = 'mapa-case-journey-v1';
+export const CASE_JOURNEY_STORAGE_KEY = 'mapa-case-journey-v1';
 const focusByCase: Record<string, { structure: string; task: string; imageTask: string }> = {
   '2604': {
     structure: 'Encéfalo e território da artéria cerebral média direita',
@@ -33,9 +33,9 @@ const atlasTargets: Record<string, { id: string; label: string; role: string }[]
   ],
 };
 
-function readRecords(): Records {
+export function readCaseJourneyRecords(): Records {
   try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    const value = JSON.parse(localStorage.getItem(CASE_JOURNEY_STORAGE_KEY) || '{}');
     if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
     return Object.fromEntries(Object.entries(value).filter(([id, entry]) => /^\d+$/.test(id) && entry && typeof entry === 'object' && !Array.isArray(entry)).map(([id, raw]) => {
       const entry = raw as RecordEntry;
@@ -46,7 +46,7 @@ function readRecords(): Records {
 
 export default function CaseJourney({ item, period, onLocate, onSelectCase, onFocusStructure }: { item: ClinicalCase; period: number; onLocate: () => void; onSelectCase: (id: string) => void; onFocusStructure: (id: string, label: string) => void }) {
   const [step, setStep] = useState(0);
-  const [records, setRecords] = useState<Records>(readRecords);
+  const [records, setRecords] = useState<Records>(readCaseJourneyRecords);
   const [answer, setAnswer] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
@@ -57,13 +57,13 @@ export default function CaseJourney({ item, period, onLocate, onSelectCase, onFo
   const save = (entry: Partial<RecordEntry>) => {
     setRecords(previous => {
       const next = { ...previous, [item.id]: { ...previous[item.id], ...entry } };
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch { /* armazenamento opcional */ }
+      try { localStorage.setItem(CASE_JOURNEY_STORAGE_KEY, JSON.stringify(next)); } catch { /* armazenamento opcional */ }
       return next;
     });
   };
   const answerQuestion = (choice: number) => {
     setAnswer(choice);
-    save({ answer: choice, wrong: Boolean(current.wrong || choice !== item.correct), completed: true });
+    save({ answer: choice, wrong: choice !== item.correct, completed: true });
   };
   const reviewItems = Object.entries(records).filter(([, entry]) => entry.wrong || entry.note?.trim());
 

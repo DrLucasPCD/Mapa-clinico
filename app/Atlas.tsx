@@ -24,6 +24,7 @@ export type AtlasProps = {
   pathology: string;
   hidden: string[];
   reset: number;
+  organs?: readonly string[];
   /** Optional exploration modes used by the compact atlas controls. */
   transparency?: number;
   layoutMode?: 'assembled' | 'layers' | 'grid';
@@ -90,7 +91,7 @@ export default function Atlas(props: AtlasProps) {
       anklePivots = new Map<'left' | 'right', T.Vector3>();
     const match = (m: T.Mesh, id: string) =>
       detailedStructureMatches(m, id);
-    loadDetailedModel(props.modelVariant ?? 'male', (message) => { if (!disposed) setStatus(message); }).then(
+    loadDetailedModel(props.modelVariant ?? 'male', (message) => { if (!disposed) setStatus(message); }, props.organs).then(
       (group) => {
         if (disposed) { group.traverse((o) => { if (o instanceof T.Mesh) { o.geometry.dispose(); (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose()); } }); return; }
         model = group;
@@ -382,7 +383,7 @@ export default function Atlas(props: AtlasProps) {
           ? p.layoutMode
           : p.region && p.region !== 'all'
             ? p.region
-            : '';
+            : p.organs ? 'selected-organs' : '';
       const focus = [focusKey, p.region, p.layoutMode, p.system].join(':');
       if (focus !== lastFocus) {
         if (focus) {
@@ -436,6 +437,6 @@ export default function Atlas(props: AtlasProps) {
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [props.modelVariant]);
+  }, [props.modelVariant, props.organs]);
   return <><AtlasSurface surfaceRef={host} status={status} />{props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane} · posição relativa {Math.round(props.slice.fraction * 100)}%<br/>Referência didática, sem registro ao paciente</div>}</>;
 }

@@ -12,6 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import type { ClinicalCase } from './content';
 import './panels.css';
 import { imageIntegration } from './image-integration';
+import { CASE_JOURNEY_STORAGE_KEY, readCaseJourneyRecords } from './CaseJourney';
 export default function CaseStudy({
   item,
   period,
@@ -22,8 +23,10 @@ export default function CaseStudy({
   onNextCase,
   onOpenDicom,
   onSequenceSlice,
+  openQuestion = false,
 }: {
   onOpenDicom?: () => void;
+  openQuestion?: boolean;
   item: ClinicalCase;
   period: number;
   onLocate: () => void;
@@ -39,7 +42,7 @@ export default function CaseStudy({
     [brightness, setBrightness] = useState(100),
     [answer, setAnswer] = useState<number | null>(null),
     [reveal, setReveal] = useState(false),
-    [panel, setPanel] = useState<'cases' | 'images' | 'questions'>('cases'),
+    [panel, setPanel] = useState<'cases' | 'images' | 'questions'>(openQuestion ? 'questions' : 'cases'),
     [fullscreen, setFullscreen] = useState(false);
   const radiograph = useRef<HTMLDivElement>(null);
   const wheelDistance = useRef(0);
@@ -277,7 +280,14 @@ export default function CaseStudy({
                       : 'incorrect'
                     : ''
                 }
-                onClick={() => setAnswer(i)}
+                onClick={() => {
+                    setAnswer(i);
+                    try {
+                      const records = readCaseJourneyRecords();
+                      records[item.id] = { ...records[item.id], answer: i, wrong: i !== item.correct, completed: true };
+                      localStorage.setItem(CASE_JOURNEY_STORAGE_KEY, JSON.stringify(records));
+                    } catch { /* A questão continua disponível sem armazenamento local. */ }
+                  }}
               >
                 {String.fromCharCode(65 + i)}. {o}
                 {answer === i && i === item.correct && <Check size={16} />}

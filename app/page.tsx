@@ -23,6 +23,7 @@ import {
   Search,
   ScanLine,
   SlidersHorizontal,
+  Stethoscope,
   X,
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -54,8 +55,15 @@ import { ultrasoundZones, type UltrasoundCaseId, type UltrasoundZone } from './u
 import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
+import { CaseLibrary, ReviewCenter, VisualTraining, kneeOrgans, type ReviewDestination, type VisualId } from './TrainingViews';
+import type { LibraryCase } from './training-data';
+import type { PathStep } from './study-paths';
+import './training.css';
 
 const Atlas = lazy(() => import('./Atlas'));
+const EcgLab = lazy(() => import('./EcgLab'));
+const Plantao = lazy(() => import('./Plantao'));
+type Workspace = 'case' | 'study' | 'imaging' | 'ultrasound' | 'paths' | 'plantao' | 'ecg' | 'visual' | 'library' | 'review';
 const systems = [
   ['all', 'Corpo integrado', Layers],
   ['skeletal', 'Esquelético', Bone],
@@ -80,7 +88,15 @@ type Drawer =
   | null;
 
 export default function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging' | 'ultrasound' | 'paths'>('imaging');
+  const [workspaceMode, setWorkspaceMode] = useState<Workspace>('imaging');
+  const [pathEntry, setPathEntry] = useState<{ id: string; step: PathStep; question?: number }>();
+  const [studyTopic, setStudyTopic] = useState<string>();
+  const [openCaseQuestion, setOpenCaseQuestion] = useState(false);
+  const [plantaoAtlas, setPlantaoAtlas] = useState(false);
+  const [plantaoDecision, setPlantaoDecision] = useState<number>();
+  const [visualTask, setVisualTask] = useState<VisualId>('us-shadow');
+  const [visualSelection, setVisualSelection] = useState('');
+  const [visualRevision, setVisualRevision] = useState(0);
   const [ultrasoundCase, setUltrasoundCase] = useState<UltrasoundCaseId>('148000');
   const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
   const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
@@ -88,7 +104,7 @@ export default function App() {
   useEffect(() => { let active = true; setModelCatalog([]); getDetailedCatalog(modelVariant).then(items => { if (active) setModelCatalog(items); }).catch(console.error); return () => { active = false; }; }, [modelVariant]);
   const [slice, setSlice] = useState<AtlasSlice | null>(null);
   const [atlasPoint, setAtlasPoint] = useState<{ point: number[]; label: string; variant: 'male' | 'female' } | null>(null);
-  const openStudy = (tab: typeof studyTab) => { setStudyTab(tab); setWorkspaceMode('study'); setMobileNav(false); };
+  const openStudy = (tab: typeof studyTab, topic?: string) => { setStudyTopic(topic); setStudyTab(tab); setWorkspaceMode('study'); setMobileNav(false); };
   const changeModel = (variant: typeof modelVariant) => { setModelVariant(variant); resetAtlas(); setSelected(''); setName(variant === 'female' ? 'Tronco feminino' : 'Corpo masculino'); };
   const [lessonTab, setLessonTab] = useState<'anatomia' | 'funcao' | 'clinica'>(
     'anatomia',
@@ -130,6 +146,9 @@ export default function App() {
     activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
   const showAtlasSlice = workspaceMode === 'imaging' ||
     (workspaceMode === 'case' && activeCase.acquisition?.kind === 'ordered-series');
+  const atlasExercise = workspaceMode === 'visual' && visualTask === 'atlas-patella';
+  const trainingWorkspace = ['plantao', 'ecg', 'visual', 'library', 'review'].includes(workspaceMode);
+  const showAtlas = !trainingWorkspace || atlasExercise || (workspaceMode === 'plantao' && plantaoAtlas);
   const syncSequenceSlice = useCallback((index: number, total: number) => {
     const next = atlasSliceForSequence(activeCase.acquisition, index, total);
     if (next) setSlice(next);
@@ -159,6 +178,8 @@ export default function App() {
     setPathology('');
   };
   const focusStructure = (id: string, title: string) => {
+    setWorkspaceMode(current => ['ecg', 'library', 'review', 'visual'].includes(current) ? 'case' : current);
+    if (workspaceMode === 'plantao') setPlantaoAtlas(true);
     choose(id, title);
     setSystem('all');
     setRegion('all');
@@ -179,7 +200,8 @@ export default function App() {
     setPathology('');
     setHidden([]);
   }, []);
-  const openPaths = () => {
+  const openPaths = (entry?: typeof pathEntry) => {
+    setPathEntry(entry);
     setWorkspaceMode('paths');
     setMobileNav(false);
     setDrawer(null);
@@ -218,6 +240,41 @@ export default function App() {
     setHidden([]);
     setSystem('all');
   };
+  function openTraining(view: 'plantao' | 'ecg' | 'visual' | 'library' | 'review', decision?: number) {
+    if (view === 'plantao') {
+      setPlantaoAtlas(false);
+      setPlantaoDecision(decision);
+    }
+    setWorkspaceMode(view);
+    setMobileNav(false);
+    setDrawer(null);
+    window.scrollTo({ top: 0 });
+  }
+  function openCase(id?: string, question = false) {
+    if (id) setCaseId(id);
+    setOpenCaseQuestion(question);
+    setWorkspaceMode('case');
+    setMobileNav(false);
+  }
+  function chooseVisual(id: VisualId) {
+    setVisualTask(id);
+    setVisualSelection('');
+    setVisualRevision(value => value + 1);
+  }
+  function openLibraryCase(item: LibraryCase) {
+    if (item.destination === 'case') openCase(item.id);
+    else if (item.destination === 'path') openPaths({ id: 'joelho', step: 'Caso' });
+    else openUltrasound(item.id);
+  }
+  function openReview(destination: ReviewDestination) {
+    switch (destination.kind) {
+      case 'path': openPaths({ id: destination.id, step: 'Questões', question: destination.question }); break;
+      case 'case': openCase(destination.id, true); break;
+      case 'curriculum': openStudy('quiz', destination.id); break;
+      case 'visual': chooseVisual(destination.id); openTraining('visual'); break;
+      case 'plantao': openTraining('plantao', destination.decision); break;
+    }
+  }
   const locate = () => {
     setRegion('all');
     setLayoutMode('assembled');
@@ -326,22 +383,28 @@ export default function App() {
             className="nav-item"
             onClick={() => {
               resetAtlas();
-              setWorkspaceMode('case');
+              openCase();
               setMobileNav(false);
             }}
           >
             <Home /> Início
           </button>
           <p>EXPLORAR</p>
-          <button className={`nav-item ${workspaceMode === 'paths' ? 'active' : ''}`} onClick={openPaths}>
+          <button className={`nav-item ${workspaceMode === 'paths' ? 'active' : ''}`} onClick={() => openPaths()}>
             <BookOpen /> Percursos de estudo
           </button>
-          <button className="nav-item" onClick={resetAtlas}>
+          <button className={`nav-item ${workspaceMode === 'plantao' ? 'active' : ''}`} onClick={() => openTraining('plantao')}><Stethoscope /> Modo Plantão</button>
+          <button className={`nav-item ${workspaceMode === 'ecg' ? 'active' : ''}`} onClick={() => openTraining('ecg')}><Activity /> Laboratório de ECG</button>
+          <button className={`nav-item ${workspaceMode === 'visual' ? 'active' : ''}`} onClick={() => openTraining('visual')}><Focus /> Treino visual</button>
+          <button className={`nav-item ${workspaceMode === 'review' ? 'active' : ''}`} onClick={() => openTraining('review')}><ListChecks /> Minha revisão</button>
+          <button className={`nav-item ${workspaceMode === 'library' ? 'active' : ''}`} onClick={() => openTraining('library')}><Library /> Biblioteca de casos</button>
+          <button className="nav-item" onClick={() => { if (!showAtlas || atlasExercise) openCase(); resetAtlas(); }}>
             <Layers /> Corpo integrado
           </button>
           <button
             className="nav-item"
             onClick={() => {
+              if (!showAtlas || atlasExercise) openCase();
               setRegion('all');
               setLayoutMode('assembled');
             }}
@@ -350,7 +413,7 @@ export default function App() {
           </button>
           <button
             className={`nav-item ${workspaceMode === 'case' ? 'active' : ''}`}
-            onClick={() => { setWorkspaceMode('case'); setMobileNav(false); }}
+            onClick={() => openCase()}
           >
             <Focus /> Casos clínicos
           </button>
@@ -363,11 +426,11 @@ export default function App() {
           <button className={`nav-item ${workspaceMode === 'ultrasound' ? 'active' : ''}`} onClick={() => openUltrasound()}><Activity /> Simulador USG</button>
           <button
             className="nav-item"
-            onClick={() =>
-              document
-                .querySelector('.publication-column')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => {
+              openCase();
+              requestAnimationFrame(() =>
+                document.querySelector('.publication-column')?.scrollIntoView({ behavior: 'smooth' }));
+            }}
           >
             <Newspaper /> Publicações
           </button>
@@ -391,6 +454,7 @@ export default function App() {
                 'nav-item system-link ' + (system === id ? 'selected' : '')
               }
               onClick={() => {
+                if (!showAtlas || atlasExercise) openCase();
                 setSystem(id);
                 setIsolate(false);
               }}
@@ -410,8 +474,17 @@ export default function App() {
             </span>
           </button>
         </aside>
-        <main className={`dashboard-stage workspace-${workspaceMode}`}>
-          <section className="atlas-column" id="atlas-panel">
+        <main className={`dashboard-stage workspace-${workspaceMode}${trainingWorkspace ? ' workspace-training' : ''}${showAtlas && trainingWorkspace ? ' training-with-atlas' : ''}`}>
+          {showAtlas && (atlasExercise ? (
+            <section className="atlas-column training-atlas" id="atlas-panel" aria-label="Modelo do joelho sem rótulos">
+              <Suspense fallback={<p className="atlas-loading">Preparando joelho 3D…</p>}>
+                <Atlas key="training-knee" modelVariant="male" organs={kneeOrgans} selected={visualSelection}
+                  system="all" isolate={false} explode={0} cut={0} plane="axial" beating={false} motion={0}
+                  pathology="" hidden={[]} reset={visualRevision} onSelect={setVisualSelection} />
+              </Suspense>
+              <div className="atlas-help"><Move3D /> Arraste para girar · clique para selecionar</div>
+            </section>
+          ) : <section className="atlas-column" id="atlas-panel">
             <div className="column-tabs">
               <button className="active" onClick={() => setDrawer(null)}>
                 Atlas 3D
@@ -681,24 +754,39 @@ export default function App() {
               <button className={modelVariant === 'female' ? 'active' : ''} onClick={() => changeModel('female')}>Feminino · tronco</button>
             </div>
             {workspaceMode === 'paths' && <a className="path-atlas-return" href="#study-paths">Voltar ao percurso</a>}
-          </section>
+          </section>)}
           <section className="case-column">
             <nav className="workspace-tabs" aria-label="Área de estudo">
-              <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={openPaths}>Percursos</button>
-              <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => setWorkspaceMode('case')}>Casos</button>
+              <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={() => openPaths()}>Percursos</button>
+              <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => openCase()}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
               <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
+              <button className={workspaceMode === 'plantao' ? 'active' : ''} onClick={() => openTraining('plantao')}>Plantão</button>
+              <button className={workspaceMode === 'ecg' ? 'active' : ''} onClick={() => openTraining('ecg')}>ECG</button>
             </nav>
-            {workspaceMode === 'paths' ? (
-              <StudyPaths period={n} modelVariant={modelVariant} onLocate={focusPathStructure}
+            {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}><EcgLab /></Suspense>
+            : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
+              <Plantao key={plantaoDecision ?? 'full'} reviewDecision={plantaoDecision}
+                onAtlas={() => {
+                  setPlantaoAtlas(true);
+                  focusPathStructure('gallbladder', 'Vesícula biliar');
+                  requestAnimationFrame(() => document.getElementById('atlas-panel')?.scrollIntoView({ block: 'nearest' }));
+                }} onUltrasound={() => openUltrasound('27525')} />
+            </Suspense>
+            : workspaceMode === 'visual' ? <VisualTraining taskId={visualTask} setTaskId={chooseVisual}
+                atlasSelection={visualSelection} selectAtlas={setVisualSelection} atlasRevision={visualRevision} />
+            : workspaceMode === 'library' ? <CaseLibrary onOpen={openLibraryCase} />
+            : workspaceMode === 'review' ? <ReviewCenter onOpen={openReview} />
+            : workspaceMode === 'paths' ? (
+              <StudyPaths period={n} entry={pathEntry} modelVariant={modelVariant} onLocate={focusPathStructure}
                 onOpenBiliary={() => openUltrasound('27525')}
-                onOpenStroke={() => { setCaseId('2604'); setWorkspaceMode('case'); }} />
-            ) : workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator key={ultrasoundCase} initialCaseId={ultrasoundCase} onSelectRegion={syncUltrasoundRegion} /> : <>
+                onOpenStroke={() => openCase('2604')} />
+            ) : workspaceMode === 'study' ? <StudyPanel key={studyTopic ?? 'browse'} initialTopic={studyTopic} modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator key={ultrasoundCase} initialCaseId={ultrasoundCase} onSelectRegion={syncUltrasoundRegion} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}
-                onValueChange={(v) => setCaseId(v || cases[0].id)}
+                onValueChange={(v) => openCase(v || cases[0].id)}
               >
                 <SelectTrigger>
                   <SelectValue>{activeCase.title}</SelectValue>
@@ -713,15 +801,16 @@ export default function App() {
               </Select>
             </div>
             <CaseStudy
-              key={caseId}
+              key={caseId + String(openCaseQuestion)}
               item={activeCase}
               period={n}
+              openQuestion={openCaseQuestion}
               onOpenDicom={() => { setWorkspaceMode('imaging'); resetAtlas(); }}
               onLocate={locate}
               caseIndex={cases.indexOf(activeCase)}
               caseCount={cases.length}
               onPreviousCase={() =>
-                setCaseId(
+                openCase(
                   cases[
                     (cases.indexOf(activeCase) + cases.length - 1) %
                       cases.length
@@ -729,7 +818,7 @@ export default function App() {
                 )
               }
               onNextCase={() =>
-                setCaseId(
+                openCase(
                   cases[(cases.indexOf(activeCase) + 1) % cases.length].id,
                 )
               }
@@ -853,8 +942,7 @@ export default function App() {
                 currentName={name}
                 currentLesson={lesson}
                 selectCase={(id) => {
-                  setCaseId(id);
-                  setWorkspaceMode('case');
+                  openCase(id);
                   setDrawer(null);
                   setTimeout(
                     () =>

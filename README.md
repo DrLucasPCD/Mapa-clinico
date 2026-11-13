@@ -4,6 +4,10 @@
 
 ## O que esta versão faz
 
+- **Laboratório de ECG** com coração 3D, vetor sincronizado ao traçado, 12 derivações convencionais e derivações direitas e posteriores. Inclui nove padrões sintéticos, velocidade e ganho ajustáveis, reprodução com pausa, guia de leitura e diagrama hexaxial arrastável com cálculo do eixo frontal.
+- **Modo Plantão** com um atendimento sobre dor no hipocôndrio direito nos modos guiado e prova. A história simulada é complementada por imagens reais de ultrassonografia do caso Radiopaedia rID 27525.
+- **Treino visual** para localizar estruturas no joelho 3D e marcar regiões de interesse em TC, RM e USG. **Minha revisão** reúne pendências dos percursos, questões, plantão, casos e treino visual no navegador. A **Biblioteca de casos** filtra seis casos por tema, sistema, modalidade e dificuldade.
+
 - Simulador de USG com escolha entre três casos verificados da Radiopaedia, transdutor arrastável sobre um mapa anterior do tronco, rotação para alternar vistas documentadas, ganho visual e destaque do órgão no Atlas. As imagens são quadros reais selecionados, não uma simulação ultrassonográfica volumétrica. A busca por outros casos abre a Radiopaedia; a API pública atual não fornece download automático de casos para importação arbitrária.
 - Exercícios no simulador de USG para localizar a vesícula biliar e o rim direito, com dicas após tentativas e opção de mover a sonda pelas setas do teclado.
 

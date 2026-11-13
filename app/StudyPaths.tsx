@@ -12,7 +12,7 @@ function firstUnanswered(progress: PathProgress, id?: string) {
   return Math.max(0, path?.questions.findIndex(q => !records?.[q.id]) ?? 0);
 }
 
-function readProgress(): PathProgress {
+export function readPathProgress(): PathProgress {
   const result: PathProgress = { paths: {} };
   try {
     const stored = JSON.parse(localStorage.getItem(storageKey) ?? 'null');
@@ -41,18 +41,26 @@ function readProgress(): PathProgress {
 
 type Props = {
   period: number;
+  entry?: { id: string; step: PathStep; question?: number };
   modelVariant: 'male' | 'female';
   onLocate: (id: string, label: string, maleOnly?: boolean) => void;
   onOpenBiliary: () => void;
   onOpenStroke: () => void;
 };
 
-export default function StudyPaths({ period, modelVariant, onLocate, onOpenBiliary, onOpenStroke }: Props) {
-  const [progress, setProgress] = useState(readProgress);
+export default function StudyPaths({ period, entry, modelVariant, onLocate, onOpenBiliary, onOpenStroke }: Props) {
+  const [progress, setProgress] = useState(() => {
+    const saved = readPathProgress();
+    if (entry) {
+      saved.lastPath = entry.id;
+      saved.paths[entry.id] = { ...saved.paths[entry.id], step: entry.step };
+    }
+    return saved;
+  });
   const [imageIndex, setImageIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
-  const [questionIndex, setQuestionIndex] = useState(() => firstUnanswered(progress, progress.lastPath));
-  const [reviewing, setReviewing] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(() => entry?.question ?? firstUnanswered(progress, progress.lastPath));
+  const [reviewing, setReviewing] = useState(entry?.question !== undefined);
   const [answer, setAnswer] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
   const [now, setNow] = useState(Date.now);
