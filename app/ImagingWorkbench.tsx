@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { groupDicomSeries, parseDicomFiles, sliceFraction, type DicomSeries, type Plane, type Region } from './dicom';
 import type { ClinicalCase } from './content';
-import { atlasSliceForSequence } from './image-integration';
+import { atlasSliceForSequence, imageIntegration } from './image-integration';
 import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
@@ -53,6 +53,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const automaticLoad = useRef<AbortController | null>(null);
   const current = series[seriesIndex];
   const selected = current?.slices[sliceIndex];
+  const previewIntegration = casePreview ? imageIntegration(casePreview.images, casePreview.acquisition) : null;
   const eligibility = useMemo(() => current ? validateCtSegmentation(current) : {eligible:false}, [current]);
   useEffect(() => {
     worker.current?.terminate(); worker.current = null;
@@ -243,7 +244,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
         <span className="preview-orientation top">A</span><span className="preview-orientation bottom">P</span><span className="preview-orientation left">R</span><span className="preview-orientation right">L</span>
       </div>
       <div className="preview-filmstrip">{casePreview.images.map((image, index) => <button key={image.src} className={index === previewIndex ? 'active' : ''} onClick={() => setPreviewIndex(index)} aria-label={`Abrir ${image.label}`}><img src={image.src} alt="" /><span>{index + 1}</span></button>)}</div>
-      <div className="preview-notice"><strong>{casePreview.acquisition?.kind === 'ordered-series' ? 'Pilha navegável sincronizada ao Atlas' : 'Imagem clínica de referência'}</strong><p>{casePreview.acquisition?.kind === 'ordered-series' ? 'Role sobre a imagem para percorrer os cortes. O plano do Atlas acompanha a posição relativa desta pilha renderizada.' : 'Esta seleção não contém geometria suficiente para reconstrução multiplanar.'}</p><a href={casePreview.source} target="_blank" rel="noreferrer">Abrir caso original ↗</a></div>
+      {previewIntegration && <div className="preview-notice"><strong>{previewIntegration.title}</strong><p>{previewIntegration.description}</p><a href={casePreview.source} target="_blank" rel="noreferrer">Abrir caso original ↗</a></div>}
     </section>}
     {!current && casePreview && onLocateCase && onSelectCase && onFocusStructure && <CaseJourney item={casePreview} period={period} onLocate={onLocateCase} onSelectCase={onSelectCase} onFocusStructure={onFocusStructure} />}
     {!current && !casePreview && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
@@ -270,13 +271,16 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
       </Suspense>
       <section className="overlay-panel" aria-label="Sobreposição anatômica registrada">
         <h3>Sobreposição neurovascular 3D</h3>
+        <p role="status" className="plane-status">
+          {registration ? 'Atlas com ajuste aproximado por marcos no visor espacial.'
+            : 'Atlas em referência anatômica. Adicione marcos para ajustar a sobreposição.'}
+        </p>
         <p>Escolha as estruturas do atlas que aparecerão no espaço do exame após o ajuste por marcos.</p>
         <div className="overlay-systems">
           {([['nervous', 'Encéfalo e nervos'], ['cardiovascular', 'Artérias e vasos'], ['skeletal', 'Esqueleto']] as const).map(([system, label]) => <button key={system} aria-pressed={overlaySystems.includes(system)} className={overlaySystems.includes(system) ? `active ${system}` : ''} onClick={() => toggleOverlay(system)}>{label}</button>)}
         </div>
         <label>Recorte anatômico<select aria-label="Plano de recorte da sobreposição" value={overlayClip} onChange={(event) => setOverlayClip(event.target.value as OverlayClip)}><option value="volume">Volume completo</option><option value="axial">Lâmina axial</option><option value="coronal">Lâmina coronal</option><option value="sagital">Lâmina sagital</option></select></label>
-        {!registration && <p className="plane-status">Adicione três ou mais pares de marcos abaixo e faça o ajuste para posicionar a anatomia no exame.</p>}
-        {registration && <p className="plane-status">Sobreposição ativa. Mova a mira nas reconstruções para deslocar o recorte selecionado.</p>}
+        {registration && <p className="plane-status">Mova a mira nas reconstruções para deslocar o recorte selecionado.</p>}
       </section>
       <details className="advanced-imaging"><summary>Superfície de alta densidade · ajustes</summary><div className="segmentation-panel">
         <h3>Superfície 3D da TC</h3>

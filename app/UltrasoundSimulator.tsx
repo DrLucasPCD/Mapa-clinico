@@ -2,16 +2,41 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ultrasoundCaseOrder, ultrasoundCases, ultrasoundViewFor, ultrasoundZoneAt, ultrasoundZoneOrder, ultrasoundZones, type ProbePosition, type UltrasoundCaseId, type UltrasoundZone } from './ultrasound-data';
 import './ultrasound.css';
 
-type Props = { onSelectRegion?: (zone: UltrasoundZone) => void };
+type Props = { onSelectRegion?: (zone: UltrasoundZone) => void; initialCaseId?: UltrasoundCaseId };
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
-export default function UltrasoundSimulator({ onSelectRegion }: Props) {
-  const [caseId, setCaseId] = useState<UltrasoundCaseId>('148000');
-  const [position, setPosition] = useState<ProbePosition>({ x: .38, y: .35 });
+const exercises = [
+  {
+    label: 'Encontrar a vesícula biliar',
+    caseId: '27525',
+    target: 'gallbladder',
+    hint: 'Procure abaixo do fígado, do lado direito do paciente.',
+    feedback: 'Você encontrou a janela da vesícula. Gire a alça para comparar as duas vistas dos cálculos.',
+  },
+  {
+    label: 'Encontrar o rim direito',
+    caseId: '148000',
+    target: 'right-kidney',
+    hint: 'Procure na lateral direita do paciente, abaixo da região hepática.',
+    feedback: 'Você encontrou a janela do rim direito. Compare o córtex com o seio renal mais ecogênico.',
+  },
+] as const;
+
+function startingPosition(id: UltrasoundCaseId): ProbePosition {
+  const first = ultrasoundZoneOrder.find(zone => ultrasoundCases[id].zoneViews[zone]?.length) ?? 'liver';
+  const { x, y } = ultrasoundZones[first];
+  return { x, y };
+}
+
+export default function UltrasoundSimulator({ onSelectRegion, initialCaseId = '148000' }: Props) {
+  const [caseId, setCaseId] = useState(initialCaseId);
+  const [position, setPosition] = useState(() => startingPosition(initialCaseId));
   const [angle, setAngle] = useState(-35);
   const [gain, setGain] = useState(100);
   const [showGuide, setShowGuide] = useState(true);
   const [dragging, setDragging] = useState(false);
+  const [exercise, setExercise] = useState<(typeof exercises)[number] | null>(null);
+  const [feedback, setFeedback] = useState<'correct' | 'retry' | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const rotating = useRef(false);
   const zone = useMemo(() => ultrasoundZoneAt(position, caseId), [position, caseId]);
@@ -28,6 +53,14 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
     if (!bounds) return;
     setPosition({ x: clamp((clientX - bounds.left) / bounds.width), y: clamp((clientY - bounds.top) / bounds.height) });
   };
+  const moveProbeWithKeys = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) return;
+    const directions = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    const direction = directions[event.key as keyof typeof directions];
+    if (!Array.isArray(direction)) return;
+    event.preventDefault();
+    setPosition(({ x, y }) => ({ x: clamp(x + direction[0] * .04), y: clamp(y + direction[1] * .04) }));
+  };
   const rotateProbe = (clientX: number, clientY: number) => {
     const bounds = bodyRef.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -41,19 +74,41 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
     setAngle(-35);
   };
   const chooseCase = (id: UltrasoundCaseId) => {
+    setExercise(null);
+    setFeedback(null);
     setCaseId(id);
-    const first = ultrasoundZoneOrder.find(zoneId => ultrasoundCases[id].zoneViews[zoneId]?.length)!;
-    setPosition({ x: ultrasoundZones[first].x, y: ultrasoundZones[first].y });
+    setPosition(startingPosition(id));
     setAngle(-35);
   };
+  const startExercise = (task: (typeof exercises)[number]) => {
+    setExercise(task);
+    setFeedback(null);
+    setCaseId(task.caseId);
+    setPosition({ x: .5, y: .21 });
+    setAngle(-35);
+  };
+  const showRegions = showGuide && (!exercise || feedback === 'correct');
 
   return <section className="ultrasound-simulator" aria-label="Simulador de ultrassom">
     <header className="us-heading"><div><small>SIMULADOR INTERATIVO · USG</small><h2>Explore a janela acústica</h2><p>Arraste sobre o abdome para posicionar a sonda. Gire a alça do próprio transdutor para comparar as vistas disponíveis do caso.</p></div><span>USG · modo B</span></header>
-    <div className="us-case-picker"><label>Escolha um caso real da Radiopaedia<select aria-label="Caso de ultrassom da Radiopaedia" value={caseId} onChange={event => chooseCase(event.target.value as UltrasoundCaseId)}>{ultrasoundCaseOrder.map(id => <option key={id} value={id}>{ultrasoundCases[id].title} · rID {id}</option>)}</select></label><p>{clinicalCase.description} <a href={clinicalCase.source} target="_blank" rel="noreferrer">Ver caso ↗</a></p><a className="us-search-link" href="https://radiopaedia.org/search?scope=cases&q=ultrasound" target="_blank" rel="noreferrer">Buscar mais casos na Radiopaedia ↗</a></div>
+    {!exercise && <div className="us-case-picker"><label>Escolha um caso real da Radiopaedia<select aria-label="Caso de ultrassom da Radiopaedia" value={caseId} onChange={event => chooseCase(event.target.value as UltrasoundCaseId)}>{ultrasoundCaseOrder.map(id => <option key={id} value={id}>{ultrasoundCases[id].title} · rID {id}</option>)}</select></label><p>{clinicalCase.description} <a href={clinicalCase.source} target="_blank" rel="noreferrer">Ver caso ↗</a></p><a className="us-search-link" href="https://radiopaedia.org/search?scope=cases&q=ultrasound" target="_blank" rel="noreferrer">Buscar mais casos na Radiopaedia ↗</a></div>}
+    <section className="us-exercises" aria-label="Exercícios de localização">
+      <h3>{exercise?.label ?? 'Treine a localização'}</h3>
+      {exercise ? <>
+        <p>Posicione a sonda no tronco e confira a janela escolhida.</p>
+        <div className="us-region-list">
+          <button type="button" onClick={() => setFeedback(zone === exercise.target ? 'correct' : 'retry')}>Conferir posição</button>
+          <button type="button" onClick={() => chooseCase(caseId)}>Voltar à exploração livre</button>
+        </div>
+        {feedback && <p role="status">{feedback === 'correct' ? exercise.feedback : `Ajuste a posição. ${exercise.hint}`}</p>}
+      </> : <div className="us-region-list">
+        {exercises.map(task => <button type="button" key={task.target} onClick={() => startExercise(task)}>{task.label}</button>)}
+      </div>}
+    </section>
     <div className="us-layout">
       <div className="us-body-panel">
         <div className="us-panel-title"><strong>Superfície do corpo</strong><small>Vista anterior · direita do paciente à esquerda</small></div>
-        <div className="us-body-map" ref={bodyRef} onPointerDown={event => { if ((event.target as HTMLElement).closest('button')) return; event.currentTarget.setPointerCapture(event.pointerId); setDragging(true); moveProbe(event.clientX, event.clientY); }} onPointerMove={event => { if (dragging) moveProbe(event.clientX, event.clientY); }} onPointerUp={() => setDragging(false)} onPointerCancel={() => setDragging(false)}>
+        <div className="us-body-map" ref={bodyRef} role="group" tabIndex={0} aria-label="Posição do transdutor. Use as setas para mover a sonda." onKeyDown={moveProbeWithKeys} onPointerDown={event => { if ((event.target as HTMLElement).closest('button')) return; event.currentTarget.setPointerCapture(event.pointerId); setDragging(true); moveProbe(event.clientX, event.clientY); }} onPointerMove={event => { if (dragging) moveProbe(event.clientX, event.clientY); }} onPointerUp={() => setDragging(false)} onPointerCancel={() => setDragging(false)}>
           <svg viewBox="0 0 300 440" role="img" aria-label="Esquema anterior do tronco humano" preserveAspectRatio="none">
             <defs><linearGradient id="usBodyGradient" x1="0" x2="1"><stop stopColor="#214456"/><stop offset=".5" stopColor="#467086"/><stop offset="1" stopColor="#214456"/></linearGradient></defs>
             <path d="M113 15 Q150 2 187 15 L206 46 Q228 56 247 76 Q261 100 262 140 L263 271 Q247 337 215 393 L194 429 L106 429 L85 393 Q53 337 37 271 L38 140 Q39 100 53 76 Q72 56 94 46 Z" fill="url(#usBodyGradient)" stroke="#79a7b4" strokeWidth="2"/>
@@ -61,7 +116,7 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
             <path d="M90 149 Q108 126 155 154 Q159 193 128 213 Q102 201 86 177Z" fill="#607b55" opacity=".52"/><path d="M101 250 Q120 232 138 246 Q145 278 123 309 Q101 296 101 250Z" fill="#7297a1" opacity=".38"/><path d="M164 250 Q182 232 200 246 Q207 278 185 309 Q163 296 164 250Z" fill="#7297a1" opacity=".38"/><ellipse cx="150" cy="346" rx="28" ry="22" fill="#7297a1" opacity=".38"/>
             <text x="42" y="126" fill="#bdd9dd" fontSize="10">D</text><text x="249" y="126" fill="#bdd9dd" fontSize="10">E</text>
           </svg>
-          {showGuide && ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button key={id} type="button" className={'us-hotspot ' + (zone === id ? 'active' : '')} style={{ left: `${ultrasoundZones[id].x * 100}%`, top: `${ultrasoundZones[id].y * 100}%` }} onClick={() => chooseZone(id)} title={ultrasoundZones[id].label} aria-label={`Selecionar ${ultrasoundZones[id].label}`}>{ultrasoundZones[id].label}</button>)}
+          {showRegions && ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button key={id} type="button" className={'us-hotspot ' + (zone === id ? 'active' : '')} style={{ left: `${ultrasoundZones[id].x * 100}%`, top: `${ultrasoundZones[id].y * 100}%` }} onClick={() => chooseZone(id)} title={ultrasoundZones[id].label} aria-label={`Selecionar ${ultrasoundZones[id].label}`}>{ultrasoundZones[id].label}</button>)}
           <div className={'us-probe ' + (dragging ? 'dragging' : '')} style={{ left: `${position.x * 100}%`, top: `${position.y * 100}%`, transform: `translate(-50%, -48%) rotate(${angle}deg)` }}><button className="us-probe-handle" type="button" role="slider" aria-label="Girar transdutor" aria-valuemin={-90} aria-valuemax={90} aria-valuenow={angle} aria-valuetext={`${angle} graus; ${availableViews.length} ${availableViews.length === 1 ? 'vista real' : 'vistas reais'} nesta região`} title="Arraste para girar o transdutor" onPointerDown={event => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); rotating.current = true; rotateProbe(event.clientX, event.clientY); }} onPointerMove={event => { if (rotating.current) rotateProbe(event.clientX, event.clientY); }} onPointerUp={() => { rotating.current = false; }} onPointerCancel={() => { rotating.current = false; }} onKeyDown={event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') { event.preventDefault(); setAngle(value => Math.max(-90, value - 10)); } if (event.key === 'ArrowRight' || event.key === 'ArrowUp') { event.preventDefault(); setAngle(value => Math.min(90, value + 10)); } if (event.key === 'Home') { event.preventDefault(); setAngle(-90); } if (event.key === 'End') { event.preventDefault(); setAngle(90); } }}><span>↻</span></button><span className="us-probe-head"/><span className="us-beam"/></div>
         </div>
         <div className="us-map-help">Arraste no tronco para mover · arraste a alça ↻ para girar · {angle}°</div>
@@ -69,7 +124,7 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
       <div className="us-image-panel">
         <div className="us-panel-title"><strong>{region?.label ?? 'Fora da janela documentada'}</strong><small>{view?.label ?? 'Posicione o transdutor sobre uma região marcada'}</small></div>
         <div className="us-image-stage" aria-live="polite">
-          {view ? <img key={view.image} src={view.image} alt={`Imagem real de ultrassom: ${view.organ}. ${view.label}. Caso da Radiopaedia por ${view.author}.`} style={{ filter: `brightness(${gain}%)` }} /> : <div className="us-no-window"><span>◉</span><strong>Sem imagem nesta posição</strong><p>Desloque o transdutor até uma das regiões marcadas.</p></div>}
+          {view ? <img key={view.image} src={view.image} alt={`Imagem real de ultrassom: ${view.organ}. ${view.label}. Caso da Radiopaedia por ${view.author}.`} style={{ filter: `brightness(${gain}%)` }} /> : <div className="us-no-window"><span>◉</span><strong>Sem imagem nesta posição</strong><p>Desloque o transdutor para explorar outra região do tronco.</p></div>}
           <div className="us-scan-label">{view ? `US · ${view.organ.toUpperCase()} · VISTA ${viewNumber}/${availableViews.length}` : 'US · SEM JANELA'}</div>
         </div>
         <div className="us-image-caption">{view ? <><strong>{view.label}</strong><p>{view.note}</p>{availableViews.length === 1 && <p className="us-view-limit">Só há uma imagem dessa região neste caso. Girar a sonda não cria outro corte real.</p>}<span>Caso cortesia de {view.author}, <a href="https://radiopaedia.org" target="_blank" rel="noreferrer">Radiopaedia.org</a>, <a href={view.source} target="_blank" rel="noreferrer">rID {caseId} ↗</a></span></> : <p>A posição indicada é um guia anatômico esquemático.</p>}</div>
@@ -77,9 +132,9 @@ export default function UltrasoundSimulator({ onSelectRegion }: Props) {
     </div>
     <div className="us-controls">
       <label>Ganho da imagem <strong>{gain}%</strong><input type="range" min="65" max="140" value={gain} onChange={event => setGain(Number(event.target.value))} aria-label="Ganho da imagem" /></label>
-      <button type="button" onClick={() => setShowGuide(value => !value)} aria-pressed={showGuide}>{showGuide ? 'Ocultar' : 'Mostrar'} regiões</button>
+      {(!exercise || feedback === 'correct') && <button type="button" onClick={() => setShowGuide(value => !value)} aria-pressed={showGuide}>{showGuide ? 'Ocultar' : 'Mostrar'} regiões</button>}
     </div>
-    <div className="us-region-list" aria-label="Regiões para explorar">{ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button type="button" key={id} className={zone === id ? 'active' : ''} onClick={() => chooseZone(id)}>{ultrasoundZones[id].label}</button>)}</div>
+    {(!exercise || feedback === 'correct') && <div className="us-region-list" aria-label="Regiões para explorar">{ultrasoundZoneOrder.filter(id => clinicalCase.zoneViews[id]?.length).map(id => <button type="button" key={id} className={zone === id ? 'active' : ''} onClick={() => chooseZone(id)}>{ultrasoundZones[id].label}</button>)}</div>}
     <p className="us-limitation"><strong>Como funciona:</strong> escolha um dos casos verificados acima. A rotação na alça do transdutor alterna as vistas reais disponíveis daquele órgão. A troca é discreta: as imagens não são uma sequência contínua nem têm coordenadas do transdutor. O ganho altera apenas a visualização.</p>
   </section>;
 }

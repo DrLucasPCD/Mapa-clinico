@@ -5,10 +5,12 @@
 ## O que esta versão faz
 
 - Simulador de USG com escolha entre três casos verificados da Radiopaedia, transdutor arrastável sobre um mapa anterior do tronco, rotação para alternar vistas documentadas, ganho visual e destaque do órgão no Atlas. As imagens são quadros reais selecionados, não uma simulação ultrassonográfica volumétrica. A busca por outros casos abre a Radiopaedia; a API pública atual não fornece download automático de casos para importação arbitrária.
+- Exercícios no simulador de USG para localizar a vesícula biliar e o rim direito, com dicas após tentativas e opção de mover a sonda pelas setas do teclado.
 
 - Painel integrado com atlas, caso clínico e publicações visíveis simultaneamente, adaptado para telas menores.
 - A abertura mostra o Atlas ao lado de uma pilha FLAIR real da Radiopaedia, com 24 miniaturas e navegação por scroll; a posição relativa do corte acompanha o plano didático do Atlas.
 - Trilha guiada nos três casos: apresentação, estruturas reais do Atlas relacionadas ao caso, leitura da imagem e pergunta com explicação. Respostas erradas e notas ficam em uma revisão local no dispositivo.
+- Em **Percursos de estudo**, três temas conectam estruturas no Atlas, imagens reais, casos da Radiopaedia e questões comentadas. O foco muda conforme o período. Etapas e respostas são salvas no navegador, com revisão imediata de erros e intervalos crescentes após acertos. A RM de referência do joelho vem de outro exame, com autoria e licença indicadas junto da imagem.
 - Atlas masculino detalhado (Z-Anatomy / BodyParts3D), com 3.478 estruturas, e atlas feminino real do NIH Human Reference Atlas com 264 estruturas do tronco/pelve; busca no catálogo, rotação, zoom, foco por duplo clique, isolamento, ocultação, transparência, afastamento e planos de corte.
 - Roteiro com 33 temas e 33 questões autorais a partir de seis materiais acadêmicos, além de árvore de 92 vasos com 70 correspondências no modelo masculino. Os ramos ausentes são identificados como conteúdo didático sem malha correspondente.
 - Leitor local de séries DICOM CT/MR nativas, monocromáticas e de um quadro por arquivo, com navegação física de cortes, scroll sobre as vistas axial/coronal/sagital e plano relativo no Atlas. Após o ajuste por marcos, encéfalo/nervos, vasos e esqueleto podem ser sobrepostos no espaço do exame como volume ou lâmina ligada à mira MPR. Arquivos importados não são enviados nem persistidos.

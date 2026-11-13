@@ -26,6 +26,10 @@ O simulador só alterna entre imagens documentadas do caso escolhido. A posiçã
 
 O painel “Download Image” da própria fonte informa que o uso não requer pedido de permissão quando é não comercial, atribui o contribuinte e não reivindica copyright do material. As condições completas prevalecem: https://radiopaedia.org/licence e https://radiopaedia.org/terms . Regime de referência: CC BY-NC-SA 3.0 — https://creativecommons.org/licenses/by-nc-sa/3.0/ . Não se concede sublicença comercial. Sínteses em português dos casos são adaptações didáticas, preservadas sob as condições aplicáveis à fonte. As imagens não foram alteradas; brilho, contraste e zoom são transformações temporárias da interface. Não foram copiadas séries completas ou feito scraping periódico.
 
+## RM de referência do joelho
+
+**Hellerhoff**, _VKB-Riss MRT T1 PDW sag.jpg_, Wikimedia Commons. Imagem redistribuída sem alterações sob CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/ . Fonte: https://commons.wikimedia.org/wiki/File:VKB-Riss_MRT_T1_PDW_sag.jpg . Arquivo: `public/study/knee-mri-hellerhoff.jpg`. Exame distinto do caso Radiopaedia rID 54521, vinculado como leitura complementar.
+
 ## Voz
 
 Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX e o executável Piper não são redistribuídos no aplicativo; os WAVs estão em `public/audio`.

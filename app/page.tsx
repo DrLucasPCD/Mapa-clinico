@@ -47,9 +47,10 @@ import './dashboard.css';
 import './workspace.css';
 import './study.css';
 import StudyPanel from './StudyPanel';
+import StudyPaths from './StudyPaths';
 import ImagingWorkbench from './ImagingWorkbench';
 import UltrasoundSimulator from './UltrasoundSimulator';
-import { ultrasoundZones, type UltrasoundZone } from './ultrasound-data';
+import { ultrasoundZones, type UltrasoundCaseId, type UltrasoundZone } from './ultrasound-data';
 import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
@@ -79,7 +80,8 @@ type Drawer =
   | null;
 
 export default function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging' | 'ultrasound'>('imaging');
+  const [workspaceMode, setWorkspaceMode] = useState<'case' | 'study' | 'imaging' | 'ultrasound' | 'paths'>('imaging');
+  const [ultrasoundCase, setUltrasoundCase] = useState<UltrasoundCaseId>('148000');
   const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
   const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
   const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
@@ -177,6 +179,30 @@ export default function App() {
     setPathology('');
     setHidden([]);
   }, []);
+  const openPaths = () => {
+    setWorkspaceMode('paths');
+    setMobileNav(false);
+    setDrawer(null);
+    requestAnimationFrame(() => document.getElementById('study-paths')?.scrollIntoView({ block: 'nearest' }));
+  };
+  const openUltrasound = (id: UltrasoundCaseId = '148000') => {
+    setUltrasoundCase(id);
+    setWorkspaceMode('ultrasound');
+    setMobileNav(false);
+    setSlice(null);
+  };
+  const focusPathStructure = (id: string, label: string, maleOnly?: boolean) => {
+    if (maleOnly) setModelVariant('male');
+    setExplode(0);
+    setTransparency(0);
+    setMotion(0);
+    setAnkleMotion(0);
+    setAnkleInversion(0);
+    focusStructure(id, label);
+    if (window.matchMedia('(max-width: 850px)').matches) {
+      document.getElementById('atlas-panel')?.scrollIntoView({ block: 'start' });
+    }
+  };
   const resetAtlas = () => {
     setReset((v) => v + 1);
     setIsolate(false);
@@ -307,6 +333,9 @@ export default function App() {
             <Home /> Início
           </button>
           <p>EXPLORAR</p>
+          <button className={`nav-item ${workspaceMode === 'paths' ? 'active' : ''}`} onClick={openPaths}>
+            <BookOpen /> Percursos de estudo
+          </button>
           <button className="nav-item" onClick={resetAtlas}>
             <Layers /> Corpo integrado
           </button>
@@ -331,7 +360,7 @@ export default function App() {
           >
             <ScanLine /> Imagens (TC, RM, RX)
           </button>
-          <button className={`nav-item ${workspaceMode === 'ultrasound' ? 'active' : ''}`} onClick={() => { setWorkspaceMode('ultrasound'); setMobileNav(false); setSlice(null); }}><Activity /> Simulador USG</button>
+          <button className={`nav-item ${workspaceMode === 'ultrasound' ? 'active' : ''}`} onClick={() => openUltrasound()}><Activity /> Simulador USG</button>
           <button
             className="nav-item"
             onClick={() =>
@@ -382,7 +411,7 @@ export default function App() {
           </button>
         </aside>
         <main className={`dashboard-stage workspace-${workspaceMode}`}>
-          <section className="atlas-column">
+          <section className="atlas-column" id="atlas-panel">
             <div className="column-tabs">
               <button className="active" onClick={() => setDrawer(null)}>
                 Atlas 3D
@@ -651,15 +680,21 @@ export default function App() {
               <button className={modelVariant === 'male' ? 'active' : ''} onClick={() => changeModel('male')}>Masculino</button>
               <button className={modelVariant === 'female' ? 'active' : ''} onClick={() => changeModel('female')}>Feminino · tronco</button>
             </div>
+            {workspaceMode === 'paths' && <a className="path-atlas-return" href="#study-paths">Voltar ao percurso</a>}
           </section>
           <section className="case-column">
             <nav className="workspace-tabs" aria-label="Área de estudo">
+              <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={openPaths}>Percursos</button>
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => setWorkspaceMode('case')}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
-              <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => { setWorkspaceMode('ultrasound'); setSlice(null); }}>USG</button>
+              <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
             </nav>
-            {workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator onSelectRegion={syncUltrasoundRegion} /> : <>
+            {workspaceMode === 'paths' ? (
+              <StudyPaths period={n} modelVariant={modelVariant} onLocate={focusPathStructure}
+                onOpenBiliary={() => openUltrasound('27525')}
+                onOpenStroke={() => { setCaseId('2604'); setWorkspaceMode('case'); }} />
+            ) : workspaceMode === 'study' ? <StudyPanel modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator key={ultrasoundCase} initialCaseId={ultrasoundCase} onSelectRegion={syncUltrasoundRegion} /> : <>
             <div className="case-switcher">
               <Select
                 value={caseId}

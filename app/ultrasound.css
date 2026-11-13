@@ -8,3 +8,8 @@
 .us-image-caption span{font-size:10px;color:#b1d0d7}
 .us-probe-handle{box-sizing:border-box;width:30px;height:56px;display:flex;align-items:flex-start;justify-content:center;padding:3px 0 0;pointer-events:auto;touch-action:none;cursor:grab;background:linear-gradient(90deg,#cfeced,#547b8a 49%,#e2f7f6);border:2px solid #fff;border-radius:15px 15px 4px 4px;color:#023543;font-size:17px;font-weight:700;box-shadow:0 0 0 3px #09c5cf66}.us-probe-handle:active{cursor:grabbing}.us-probe-handle:focus-visible{outline:3px solid #ffd867;outline-offset:4px}.us-probe-head{width:41px}.us-controls{grid-template-columns:1fr auto}.us-view-limit{color:#ffe4a4!important;font-weight:600}
 @media(max-width:700px){.us-controls{grid-template-columns:1fr}}
+.us-exercises{background:#fff;border:1px solid #d1e3e8;border-radius:8px;padding:10px 12px;margin:10px 0;color:#214b5e}
+.us-exercises h3{margin:0 0 6px;font-size:14px}
+.us-exercises p{margin:6px 0;font-size:12px;line-height:1.5}
+.us-exercises [role="status"]{color:#006b75;font-weight:600}
+.us-body-map:focus-visible{outline:2px solid #39cbce;outline-offset:-3px}
