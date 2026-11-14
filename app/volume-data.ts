@@ -1,6 +1,5 @@
 import type { DicomSeries } from './dicom';
-import { sliceFrame } from './patient-geometry';
-import { mprGeometry } from './mpr';
+import { regularVolumeGrid } from './mpr';
 
 type Point = [number, number, number];
 export type VolumeData = {
@@ -31,10 +30,9 @@ export function makeVolumeData(
   series: DicomSeries,
   cap = 144,
 ): VolumeData | null {
-  const grid = mprGeometry(series);
-  const first = series.slices[0];
-  const frame = first && sliceFrame(first);
-  if (!grid || !frame) return null;
+  const grid = regularVolumeGrid(series);
+  if (!grid) return null;
+  const { frame } = grid;
   const source: Point = [series.columns, series.rows, series.slices.length];
   const dims = source.map((n) => Math.min(n, cap)) as Point;
   const [width, height, depth] = dims;

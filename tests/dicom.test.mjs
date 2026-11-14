@@ -14,7 +14,7 @@ async function loadDicom() {
   const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } }).outputText;
   return import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
 }
-const { parseDicomImage, groupDicomSeries, planeForSlice, sliceFraction } = await loadDicom();
+const { parseDicomFrames, parseDicomImage, groupDicomSeries, planeForSlice, sliceFraction } = await loadDicom();
 
 const enc = new TextEncoder();
 const u16 = (n) => Uint8Array.of(n & 255, n >> 8);
@@ -75,4 +75,65 @@ test('rejects unsupported RGB, multiframe, and compressed inputs', () => {
   assert.throws(() => parseDicomImage(dicom({ samples: 3 })), /RGB|monocromáticas/);
   assert.throws(() => parseDicomImage(dicom({ frames: '2' })), /multiframes/);
   assert.throws(() => parseDicomImage(dicom({ syntax: '1.2.840.10008.1.2.4.50' })), /comprimida/);
+});
+
+function sequence(group, tag, ...items) {
+  return element(group,tag,'SQ',join(...items.map(data=>join(u16(0xfffe),u16(0xe000),u32(data.length),data))));
+}
+
+function fd(...values) {
+  const data=new Uint8Array(values.length*8);
+  values.forEach((value,index)=>new DataView(data.buffer).setFloat64(index*8,value,true));
+  return data;
+}
+
+function enhancedMr() {
+  const shared=sequence(0x5200,0x9229,join(
+    sequence(0x28,0x9110,element(0x28,0x0030,'DS','2\\2')),
+    sequence(0x20,0x9116,element(0x20,0x0037,'DS','1\\0\\0\\0\\1\\0')),
+    sequence(0x18,0x9197,element(0x18,0x9090,'FD',fd(0,0,1))),
+    sequence(0x40,0x9096,join(
+      sequence(0x40,0x08ea,join(element(8,0x0100,'SH','m/s'),element(8,0x0102,'SH','UCUM'))),
+      element(0x40,0x9216,'SS',u16(-1000)),
+      element(0x40,0x9211,'SS',u16(1000)),
+      element(0x40,0x9224,'FD',fd(0)),
+      element(0x40,0x9225,'FD',fd(.001)),
+    )),
+  ));
+  const perFrame=sequence(0x5200,0x9230,...[500,100].flatMap(time=>[9,3].map(z=>join(
+    sequence(0x18,0x9118,join(element(0x20,0x9153,'FD',fd(time)),element(0x18,0x9070,'FD',fd(900)))),
+    sequence(0x20,0x9113,element(0x20,0x0032,'DS','0\\0\\'+z)),
+  ))));
+  const prefix=dicom({frames:'4'}).slice(0,-20);
+  const header=Buffer.from(prefix);
+  const modalityTag=header.indexOf(Buffer.from([8,0,96,0,67,83,2,0]));
+  header.write('MR',modalityTag+8);
+  const pixels=join(...[10,20,-100,200].flatMap(value=>Array.from({length:4},()=>u16(value))));
+  return join(header,shared,perFrame,element(0x7fe0,0x10,'OW',pixels));
+}
+
+test('Enhanced MR uses per-frame position and timing, and calibrates raw signed velocity',()=>{
+  const frames=parseDicomFrames(enhancedMr());
+  assert.equal(frames.length,4);
+  assert.deepEqual(frames.map(frame=>frame.pixels[0]),[10,20,-100,200]);
+  const phases=groupDicomSeries(frames).sort((a,b)=>a.cardiacPhase.value-b.cardiacPhase.value);
+  assert.deepEqual(phases.map(phase=>phase.cardiacPhase.value),[100,500]);
+  assert.deepEqual(phases.map(phase=>phase.slices.map(slice=>slice.position[2])),[[3,9],[3,9]]);
+  assert.equal(frames[0].cardiac.rrMs,900);
+  assert.deepEqual(frames[0].velocity,{direction:[0,0,1],first:-1000,last:1000,slopeCmPerSec:.1,interceptCmPerSec:0});
+});
+
+test('decodes signed RLE Lossless data by assembling the high and low byte planes',()=>{
+  const syntax='1.2.840.10008.1.2.5';
+  const prefix=dicom({syntax}).slice(0,-20);
+  const header=new Uint8Array(64);
+  const view=new DataView(header.buffer);
+  view.setUint32(0,2,true);
+  view.setUint32(4,64,true);
+  view.setUint32(8,70,true);
+  const bytes=join(header,Uint8Array.of(1,0xff,0,1,0,1),Uint8Array.of(1,0xff,0,1,0xe8,0));
+  const delimiter=(tag,n)=>join(u16(0xfffe),u16(tag),u32(n));
+  const encoded=join(u16(0x7fe0),u16(0x0010),enc.encode('OB'),u16(0),u32(0xffffffff),
+    delimiter(0xe000,0),delimiter(0xe000,bytes.length),bytes,delimiter(0xe0dd,0));
+  assert.deepEqual([...parseDicomImage(join(prefix,encoded)).pixels],[-1,0,232,256]);
 });

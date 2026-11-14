@@ -77,3 +77,50 @@ test('irregular geometry has no renderable volume', () => {
   series.slices[4].position[2] += 2;
   assert.equal(makeVolumeData(series), null);
 });
+
+const { createCardiacCine, cinePhaseAt, cineCandidates, regionFlow } =
+  await import(
+    await moduleUrl('cardiac-cine', { 'patient-geometry': frame, mpr })
+  );
+
+test('cine uses the recorded time sequence and rejects a moved phase grid', () => {
+  const phases = [400, 0, 200].map((value) => {
+    const phase = phantom();
+    return {
+      ...phase,
+      id: String(value),
+      acquisitionId: 'test',
+      cardiacPhase: { kind: 'trigger', value },
+      slices: phase.slices.map((slice) => ({
+        ...slice,
+        cardiac: { rrMs: 1000 },
+      })),
+    };
+  });
+  const cine = createCardiacCine(cineCandidates(phases, phases[0], false));
+  assert.deepEqual(cine.frameStartsMs, [0, 200, 400]);
+  assert.equal(cinePhaseAt(cine, 399), 1);
+  assert.equal(cinePhaseAt(cine, 405), 2);
+  assert.equal(cinePhaseAt(cine, 1001), 0);
+  assert.ok(cine.hasVolume);
+  phases[2].slices[3].position[0] += 4;
+  assert.equal(createCardiacCine(phases), null);
+});
+
+test('integrates calibrated signed velocity using pixel area and requires through-plane encoding', () => {
+  const slice = phantom('MR').slices[0];
+  slice.pixels.fill(-100);
+  slice.velocity = {
+    direction: [0, 0, 1],
+    slopeCmPerSec: 0.5,
+    interceptCmPerSec: 0,
+    first: -500,
+    last: 500,
+  };
+  assert.equal(regionFlow(slice, 1, 2, 2.1), -9);
+  slice.velocity.direction = [0, 1, 0];
+  assert.equal(regionFlow(slice, 1, 2, 2.1), null);
+  slice.velocity.direction = [0, 0, 1];
+  slice.padding = [-100, -100];
+  assert.equal(regionFlow(slice, 1, 2, 2.1), null);
+});

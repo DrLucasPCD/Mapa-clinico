@@ -17,12 +17,11 @@ function labelForNormal(normal: readonly number[]): Plane {
 
 const axisAligned = (direction: readonly number[]) => Math.max(...direction.map(Math.abs)) > .9999;
 
-/** Validates a rectilinear stack suitable for orthogonal nearest-neighbour MPR. */
-export function mprGeometry(series: DicomSeries): MprGeometry | null {
+/** A regular orthogonal voxel grid may be oblique to the patient axes. */
+export function regularVolumeGrid(series: DicomSeries) {
   if (series.slices.length < 2) return null;
   const first = sliceFrame(series.slices[0]);
   if (!first) return null;
-  if (![first.rowDirection, first.columnDirection, first.normal].every(axisAligned)) return null;
   let step = 0;
   for (let index = 0; index < series.slices.length; index++) {
     const current = sliceFrame(series.slices[index]);
@@ -38,7 +37,16 @@ export function mprGeometry(series: DicomSeries): MprGeometry | null {
     if (index === 1) step = projected;
     else if (Math.abs(projected - step) > Math.max(1e-3, step * 1e-3)) return null;
   }
-  return { stepMm: step, labels: {
+  return { stepMm: step, frame: first };
+}
+
+/** Patient-aligned axial, coronal and sagittal views. */
+export function mprGeometry(series: DicomSeries): MprGeometry | null {
+  const grid = regularVolumeGrid(series);
+  if (!grid) return null;
+  const { stepMm, frame: first } = grid;
+  if (![first.rowDirection, first.columnDirection, first.normal].every(axisAligned)) return null;
+  return { stepMm, labels: {
     source: labelForNormal(first.normal),
     row: labelForNormal(first.columnDirection),
     column: labelForNormal(first.rowDirection),

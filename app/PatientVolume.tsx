@@ -2,7 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { DicomSeries, Plane } from './dicom';
-import { makeVolumeData, volumeCoordinate } from './volume-data';
+import {
+  makeVolumeData,
+  volumeCoordinate,
+  type VolumeData,
+} from './volume-data';
 import { mprGeometry } from './mpr';
 
 const vertex = `
@@ -87,6 +91,7 @@ type Props = {
   center: number;
   width: number;
   onReference?: () => void;
+  activePhase?: DicomSeries;
 };
 
 export default function PatientVolume({
@@ -95,8 +100,28 @@ export default function PatientVolume({
   center,
   width,
   onReference,
+  activePhase,
 }: Props) {
-  const data = useMemo(() => makeVolumeData(series), [series]);
+  const isCine = activePhase !== undefined;
+  const data = useMemo(
+    () => makeVolumeData(series, isCine ? 96 : 144),
+    [series, isCine],
+  );
+  const cache = useMemo(() => new Map<DicomSeries, VolumeData>(), [series]);
+  const image = useMemo(() => {
+    if (!data || !activePhase || activePhase === series) return data;
+    const existing = cache.get(activePhase);
+    if (existing) return existing;
+    const phase = makeVolumeData(activePhase, 96);
+    if (!phase) return data;
+    const maxCached = Math.max(
+      1,
+      Math.floor((32 * 1024 * 1024) / phase.values.byteLength),
+    );
+    if (cache.size >= maxCached) cache.delete(cache.keys().next().value!);
+    cache.set(activePhase, phase);
+    return phase;
+  }, [activePhase, cache, data, series]);
   const frame = useMemo(() => mprGeometry(series), [series]);
   const host = useRef<HTMLDivElement>(null);
   const [preset, setPreset] = useState<CtPreset>('angiographic');
@@ -119,6 +144,7 @@ export default function PatientVolume({
     cut: 0,
     invert,
     reset,
+    image,
   });
   settings.current = {
     point,
@@ -127,6 +153,7 @@ export default function PatientVolume({
     cut: clip === 'full' ? -1 : axes.indexOf(clip),
     invert,
     reset,
+    image,
   };
 
   useEffect(() => {
@@ -231,6 +258,7 @@ export default function PatientVolume({
     const sample = new T.Vector3();
     let frameId: number;
     let previous = undefined as typeof settings.current | undefined;
+    let textureImage = data;
     function draw() {
       const state = settings.current;
       if (resetKey !== state.reset) {
@@ -247,6 +275,14 @@ export default function PatientVolume({
       dirty = false;
       previous = state;
       const { uniforms } = material;
+      if (state.image && textureImage !== state.image) {
+        textureImage = state.image;
+        texture.image.data = state.image.values;
+        texture.needsUpdate = true;
+        uniforms.minimum.value = state.image.minimum;
+        uniforms.intensitySpan.value =
+          state.image.maximum - state.image.minimum;
+      }
       uniforms.eye.value.copy(
         eye.copy(camera.position).applyMatrix4(inverse).addScalar(0.5),
       );
@@ -336,19 +372,21 @@ export default function PatientVolume({
             onChange={(e) => setDensity(e.target.valueAsNumber)}
           />
         </label>
-        <label>
-          Recortar na mira
-          <select
-            value={clip}
-            onChange={(e) => setClip(e.target.value as 'full' | Plane)}
-          >
-            <option value="full">Volume completo</option>
-            <option value="axial">Axial</option>
-            <option value="coronal">Coronal</option>
-            <option value="sagital">Sagital</option>
-          </select>
-        </label>
-        {clip !== 'full' && (
+        {frame && (
+          <label>
+            Recortar na mira
+            <select
+              value={clip}
+              onChange={(e) => setClip(e.target.value as 'full' | Plane)}
+            >
+              <option value="full">Volume completo</option>
+              <option value="axial">Axial</option>
+              <option value="coronal">Coronal</option>
+              <option value="sagital">Sagital</option>
+            </select>
+          </label>
+        )}
+        {frame && clip !== 'full' && (
           <label>
             <input
               type="checkbox"
@@ -366,9 +404,9 @@ export default function PatientVolume({
         )}
       </div>
       <p className="plane-status">
-        Volume estático calculado a partir dos voxels da série. A mira e o
-        recorte usam as coordenadas do exame. As cores representam intensidade;
-        não identificam lesões automaticamente.
+        {isCine
+          ? 'Cada volume usa os voxels da fase selecionada no exame.'
+          : 'Volume estático calculado a partir dos voxels da série. A mira e o recorte usam as coordenadas do exame. As cores representam intensidade.'}
       </p>
     </section>
   );

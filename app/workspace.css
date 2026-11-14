@@ -75,3 +75,48 @@
 .volume-controls select { color:#e7f9fa; background:#12303e; border:1px solid #426372; border-radius:5px; padding:3px 5px; max-width:100%; }
 .volume-controls input[type=range] { flex:1; min-width:74px; accent-color:#54dce0; }
 .patient-volume .plane-status { color:#bed4df; font-size:10px; }
+
+.cine-entry {
+  padding: 8px 10px;
+  margin: 8px 0;
+  border: 1px solid #bfd8e2;
+  border-radius: 8px;
+  background: #eaf5f8;
+}
+.cine-entry button, .cardiac-cine button, .cardiac-cine select {
+  border-radius: 6px;
+  border: 1px solid #386270;
+  padding: 6px 8px;
+  background: #13333f;
+  color: #e3f7fb;
+}
+.cine-entry button { background: #006f79; }
+.cine-entry summary { cursor: pointer; color: #215768; }
+.cine-entry details label { display: flex; align-items: center; gap: 6px; }
+.cardiac-cine {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 9px;
+  background: #0a2230;
+  border: 1px solid #214b5e;
+  color: #e6f6fb;
+}
+.cardiac-cine h3, .cardiac-cine h4 { margin: 0; color: #e6f6fb; }
+.cardiac-cine > p, .cardiac-cine header > p, .cardiac-cine .cine-flow p { color: #b9dae4; }
+.cine-transport { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 9px 0; }
+.cine-transport label { font-size: 11px; min-width: 120px; flex: 1; }
+.cine-transport label:last-child { min-width: auto; flex: 0 0 auto; }
+.cardiac-cine button[aria-pressed=true], .cardiac-cine .cine-play { background: #006f79; border-color: #32b0b7; }
+.cine-transport button { display: grid; place-items: center; }
+.cine-transport input, .cine-slice input, .cine-flow input { width: 100%; accent-color: #56e2df; }
+.cine-slice, .cine-flow label { font-size: 12px; margin-bottom: 10px; display: block; }
+.cine-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.cine-images { display: grid; min-width: 0; justify-content: stretch; }
+.cine-images.with-volume { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.cine-source { width: 100%; align-self: start; justify-self: center; }
+.cine-source canvas { width: 100%; display: block; border-radius: 7px; background: #071722; cursor: crosshair; }
+.cine-flow { border-top: 1px solid #305363; margin-top: 10px; padding-top: 10px; }
+.cine-curve { display: block; width: 100%; max-height: 130px; background: #102e3b; border-radius: 6px; }
+.cine-negative { color: #5acbfb; }
+.cine-positive { color: #ffa67c; }
+@media (max-width: 570px) { .cine-images.with-volume { grid-template-columns: 1fr; } }

@@ -5,6 +5,7 @@ import { cursorFromView, mprGeometry, viewDimensions, viewVoxel, type MprCursor,
 
 type Props = {
   spatialView?: ReactNode;
+  keepCursor?: boolean;
   series: DicomSeries;
   slice: number;
   windowCenter: number;
@@ -17,7 +18,7 @@ type Props = {
 const views: MprView[] = ['source', 'row', 'column'];
 type MeasurePoint = { view: MprView; index: number; x: number; y: number; patient: number[] };
 
-export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView }: Props) {
+export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView, keepCursor = false }: Props) {
   const safeSlice = Math.max(0, Math.min(series.slices.length - 1, slice));
   const geometry = useMemo(() => mprGeometry(series), [series]);
   const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice });
@@ -25,7 +26,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
   const [measureStart, setMeasureStart] = useState<MeasurePoint | null>(null);
   const [measureEnd, setMeasureEnd] = useState<MeasurePoint | null>(null);
   const canvases = useRef<Record<MprView, HTMLCanvasElement | null>>({ source: null, row: null, column: null });
-  useEffect(() => { setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice }); setMeasureStart(null); setMeasureEnd(null); }, [series]);
+  useEffect(() => { if (keepCursor) return; setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice }); setMeasureStart(null); setMeasureEnd(null); }, [series, keepCursor]);
   useEffect(() => setCursor(current => current.slice === safeSlice ? current : { ...current, slice: safeSlice }), [safeSlice]);
   useEffect(() => {
     const frame = series.slices[cursor.slice];
