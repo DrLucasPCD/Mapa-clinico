@@ -311,7 +311,7 @@ export default function App() {
   );
 
   return (
-    <div className="clinical-dashboard" id="top">
+    <div className={`clinical-dashboard${workspaceMode === 'ecg' ? ' clinical-ecg' : ''}`} id="top">
       <header className="clinical-topbar">
         <button
           className="mobile-menu"
@@ -379,6 +379,27 @@ export default function App() {
       </header>
       <div className="clinical-body">
         <aside className={'clinical-sidebar ' + (mobileNav ? 'open' : '')}>
+          {workspaceMode === 'ecg' ? <>
+            <button className="nav-item ecg-nav-overview" onClick={() => { resetAtlas(); openCase(); }}><Home /> Visão geral</button>
+            <button className="nav-item" onClick={() => { setDrawer('lists'); setMobileNav(false); }}><Bookmark /> Minhas listas</button>
+            <h2 className="ecg-nav-heading"><Layers /> Explorar o corpo</h2>
+            <button className="nav-item" onClick={() => { resetAtlas(); openCase(); }}><Layers /> Atlas 3D</button>
+            <button className="nav-item" onClick={() => { setWorkspaceMode('imaging'); setMobileNav(false); resetAtlas(); }}><ScanLine /> Imagens (TC, RM, RX)</button>
+            <button className="nav-item" onClick={() => openUltrasound()}><Activity /> Simulador de USG</button>
+            <h2 className="ecg-nav-heading"><Stethoscope /> Casos clínicos</h2>
+            <button className="nav-item" onClick={() => openTraining('library')}><Library /> Biblioteca de casos</button>
+            <button className="nav-item" onClick={() => openTraining('plantao')}><Stethoscope /> Modo Plantão</button>
+            <button className="nav-item" onClick={() => openPaths()}><BookOpen /> Percursos de estudo</button>
+            <h2 className="ecg-nav-heading"><Activity /> Laboratórios</h2>
+            <button className="nav-item active" aria-current="page" onClick={() => setMobileNav(false)}><Activity /> Laboratório de ECG</button>
+            <button className="nav-item" onClick={() => openTraining('visual')}><Focus /> Treino visual</button>
+            <h2 className="ecg-nav-heading"><BookOpen /> Minha aprendizagem</h2>
+            <button className="nav-item" onClick={() => openTraining('review')}><ListChecks /> Minha revisão</button>
+            <button className="nav-item" onClick={() => { setDrawer('maps'); setMobileNav(false); }}><Brain /> Mapas mentais</button>
+            <button className="nav-item" onClick={() => { setDrawer('protocols'); setMobileNav(false); }}><Library /> Protocolos e diretrizes</button>
+            <button className="nav-item" onClick={() => openStudy('quiz')}><ListChecks /> Simulados e questões</button>
+            <button className="nav-item" onClick={() => openStudy('topics')}><BookOpen /> Roteiro da faculdade</button>
+          </> : <>
           <button
             className="nav-item"
             onClick={() => {
@@ -394,7 +415,7 @@ export default function App() {
             <BookOpen /> Percursos de estudo
           </button>
           <button className={`nav-item ${workspaceMode === 'plantao' ? 'active' : ''}`} onClick={() => openTraining('plantao')}><Stethoscope /> Modo Plantão</button>
-          <button className={`nav-item ${workspaceMode === 'ecg' ? 'active' : ''}`} onClick={() => openTraining('ecg')}><Activity /> Laboratório de ECG</button>
+          <button className="nav-item" onClick={() => openTraining('ecg')}><Activity /> Laboratório de ECG</button>
           <button className={`nav-item ${workspaceMode === 'visual' ? 'active' : ''}`} onClick={() => openTraining('visual')}><Focus /> Treino visual</button>
           <button className={`nav-item ${workspaceMode === 'review' ? 'active' : ''}`} onClick={() => openTraining('review')}><ListChecks /> Minha revisão</button>
           <button className={`nav-item ${workspaceMode === 'library' ? 'active' : ''}`} onClick={() => openTraining('library')}><Library /> Biblioteca de casos</button>
@@ -473,6 +494,7 @@ export default function App() {
               <small>Do corpo à clínica</small>
             </span>
           </button>
+          </>}
         </aside>
         <main className={`dashboard-stage workspace-${workspaceMode}${trainingWorkspace ? ' workspace-training' : ''}${showAtlas && trainingWorkspace ? ' training-with-atlas' : ''}`}>
           {showAtlas && (atlasExercise ? (
@@ -756,16 +778,19 @@ export default function App() {
             {workspaceMode === 'paths' && <a className="path-atlas-return" href="#study-paths">Voltar ao percurso</a>}
           </section>)}
           <section className="case-column">
-            <nav className="workspace-tabs" aria-label="Área de estudo">
+            {workspaceMode !== 'ecg' && <nav className="workspace-tabs" aria-label="Área de estudo">
               <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={() => openPaths()}>Percursos</button>
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => openCase()}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
               <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
               <button className={workspaceMode === 'plantao' ? 'active' : ''} onClick={() => openTraining('plantao')}>Plantão</button>
-              <button className={workspaceMode === 'ecg' ? 'active' : ''} onClick={() => openTraining('ecg')}>ECG</button>
-            </nav>
-            {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}><EcgLab /></Suspense>
+              <button onClick={() => openTraining('ecg')}>ECG</button>
+            </nav>}
+            {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}>
+              <EcgLab onAnatomy={() => focusPathStructure('heart', 'Coração', true)}
+                onHome={() => { resetAtlas(); openCase(); }} />
+            </Suspense>
             : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
               <Plantao key={plantaoDecision ?? 'full'} reviewDecision={plantaoDecision}
                 onAtlas={() => {

@@ -16,8 +16,11 @@ type Props = {
   onSelectLead: (id: LeadId) => void;
 };
 const chambers = ['right_atrium', 'left_atrium', 'right_ventricle', 'left_ventricle'];
+const vessels = ['ascending_aorta', 'aortic_arch', 'pulmonary_trunk', 'superior_vena_cava',
+  'right_coronary_artery', 'left_coronary_artery', 'anterior_interventricular_artery', 'great_cardiac_vein'];
 const toWorld = ([left, inferior, anterior]: Vector) => new T.Vector3(left, -inferior, anterior);
 const allLeads = Object.keys(ecgLeads) as LeadId[];
+const heartMagnification = 1.2;
 const leadColor = (lead: LeadId) => {
   if (frontalLeads.some(id => id === lead)) return 0x73ccef;
   if (rightLeads.some(id => id === lead)) return 0xf6ae82;
@@ -57,6 +60,9 @@ export default function EcgHeart(props: Props) {
     const light = new T.DirectionalLight(0xffd7c7, 2.3);
     light.position.set(2, 2, 3);
     scene.add(light);
+    const rim = new T.DirectionalLight(0x9ed5ff, 1.5);
+    rim.position.set(-2, 1, -3);
+    scene.add(rim);
     const camera = new T.PerspectiveCamera(43, 1, .01, 20);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
@@ -67,7 +73,7 @@ export default function EcgHeart(props: Props) {
       if (view === 'frontal') camera.position.set(0, 0, 1);
       else if (view === 'horizontal') camera.position.set(0, 1, .035);
       else camera.position.set(.54, .42, .79);
-      camera.position.setLength(current.current.visibleLeads.length ? 5.8 : 3.45);
+      camera.position.setLength(current.current.visibleLeads.length ? 5.1 : 3.65);
       controls.update();
     };
     const initialView = preferredView(current.current);
@@ -97,7 +103,7 @@ export default function EcgHeart(props: Props) {
     const trailMaterial = new T.MeshBasicMaterial({ color: '#45d5e6', transparent: true, depthTest: false, depthWrite: false });
     const frontMaterial = new T.MeshBasicMaterial({ color: '#ffdc86', transparent: true, depthTest: false, depthWrite: false });
     const pathways = conductionPaths.map(path => {
-      const curve = new T.CatmullRomCurve3(path.points.map(point => new T.Vector3(...point)));
+      const curve = new T.CatmullRomCurve3(path.points.map(point => new T.Vector3(...point).multiplyScalar(heartMagnification)));
       const tube = new T.TubeGeometry(curve, 30, .016, 6, false);
       const trail = new T.Mesh(tube, trailMaterial);
       const front = new T.Mesh(pathGeometry, frontMaterial);
@@ -108,7 +114,7 @@ export default function EcgHeart(props: Props) {
     });
     const nodes = conductionNodes.map(node => {
       const mesh = new T.Mesh(pathGeometry, frontMaterial);
-      mesh.position.fromArray(node.point);
+      mesh.position.fromArray(node.point).multiplyScalar(heartMagnification);
       mesh.renderOrder = 5;
       scene.add(mesh);
       return { ...node, mesh };
@@ -132,9 +138,20 @@ export default function EcgHeart(props: Props) {
         (object.material as T.Material).dispose();
       }
     });
-    loadDetailedModel('male', undefined, chambers).then(group => {
+    loadDetailedModel('male', undefined, [...chambers, ...vessels]).then(group => {
       if (disposed) { disposeHeart(group); return; }
-      const box = new T.Box3().setFromObject(group);
+      // Keep the conduction paths centered on the chambers when vessels are added.
+      const box = new T.Box3();
+      for (const object of group.children) {
+        const organ = String(object.userData.anatomyId).replaceAll('-', '_');
+        if (chambers.includes(organ)) box.expandByObject(object);
+        if (!(object instanceof T.Mesh)) continue;
+        const material = object.material as T.MeshStandardMaterial;
+        if (organ === 'pulmonary_trunk' || organ === 'superior_vena_cava') material.color.set('#4c6fb2');
+        else if (organ.includes('coronary_artery') || organ === 'anterior_interventricular_artery') material.color.set('#e38978');
+        else if (chambers.includes(organ)) material.color.set('#ac393d');
+        material.roughness = .44;
+      }
       const center = box.getCenter(new T.Vector3());
       const size = box.getSize(new T.Vector3()).length();
       if (!size) {
@@ -142,8 +159,9 @@ export default function EcgHeart(props: Props) {
         setStatus('O modelo do coração está indisponível.');
         return;
       }
-      group.scale.setScalar(2.1 / size);
-      group.position.copy(center).multiplyScalar(-2.1 / size);
+      const scale = 2.1 * heartMagnification / size;
+      group.scale.setScalar(scale);
+      group.position.copy(center).multiplyScalar(-scale);
       heart = group;
       scene.add(group);
       setReady(true);
@@ -205,9 +223,10 @@ export default function EcgHeart(props: Props) {
         const id = String(object.userData.anatomyId);
         const active = next.phase === 'atria' ? id.includes('atrium') : next.phase === 'ventricles' && id.includes('ventricle');
         const material = object.material as T.MeshStandardMaterial;
-        material.transparent = next.showConduction;
-        material.opacity = next.showConduction ? .70 : 1;
-        material.depthWrite = !next.showConduction;
+        const translucent = next.showConduction && (id.includes('atrium') || id.includes('ventricle'));
+        material.transparent = translucent;
+        material.opacity = translucent ? .80 : 1;
+        material.depthWrite = !translucent;
         material.emissive.set(active ? '#ca630e' : '#270911');
         material.emissiveIntensity = active ? .63 : .16;
       });
