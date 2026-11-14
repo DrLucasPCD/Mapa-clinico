@@ -160,3 +160,93 @@
   .ecg-lead-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .training-screen .review-entries li { align-items: flex-start; }
 }
+
+.ecg-model-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0 10px 8px;
+}
+.ecg-model-filters button, .ecg-heart-label {
+  border: 1px solid #557687;
+  border-radius: 6px;
+  background: #173848;
+  color: #eef8fb;
+  padding: 4px 7px;
+  font-size: 11px;
+}
+.ecg-model-filters button[aria-pressed="true"] { background: #d4f1f4; color: #143945; border-color: #d4f1f4; }
+.ecg-heart-label {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  padding: 2px 4px;
+  line-height: 1.2;
+  min-width: 23px;
+  color: var(--lead-color);
+  background: #102a37f2;
+  border-color: var(--lead-color);
+  font-weight: 700;
+}
+.ecg-heart-label[aria-pressed="true"] { z-index: 2; color: #173848; background: #fff; border-color: #fff; }
+.ecg-lead-legend span:nth-child(2) i { background: #fff; }
+.ecg-lead-legend span:nth-child(3) i { background: #73ccef; }
+.ecg-lead-legend span:nth-child(4) i { background: #82e0bf; }
+.ecg-lead-legend span:nth-child(5) i { background: #f6ae82; }
+.ecg-lead-legend span:nth-child(6) i { background: #bfa8fc; }
+.ecg-conduction, .ecg-placement-guide { display: grid; gap: 12px; }
+.ecg-placement-link { margin: 0 10px 10px; font-size: 12px; }
+.ecg-conduction .ecg-pair, .ecg-placement-guide .ecg-pair {
+  grid-template-columns: minmax(0, 1.03fr) minmax(0, 1fr);
+}
+.ecg-conduction .ecg-heart-view { height: clamp(275px, 35vw, 410px); }
+.ecg-conduction-steps { display: grid; gap: 5px; }
+.ecg-conduction-steps button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  color: var(--training-ink);
+  background: var(--training-soft);
+  border: 1px solid var(--training-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+.ecg-conduction-steps button[aria-current] { border-color: var(--training-brand); background: #def3f3; }
+.ecg-conduction-steps span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 21px;
+  height: 21px;
+  border-radius: 50%;
+  color: #075d66;
+  background: #d9ebee;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ecg-patient-map { position: relative; width: min(100%, 355px); margin: 10px auto 0; }
+.ecg-patient-outline { display: block; width: 100%; height: auto; color: #41667a; }
+.ecg-patient-outline text { fill: currentColor; font-size: 13px; font-weight: 650; }
+.ecg-electrode {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #fff;
+  color: #135367;
+  border: 2px solid #5f97a3;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 750;
+  padding: 0;
+}
+.ecg-electrode[aria-pressed="true"], .ecg-electrode:disabled { background: #007781; color: #fff; border-color: #fff; box-shadow: 0 0 0 2px #007781; opacity: 1; }
+.ecg-electrode:focus-visible { z-index: 1; }
+.ecg-patient-map[data-view="back"] .ecg-electrode { width: clamp(18px, 5vw, 22px); height: clamp(18px, 5vw, 22px); font-size: 8px; }
+.ecg-placement-details progress { width: 100%; accent-color: var(--training-brand); }
+@media (max-width: 740px) {
+  .ecg-conduction .ecg-pair, .ecg-placement-guide .ecg-pair { grid-template-columns: minmax(0, 1fr); }
+}

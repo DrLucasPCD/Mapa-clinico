@@ -5,6 +5,7 @@
 ## O que esta versão faz
 
 - **Laboratório de ECG** com coração 3D, vetor sincronizado ao traçado, 12 derivações convencionais e derivações direitas e posteriores. Inclui nove padrões sintéticos, velocidade e ganho ajustáveis, reprodução com pausa, guia de leitura e diagrama hexaxial arrastável com cálculo do eixo frontal.
+- O coração 3D permite selecionar os eixos das 17 derivações disponíveis. A aba **Condução elétrica** anima o trajeto esquemático do impulso sinusal. Em **Posicionar eletrodos**, o guia mostra os pontos da montagem padrão e das complementares em vistas anterior, lateral e posterior, com prática de colocação.
 - **Modo Plantão** com um atendimento sobre dor no hipocôndrio direito nos modos guiado e prova. A história simulada é complementada por imagens reais de ultrassonografia do caso Radiopaedia rID 27525.
 - **Treino visual** para localizar estruturas no joelho 3D e marcar regiões de interesse em TC, RM e USG. **Minha revisão** reúne pendências dos percursos, questões, plantão, casos e treino visual no navegador. A **Biblioteca de casos** filtra seis casos por tema, sistema, modalidade e dificuldade.
 

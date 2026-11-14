@@ -2,17 +2,35 @@ import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadDetailedModel } from './detailed-models';
-import type { Vector } from './ecg-model';
+import { ecgLeads, frontalLeads, rightLeads, posteriorLeads, type LeadId, type Vector } from './ecg-model';
+import { conductionNodes, conductionPaths, type ConductionStage } from './ecg-conduction';
 
-type Props = { vector: Vector; axis: Vector; phase: string; plane: 'frontal' | 'horizontal' };
+type View = 'frontal' | 'horizontal' | 'oblique';
+type Props =
+  | { mode: 'leads'; vector: Vector; lead: LeadId; visibleLeads: readonly LeadId[]; phase: string; onSelectLead: (id: LeadId) => void }
+  | { mode: 'conduction'; stage: ConductionStage };
 const chambers = ['right_atrium', 'left_atrium', 'right_ventricle', 'left_ventricle'];
 const toWorld = ([left, inferior, anterior]: Vector) => new T.Vector3(left, -inferior, anterior);
+const allLeads = Object.keys(ecgLeads) as LeadId[];
+const leadColor = (lead: LeadId) => {
+  if (frontalLeads.some(id => id === lead)) return 0x73ccef;
+  if (rightLeads.some(id => id === lead)) return 0xf6ae82;
+  if (posteriorLeads.some(id => id === lead)) return 0xbfa8fc;
+  return 0x82e0bf;
+};
+
+function preferredView(props: Props): View {
+  if (props.mode === 'conduction') return 'frontal';
+  const plane = ecgLeads[props.lead].plane;
+  return props.visibleLeads.some(id => ecgLeads[id].plane !== plane) ? 'oblique' : plane;
+}
 
 export default function EcgHeart(props: Props) {
   const container = useRef<HTMLDivElement>(null);
   const current = useRef(props);
   current.current = props;
-  const orient = useRef<(view: 'frontal' | 'horizontal') => void>(() => {});
+  const orient = useRef<(view: View) => void>(() => {});
+  const labels = useRef(new Map<LeadId, HTMLButtonElement>());
   const [status, setStatus] = useState('Carregando coração 3D…');
   const [ready, setReady] = useState(false);
 
@@ -33,30 +51,62 @@ export default function EcgHeart(props: Props) {
     const light = new T.DirectionalLight(0xffd7c7, 2.3);
     light.position.set(2, 2, 3);
     scene.add(light);
-    const camera = new T.PerspectiveCamera(35, 1, .01, 20);
+    const camera = new T.PerspectiveCamera(43, 1, .01, 20);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableDamping = true;
     controls.minDistance = 2.5;
     controls.maxDistance = 8;
     orient.current = view => {
-      if (view === 'frontal') camera.position.set(0, 0, 4.8);
-      else camera.position.set(0, 4.75, .18);
+      if (view === 'frontal') camera.position.set(0, 0, 1);
+      else if (view === 'horizontal') camera.position.set(0, 1, .035);
+      else camera.position.set(.54, .42, .79);
+      camera.position.setLength(current.current.mode === 'conduction' ? 3.45 : 5.8);
       controls.update();
     };
-    orient.current(current.current.plane);
-    const circle = new T.Mesh(new T.RingGeometry(1.06, 1.066, 80), new T.MeshBasicMaterial({ color: '#587287', side: T.DoubleSide }));
-    scene.add(circle);
+    const initialView = preferredView(current.current);
+    orient.current(initialView);
+    const ringGeometry = new T.RingGeometry(1.32, 1.326, 80);
+    const frontalRing = new T.Mesh(ringGeometry, new T.MeshBasicMaterial({ color: '#51758c', side: T.DoubleSide }));
+    const horizontalRing = new T.Mesh(ringGeometry, new T.MeshBasicMaterial({ color: '#496e69', side: T.DoubleSide }));
+    horizontalRing.rotation.x = Math.PI / 2;
+    scene.add(frontalRing, horizontalRing);
     const origin = new T.Vector3();
-    const positive = new T.ArrowHelper(new T.Vector3(1, 0, 0), origin, 1.2, 0x45d5e6, .15, .085);
     const negative = new T.ArrowHelper(new T.Vector3(-1, 0, 0), origin, 1.2, 0x547185, .10, .064);
     const electric = new T.ArrowHelper(new T.Vector3(1, 0, 0), origin, .75, 0xffcd74, .16, .10);
-    for (const arrow of [positive, negative, electric]) {
+    const leadArrows = allLeads.map((id, index) => {
+      const axis = toWorld(ecgLeads[id].axis);
+      const length = index % 2 === 0 ? 1.48 : 1.72;
+      const arrow = new T.ArrowHelper(axis, origin, length, leadColor(id), .12, .065);
+      const labelPoint = axis.clone().multiplyScalar(length + .15);
+      return { id, arrow, labelPoint, length };
+    });
+    for (const arrow of [negative, electric, ...leadArrows.map(item => item.arrow)]) {
       for (const material of [arrow.line.material, arrow.cone.material].flat()) material.depthTest = false;
       arrow.line.renderOrder = 2;
       arrow.cone.renderOrder = 2;
       scene.add(arrow);
     }
+    const pathGeometry = new T.SphereGeometry(.044, 14, 10);
+    const trailMaterial = new T.MeshBasicMaterial({ color: '#45d5e6', transparent: true, depthTest: false, depthWrite: false });
+    const frontMaterial = new T.MeshBasicMaterial({ color: '#ffdc86', transparent: true, depthTest: false, depthWrite: false });
+    const pathways = conductionPaths.map(path => {
+      const curve = new T.CatmullRomCurve3(path.points.map(point => new T.Vector3(...point)));
+      const tube = new T.TubeGeometry(curve, 30, .016, 6, false);
+      const trail = new T.Mesh(tube, trailMaterial);
+      const front = new T.Mesh(pathGeometry, frontMaterial);
+      trail.renderOrder = 4;
+      front.renderOrder = 5;
+      scene.add(trail, front);
+      return { step: path.step, curve, trail, front, count: tube.index!.count };
+    });
+    const nodes = conductionNodes.map(node => {
+      const mesh = new T.Mesh(pathGeometry, frontMaterial);
+      mesh.position.fromArray(node.point);
+      mesh.renderOrder = 5;
+      scene.add(mesh);
+      return { ...node, mesh };
+    });
     const resize = () => {
       const { clientWidth: width, clientHeight: height } = host;
       if (!width || !height) return;
@@ -88,41 +138,108 @@ export default function EcgHeart(props: Props) {
       }
       group.scale.setScalar(2.1 / size);
       group.position.copy(center).multiplyScalar(-2.1 / size);
+      if (current.current.mode === 'conduction') group.children.forEach(object => {
+        if (!(object instanceof T.Mesh)) return;
+        const material = object.material as T.MeshStandardMaterial;
+        material.transparent = true;
+        material.opacity = .60;
+        material.depthWrite = false;
+      });
       heart = group;
       scene.add(group);
       setReady(true);
       setStatus('');
     }).catch(() => { if (!disposed) setStatus('O modelo do coração não carregou. Reabra o laboratório para tentar novamente.'); });
 
-    let plane = current.current.plane;
+    let view = initialView;
+    let leadVisibility = '';
+    const projected = new T.Vector3();
+    const pulsePoint = new T.Vector3();
     function draw() {
       frame = requestAnimationFrame(draw);
       const next = current.current;
-      if (plane !== next.plane) {
-        plane = next.plane;
-        orient.current(plane);
+      const nextView = preferredView(next);
+      if (view !== nextView) {
+        view = nextView;
+        orient.current(view);
       }
-      circle.rotation.x = plane === 'frontal' ? 0 : Math.PI / 2;
-      const axis = toWorld(next.axis);
-      positive.setDirection(axis);
-      negative.setDirection(axis.negate());
-      const vector = toWorld(next.vector);
-      const length = vector.length();
-      electric.visible = length > .024;
-      if (electric.visible) {
-        electric.setDirection(vector.normalize());
-        electric.setLength(Math.min(1.25, length * 1.24), Math.min(.16, length * .7), Math.min(.10, length * .4));
+      if (next.mode === 'leads') {
+        const visibility = next.visibleLeads.join(',') + ':' + next.lead;
+        if (leadVisibility !== visibility) {
+          leadVisibility = visibility;
+          frontalRing.visible = next.visibleLeads.some(id => ecgLeads[id].plane === 'frontal');
+          horizontalRing.visible = next.visibleLeads.some(id => ecgLeads[id].plane === 'horizontal');
+          negative.visible = next.visibleLeads.length === 1;
+          negative.setDirection(toWorld(ecgLeads[next.lead].axis).negate());
+          for (const { id, arrow, length } of leadArrows) {
+            arrow.visible = next.visibleLeads.includes(id);
+            arrow.setColor(new T.Color(id === next.lead ? '#ffffff' : leadColor(id)));
+            arrow.setLength(length, id === next.lead ? .18 : .12, id === next.lead ? .10 : .065);
+          }
+        }
+        const vector = toWorld(next.vector);
+        const length = vector.length();
+        electric.visible = length > .024;
+        if (electric.visible) {
+          electric.setDirection(vector.normalize());
+          electric.setLength(Math.min(1.25, length * 1.24), Math.min(.16, length * .7), Math.min(.10, length * .4));
+        }
+      } else {
+        frontalRing.visible = horizontalRing.visible = negative.visible = electric.visible = false;
+        for (const { arrow } of leadArrows) arrow.visible = false;
+      }
+      const stage = next.mode === 'conduction' ? next.stage : undefined;
+      for (const { step, curve, trail, front, count } of pathways) {
+        trail.visible = Boolean(stage && stage.index >= step);
+        front.visible = stage?.index === step;
+        if (stage && trail.visible) {
+          const fraction = stage.index > step ? 1 : stage.progress;
+          trail.geometry.setDrawRange(0, Math.floor(fraction * count / 36) * 36);
+          if (front.visible) front.position.copy(curve.getPointAt(fraction, pulsePoint));
+        }
+      }
+      for (const { mesh, step } of nodes) {
+        mesh.visible = Boolean(stage && stage.index >= step);
+        mesh.material = stage?.index === step ? frontMaterial : trailMaterial;
+        mesh.scale.setScalar(stage?.index === step ? 1.1 + .55 * Math.sin(stage.progress * Math.PI) : .8);
       }
       heart?.children.forEach(object => {
         if (!(object instanceof T.Mesh)) return;
         const id = String(object.userData.anatomyId);
-        const active = next.phase === 'atria' ? id.includes('atrium') : next.phase === 'ventricles' && id.includes('ventricle');
+        const active = stage
+          ? stage.index <= 1 ? id.includes('atrium') : stage.index >= 5 && id.includes('ventricle')
+          : next.mode === 'leads' && (next.phase === 'atria' ? id.includes('atrium') : next.phase === 'ventricles' && id.includes('ventricle'));
         const material = object.material as T.MeshStandardMaterial;
         material.emissive.set(active ? '#ca630e' : '#270911');
         material.emissiveIntensity = active ? .63 : .16;
       });
       controls.update();
       renderer.render(scene, camera);
+      const rect = renderer.domElement;
+      const width = rect.clientWidth;
+      const height = rect.clientHeight;
+      const positions = leadArrows.flatMap(({ id, labelPoint }) => {
+        const label = labels.current.get(id);
+        if (!label) return [];
+        projected.copy(labelPoint).project(camera);
+        return [{ label, x: (projected.x + 1) * width / 2, y: (1 - projected.y) * height / 2 }];
+      });
+      // Keep nearby labels readable when the two planes overlap on screen.
+      for (let pass = 0; pass < 5; pass += 1) {
+        positions.forEach((point, i) => {
+          for (const other of positions.slice(i + 1)) {
+            if (Math.abs(point.x - other.x) >= 34 || Math.abs(point.y - other.y) >= 20) continue;
+            const shift = (20 - Math.abs(point.y - other.y)) / 2;
+            const direction = point.y > other.y ? 1 : -1;
+            point.y += direction * shift;
+            other.y -= direction * shift;
+          }
+        });
+      }
+      for (const { label, x, y } of positions) {
+        label.style.left = `${Math.max(18, Math.min(width - 18, x))}px`;
+        label.style.top = `${Math.max(13, Math.min(height - 46, y))}px`;
+      }
     }
     draw();
     return () => {
@@ -130,9 +247,14 @@ export default function EcgHeart(props: Props) {
       cancelAnimationFrame(frame);
       observer.disconnect();
       controls.dispose();
-      circle.geometry.dispose();
-      circle.material.dispose();
-      for (const arrow of [positive, negative, electric]) arrow.dispose();
+      ringGeometry.dispose();
+      frontalRing.material.dispose();
+      horizontalRing.material.dispose();
+      pathGeometry.dispose();
+      trailMaterial.dispose();
+      frontMaterial.dispose();
+      for (const { trail } of pathways) trail.geometry.dispose();
+      for (const arrow of [negative, electric, ...leadArrows.map(item => item.arrow)]) arrow.dispose();
       if (heart) disposeHeart(heart);
       renderer.dispose();
       renderer.domElement.remove();
@@ -141,11 +263,18 @@ export default function EcgHeart(props: Props) {
 
   return (
     <div className="ecg-heart">
-      <div className="ecg-heart-view" ref={container} role="img" aria-label="Coração anatômico 3D com o eixo da derivação e o vetor elétrico" />
+      <div className="ecg-heart-view" ref={container} role="img" aria-label={props.mode === 'leads' ? 'Coração 3D com vetores das derivações' : 'Coração 3D com o sistema de condução elétrica'} />
+      {ready && props.mode === 'leads' && props.visibleLeads.map(id => (
+        <button key={id} className="ecg-heart-label" style={{ '--lead-color': '#' + leadColor(id).toString(16) } as React.CSSProperties}
+          ref={node => { if (node) labels.current.set(id, node); else labels.current.delete(id); }}
+          aria-label={`Selecionar derivação ${id} no coração 3D`} aria-pressed={id === props.lead}
+          onClick={() => props.onSelectLead(id)}>{id}</button>
+      ))}
       {status && <p className="ecg-heart-status" role="status">{status}</p>}
       {ready && <div className="ecg-heart-controls" aria-label="Orientação da câmera">
         <button onClick={() => orient.current('frontal')}>Frontal</button>
         <button onClick={() => orient.current('horizontal')}>Superior</button>
+        <button onClick={() => orient.current('oblique')}>Oblíqua</button>
       </div>}
       {ready && <small className="ecg-heart-help">Arraste para girar</small>}
     </div>

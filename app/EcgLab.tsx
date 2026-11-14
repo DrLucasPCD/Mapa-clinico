@@ -1,6 +1,8 @@
 import { lazy, memo, Suspense, useEffect, useId, useMemo, useState } from 'react';
 import { Activity, Pause, Play, RotateCcw } from 'lucide-react';
 import { axisClass, calculateAxis, chestLeads, ecgBeats, ecgLeads, ecgPatterns, ecgPhase, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
+import EcgConduction from './EcgConduction';
+import EcgPlacement from './EcgPlacement';
 
 const EcgHeart = lazy(() => import('./EcgHeart'));
 const groups = {
@@ -10,6 +12,7 @@ const groups = {
   Direitas: rightLeads,
   Posteriores: posteriorLeads,
 };
+const allLeads = [...frontalLeads, ...chestLeads, ...rightLeads, ...posteriorLeads];
 
 const EcgTrace = memo(function EcgTrace({ values, lead, speed, gain, cursor, duration, onSeek }: {
   values: number[]; lead: LeadId; speed: number; gain: number; cursor?: number; duration: number; onSeek?: (time: number) => void;
@@ -72,7 +75,9 @@ export default function EcgLab() {
   const [cursor, setCursor] = useState(.8);
   const [playing, setPlaying] = useState(false);
   const [slow, setSlow] = useState(false);
-  const [tab, setTab] = useState<'sim' | 'axis' | 'reading'>('sim');
+  const [tab, setTab] = useState<'sim' | 'axis' | 'reading' | 'conduction' | 'placement'>('sim');
+  const [placementLead, setPlacementLead] = useState<LeadId>();
+  const [leadView, setLeadView] = useState<'group' | 'single' | 'all'>('group');
   const [axisI, setAxisI] = useState('5');
   const [axisAvf, setAxisAvf] = useState('7');
   const duration = speed === 25 ? 6 : 3;
@@ -86,6 +91,7 @@ export default function EcgLab() {
   const vector = electricalVector(time, beats, pattern, axis);
   const voltage = projectLead(vector, lead);
   const phase = ecgPhase(time, beats, pattern);
+  const visibleLeads = leadView === 'all' ? allLeads : leadView === 'group' ? groups[group] : [lead];
   const angle = axisI.trim() && axisAvf.trim() ? calculateAxis(Number(axisI), Number(axisAvf)) : null;
 
   useEffect(() => {
@@ -138,6 +144,8 @@ export default function EcgLab() {
       </header>
       <nav className="training-tabs" aria-label="Áreas do laboratório de ECG">
         <button aria-pressed={tab === 'sim'} onClick={() => setTab('sim')}>Simulador 3D</button>
+        <button aria-pressed={tab === 'conduction'} onClick={() => setTab('conduction')}>Condução elétrica</button>
+        <button aria-pressed={tab === 'placement'} onClick={() => { setPlacementLead(undefined); setTab('placement'); }}>Posicionar eletrodos</button>
         <button aria-pressed={tab === 'axis'} onClick={() => setTab('axis')}>Eixo cardíaco</button>
         <button aria-pressed={tab === 'reading'} onClick={() => setTab('reading')}>Guia de leitura</button>
       </nav>
@@ -162,9 +170,20 @@ export default function EcgLab() {
         </div>
         <div className="ecg-pair">
           <div className="ecg-model">
-            <header><strong>Coração 3D</strong><span>{ecgLeads[lead].plane === 'frontal' ? 'Plano frontal' : 'Plano horizontal'}</span></header>
-            <Suspense fallback={<p>Preparando coração 3D…</p>}><EcgHeart vector={vector} axis={ecgLeads[lead].axis} plane={ecgLeads[lead].plane} phase={phase.region} /></Suspense>
-            <div className="ecg-legend"><span><i /> Vetor elétrico</span><span><i /> Polo positivo da derivação</span></div>
+            <header><strong>Coração 3D</strong><span>{visibleLeads.length === 1 ? `Derivação ${lead}` : `${visibleLeads.length} derivações no modelo`}</span></header>
+            <div className="ecg-model-filters" aria-label="Derivações no coração 3D">
+              <button aria-pressed={leadView === 'single'} onClick={() => setLeadView('single')}>Selecionada</button>
+              <button aria-pressed={leadView === 'group'} onClick={() => {
+                setLeadView('group');
+                if (!groups[group].some(id => id === lead)) setLead(groups[group][0]);
+              }}>Grupo atual</button>
+              <button aria-pressed={leadView === 'all'} onClick={() => setLeadView('all')}>Todas (17)</button>
+            </div>
+            <Suspense fallback={<p>Preparando coração 3D…</p>}><EcgHeart mode="leads" vector={vector} lead={lead} visibleLeads={visibleLeads} phase={phase.region} onSelectLead={setLead} /></Suspense>
+            <div className="ecg-legend ecg-lead-legend">
+              <span><i /> Vetor elétrico</span><span><i /> Derivação selecionada</span>
+              <span><i /> Frontais</span><span><i /> V1–V6</span><span><i /> Direitas</span><span><i /> Posteriores</span>
+            </div>
           </div>
           <div className="ecg-strip">
             <header><strong>Derivação {lead}</strong><span>{speed} mm/s · {gain} mm/mV</span></header>
@@ -178,6 +197,11 @@ export default function EcgLab() {
             </div>
             <p className="ecg-phase"><strong>{phase.name} · {phase.detail}</strong><span>{lead}: {voltage > .025 ? 'deflexão positiva' : voltage < -.025 ? 'deflexão negativa' : 'próximo à linha de base'} ({voltage.toFixed(2)} mV)</span></p>
             <p className="ecg-placement">{ecgLeads[lead].placement}</p>
+            <button className="training-secondary ecg-placement-link" onClick={() => {
+              setPlacementLead(lead);
+              setTab('placement');
+              requestAnimationFrame(() => document.getElementById('ecg-placement-guide')?.scrollIntoView({ block: 'start' }));
+            }}>Ver {ecgLeads[lead].plane === 'horizontal' ? lead + ' no paciente' : 'eletrodos no paciente'}</button>
           </div>
         </div>
         <div className="ecg-lead-grid" aria-label="Selecionar derivação">
@@ -186,6 +210,8 @@ export default function EcgLab() {
           </button>)}
         </div>
       </>}
+      {tab === 'conduction' && <EcgConduction />}
+      {tab === 'placement' && <EcgPlacement key={placementLead ?? 'default'} initialLead={placementLead} />}
       {tab === 'axis' && <div className="ecg-axis training-card">
         <h3>Explore o eixo frontal</h3>
         <p>Arraste o vetor no diagrama ou ajuste o ângulo. Compare as seis derivações enquanto o eixo muda.</p>
