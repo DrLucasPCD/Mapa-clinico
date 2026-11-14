@@ -194,13 +194,15 @@
 .ecg-lead-legend span:nth-child(4) i { background: #82e0bf; }
 .ecg-lead-legend span:nth-child(5) i { background: #f6ae82; }
 .ecg-lead-legend span:nth-child(6) i { background: #bfa8fc; }
-.ecg-conduction, .ecg-placement-guide { display: grid; gap: 12px; }
+.ecg-placement-guide { display: grid; gap: 12px; }
+.ecg-path-legend span:first-child i { background: #ffdc86; }
+.ecg-path-legend span:nth-child(2) i { background: #45d5e6; }
 .ecg-placement-link { margin: 0 10px 10px; font-size: 12px; }
-.ecg-conduction .ecg-pair, .ecg-placement-guide .ecg-pair {
+.ecg-placement-guide .ecg-pair {
   grid-template-columns: minmax(0, 1.03fr) minmax(0, 1fr);
 }
-.ecg-conduction .ecg-heart-view { height: clamp(275px, 35vw, 410px); }
-.ecg-conduction-steps { display: grid; gap: 5px; }
+.ecg-conduction-steps { display: flex; flex-wrap: wrap; gap: 5px; }
+.ecg-stage-feedback { min-height: 4.5em; }
 .ecg-conduction-steps button {
   display: flex;
   gap: 8px;
@@ -248,5 +250,5 @@
 .ecg-patient-map[data-view="back"] .ecg-electrode { width: clamp(18px, 5vw, 22px); height: clamp(18px, 5vw, 22px); font-size: 8px; }
 .ecg-placement-details progress { width: 100%; accent-color: var(--training-brand); }
 @media (max-width: 740px) {
-  .ecg-conduction .ecg-pair, .ecg-placement-guide .ecg-pair { grid-template-columns: minmax(0, 1fr); }
+  .ecg-placement-guide .ecg-pair { grid-template-columns: minmax(0, 1fr); }
 }

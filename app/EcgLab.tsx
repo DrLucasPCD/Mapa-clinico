@@ -1,7 +1,8 @@
 import { lazy, memo, Suspense, useEffect, useId, useMemo, useState } from 'react';
 import { Activity, Pause, Play, RotateCcw } from 'lucide-react';
-import { axisClass, calculateAxis, chestLeads, ecgBeats, ecgLeads, ecgPatterns, ecgPhase, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
+import { activationTimes, axisClass, calculateAxis, chestLeads, ecgActivation, ecgBeats, ecgLeads, ecgPatterns, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
 import EcgConduction from './EcgConduction';
+import { conductionSteps } from './ecg-conduction';
 import EcgPlacement from './EcgPlacement';
 
 const EcgHeart = lazy(() => import('./EcgHeart'));
@@ -75,9 +76,10 @@ export default function EcgLab() {
   const [cursor, setCursor] = useState(.8);
   const [playing, setPlaying] = useState(false);
   const [slow, setSlow] = useState(false);
-  const [tab, setTab] = useState<'sim' | 'axis' | 'reading' | 'conduction' | 'placement'>('sim');
+  const [tab, setTab] = useState<'sim' | 'axis' | 'reading' | 'placement'>('sim');
+  const [showConduction, setShowConduction] = useState(true);
   const [placementLead, setPlacementLead] = useState<LeadId>();
-  const [leadView, setLeadView] = useState<'group' | 'single' | 'all'>('group');
+  const [leadView, setLeadView] = useState<'group' | 'single' | 'all' | 'none'>('group');
   const [axisI, setAxisI] = useState('5');
   const [axisAvf, setAxisAvf] = useState('7');
   const duration = speed === 25 ? 6 : 3;
@@ -90,8 +92,10 @@ export default function EcgLab() {
   const time = Math.min(cursor, duration);
   const vector = electricalVector(time, beats, pattern, axis);
   const voltage = projectLead(vector, lead);
-  const phase = ecgPhase(time, beats, pattern);
-  const visibleLeads = leadView === 'all' ? allLeads : leadView === 'group' ? groups[group] : [lead];
+  const phase = ecgActivation(time, beats, pattern);
+  const stageTimes = useMemo(() => activationTimes(duration, beats, pattern), [duration, beats, pattern]);
+  const visibleLeads = leadView === 'all' ? allLeads : leadView === 'group' ? groups[group] : leadView === 'none' ? [] : [lead];
+  const showPath = showConduction && pattern !== 'vt';
   const angle = axisI.trim() && axisAvf.trim() ? calculateAxis(Number(axisI), Number(axisAvf)) : null;
 
   useEffect(() => {
@@ -127,6 +131,14 @@ export default function EcgLab() {
     setCursor(next);
   }
 
+  function seekStage(index: number) {
+    const options = stageTimes[index];
+    if (options?.length) {
+      seek(options.reduce((nearest, candidate) =>
+        Math.abs(candidate - time) < Math.abs(nearest - time) ? candidate : nearest));
+    }
+  }
+
   const visibleAxis = [Math.cos(axis * Math.PI / 180) * 66, Math.sin(axis * Math.PI / 180) * 66];
   const frontalVector = [visibleAxis[0] / 66, visibleAxis[1] / 66, 0] as const;
   function dragAxis(event: React.PointerEvent<SVGSVGElement>) {
@@ -144,7 +156,6 @@ export default function EcgLab() {
       </header>
       <nav className="training-tabs" aria-label="Áreas do laboratório de ECG">
         <button aria-pressed={tab === 'sim'} onClick={() => setTab('sim')}>Simulador 3D</button>
-        <button aria-pressed={tab === 'conduction'} onClick={() => setTab('conduction')}>Condução elétrica</button>
         <button aria-pressed={tab === 'placement'} onClick={() => { setPlacementLead(undefined); setTab('placement'); }}>Posicionar eletrodos</button>
         <button aria-pressed={tab === 'axis'} onClick={() => setTab('axis')}>Eixo cardíaco</button>
         <button aria-pressed={tab === 'reading'} onClick={() => setTab('reading')}>Guia de leitura</button>
@@ -170,7 +181,7 @@ export default function EcgLab() {
         </div>
         <div className="ecg-pair">
           <div className="ecg-model">
-            <header><strong>Coração 3D</strong><span>{visibleLeads.length === 1 ? `Derivação ${lead}` : `${visibleLeads.length} derivações no modelo`}</span></header>
+            <header><strong>Coração 3D</strong><span>{visibleLeads.length <= 1 ? `Derivação ${lead}` : `${visibleLeads.length} derivações no modelo`}</span></header>
             <div className="ecg-model-filters" aria-label="Derivações no coração 3D">
               <button aria-pressed={leadView === 'single'} onClick={() => setLeadView('single')}>Selecionada</button>
               <button aria-pressed={leadView === 'group'} onClick={() => {
@@ -178,12 +189,20 @@ export default function EcgLab() {
                 if (!groups[group].some(id => id === lead)) setLead(groups[group][0]);
               }}>Grupo atual</button>
               <button aria-pressed={leadView === 'all'} onClick={() => setLeadView('all')}>Todas (17)</button>
+              <button aria-pressed={leadView === 'none'} onClick={() => setLeadView('none')}>Sem eixos</button>
             </div>
-            <Suspense fallback={<p>Preparando coração 3D…</p>}><EcgHeart mode="leads" vector={vector} lead={lead} visibleLeads={visibleLeads} phase={phase.region} onSelectLead={setLead} /></Suspense>
-            <div className="ecg-legend ecg-lead-legend">
+            <div className="ecg-model-filters">
+              <button aria-pressed={showConduction} onClick={() => setShowConduction(value => !value)}>Condução elétrica</button>
+            </div>
+            <Suspense fallback={<p>Preparando coração 3D…</p>}>
+              <EcgHeart vector={vector} lead={lead} visibleLeads={visibleLeads} phase={phase.region}
+                stage={phase.stage} showConduction={showPath} onSelectLead={setLead} />
+            </Suspense>
+            {visibleLeads.length > 0 && <div className="ecg-legend ecg-lead-legend">
               <span><i /> Vetor elétrico</span><span><i /> Derivação selecionada</span>
               <span><i /> Frontais</span><span><i /> V1–V6</span><span><i /> Direitas</span><span><i /> Posteriores</span>
-            </div>
+            </div>}
+            {showPath && <div className="ecg-legend ecg-path-legend"><span><i /> Frente de ativação</span><span><i /> Percurso ativado</span></div>}
           </div>
           <div className="ecg-strip">
             <header><strong>Derivação {lead}</strong><span>{speed} mm/s · {gain} mm/mV</span></header>
@@ -195,7 +214,10 @@ export default function EcgLab() {
               <input aria-label="Instante do traçado" type="range" min="0" max={duration} step=".004" value={time} onChange={event => seek(Number(event.target.value))} />
               <output>{time.toFixed(2)} s</output>
             </div>
-            <p className="ecg-phase"><strong>{phase.name} · {phase.detail}</strong><span>{lead}: {voltage > .025 ? 'deflexão positiva' : voltage < -.025 ? 'deflexão negativa' : 'próximo à linha de base'} ({voltage.toFixed(2)} mV)</span></p>
+            <p className="ecg-phase"><strong>{phase.name} · {phase.detail}</strong>
+              {showPath && phase.stage && <span>{conductionSteps[phase.stage.index].label}</span>}
+              <span>{lead}: {voltage > .025 ? 'deflexão positiva' : voltage < -.025 ? 'deflexão negativa' : 'próximo à linha de base'} ({voltage.toFixed(2)} mV)</span>
+            </p>
             <p className="ecg-placement">{ecgLeads[lead].placement}</p>
             <button className="training-secondary ecg-placement-link" onClick={() => {
               setPlacementLead(lead);
@@ -204,13 +226,15 @@ export default function EcgLab() {
             }}>Ver {ecgLeads[lead].plane === 'horizontal' ? lead + ' no paciente' : 'eletrodos no paciente'}</button>
           </div>
         </div>
+        {showPath && <EcgConduction stage={phase.stage} available={conductionSteps.map((_, i) => Boolean(stageTimes[i]?.length))} onSeek={seekStage} />}
+        {showConduction && pattern === 'vt' && <p className="training-note">Na taquicardia ventricular, a ativação parte dos ventrículos. O modelo destaca a atividade ventricular durante o QRS e a onda T.</p>}
+        {showPath && (pattern === 'af' || pattern === 'flutter') && <p className="training-note">Neste padrão, o coração 3D mostra o percurso da condução que leva aos batimentos ventriculares.</p>}
         <div className="ecg-lead-grid" aria-label="Selecionar derivação">
           {groups[group].map(item => <button key={item} aria-pressed={lead === item} onClick={() => setLead(item)}>
             <strong>{item}</strong><EcgTrace values={signals[item]!} lead={item} speed={speed} gain={gain} duration={duration} />
           </button>)}
         </div>
       </>}
-      {tab === 'conduction' && <EcgConduction />}
       {tab === 'placement' && <EcgPlacement key={placementLead ?? 'default'} initialLead={placementLead} />}
       {tab === 'axis' && <div className="ecg-axis training-card">
         <h3>Explore o eixo frontal</h3>

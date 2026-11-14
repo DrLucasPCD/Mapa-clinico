@@ -2,41 +2,32 @@ export const conductionSteps = [
   {
     id: 'sinus', label: 'Nó sinoatrial', wave: 'Início da onda P',
     detail: 'O impulso nasce na parte superior do átrio direito, junto à entrada da veia cava superior.',
-    duration: 1.15,
   },
   {
     id: 'atria', label: 'Átrios', wave: 'Onda P',
     detail: 'A ativação se espalha pelo miocárdio dos dois átrios e chega ao nó atrioventricular.',
-    duration: 2.15,
   },
   {
     id: 'av', label: 'Nó atrioventricular', wave: 'Segmento PR',
     detail: 'A condução desacelera no nó AV, dando tempo para o enchimento dos ventrículos. Esse atraso contribui para o intervalo PR.',
-    duration: 2.35,
   },
   {
     id: 'his', label: 'Feixe de His', wave: 'Transição para o QRS',
     detail: 'O feixe atrioventricular conduz o impulso do nó AV até a parte superior do septo interventricular.',
-    duration: 1.65,
   },
   {
     id: 'branches', label: 'Ramos direito e esquerdo', wave: 'Início do QRS',
     detail: 'A ativação segue pelos dois ramos ao longo do septo, em direção aos ventrículos.',
-    duration: 1.65,
   },
   {
     id: 'purkinje', label: 'Fibras de Purkinje', wave: 'Complexo QRS',
     detail: 'A rede subendocárdica distribui rapidamente o impulso ao miocárdio ventricular. O QRS registra a despolarização ventricular.',
-    duration: 2.15,
   },
   {
     id: 'repolarization', label: 'Repolarização ventricular', wave: 'Onda T',
     detail: 'As células ventriculares recuperam seu estado elétrico. A onda T representa essa repolarização.',
-    duration: 2.1,
   },
 ] as const;
-
-export type ConductionStage = { index: number; progress: number };
 
 // Coordenadas esquemáticas em relação ao centro das quatro câmaras do Atlas.
 // Os caminhos ramificados representam a ordem de ativação, sem escala de tempo.

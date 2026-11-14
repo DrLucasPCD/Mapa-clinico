@@ -5,7 +5,7 @@ import ts from 'typescript';
 
 const source = await readFile('app/ecg-model.ts', 'utf8');
 const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } }).outputText;
-const { calculateAxis, ecgBeats, electricalVector, projectLead } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
+const { activationTimes, calculateAxis, ecgActivation, ecgBeats, electricalVector, projectLead } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
 
 test('frontal projections preserve Einthoven and recover the axis across quadrants', () => {
   for (const angle of [-155, -62, 0, 60, 125]) {
@@ -33,4 +33,23 @@ test('sinus beats are regular and atrial fibrillation varies RR', () => {
   };
   assert.equal(intervals('sinus').size, 1);
   assert.ok(intervals('af').size > 3);
+});
+
+test('the sinus conduction landmarks follow P, PR, QRS and T on the same time axis', () => {
+  const beats = [1];
+  const times = activationTimes(2, beats, 'sinus');
+  const jumps = Array.from({ length: 7 }, (_, index) => times[index][0]);
+  assert.deepEqual(jumps, [...jumps].sort((a, b) => a - b));
+  assert.deepEqual(jumps.map(time => ecgActivation(time, beats, 'sinus').name),
+    ['Início de P', 'P', 'PR', 'PR', 'QRS', 'QRS', 'T']);
+  assert.equal(ecgActivation(1.5, beats, 'sinus').stage, null);
+});
+
+test('PR prolongation and non-sinus patterns use their corresponding activation windows', () => {
+  const beats = [1];
+  assert.ok(activationTimes(2, beats, 'av')[1][0] < activationTimes(2, beats, 'sinus')[1][0]);
+  assert.equal(activationTimes(2, beats, 'af')[1], undefined);
+  assert.equal(ecgActivation(1, beats, 'af').stage.ventricularOnly, true);
+  assert.equal(ecgActivation(1, beats, 'vt').name, 'QRS');
+  assert.deepEqual(activationTimes(2, beats, 'vt'), {});
 });

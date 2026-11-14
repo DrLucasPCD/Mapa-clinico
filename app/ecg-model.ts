@@ -47,6 +47,10 @@ export const ecgPatterns = {
 } as const;
 export type PatternId = keyof typeof ecgPatterns;
 export const patternIds = Object.keys(ecgPatterns) as PatternId[];
+export type ConductionStage = { index: number; progress: number; ventricularOnly: boolean };
+
+const atrialPeak = (pattern: PatternId) => pattern === 'av' ? -.235 : -.155;
+const hasOrganizedP = (pattern: PatternId) => pattern !== 'af' && pattern !== 'flutter' && pattern !== 'vt';
 
 const dot = (a: Vector, b: Vector) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const pulse = (time: number, center: number, width: number) => Math.exp(-.5 * ((time - center) / width) ** 2);
@@ -71,7 +75,7 @@ export function electricalVector(time: number, beats: number[], pattern: Pattern
   for (const beat of beats) {
     const t = time - beat;
     if (t < -.37 || t > .47) continue;
-    const p = ['af', 'flutter', 'vt'].includes(pattern) ? 0 : pulse(t, pattern === 'av' ? -.235 : -.155, .019) * .16;
+    const p = hasOrganizedP(pattern) ? pulse(t, atrialPeak(pattern), .019) * .16 : 0;
     const q = pulse(t, wide ? -.044 : -.018, wide ? .017 : .007) * .18;
     const r = pulse(t, 0, wide ? .032 : .012) * 1.20;
     const s = pulse(t, wide ? .065 : .028, wide ? .021 : .009) * .40;
@@ -117,21 +121,44 @@ export function axisClass(angle: number) {
   return 'Eixo extremo';
 }
 
-export function ecgPhase(time: number, beats: number[], pattern: PatternId) {
-  const distance = beats.reduce((closest, beat) => Math.abs(time - beat) < Math.abs(closest) ? time - beat : closest, Infinity);
+export function ecgActivation(time: number, beats: number[], pattern: PatternId) {
+  const atrial = hasOrganizedP(pattern);
+  const p = atrialPeak(pattern);
   const wide = pattern === 'vt';
-  if (distance >= (wide ? -.075 : -.039) && distance <= (wide ? .115 : .054)) {
-    return { name: 'QRS', detail: 'Despolarização ventricular', region: 'ventricles' };
+  const phase = (name: string, detail: string, region: string, index: number, start: number, end: number) => {
+    const beat = beats.find(value => time >= value + start && time < value + end);
+    if (beat === undefined) return null;
+    const progress = Math.max(0, Math.min(1, (time - (beat + start)) / (end - start)));
+    const stage: ConductionStage | null = wide ? null : { index, progress, ventricularOnly: !atrial };
+    return { name, detail, region, stage };
+  };
+  // Resolve coincident activity in fast simulated rhythms in favor of QRS,
+  // then the atrial event, then repolarization from the previous beat.
+  return (wide
+    ? phase('QRS', 'Despolarização ventricular', 'ventricles', 5, -.075, .115)
+    : phase('QRS', 'Despolarização ventricular', 'ventricles', 4, -.039, -.012)
+      ?? phase('QRS', 'Despolarização ventricular', 'ventricles', 5, -.012, .054))
+    ?? (atrial
+      ? phase('Início de P', 'Ativação do nó sinoatrial', 'atria', 0, p - .050, p - .031)
+        ?? phase('P', 'Despolarização atrial', 'atria', 1, p - .031, p + .038)
+        ?? phase('PR', 'Condução atrioventricular', 'av', 2, p + .038, -.057)
+        ?? phase('PR', 'Condução pelo feixe de His', 'av', 3, -.057, -.039)
+      : !wide ? phase('Pré-QRS', 'Condução pelo feixe de His', 'av', 3, -.057, -.039) : null)
+    ?? phase('T', 'Repolarização ventricular', 'ventricles', 6, wide ? .135 : .145, wide ? .255 : .315)
+    ?? { name: 'Entre ondas', detail: 'Observe o segmento do traçado', region: 'rest', stage: null };
+}
+
+export function activationTimes(duration: number, beats: number[], pattern: PatternId) {
+  const times: Record<number, number[]> = {};
+  let previous: number | undefined;
+  let start = 0;
+  const sampleCount = Math.floor(duration * 250) + 1;
+  for (let sample = 0; sample <= sampleCount; sample += 1) {
+    const index = sample === sampleCount ? undefined : ecgActivation(sample / 250, beats, pattern).stage?.index;
+    if (index === previous) continue;
+    if (previous !== undefined) (times[previous] ??= []).push(Math.floor((start + sample - 1) / 2) / 250);
+    previous = index;
+    start = sample;
   }
-  if (distance >= (wide ? .135 : .145) && distance <= (wide ? .255 : .315)) {
-    return { name: 'T', detail: 'Repolarização ventricular', region: 'ventricles' };
-  }
-  const p = pattern === 'av' ? -.235 : -.155;
-  if (!['vt', 'af', 'flutter'].includes(pattern) && distance >= p - .042 && distance <= p + .038) {
-    return { name: 'P', detail: 'Despolarização atrial', region: 'atria' };
-  }
-  if (!['vt', 'af', 'flutter'].includes(pattern) && distance > p + .038 && distance < -.039) {
-    return { name: 'PR', detail: 'Condução atrioventricular', region: 'av' };
-  }
-  return { name: 'Entre ondas', detail: 'Compare a linha de base e as deflexões.', region: 'rest' };
+  return times;
 }
