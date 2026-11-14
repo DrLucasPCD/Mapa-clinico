@@ -1021,3 +1021,6 @@
   z-index: 10;
 }
 .atlas-credits{text-align:center;padding:0 15px 15px;font-size:10px;color:#648196}.atlas-credits a{color:#087b83;text-decoration:underline}
+
+.atlas-column > .column-tabs .atlas-lab-link { display:inline-flex; align-items:center; justify-content:center; gap:4px; white-space:nowrap; padding-inline:5px; color:#adf0ef; }
+.atlas-column > .column-tabs .atlas-lab-link:hover { background:#126477; color:#fff; }

@@ -5,6 +5,7 @@ import { atlasSliceForSequence, imageIntegration } from './image-integration';
 import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
+import { mprGeometry } from './mpr';
 import LandmarkPanel from './LandmarkPanel';
 import CaseJourney from './CaseJourney';
 import type { OverlayClip, OverlaySystem } from './registered-overlay';
@@ -12,6 +13,7 @@ import type { OverlayClip, OverlaySystem } from './registered-overlay';
 type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
 type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; period?: number; onLocateCase?: () => void; onSelectCase?: (id: string) => void; onFocusStructure?: (id: string, label: string) => void; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: SliceLocation) => void };
+const PatientVolume = lazy(() => import('./PatientVolume'));
 const PatientSlices = lazy(() => import('./PatientSlices'));
 const TriPlanarViewer = lazy(() => import('./TriPlanarViewer'));
 const MAX_DICOM_BYTES = 500 * 1024 * 1024;
@@ -45,6 +47,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const [registration, setRegistration] = useState<{matrix:number[];modelVariant:'male'|'female'}|null>(null);
   const [overlaySystems, setOverlaySystems] = useState<OverlaySystem[]>(['nervous', 'cardiovascular']);
   const [overlayClip, setOverlayClip] = useState<OverlayClip>('volume');
+  const [spatialMode, setSpatialMode] = useState<'slices'|'volume'>('slices');
   const [previewIndex, setPreviewIndex] = useState(0);
   const previewHost = useRef<HTMLDivElement>(null);
   const worker = useRef<Worker|null>(null);
@@ -54,11 +57,12 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const current = series[seriesIndex];
   const selected = current?.slices[sliceIndex];
   const previewIntegration = casePreview ? imageIntegration(casePreview.images, casePreview.acquisition) : null;
+  const canRenderVolume = useMemo(() => Boolean(current && mprGeometry(current)), [current]);
   const eligibility = useMemo(() => current ? validateCtSegmentation(current) : {eligible:false}, [current]);
   useEffect(() => {
     worker.current?.terminate(); worker.current = null;
     const middle = current ? pixelCenter(current.slices[Math.floor(current.slices.length / 2)], Math.floor(current.rows / 2), Math.floor(current.columns / 2)) ?? null : null;
-    setSurface(null); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
+    setSpatialMode('slices'); setSurface(null); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
     return () => { worker.current?.terminate(); worker.current = null; };
   }, [current]);
   useEffect(() => { setRegistration(null); }, [modelVariant]);
@@ -66,6 +70,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     if (!current || !eligibility.eligible) return;
     worker.current?.terminate();
     const task = new Worker(new URL('./ct-segmentation.worker.ts', import.meta.url), {type:'module'});
+    setSpatialMode('slices');
     worker.current = task; setSegmenting(true); setSegmentationError(''); setSurface(null);
     task.onmessage = event => {
       if (worker.current !== task) return;
@@ -227,7 +232,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   );
 
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
-    <header><small>DO CORPO À IMAGEM</small><h2>Atlas e imagens integrados</h2><p>Explore o caso e a anatomia lado a lado. Importe uma série DICOM completa para liberar as reconstruções axial, coronal e sagital.</p></header>
+    <header><small>DO CORPO À IMAGEM</small><h2>Atlas e imagens integrados</h2><p>Explore o caso e a anatomia lado a lado. Importe uma série DICOM compatível para reconstruir os três planos e o volume 3D do exame.</p></header>
     <div className="image-tools">
       <label>Selecionar série<input aria-label="Selecionar arquivos DICOM" type="file" accept=".dcm,application/dicom" multiple onChange={(event) => void openFiles(event.target.files)} /></label>
       {loading && <span>Processando localmente…</span>}
@@ -244,6 +249,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
         <span className="preview-orientation top">A</span><span className="preview-orientation bottom">P</span><span className="preview-orientation left">R</span><span className="preview-orientation right">L</span>
       </div>
       <div className="preview-filmstrip">{casePreview.images.map((image, index) => <button key={image.src} className={index === previewIndex ? 'active' : ''} onClick={() => setPreviewIndex(index)} aria-label={`Abrir ${image.label}`}><img src={image.src} alt="" /><span>{index + 1}</span></button>)}</div>
+      {casePreview.acquisition?.kind !== 'dicom-series' && <p className="plane-status">As imagens de página do Radiopaedia podem ser estudadas em sequência quando disponível. Para gerar volume ou reconstruir planos do paciente, importe o DICOM original.</p>}
       {previewIntegration && <div className="preview-notice"><strong>{previewIntegration.title}</strong><p>{previewIntegration.description}</p><a href={casePreview.source} target="_blank" rel="noreferrer">Abrir caso original ↗</a></div>}
     </section>}
     {!current && casePreview && onLocateCase && onSelectCase && onFocusStructure && <CaseJourney item={casePreview} period={period} onLocate={onLocateCase} onSelectCase={onSelectCase} onFocusStructure={onFocusStructure} />}
@@ -267,7 +273,20 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
         <label>Largura da janela {Math.round(ww)}<input aria-label="Largura da janela" type="range" min="1" max={Math.max(1, Math.ceil(range[1] - range[0]))} value={ww} onChange={(event) => setWidth(Number(event.target.value))} /></label>
       </div>
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
-        <TriPlanarViewer series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex} onPatientPoint={point => { setTargetPoint(point); setMprPoint(point); }} spatialView={<Suspense fallback={<p>Preparando volume…</p>}><PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex} surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} /></Suspense>} />
+        <TriPlanarViewer key={current.id+'-'+seriesIndex} series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex}
+          onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} spatialView={<>
+            <div className="spatial-view-tabs" aria-label="Visualização do exame em 3D">
+              <button aria-pressed={spatialMode==='slices' || !canRenderVolume} onClick={()=>setSpatialMode('slices')}>Pilhas e fusão</button>
+              <button disabled={!canRenderVolume} aria-pressed={spatialMode==='volume' && canRenderVolume} onClick={()=>setSpatialMode('volume')}>Volume do exame</button>
+            </div>
+            <Suspense fallback={<p>Preparando visualização espacial…</p>}>
+              {spatialMode==='volume' && canRenderVolume
+                ? <PatientVolume key={current.id} series={current} point={mprPoint} center={wc} width={ww}
+                    onReference={onFocusStructure ? () => { setRegion('thorax'); onFocusStructure('heart','Coração'); } : undefined} />
+                : <PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex}
+                    surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} />}
+            </Suspense>
+          </>} />
       </Suspense>
       <section className="overlay-panel" aria-label="Sobreposição anatômica registrada">
         <h3>Sobreposição neurovascular 3D</h3>

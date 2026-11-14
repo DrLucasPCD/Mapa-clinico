@@ -1,0 +1,89 @@
+.clinical-dashboard .workspace-lab3d { padding: 0; }
+.workspace-lab3d > .case-column { border: 0; background: transparent; }
+.training-screen.lab3d { --navy:#091e2b; --aqua:#77efea; padding:clamp(12px,2vw,24px); gap:15px; background:linear-gradient(140deg,#f6fafb,#eaf3f6); }
+.lab3d-header { display:flex; align-items:center; gap:13px; flex-wrap:wrap; }
+.lab3d-mark { display:grid; place-items:center; width:53px; height:53px; border-radius:14px; background:linear-gradient(145deg,#10a99e,#005872); color:white; }
+.lab3d-header small,.lab3d-activity-title small { color:#007a80; font-size:10px; font-weight:800; letter-spacing:.12em; }
+.lab3d-header h1 { font-size:clamp(27px,4vw,41px); letter-spacing:-.035em; line-height:1; font-weight:800; color:#10273a; margin:1px 0 6px; }
+.lab3d-header p,.lab3d-inspector>p { color:#486478; }
+.lab3d button,.lab3d select { border:1px solid #c9dde4; border-radius:8px; background:#fff; padding:7px 10px; font-weight:600; font-size:12px; color:#143a4b; }
+.lab3d button:hover { border-color:#479ba4; }
+.lab3d button:focus-visible,.lab3d input:focus-visible,.lab3d select:focus-visible,.lab3d-canvas:focus-visible { outline:2px solid #03a2a6; outline-offset:2px; }
+.lab3d button[aria-pressed=true] { border-color:#4cb4b5; background:#e0f7f6; color:#00616a; }
+.lab3d button svg { flex-shrink:0; }
+.lab3d .lab3d-imaging-link { margin-left:auto; display:flex; align-items:center; gap:7px; }
+.lab3d-scales { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.lab3d-scales button { display:flex; align-items:center; gap:8px; min-height:43px; justify-content:center; }
+.lab3d-scales small { font-size:10px; color:#507184; font-variant-numeric:tabular-nums; }
+.lab3d-bench { display:grid; grid-template-columns:minmax(0,1fr) minmax(238px,29%); gap:12px; align-items:start; }
+.lab3d-model { min-width:0; color:#f1fbff; background:#071923; border:1px solid #174354; border-radius:14px; overflow:hidden; }
+.lab3d-model-head { display:flex; justify-content:space-between; align-items:center; padding:13px 15px; border-bottom:1px solid #1b3c4b; }
+.lab3d-model-head small { font-size:9px; color:var(--aqua); font-weight:800; letter-spacing:.14em; }
+.lab3d-model-head h2 { font-size:clamp(18px,2.35vw,28px); font-weight:750; margin-top:3px; }
+.lab3d-model button { color:#e9faff; background:#102b39; border-color:#285263; }
+.lab3d-model button[aria-pressed=true] { color:#efffff; background:#075964; border-color:#35afb2; }
+.lab3d-stage { position:relative; min-height:clamp(365px,56vh,645px); background:radial-gradient(ellipse at 48% 50%,#133145,#071720 67%); }
+.lab3d-stage:before { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg,transparent 95%,#34778b28 96%),linear-gradient(90deg,transparent 96%,#34778b28 97%); background-size:36px 36px; mask-image:radial-gradient(ellipse,#000,transparent 77%); }
+.lab3d-surface,.lab3d-canvas { position:absolute; inset:0; }
+.lab3d-canvas canvas { display:block; width:100%; height:100%; }
+.lab3d-loading { position:absolute; top:45%; left:50%; transform:translateX(-50%); pointer-events:none; padding:8px 12px; border-radius:8px; background:#113343; color:white; }
+.lab3d-render-modes,.lab3d-camera { display:flex; flex-wrap:wrap; gap:5px; }
+.lab3d-render-modes { position:absolute; top:9px; left:10px; right:10px; }
+.lab3d-camera { padding:8px 10px; border-top:1px solid #1b3c4b; }
+.lab3d-orbit-help { position:absolute; bottom:7px; right:10px; color:#aacbd4; font-size:10px; pointer-events:none; padding:3px; background:#071c2796; }
+.lab3d-label { position:absolute; z-index:1; transform:translate(-50%,-140%); background:#072d3a; border:1px solid #54dfeb; color:#eaffff; font-size:11px; border-radius:5px; padding:4px 8px; pointer-events:none; }
+.lab3d-trace { position:absolute; bottom:23px; left:10px; width:clamp(130px,36%,290px); border:1px solid #29566a; border-radius:8px; background:#071d2bea; pointer-events:none; padding:5px 8px; }
+.lab3d-trace span,.lab3d-layerlist h3 { display:flex; align-items:center; gap:6px; }
+.lab3d-trace span { font-size:10px; color:#9cd7dc; }
+.lab3d-trace svg { width:100%; }
+.lab3d-inspector,.lab3d-activity { display:grid; gap:10px; min-width:0; background:#fff; border:1px solid #d2e1e9; border-radius:12px; padding:13px; }
+.lab3d-inspector>p { font-size:12px; }
+.lab3d-inspector .lab3d-activity { background:#f2fafb; padding:8px; }
+.lab3d-inspector .lab3d-activity h2 { font-size:18px; }
+.lab3d-inspector .lab3d-steps { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.lab3d-inspector .lab3d-steps button { flex-direction:column; padding:5px 3px; font-size:10px; }
+.lab3d-inspector .lab3d-step-body { padding:5px 1px; gap:5px; font-size:12px; }
+.lab3d-inspector .lab3d-caption { font-size:10px; }
+@media(min-width:681px) { .lab3d-inspector { max-height:calc(clamp(365px,56vh,645px) + 116px); overflow:auto; overscroll-behavior:contain; } }
+
+.lab3d-movement { display:flex; align-items:center; gap:10px; }
+.lab3d-movement button { align-self:center; background:#087f82; color:#fff; }
+.lab3d-movement label,.lab3d-cut label,.lab3d-molecule-picker,.lab3d-step-body label { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px; font-size:12px; }
+.lab3d-movement label { flex:1; }
+.lab3d input[type=range] { width:100%; height:15px; accent-color:#018b93; }
+.lab3d-check { display:flex; align-items:center; gap:6px; font-size:12px; }
+.lab3d-cut { display:grid; gap:6px; padding:8px 0; border-block:1px solid #e1ecf1; }
+.lab3d-cut select { padding:4px; }
+.lab3d-layerlist { display:grid; gap:4px; }
+.lab3d-layerlist h3 { font-size:13px; margin-bottom:3px; }
+.lab3d-layerlist button { display:flex; align-items:center; text-align:left; padding:4px 7px; gap:6px; border-radius:6px; }
+.lab3d-layerlist button svg:last-child { margin-left:auto; }
+.lab3d-layerlist button[aria-pressed=false] { opacity:.66; }
+.lab3d-layerlist button i { border-radius:50%; width:9px; height:9px; flex:0 0 9px; }
+.lab3d-search,.lab3d-selected { display:flex; align-items:center; gap:6px; padding:5px 7px; border:1px solid #cadae2; border-radius:6px; color:#2e5265; }
+.lab3d-search input { width:100%; min-width:0; padding:3px 0; }
+.lab3d-selected { margin-top:5px; justify-content:space-between; font-size:12px; }
+.lab3d-selected button { padding:4px; }
+.lab3d-parts ul { max-height:125px; overflow:auto; list-style:none; padding:0; margin:4px 0 0; }
+.lab3d-parts li button { width:100%; padding:4px 6px; text-align:left; border-color:transparent; overflow-wrap:anywhere; }
+.lab3d-atom-key { display:flex; flex-wrap:wrap; gap:5px; }
+.lab3d-atom-key span { padding:2px 4px; border:1px solid #b4c8d3; border-radius:3px; }
+.lab3d-atom-key span:nth-child(3) { border-color:#4b8dff; }
+.lab3d-atom-key span:nth-child(4) { border-color:#ff5c65; }
+.lab3d-activity-title { display:flex; align-items:center; gap:8px; color:#007f86; }
+.lab3d-activity-title h2 { font-size:20px; color:#14394b; }
+.lab3d-steps { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; }
+.lab3d-steps button { display:flex; align-items:center; gap:6px; justify-content:center; }
+.lab3d-steps span { display:grid; place-items:center; width:18px; height:18px; flex:0 0 18px; border-radius:50%; background:#dceff2; }
+.lab3d-step-body { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; background:#f3fafb; border-radius:8px; padding:9px; }
+.lab3d-step-body>div:first-child { flex:1 1 280px; }
+.lab3d-step-body p,.lab3d-caption { font-size:12px; color:#557183; }
+.lab3d-step-actions,.lab3d-resources { display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
+.lab3d-step-actions button,.lab3d-resources button { display:flex; align-items:center; gap:5px; }
+@media(max-width:920px) { .lab3d-steps button { flex-direction:column; } }
+@media(max-width:680px) {
+  .lab3d-bench { grid-template-columns:minmax(0,1fr); }
+  .lab3d-scales { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .lab3d .lab3d-imaging-link { margin-left:0; }
+  .lab3d-stage { min-height:400px; }
+}

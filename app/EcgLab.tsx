@@ -78,7 +78,7 @@ const reading = [
   ['ST e onda T', 'Compare o ponto J, o segmento ST e a onda T em derivações vizinhas. Relacione os achados com o contexto clínico.'],
 ];
 
-export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; onHome: () => void }) {
+export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: () => void; onHome: () => void; onImmersive: () => void }) {
   const [pattern, setPattern] = useState<PatternId>('sinus');
   const [bpm, setBpm] = useState<number>(ecgPatterns.sinus.bpm);
   const [frequencyDraft, setFrequencyDraft] = useState<string | null>(null);
@@ -309,6 +309,7 @@ export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; o
               </div>
               <div className="ecg-related-actions">
                 <button onClick={onAnatomy}><Heart size={17} /> Anatomia relacionada <ChevronRight size={16} /></button>
+                <button onClick={onImmersive}><Activity size={17} /> Fluxo e artérias em 3D <ChevronRight size={16} /></button>
                 <button onClick={() => openPlacement(true)}><Focus size={17} /> Posicionar eletrodos <ChevronRight size={16} /></button>
                 <button onClick={() => openTab('case')}><ClipboardList size={17} /> Caso clínico <ChevronRight size={16} /></button>
                 <a href="https://pubmed.ncbi.nlm.nih.gov/?term=10.1161%2FCIRCULATIONAHA.106.180200" target="_blank" rel="noreferrer"><BookOpen size={17} /> Evidências (PubMed) <ArrowUpRight size={16} /></a>

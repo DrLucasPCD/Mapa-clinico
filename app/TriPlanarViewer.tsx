@@ -11,20 +11,28 @@ type Props = {
   windowWidth: number;
   onSlice: (index: number) => void;
   onPatientPoint: (point: number[]) => void;
+  onCursorChange: (point: number[]) => void;
 };
 
 const views: MprView[] = ['source', 'row', 'column'];
 type MeasurePoint = { view: MprView; index: number; x: number; y: number; patient: number[] };
 
-export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, spatialView }: Props) {
+export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView }: Props) {
+  const safeSlice = Math.max(0, Math.min(series.slices.length - 1, slice));
   const geometry = useMemo(() => mprGeometry(series), [series]);
-  const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice });
+  const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice });
   const [measureMode, setMeasureMode] = useState(false);
   const [measureStart, setMeasureStart] = useState<MeasurePoint | null>(null);
   const [measureEnd, setMeasureEnd] = useState<MeasurePoint | null>(null);
   const canvases = useRef<Record<MprView, HTMLCanvasElement | null>>({ source: null, row: null, column: null });
-  useEffect(() => { setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice }); setMeasureStart(null); setMeasureEnd(null); }, [series]);
-  useEffect(() => setCursor(current => current.slice === slice ? current : { ...current, slice }), [slice]);
+  useEffect(() => { setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice }); setMeasureStart(null); setMeasureEnd(null); }, [series]);
+  useEffect(() => setCursor(current => current.slice === safeSlice ? current : { ...current, slice: safeSlice }), [safeSlice]);
+  useEffect(() => {
+    const frame = series.slices[cursor.slice];
+    if (!frame) return;
+    const point = pixelCenter(frame,cursor.row,cursor.column);
+    if (point) onCursorChange(point);
+  }, [series,cursor,onCursorChange]);
 
   useEffect(() => {
     if (!geometry) return;

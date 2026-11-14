@@ -6,6 +6,7 @@
 
 - **Laboratório de ECG** com coração 3D, vetor sincronizado ao traçado, 12 derivações convencionais e derivações direitas e posteriores. Inclui nove padrões sintéticos, velocidade e ganho ajustáveis, reprodução com pausa, guia de leitura e diagrama hexaxial arrastável com cálculo do eixo frontal.
 - O coração 3D permite selecionar os eixos das 17 derivações disponíveis. A condução elétrica é exibida no mesmo modelo e acompanha o cursor do traçado. Os botões de etapa levam ao trecho correspondente do ECG. Em **Posicionar eletrodos**, o guia mostra os pontos da montagem padrão e das complementares em vistas anterior, lateral e posterior, com prática de colocação.
+- **Laboratório 3D** com dissecação de coração e encéfalo, camadas translúcidas e recortes em três planos. O coração tem fluxo ilustrado, ECG sintético sincronizado e uma simulação de placa, fio-guia, balão e stent na descendente anterior. O encéfalo oferece exploração de giros e núcleos, nuvem de pontos da malha, neurônio esquemático e conformações moleculares do PubChem.
 - **Modo Plantão** com um atendimento sobre dor no hipocôndrio direito nos modos guiado e prova. A história simulada é complementada por imagens reais de ultrassonografia do caso Radiopaedia rID 27525.
 - **Treino visual** para localizar estruturas no joelho 3D e marcar regiões de interesse em TC, RM e USG. **Minha revisão** reúne pendências dos percursos, questões, plantão, casos e treino visual no navegador. A **Biblioteca de casos** filtra seis casos por tema, sistema, modalidade e dificuldade.
 
@@ -95,6 +96,7 @@ Cada caso classifica sua mídia antes de oferecer integração: imagens selecion
 
 O leitor posiciona as fatias no espaço do próprio exame quando posição, orientação e espaçamento dos pixels são válidos. Esse posicionamento não é registro do Atlas genérico e não segmenta órgãos. O caso Radiopaedia rID 87566 oferece uma pilha renderizada FLAIR; ela não é uma série DICOM e, por isso, não habilita MPR ou alinhamento exato.
 
+Em **TC / RM → Volume do exame**, uma pilha regular habilita a renderização volumétrica local por intensidade. Os cortes e a mira mantêm as coordenadas físicas compartilhadas. É possível recortar na mira, mudar a opacidade e comparar o resultado ao coração do Atlas. O volume é reamostrado em até 144 voxels por eixo e não segmenta lesões nem reproduz movimento ou fluxo específico do paciente. As animações do Laboratório 3D são cenas de referência separadas.
 
 ### Superfície da TC e ajuste manual do Atlas
 

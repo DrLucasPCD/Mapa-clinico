@@ -48,3 +48,7 @@ Arquivos em `public/models/detailed`: distribuição de https://github.com/Nurka
 - Feminino (`*_female.glb`, `manifest_female.json`): NIH Human Reference Atlas / Visible Human Female, CC BY 4.0. Abrangência: tronco e pelve.
 - Os arquivos não foram mesclados entre sexos/fontes. O aplicativo adapta coordenadas e interação em memória; as licenças dos ativos permanecem independentes da licença do código.
 - Decodificadores Draco: distribuídos com Three.js; licença Apache 2.0 do Draco preservada na pasta de decodificadores.
+
+### Modelos moleculares 3D
+
+O Laboratório 3D usa coordenadas de conformações e ligações obtidas da API PUG REST do PubChem (NCBI), convertidas para JSON: [dopamina, CID 681](https://pubchem.ncbi.nlm.nih.gov/compound/681), [serotonina, CID 5202](https://pubchem.ncbi.nlm.nih.gov/compound/5202) e [noradrenalina, CID 439260](https://pubchem.ncbi.nlm.nih.gov/compound/439260). As cenas renderizam essas coordenadas localmente.
