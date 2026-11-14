@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-13T17:11:27.496Z",
+  "lastChecked": "2026-11-14T15:47:52.672Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -91,6 +91,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43031769",
+      "title": "McCune-Albright syndrome with kyphosis challenges in diagnosis and treatment: a rare male case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43031769/",
+      "authors": "Peng W, Liu H, Cui W",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -208,15 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001301/",
       "authors": "Jiang F, Zhang M, Yang C",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "42999753",
-      "title": "Systemic cardiac microcoil migration: A rare complication of CT-guided lung localization.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42999753/",
-      "authors": "Almutairi A, AlHarbi H, Aldayhani A",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
