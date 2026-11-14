@@ -1,27 +1,7 @@
-.clinical-ecg {
-  --ecg-sidebar-width: clamp(195px, 16vw, 260px);
-  --ecg-sidebar: #092431;
-  --ecg-panel-border: #dbe3ec;
-  background: #eef3f8;
-}
-.clinical-ecg .clinical-topbar { background: #f8fafde8; gap: clamp(12px, 1.6vw, 24px); padding-inline: 0 22px; }
-.clinical-ecg .clinical-brand { align-self: stretch; width: var(--ecg-sidebar-width); min-width: var(--ecg-sidebar-width); padding: 8px 16px; margin-block: -10px; background: var(--ecg-sidebar); color: #fff; }
-.clinical-ecg .clinical-brand > span { color: #38e4d8; border-color: #38e4d8; padding: 7px; }
-.clinical-ecg .clinical-brand strong { font-size: clamp(16px, 1.45vw, 23px); white-space: nowrap; }
-.clinical-ecg .clinical-brand small { color: #d5e7ec; }
-.clinical-ecg .clinical-body { grid-template-columns: var(--ecg-sidebar-width) minmax(0, 1fr); }
-.clinical-ecg .clinical-sidebar { background: linear-gradient(145deg, #0d2b3a, #071f2c 72%); border-color: #183747; padding: 16px 13px; gap: 2px; }
-.clinical-ecg .clinical-sidebar .nav-item { color: #edf6f9; padding: 7px 10px; font-size: 13px; }
-.clinical-ecg .clinical-sidebar .nav-item:hover { background: #164457; }
-.clinical-ecg .clinical-sidebar .nav-item.active { background: linear-gradient(105deg, #078d87, #086c70); color: #fff; }
-.clinical-ecg .clinical-sidebar .nav-item.active svg, .ecg-nav-heading svg, .clinical-ecg .ecg-nav-overview svg { color: #47eedf; }
-.clinical-ecg .clinical-sidebar .ecg-nav-overview { background: #0d3c47; font-weight: 700; padding-block: 9px; margin-bottom: 3px; }
-.clinical-ecg .ecg-nav-heading { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 14px; margin: 14px 8px 4px; font-weight: 700; }
-.clinical-ecg .ecg-nav-heading svg { width: 19px; height: 19px; }
 .clinical-ecg .workspace-ecg { padding: 0; }
 .clinical-ecg .workspace-ecg > .case-column { background: transparent; border: 0; border-radius: 0; }
-.clinical-ecg .clinical-bottom { margin-left: var(--ecg-sidebar-width); }
 .ecg-lab.training-screen {
+  --ecg-panel-border: #dbe3ec;
   --training-ink: #102030;
   --training-muted: #46566b;
   --training-brand: #007d79;
@@ -136,15 +116,7 @@ button.ecg-vital { background: none; border: 0; text-align: left; }
 @media (max-width: 1000px) {
   .ecg-summary-row { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 850px) {
-  .clinical-ecg .clinical-topbar { padding: 10px; }
-  .clinical-ecg .clinical-brand { background: transparent; color: #102b48; margin: 0; padding: 0; min-width: 0; width: auto; }
-  .clinical-ecg .clinical-brand small { color: #537187; }
-  .clinical-ecg .clinical-brand > span { color: #008781; border-color: #008781; }
-  .clinical-ecg .clinical-bottom { margin-left: 12px; }
-}
 @media (max-width: 620px) {
-  .clinical-ecg .clinical-topbar .saved-button { display: none; }
   .ecg-workbench { grid-template-columns: minmax(0, 1fr); }
   .ecg-explainer-body { grid-template-columns: minmax(0, 1fr); }
   .ecg-related-actions { grid-template-columns: minmax(0, 1fr); }

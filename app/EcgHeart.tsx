@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadDetailedModel } from './detailed-models';
+import { heartChambers, heartLighting, heartOrgans } from './heart-model';
 import { ecgLeads, frontalLeads, rightLeads, posteriorLeads, type ConductionStage, type LeadId, type Vector } from './ecg-model';
 import { conductionNodes, conductionPaths } from './ecg-conduction';
 
@@ -15,9 +16,6 @@ type Props = {
   showConduction: boolean;
   onSelectLead: (id: LeadId) => void;
 };
-const chambers = ['right_atrium', 'left_atrium', 'right_ventricle', 'left_ventricle'];
-const vessels = ['ascending_aorta', 'aortic_arch', 'pulmonary_trunk', 'superior_vena_cava',
-  'right_coronary_artery', 'left_coronary_artery', 'anterior_interventricular_artery', 'great_cardiac_vein'];
 const toWorld = ([left, inferior, anterior]: Vector) => new T.Vector3(left, -inferior, anterior);
 const allLeads = Object.keys(ecgLeads) as LeadId[];
 const heartMagnification = 1.2;
@@ -56,13 +54,13 @@ export default function EcgHeart(props: Props) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     host.appendChild(renderer.domElement);
     const scene = new T.Scene();
-    scene.add(new T.HemisphereLight(0xf6f5ff, 0x45323b, 2));
-    const light = new T.DirectionalLight(0xffd7c7, 2.3);
-    light.position.set(2, 2, 3);
-    scene.add(light);
-    const rim = new T.DirectionalLight(0x9ed5ff, 1.5);
-    rim.position.set(-2, 1, -3);
-    scene.add(rim);
+    const { ambient, key, rim } = heartLighting;
+    scene.add(new T.HemisphereLight(ambient.sky, ambient.ground, ambient.intensity));
+    for (const preset of [key, rim]) {
+      const light = new T.DirectionalLight(preset.color, preset.intensity);
+      light.position.fromArray(preset.position);
+      scene.add(light);
+    }
     const camera = new T.PerspectiveCamera(43, 1, .01, 20);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
@@ -138,19 +136,13 @@ export default function EcgHeart(props: Props) {
         (object.material as T.Material).dispose();
       }
     });
-    loadDetailedModel('male', undefined, [...chambers, ...vessels]).then(group => {
+    loadDetailedModel('male', undefined, heartOrgans).then(group => {
       if (disposed) { disposeHeart(group); return; }
       // Keep the conduction paths centered on the chambers when vessels are added.
       const box = new T.Box3();
       for (const object of group.children) {
         const organ = String(object.userData.anatomyId).replaceAll('-', '_');
-        if (chambers.includes(organ)) box.expandByObject(object);
-        if (!(object instanceof T.Mesh)) continue;
-        const material = object.material as T.MeshStandardMaterial;
-        if (organ === 'pulmonary_trunk' || organ === 'superior_vena_cava') material.color.set('#4c6fb2');
-        else if (organ.includes('coronary_artery') || organ === 'anterior_interventricular_artery') material.color.set('#e38978');
-        else if (chambers.includes(organ)) material.color.set('#ac393d');
-        material.roughness = .44;
+        if (heartChambers.includes(organ)) box.expandByObject(object);
       }
       const center = box.getCenter(new T.Vector3());
       const size = box.getSize(new T.Vector3()).length();

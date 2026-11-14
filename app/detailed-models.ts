@@ -1,3 +1,4 @@
+import { heartMaterial, isHeartStructure } from './heart-model';
 import { detailedAliases } from './detailed-catalog';
 import * as THREE from 'three';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
@@ -107,6 +108,7 @@ export function aliasesForDetailedStructure(organ: DetailedManifestOrgan): strin
 
 export function detailedStructureMatches(mesh: THREE.Object3D, selection: string): boolean {
   if (!selection) return false;
+  if (selection === 'heart') return isHeartStructure(String(mesh.userData.anatomyId));
   const [base, side] = selection.split('@');
   const wantedSide = side === 'left' || side === 'right' ? side : '';
   const values = [String(mesh.userData.anatomyId || ''), ...(mesh.userData.aliases || [])];
@@ -183,7 +185,7 @@ export async function loadDetailedModel(
     geometry.computeBoundingSphere();
     const palette: Record<string, string> = { skeletal: '#e7d7b5', muscular: '#b34e4b', articular: '#c3d8dc', cardiovascular: '#c83f48', nervous: '#e6cb77', digestive: '#c89079', renal: '#ab5755', reproductive: '#cb8d97', respiratory: '#cb949b', lymphatic: '#77a27a', endocrine: '#d9a067', integumentary: '#c8a68e', regional: '#c8a68e' };
     const color = /vein|venous|vena_/.test(organ.organ_id) ? '#567fbd' : /fascia|tendon|ligament/.test(organ.organ_id) ? '#ded9c8' : palette[organ.system] ?? '#c6b5a0';
-    const material = new THREE.MeshStandardMaterial({ color, roughness: 0.72, metalness: 0 });
+    const material = new THREE.MeshStandardMaterial({ color, roughness: 0.72, metalness: 0, ...heartMaterial(organ.organ_id) });
     const mesh = new THREE.Mesh(geometry, material);
     const canonicalId = organ.organ_id.replace(/_l$/, '_left').replace(/_r$/, '_right').replace(/_/g, '-');
     mesh.name = organ.name_en;

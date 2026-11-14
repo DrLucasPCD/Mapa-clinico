@@ -55,6 +55,7 @@ import { ultrasoundZones, type UltrasoundCaseId, type UltrasoundZone } from './u
 import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
+import { heartOrgans } from './heart-model';
 import { CaseLibrary, ReviewCenter, VisualTraining, kneeOrgans, type ReviewDestination, type VisualId } from './TrainingViews';
 import type { LibraryCase } from './training-data';
 import type { PathStep } from './study-paths';
@@ -89,6 +90,7 @@ type Drawer =
 
 export default function App() {
   const [workspaceMode, setWorkspaceMode] = useState<Workspace>('imaging');
+  const [caseView, setCaseView] = useState<'overview' | 'atlas' | 'case' | 'publications'>('case');
   const [pathEntry, setPathEntry] = useState<{ id: string; step: PathStep; question?: number }>();
   const [studyTopic, setStudyTopic] = useState<string>();
   const [openCaseQuestion, setOpenCaseQuestion] = useState(false);
@@ -136,7 +138,10 @@ export default function App() {
     [saved, setSaved] = useState<string[]>([]);
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setDrawer(null);
+      if (e.key === 'Escape') {
+        setDrawer(null);
+        setMobileNav(false);
+      }
     };
     window.addEventListener('keydown', close);
     return () => window.removeEventListener('keydown', close);
@@ -146,6 +151,8 @@ export default function App() {
     activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
   const showAtlasSlice = workspaceMode === 'imaging' ||
     (workspaceMode === 'case' && activeCase.acquisition?.kind === 'ordered-series');
+  const sliceMatchesHeart = slice?.region === 'thorax' || slice?.region === 'body';
+  const visibleSlice = showAtlasSlice && (!(isolate && selected === 'heart') || sliceMatchesHeart) ? slice : null;
   const atlasExercise = workspaceMode === 'visual' && visualTask === 'atlas-patella';
   const trainingWorkspace = ['plantao', 'ecg', 'visual', 'library', 'review'].includes(workspaceMode);
   const showAtlas = !trainingWorkspace || atlasExercise || (workspaceMode === 'plantao' && plantaoAtlas);
@@ -154,7 +161,10 @@ export default function App() {
     if (next) setSlice(next);
   }, [activeCase]);
   const searchResults = useMemo(
-    () => searchAtlasStructures(query, system, 60, modelCatalog),
+    () => searchAtlasStructures(query, system, 60, [
+      { id: 'heart', name: 'Coração', system: 'cardiovascular', objectCount: heartOrgans.length },
+      ...modelCatalog,
+    ]),
     [query, system, modelCatalog],
   );
 
@@ -179,7 +189,9 @@ export default function App() {
   };
   const focusStructure = (id: string, title: string) => {
     setWorkspaceMode(current => ['ecg', 'library', 'review', 'visual'].includes(current) ? 'case' : current);
+    setCaseView('atlas');
     if (workspaceMode === 'plantao') setPlantaoAtlas(true);
+    if (id === 'heart') setModelVariant('male');
     choose(id, title);
     setSystem('all');
     setRegion('all');
@@ -254,8 +266,33 @@ export default function App() {
     if (id) setCaseId(id);
     setOpenCaseQuestion(question);
     setWorkspaceMode('case');
+    setCaseView('case');
     setMobileNav(false);
   }
+  function openAtlas(view: typeof caseView = 'atlas') {
+    resetAtlas();
+    openCase();
+    setCaseView(view);
+    if (view === 'publications') {
+      requestAnimationFrame(() => document.querySelector('.publication-column')?.scrollIntoView({ behavior: 'smooth' }));
+    } else {
+      window.scrollTo({ top: 0 });
+    }
+  }
+  function openImaging() {
+    setWorkspaceMode('imaging');
+    setMobileNav(false);
+    resetAtlas();
+  }
+  function openNavDrawer(panel: Drawer) {
+    setDrawer(panel);
+    setMobileNav(false);
+  }
+  const navItem = (label: string, Icon: typeof Home, action: () => void, current = false, modifier = '') => (
+    <button className={`nav-item ${modifier}`} aria-current={current ? 'page' : undefined} onClick={action}>
+      <Icon /> {label}
+    </button>
+  );
   function chooseVisual(id: VisualId) {
     setVisualTask(id);
     setVisualSelection('');
@@ -315,10 +352,12 @@ export default function App() {
       <header className="clinical-topbar">
         <button
           className="mobile-menu"
-          aria-label="Abrir navegação"
+          aria-label={mobileNav ? 'Fechar navegação' : 'Abrir navegação'}
+          aria-expanded={mobileNav}
+          aria-controls="clinical-navigation"
           onClick={() => setMobileNav(!mobileNav)}
         >
-          <Menu />
+          {mobileNav ? <X /> : <Menu />}
         </button>
         <a className="clinical-brand" href="#top">
           <span>
@@ -341,7 +380,7 @@ export default function App() {
           </label>
           {query && (
             <button onClick={() => setDrawer('structures')}>
-              {searchResults.length} resultados
+              {searchResults.length} {searchResults.length === 1 ? 'resultado' : 'resultados'}
             </button>
           )}
         </div>
@@ -378,124 +417,48 @@ export default function App() {
         </div>
       </header>
       <div className="clinical-body">
-        <aside className={'clinical-sidebar ' + (mobileNav ? 'open' : '')}>
-          {workspaceMode === 'ecg' ? <>
-            <button className="nav-item ecg-nav-overview" onClick={() => { resetAtlas(); openCase(); }}><Home /> Visão geral</button>
-            <button className="nav-item" onClick={() => { setDrawer('lists'); setMobileNav(false); }}><Bookmark /> Minhas listas</button>
-            <h2 className="ecg-nav-heading"><Layers /> Explorar o corpo</h2>
-            <button className="nav-item" onClick={() => { resetAtlas(); openCase(); }}><Layers /> Atlas 3D</button>
-            <button className="nav-item" onClick={() => { setWorkspaceMode('imaging'); setMobileNav(false); resetAtlas(); }}><ScanLine /> Imagens (TC, RM, RX)</button>
-            <button className="nav-item" onClick={() => openUltrasound()}><Activity /> Simulador de USG</button>
-            <h2 className="ecg-nav-heading"><Stethoscope /> Casos clínicos</h2>
-            <button className="nav-item" onClick={() => openTraining('library')}><Library /> Biblioteca de casos</button>
-            <button className="nav-item" onClick={() => openTraining('plantao')}><Stethoscope /> Modo Plantão</button>
-            <button className="nav-item" onClick={() => openPaths()}><BookOpen /> Percursos de estudo</button>
-            <h2 className="ecg-nav-heading"><Activity /> Laboratórios</h2>
-            <button className="nav-item active" aria-current="page" onClick={() => setMobileNav(false)}><Activity /> Laboratório de ECG</button>
-            <button className="nav-item" onClick={() => openTraining('visual')}><Focus /> Treino visual</button>
-            <h2 className="ecg-nav-heading"><BookOpen /> Minha aprendizagem</h2>
-            <button className="nav-item" onClick={() => openTraining('review')}><ListChecks /> Minha revisão</button>
-            <button className="nav-item" onClick={() => { setDrawer('maps'); setMobileNav(false); }}><Brain /> Mapas mentais</button>
-            <button className="nav-item" onClick={() => { setDrawer('protocols'); setMobileNav(false); }}><Library /> Protocolos e diretrizes</button>
-            <button className="nav-item" onClick={() => openStudy('quiz')}><ListChecks /> Simulados e questões</button>
-            <button className="nav-item" onClick={() => openStudy('topics')}><BookOpen /> Roteiro da faculdade</button>
-          </> : <>
-          <button
-            className="nav-item"
-            onClick={() => {
-              resetAtlas();
-              openCase();
-              setMobileNav(false);
-            }}
-          >
-            <Home /> Início
-          </button>
-          <p>EXPLORAR</p>
-          <button className={`nav-item ${workspaceMode === 'paths' ? 'active' : ''}`} onClick={() => openPaths()}>
-            <BookOpen /> Percursos de estudo
-          </button>
-          <button className={`nav-item ${workspaceMode === 'plantao' ? 'active' : ''}`} onClick={() => openTraining('plantao')}><Stethoscope /> Modo Plantão</button>
-          <button className="nav-item" onClick={() => openTraining('ecg')}><Activity /> Laboratório de ECG</button>
-          <button className={`nav-item ${workspaceMode === 'visual' ? 'active' : ''}`} onClick={() => openTraining('visual')}><Focus /> Treino visual</button>
-          <button className={`nav-item ${workspaceMode === 'review' ? 'active' : ''}`} onClick={() => openTraining('review')}><ListChecks /> Minha revisão</button>
-          <button className={`nav-item ${workspaceMode === 'library' ? 'active' : ''}`} onClick={() => openTraining('library')}><Library /> Biblioteca de casos</button>
-          <button className="nav-item" onClick={() => { if (!showAtlas || atlasExercise) openCase(); resetAtlas(); }}>
-            <Layers /> Corpo integrado
-          </button>
-          <button
-            className="nav-item"
-            onClick={() => {
-              if (!showAtlas || atlasExercise) openCase();
-              setRegion('all');
-              setLayoutMode('assembled');
-            }}
-          >
-            <Layers /> Atlas 3D
-          </button>
-          <button
-            className={`nav-item ${workspaceMode === 'case' ? 'active' : ''}`}
-            onClick={() => openCase()}
-          >
-            <Focus /> Casos clínicos
-          </button>
-          <button
-            className={`nav-item ${workspaceMode === 'imaging' ? 'active' : ''}`}
-            onClick={() => { setWorkspaceMode('imaging'); setMobileNav(false); resetAtlas(); }}
-          >
-            <ScanLine /> Imagens (TC, RM, RX)
-          </button>
-          <button className={`nav-item ${workspaceMode === 'ultrasound' ? 'active' : ''}`} onClick={() => openUltrasound()}><Activity /> Simulador USG</button>
-          <button
-            className="nav-item"
-            onClick={() => {
-              openCase();
-              requestAnimationFrame(() =>
-                document.querySelector('.publication-column')?.scrollIntoView({ behavior: 'smooth' }));
-            }}
-          >
-            <Newspaper /> Publicações
-          </button>
-          <button className="nav-item" onClick={() => setDrawer('maps')}>
-            <Brain /> Mapas mentais
-          </button>
-          <button className="nav-item" onClick={() => setDrawer('protocols')}>
-            <Library /> Protocolos e diretrizes
-          </button>
-          <button className="nav-item" onClick={() => openStudy('quiz')}>
-            <ListChecks /> Simulados e questões
-          </button>
-          <button className="nav-item" onClick={() => openStudy('topics')}><BookOpen /> Roteiro da faculdade</button>
-          <button className="nav-item" onClick={() => openStudy('vessels')}><Activity /> Artérias e territórios</button>
-          <div className="side-rule" />
-          <p>SISTEMAS</p>
-          {systems.slice(1).map(([id, label, Icon]) => (
-            <button
-              key={id}
-              className={
-                'nav-item system-link ' + (system === id ? 'selected' : '')
-              }
-              onClick={() => {
-                if (!showAtlas || atlasExercise) openCase();
-                setSystem(id);
-                setIsolate(false);
-              }}
-            >
-              <Icon />
-              {label}
-            </button>
-          ))}
-          <button
-            className="connect-card"
-            onClick={() => setDrawer('structures')}
-          >
-            <Brain />
-            <span>
-              <strong>Conectar conhecimentos</strong>
-              <small>Do corpo à clínica</small>
-            </span>
-          </button>
-          </>}
-        </aside>
+        <nav id="clinical-navigation" aria-label="Navegação principal" className={`clinical-sidebar${mobileNav ? ' open' : ''}`}>
+          {navItem('Visão geral', Home, () => openAtlas('overview'), workspaceMode === 'case' && caseView === 'overview', 'nav-overview')}
+          {navItem('Minhas listas', Bookmark, () => openNavDrawer('lists'))}
+
+          <h2 className="nav-heading"><Layers /> Explorar o corpo</h2>
+          {navItem('Atlas 3D', Layers, () => openAtlas(), workspaceMode === 'case' && caseView === 'atlas')}
+          <details className="nav-systems">
+            <summary className="nav-item"><Heart /> Sistemas do corpo <ChevronRight className="nav-chevron" /></summary>
+            <div>
+              {systems.map(([id, label, Icon]) => (
+                <button key={id} className="nav-item" aria-pressed={system === id} onClick={() => {
+                  if (!showAtlas || atlasExercise) openAtlas();
+                  setSystem(id);
+                  setIsolate(false);
+                  setMobileNav(false);
+                  document.getElementById('atlas-panel')?.scrollIntoView({ block: 'nearest' });
+                }}><Icon /> {label}</button>
+              ))}
+            </div>
+          </details>
+          {navItem('Imagens (TC, RM, RX)', ScanLine, openImaging, workspaceMode === 'imaging')}
+          {navItem('Simulador de USG', Activity, () => openUltrasound(), workspaceMode === 'ultrasound')}
+          {navItem('Artérias e territórios', Activity, () => openStudy('vessels'), workspaceMode === 'study' && studyTab === 'vessels')}
+
+          <h2 className="nav-heading"><Stethoscope /> Casos clínicos</h2>
+          {navItem('Biblioteca de casos', Library, () => openTraining('library'), workspaceMode === 'library')}
+          {navItem('Caso em estudo', Focus, () => openCase(), workspaceMode === 'case' && caseView === 'case')}
+          {navItem('Modo Plantão', Stethoscope, () => openTraining('plantao'), workspaceMode === 'plantao')}
+          {navItem('Percursos de estudo', BookOpen, () => openPaths(), workspaceMode === 'paths')}
+
+          <h2 className="nav-heading"><Activity /> Laboratórios</h2>
+          {navItem('Laboratório de ECG', Activity, () => openTraining('ecg'), workspaceMode === 'ecg')}
+          {navItem('Treino visual', Focus, () => openTraining('visual'), workspaceMode === 'visual')}
+
+          <h2 className="nav-heading"><BookOpen /> Minha aprendizagem</h2>
+          {navItem('Minha revisão', ListChecks, () => openTraining('review'), workspaceMode === 'review')}
+          {navItem('Mapas mentais', Brain, () => openNavDrawer('maps'))}
+          {navItem('Publicações', Newspaper, () => openAtlas('publications'), workspaceMode === 'case' && caseView === 'publications')}
+          {navItem('Protocolos e diretrizes', Library, () => openNavDrawer('protocols'))}
+          {navItem('Simulados e questões', ListChecks, () => openStudy('quiz'), workspaceMode === 'study' && studyTab === 'quiz')}
+          {navItem('Roteiro da faculdade', BookOpen, () => openStudy('topics'), workspaceMode === 'study' && studyTab === 'topics')}
+        </nav>
         <main className={`dashboard-stage workspace-${workspaceMode}${trainingWorkspace ? ' workspace-training' : ''}${showAtlas && trainingWorkspace ? ' training-with-atlas' : ''}`}>
           {showAtlas && (atlasExercise ? (
             <section className="atlas-column training-atlas" id="atlas-panel" aria-label="Modelo do joelho sem rótulos">
@@ -575,7 +538,7 @@ export default function App() {
             >
               <Atlas
                 modelVariant={modelVariant}
-                slice={showAtlasSlice ? slice : null}
+                slice={visibleSlice}
                 system={system}
                 selected={selected}
                 isolate={isolate}
@@ -782,14 +745,14 @@ export default function App() {
               <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={() => openPaths()}>Percursos</button>
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => openCase()}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
-              <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={() => { setWorkspaceMode('imaging'); resetAtlas(); }}>TC / RM</button>
+              <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={openImaging}>TC / RM</button>
               <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
               <button className={workspaceMode === 'plantao' ? 'active' : ''} onClick={() => openTraining('plantao')}>Plantão</button>
               <button onClick={() => openTraining('ecg')}>ECG</button>
             </nav>}
             {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}>
               <EcgLab onAnatomy={() => focusPathStructure('heart', 'Coração', true)}
-                onHome={() => { resetAtlas(); openCase(); }} />
+                onHome={() => openAtlas('overview')} />
             </Suspense>
             : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
               <Plantao key={plantaoDecision ?? 'full'} reviewDecision={plantaoDecision}
@@ -830,7 +793,7 @@ export default function App() {
               item={activeCase}
               period={n}
               openQuestion={openCaseQuestion}
-              onOpenDicom={() => { setWorkspaceMode('imaging'); resetAtlas(); }}
+              onOpenDicom={openImaging}
               onLocate={locate}
               caseIndex={cases.indexOf(activeCase)}
               caseCount={cases.length}

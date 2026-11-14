@@ -10,6 +10,7 @@ import AtlasSurface from './AtlasSurface';
 import { loadDetailedModel, detailedStructureMatches } from './detailed-models';
 import { relativeSlice, type AtlasSlice } from './atlas-slice';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { heartLighting, isHeartStructure } from './heart-model';
 export type AtlasProps = {
   modelVariant?: 'male' | 'female';
   slice?: AtlasSlice | null;
@@ -68,7 +69,8 @@ export default function Atlas(props: AtlasProps) {
     controls.enableDamping = true;
     controls.minDistance = 0.15;
     controls.maxDistance = 500;
-    scene.add(new T.HemisphereLight(0xdff7ff, 0x31404c, 3));
+    const ambient = new T.HemisphereLight(0xdff7ff, 0x31404c, 3);
+    scene.add(ambient);
     const key = new T.DirectionalLight(0xffffff, 3);
     key.position.set(2, 3, 4);
     scene.add(key);
@@ -89,6 +91,8 @@ export default function Atlas(props: AtlasProps) {
     const groupCenters = new Map<string, T.Vector3>(),
       gridOffsets = new Map<string, T.Vector3>(),
       anklePivots = new Map<'left' | 'right', T.Vector3>();
+    const heartPivot = new T.Vector3();
+    let heartLightingActive = false;
     const match = (m: T.Mesh, id: string) =>
       detailedStructureMatches(m, id);
     loadDetailedModel(props.modelVariant ?? 'male', (message) => { if (!disposed) setStatus(message); }, props.organs).then(
@@ -115,6 +119,7 @@ export default function Atlas(props: AtlasProps) {
           m.userData.materials = material;
           m.userData.colors = material.map((value) => value.color.clone());
           m.userData.opacities = material.map((value) => value.opacity);
+          m.userData.isHeart = isHeartStructure(String(m.userData.anatomyId));
           m.geometry.computeBoundingBox();
           m.userData.center = m.geometry
             .boundingBox!.getCenter(new T.Vector3())
@@ -125,12 +130,15 @@ export default function Atlas(props: AtlasProps) {
         // Derive their bounds from the loaded geometry, then move each whole
         // structure as a unit when the catalogue/grid view is requested.
         const grouped = new Map<string, T.Box3>();
+        const heartBounds = new T.Box3();
         meshes.forEach((mesh) => {
           const id = String(mesh.userData.anatomyId || mesh.uuid);
           const box = grouped.get(id) ?? new T.Box3();
           box.expandByObject(mesh);
+          if (mesh.userData.isHeart) heartBounds.expandByObject(mesh);
           grouped.set(id, box);
         });
+        if (!heartBounds.isEmpty()) heartBounds.getCenter(heartPivot);
         const groups: AtlasGroup[] = [];
         grouped.forEach((box, id) => {
           const center = box.getCenter(new T.Vector3());
@@ -256,6 +264,20 @@ export default function Atlas(props: AtlasProps) {
       if (disposed) return;
       frame = requestAnimationFrame(animate);
       const p = current.current;
+      const focusOnHeart = p.isolate && p.selected === 'heart';
+      if (focusOnHeart !== heartLightingActive) {
+        heartLightingActive = focusOnHeart;
+        ambient.color.setHex(focusOnHeart ? heartLighting.ambient.sky : 0xdff7ff);
+        ambient.groundColor.setHex(focusOnHeart ? heartLighting.ambient.ground : 0x31404c);
+        ambient.intensity = focusOnHeart ? heartLighting.ambient.intensity : 3;
+        key.color.setHex(focusOnHeart ? heartLighting.key.color : 0xffffff);
+        key.intensity = focusOnHeart ? heartLighting.key.intensity : 3;
+        key.position.fromArray(focusOnHeart ? heartLighting.key.position : [2, 3, 4]);
+        rim.color.setHex(focusOnHeart ? heartLighting.rim.color : 0x72e1e2);
+        rim.intensity = focusOnHeart ? heartLighting.rim.intensity : 2;
+        rim.position.fromArray(focusOnHeart ? heartLighting.rim.position : [-2, 1, -2]);
+      }
+      const pulse = 1 + Math.pow(Math.max(0, Math.sin(time * 0.00754)), 4) * .04;
       clip.normal.set(
         p.plane === 'sagital' ? 1 : 0,
         p.plane === 'axial' ? 1 : 0,
@@ -311,10 +333,9 @@ export default function Atlas(props: AtlasProps) {
           // remains intact even when it is made of many GLB mesh fragments.
           m.position.add(gridOffsets.get(id) ?? new T.Vector3());
         }
-        if (p.beating && match(m, 'heart-')) {
-          const scale =
-            1 + Math.pow(Math.max(0, Math.sin(time * 0.00754)), 4) * 0.06;
-          m.scale.multiplyScalar(scale);
+        if (p.beating && m.userData.isHeart && (!p.layoutMode || p.layoutMode === 'assembled')) {
+          m.scale.multiplyScalar(pulse);
+          m.position.addScaledVector(heartPivot, 1 - pulse);
         }
         if (
           p.motion &&
@@ -358,8 +379,8 @@ export default function Atlas(props: AtlasProps) {
           mat.transparent = opacity < 0.999;
           mat.opacity = (m.userData.opacities[index] ?? 1) * opacity;
           mat.depthWrite = opacity > 0.98;
-          mat.emissive.setHex(match(m, p.selected) ? 0x136d72 : 0);
-          mat.emissiveIntensity = 0.35;
+          mat.emissive.setHex(focusOnHeart ? 0x270911 : match(m, p.selected) ? 0x136d72 : 0);
+          mat.emissiveIntensity = focusOnHeart ? .16 : .35;
           if (p.pathology && match(m, p.pathology)) {
             mat.color.set('#ff655f');
             mat.emissive.set('#a51818');
