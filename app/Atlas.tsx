@@ -11,6 +11,8 @@ import { loadDetailedModel, detailedStructureMatches } from './detailed-models';
 import { relativeSlice, type AtlasSlice } from './atlas-slice';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { heartLighting, isHeartStructure } from './heart-model';
+import { prepareHeartMotion, type HeartRig } from './heart-motion';
+import { heartCycle } from './heart-cycle';
 export type AtlasProps = {
   modelVariant?: 'male' | 'female';
   slice?: AtlasSlice | null;
@@ -91,7 +93,8 @@ export default function Atlas(props: AtlasProps) {
     const groupCenters = new Map<string, T.Vector3>(),
       gridOffsets = new Map<string, T.Vector3>(),
       anklePivots = new Map<'left' | 'right', T.Vector3>();
-    const heartPivot = new T.Vector3();
+    let heartRig: HeartRig | undefined;
+    let lastHeartTime = -1;
     let heartLightingActive = false;
     const match = (m: T.Mesh, id: string) =>
       detailedStructureMatches(m, id);
@@ -130,15 +133,13 @@ export default function Atlas(props: AtlasProps) {
         // Derive their bounds from the loaded geometry, then move each whole
         // structure as a unit when the catalogue/grid view is requested.
         const grouped = new Map<string, T.Box3>();
-        const heartBounds = new T.Box3();
         meshes.forEach((mesh) => {
           const id = String(mesh.userData.anatomyId || mesh.uuid);
           const box = grouped.get(id) ?? new T.Box3();
           box.expandByObject(mesh);
-          if (mesh.userData.isHeart) heartBounds.expandByObject(mesh);
           grouped.set(id, box);
         });
-        if (!heartBounds.isEmpty()) heartBounds.getCenter(heartPivot);
+        heartRig = prepareHeartMotion(meshes.filter(mesh => mesh.userData.isHeart));
         const groups: AtlasGroup[] = [];
         grouped.forEach((box, id) => {
           const center = box.getCenter(new T.Vector3());
@@ -192,7 +193,18 @@ export default function Atlas(props: AtlasProps) {
         .find((h) => clip.distanceToPoint(h.point) >= 0);
       if (hit) {
         const m = hit.object;
-        const referencePoint = m.worldToLocal(hit.point.clone()).applyMatrix4(m.userData.referenceMatrix);
+        const referencePoint = m.worldToLocal(hit.point.clone());
+        if (m instanceof T.Mesh && m.morphTargetInfluences?.some(value => value !== 0) && hit.barycoord && hit.face) {
+          // Interpolate the rest-pose triangle so registration uses the reference atlas.
+          const base = m.geometry.getAttribute('position');
+          const { a,b,c } = hit.face;
+          const { x,y,z } = hit.barycoord;
+          const vertex = new T.Vector3();
+          referencePoint.fromBufferAttribute(base,a).multiplyScalar(x)
+            .addScaledVector(vertex.fromBufferAttribute(base,b),y)
+            .addScaledVector(vertex.fromBufferAttribute(base,c),z);
+        }
+        referencePoint.applyMatrix4(m.userData.referenceMatrix);
         current.current.onLandmark?.({
           point: [referencePoint.x * 1000, -referencePoint.z * 1000, referencePoint.y * 1000],
           label: m.userData.sourceName || m.name,
@@ -277,7 +289,11 @@ export default function Atlas(props: AtlasProps) {
         rim.intensity = focusOnHeart ? heartLighting.rim.intensity : 2;
         rim.position.fromArray(focusOnHeart ? heartLighting.rim.position : [-2, 1, -2]);
       }
-      const pulse = 1 + Math.pow(Math.max(0, Math.sin(time * 0.00754)), 4) * .04;
+      const heartTime = p.beating && (!p.layoutMode || p.layoutMode === 'assembled') && !p.explode ? time/1000 : 0;
+      if (heartRig && (lastHeartTime !== heartTime)) {
+        heartRig.update(heartCycle(heartTime));
+        lastHeartTime = heartTime;
+      }
       clip.normal.set(
         p.plane === 'sagital' ? 1 : 0,
         p.plane === 'axial' ? 1 : 0,
@@ -332,10 +348,6 @@ export default function Atlas(props: AtlasProps) {
           // `gridOffsets` is calculated per anatomyId, so a named structure
           // remains intact even when it is made of many GLB mesh fragments.
           m.position.add(gridOffsets.get(id) ?? new T.Vector3());
-        }
-        if (p.beating && m.userData.isHeart && (!p.layoutMode || p.layoutMode === 'assembled')) {
-          m.scale.multiplyScalar(pulse);
-          m.position.addScaledVector(heartPivot, 1 - pulse);
         }
         if (
           p.motion &&

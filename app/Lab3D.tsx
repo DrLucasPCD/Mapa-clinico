@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   Activity,
   ArrowRight,
@@ -30,7 +30,8 @@ import {
   type LabView,
 } from './lab3d-data';
 import { moleculeCid, moleculeOptions, type Molecule } from './lab3d-geometry';
-import { ecgBeats, electricalVector, projectLead } from './ecg-model';
+import HeartCyclePanel from './HeartCyclePanel';
+import { cycleComparison } from './heart-cycle';
 import './lab3d.css';
 
 const scales = [
@@ -63,59 +64,6 @@ type Destination = {
   onAtlas: (scope: 'heart' | 'brain') => void;
 };
 
-function HeartTrace({ bpm, time }: { bpm: number; time: RefObject<number> }) {
-  const head = useRef<SVGLineElement>(null);
-  const length = (60 / bpm) * Math.max(3, Math.round(bpm / 15));
-  const values = useMemo(() => {
-    const cycle = 60 / bpm;
-    const beats = ecgBeats('sinus', bpm, length + cycle);
-    const points = Array.from({ length: 481 }, (_, i) =>
-      projectLead(
-        electricalVector((i * length) / 480, beats, 'sinus', 55),
-        'II',
-      ),
-    );
-    return points
-      .map(
-        (y, i) =>
-          (i ? 'L' : 'M') +
-          ((i / 480) * 290).toFixed(1) +
-          ',' +
-          (26 - y * 19).toFixed(1),
-      )
-      .join(' ');
-  }, [bpm, length]);
-  useEffect(() => {
-    let frame = 0;
-    const draw = () => {
-      const x = ((time.current % length) / length) * 290;
-      head.current?.setAttribute('transform', 'translate(' + x + ' 0)');
-      frame = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => cancelAnimationFrame(frame);
-  }, [time, length]);
-  return (
-    <div className="lab3d-trace">
-      <span>
-        <Activity size={14} /> ECG sintético · DII
-      </span>
-      <svg
-        viewBox="0 0 290 47"
-        role="img"
-        aria-label="ECG de ritmo sinusal sincronizado com o batimento do modelo"
-      >
-        <path
-          d="M0 14 H290 M0 26 H290 M0 38 H290"
-          stroke="#24495f"
-          fill="none"
-        />
-        <path d={values} stroke="#5af0ad" strokeWidth="1.5" fill="none" />
-        <line ref={head} x1="0" x2="0" y1="5" y2="43" stroke="#88e9ff" />
-      </svg>
-    </div>
-  );
-}
 const descriptions = {
   heart: [
     'Coração em movimento',
@@ -159,7 +107,10 @@ export default function Lab3D({
   const [pointCloud, setPointCloud] = useState(false);
   const [hydrogen, setHydrogen] = useState(true);
   const [flow, setFlow] = useState(true);
-  const [bpm, setBpm] = useState(72);
+  const [bpm, setBpm] = useState(75);
+  const [lockedCamera,setLockedCamera] = useState(false);
+  const [vectors,setVectors] = useState(false);
+  const [chamberView,setChamberView] = useState<'all'|'atria'|'ventricles'>('all');
   const [playing, setPlaying] = useState(
     () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
@@ -177,15 +128,31 @@ export default function Lab3D({
           formatSearch(p.name + ' ' + p.id).includes(formatSearch(query)) &&
           (scope === 'molecule'
             ? hydrogen || p.layer !== 'H'
-            : layers.includes(p.layer)),
+            : layers.includes(p.layer)) &&
+          (scope !== 'heart' || chamberView === 'all' ||
+            (chamberView === 'atria' ? p.id.endsWith('-atrium') : ['left-ventricle','right-ventricle'].includes(p.id))),
       ),
-    [parts, query, scope, hydrogen, layers],
+    [parts, query, scope, hydrogen, layers, chamberView],
   );
   const selectedPart = parts.find((p) => p.id === selected);
   const macro = scope === 'heart' || scope === 'brain';
   const moving = scope === 'heart' || scope === 'neuron';
 
+  function seekHeart(seconds:number) {
+    setPlaying(false);
+    time.current=seconds;
+  }
+
+  function compareHeart(systole:boolean) {
+    setLockedCamera(true);
+    seekHeart(cycleComparison(bpm,systole));
+  }
+
   function resetModel(next = scope) {
+    time.current=0;
+    setLockedCamera(false);
+    setVectors(false);
+    setChamberView('all');
     setView(next === 'heart' ? 'ghost' : 'natural');
     setLayers(labLayers[next].map((x) => x.id));
     setSpread(0);
@@ -209,6 +176,8 @@ export default function Lab3D({
     setScope(next);
   }
   function setCoronaryStep(step: number) {
+    setLockedCamera(false);
+    setChamberView('all');
     setStage(step);
     setProgress(0);
     setSpread(0);
@@ -384,6 +353,9 @@ export default function Lab3D({
               playing={playing}
               bpm={bpm}
               time={time}
+              lockedCamera={lockedCamera}
+              vectors={vectors}
+              chamberView={chamberView}
               onSelect={(id) => {
                 setFocus(0);
                 setSelected(id);
@@ -417,9 +389,12 @@ export default function Lab3D({
                 )}
               </div>
             )}
-            {scope === 'heart' && <HeartTrace bpm={bpm} time={time} />}
+            {scope==='heart' && <div className="heart-phase-shortcuts" aria-label="Comparar sístole e diástole">
+              <button onClick={()=>compareHeart(false)}>Diástole</button>
+              <button onClick={()=>compareHeart(true)}>Sístole</button>
+            </div>}
             <div className="lab3d-orbit-help">
-              Arraste para girar · Role para aproximar
+              {lockedCamera ? 'Câmera fixa' : 'Arraste para girar · Role para aproximar'}
             </div>
           </div>
           <div className="lab3d-camera" aria-label="Vistas do modelo">
@@ -428,6 +403,7 @@ export default function Lab3D({
                 key={id}
                 aria-pressed={camera === id && !close}
                 onClick={() => {
+                  setLockedCamera(false);
                   setCamera(id);
                   setCameraReset((n) => n + 1);
                   setClose(false);
@@ -436,7 +412,9 @@ export default function Lab3D({
                 {cameraViews[id]}
               </button>
             ))}
+            {scope==='heart' && <button aria-pressed={lockedCamera} onClick={()=>setLockedCamera(value=>!value)}>Câmera fixa</button>}
           </div>
+          {scope==='heart' && <HeartCyclePanel bpm={bpm} time={time} onSeek={seekHeart}/>}
         </section>
         <aside
           className="lab3d-inspector"
@@ -472,6 +450,16 @@ export default function Lab3D({
               )}
             </div>
           )}
+          {scope === 'heart' && <div className="heart-motion-controls">
+            <label>Isolar câmaras
+              <select value={chamberView} onChange={event=>setChamberView(event.target.value as typeof chamberView)}>
+                <option value="all">Coração completo</option><option value="atria">Átrios</option><option value="ventricles">Ventrículos</option>
+              </select>
+            </label>
+            <label className="lab3d-check"><input type="checkbox" checked={vectors} onChange={event=>setVectors(event.target.checked)}/>
+              Vetores da contração do VE
+            </label>
+          </div>}
           {scope === 'heart' && simulation}
           {scope === 'heart' && (
             <label className="lab3d-check">

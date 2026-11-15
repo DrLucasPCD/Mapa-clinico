@@ -5,6 +5,8 @@ import { loadDetailedModel } from './detailed-models';
 import { heartChambers, heartLighting, heartOrgans } from './heart-model';
 import { ecgLeads, frontalLeads, rightLeads, posteriorLeads, type ConductionStage, type LeadId, type Vector } from './ecg-model';
 import { conductionNodes, conductionPaths } from './ecg-conduction';
+import { prepareHeartMotion, type HeartRig } from './heart-motion';
+import type { CardiacMotion } from './heart-cycle';
 
 type View = 'frontal' | 'horizontal' | 'oblique';
 type Props = {
@@ -12,6 +14,7 @@ type Props = {
   lead: LeadId;
   visibleLeads: readonly LeadId[];
   phase: string;
+  motion: CardiacMotion;
   stage: ConductionStage | null;
   showConduction: boolean;
   onSelectLead: (id: LeadId) => void;
@@ -130,6 +133,7 @@ export default function EcgHeart(props: Props) {
     let disposed = false;
     let frame = 0;
     let heart: T.Group | undefined;
+    let heartRig: HeartRig | undefined;
     const disposeHeart = (group: T.Group) => group.traverse(object => {
       if (object instanceof T.Mesh) {
         object.geometry.dispose();
@@ -154,6 +158,7 @@ export default function EcgHeart(props: Props) {
       const scale = 2.1 * heartMagnification / size;
       group.scale.setScalar(scale);
       group.position.copy(center).multiplyScalar(-scale);
+      heartRig = prepareHeartMotion(group.children.filter((child):child is T.Mesh=>child instanceof T.Mesh));
       heart = group;
       scene.add(group);
       setReady(true);
@@ -210,6 +215,7 @@ export default function EcgHeart(props: Props) {
         mesh.material = stage?.index === step ? frontMaterial : trailMaterial;
         mesh.scale.setScalar(stage?.index === step ? 1.1 + .55 * Math.sin(stage.progress * Math.PI) : .8);
       }
+      heartRig?.update(next.motion);
       heart?.children.forEach(object => {
         if (!(object instanceof T.Mesh)) return;
         const id = String(object.userData.anatomyId);

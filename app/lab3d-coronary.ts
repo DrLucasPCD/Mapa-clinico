@@ -1,5 +1,7 @@
 import * as T from 'three';
 import { tube, vesselGuide } from './lab3d-geometry';
+import type { HeartRig } from './heart-motion';
+import type { CardiacMotion } from './heart-cycle';
 
 const lesionAt = 0.4;
 /** Educational geometry drawn in the reference Atlas vessel coordinates. */
@@ -162,18 +164,31 @@ export function makeCoronaryDemo(anatomy: T.Group) {
     tip.renderOrder = 4;
     group.add(advance, tip, plaque, balloon, stent);
   }
+  const movingLesion=lesion?.clone();
+  const devices=[plaque,balloon,stent].map(object=>({object,position:object.position.clone()}));
+  const shapePoint=new T.Vector3();
+  function bind(rig:HeartRig) {
+    if(advance) rig.bind(advance,'anterior-interventricular-artery');
+  }
   function update(
     time: number,
     showFlow: boolean,
     stage: number,
     progress: number,
     split: number,
+    rig?: HeartRig,
+    motion?: CardiacMotion,
   ) {
+    if(rig && motion && movingLesion && lesion) {
+      rig.point('anterior-interventricular-artery',lesion,motion,movingLesion);
+      for(const {object,position} of devices)
+        rig.point('anterior-interventricular-artery',position,motion,object.position);
+    }
     const t = Math.min(1, Math.max(0, progress));
     const opened = stage >= 4 ? 1 : stage === 3 ? t : 0;
     for (const { curve, speed, particles, id } of particleSets) {
       const restricted = id === 'anterior-interventricular-artery' && stage > 0;
-      particles.visible = showFlow && split === 0;
+      particles.visible = showFlow && split === 0 && (stage>0 || id==='anterior-interventricular-artery');
       if (!particles.visible) continue;
       const count = restricted ? Math.round(10 + 14 * opened) : 24;
       particles.count = count;
@@ -182,7 +197,8 @@ export function makeCoronaryDemo(anatomy: T.Group) {
           (time * speed * (restricted ? 0.66 + 0.34 * opened : 1) + i / count) %
           1;
         curve.getPointAt(travel, point);
-        cell.position.copy(point);
+        if(rig && motion) rig.point(id,point,motion,cell.position);
+        else cell.position.copy(point);
         cell.position.z += Math.sin(i * 1.72) * 0.00065;
         cell.position.x += Math.cos(i * 1.72) * 0.00065;
         cell.updateMatrix();
@@ -201,10 +217,12 @@ export function makeCoronaryDemo(anatomy: T.Group) {
     advance.visible = split === 0 && (stage === 3 || (stage === 2 && t > 0));
     tip.visible = advance.visible;
     advance.geometry.setDrawRange(0, Math.round(advanceAt * 72) * 8 * 6);
-    wirePath.getPointAt(advanceAt, tip.position);
+    wirePath.getPointAt(advanceAt, shapePoint);
+    if(rig && motion) rig.point('anterior-interventricular-artery',shapePoint,motion,tip.position);
+    else tip.position.copy(shapePoint);
     balloon.visible = split === 0 && stage === 3;
     balloon.scale.set(0.0011 + opened * 0.002, 0.0061, 0.0011 + opened * 0.002);
     stent.visible = split === 0 && stage === 4;
   }
-  return { group, update, lesion };
+  return { group, update, lesion, movingLesion, bind };
 }

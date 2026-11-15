@@ -1,3 +1,4 @@
+import { heartCycleAtBeat } from './heart-cycle';
 import { lazy, memo, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Activity, ArrowRight, ArrowUpRight, BookOpen, ChevronRight, ClipboardList, Focus, Heart, Home, Maximize2, Minimize2, Pause, Play, RotateCcw, Settings2, Target } from 'lucide-react';
 import { activationTimes, axisClass, calculateAxis, chestLeads, ecgActivation, ecgBeats, ecgLeads, ecgPatterns, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
@@ -109,6 +110,7 @@ export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: 
   const vector = electricalVector(time, beats, pattern, axis);
   const voltage = projectLead(vector, lead);
   const phase = ecgActivation(time, beats, pattern);
+  const motion = heartCycleAtBeat(time,beats,bpm,!['af','flutter','vt'].includes(pattern));
   const stageTimes = useMemo(() => activationTimes(duration, beats, pattern), [duration, beats, pattern]);
   const visibleLeads = leadView === 'all' ? allLeads : leadView === 'group' ? groups[group] : leadView === 'none' ? [] : [lead];
   const showPath = showConduction && pattern !== 'vt';
@@ -262,7 +264,7 @@ export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: 
             </div>
             <Suspense fallback={<p className="ecg-loading">Preparando coração 3D…</p>}>
               <EcgHeart vector={vector} lead={lead} visibleLeads={visibleLeads} phase={phase.region}
-                stage={phase.stage} showConduction={showPath} onSelectLead={setLead} />
+                stage={phase.stage} motion={motion} showConduction={showPath} onSelectLead={setLead} />
             </Suspense>
             <div className="ecg-model-bottom">
               <label><span className="sr-only">Mostrar derivações</span><select aria-label="Mostrar derivações" value={leadView}

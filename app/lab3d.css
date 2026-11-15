@@ -32,10 +32,7 @@
 .lab3d-camera { padding:8px 10px; border-top:1px solid #1b3c4b; }
 .lab3d-orbit-help { position:absolute; bottom:7px; right:10px; color:#aacbd4; font-size:10px; pointer-events:none; padding:3px; background:#071c2796; }
 .lab3d-label { position:absolute; z-index:1; transform:translate(-50%,-140%); background:#072d3a; border:1px solid #54dfeb; color:#eaffff; font-size:11px; border-radius:5px; padding:4px 8px; pointer-events:none; }
-.lab3d-trace { position:absolute; bottom:23px; left:10px; width:clamp(130px,36%,290px); border:1px solid #29566a; border-radius:8px; background:#071d2bea; pointer-events:none; padding:5px 8px; }
-.lab3d-trace span,.lab3d-layerlist h3 { display:flex; align-items:center; gap:6px; }
-.lab3d-trace span { font-size:10px; color:#9cd7dc; }
-.lab3d-trace svg { width:100%; }
+.lab3d-layerlist h3 { display:flex; align-items:center; gap:6px; }
 .lab3d-inspector,.lab3d-activity { display:grid; gap:10px; min-width:0; background:#fff; border:1px solid #d2e1e9; border-radius:12px; padding:13px; }
 .lab3d-inspector>p { font-size:12px; }
 .lab3d-inspector .lab3d-activity { background:#f2fafb; padding:8px; }
@@ -87,3 +84,22 @@
   .lab3d .lab3d-imaging-link { margin-left:0; }
   .lab3d-stage { min-height:400px; }
 }
+
+.heart-cycle-panel { border-top:1px solid #2a4e5b; padding:10px; background:#0e2937; }
+.heart-cycle-summary,.heart-cycle-controls { display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap; margin:4px 0; }
+.heart-cycle-summary > span,.heart-cycle-summary small { font-size:11px; color:#bfd9e3; }
+.heart-cycle-summary h3 { font-size:14px; }
+.heart-cycle-controls input[type=range] { min-width:70px; width:auto; flex:1; }
+.heart-cycle-graph { display:grid; grid-template-columns:minmax(100px,auto) minmax(0,1fr); gap:7px; align-items:stretch; margin:6px 0; }
+.heart-cycle-graph svg { width:100%; height:146px; background:#09212d; border-radius:5px; }
+.heart-cycle-labels { display:grid; grid-template-rows:repeat(3,1fr); font-size:11px; align-items:center; }
+.heart-cycle-labels small { display:block; color:#c3d9e2; }
+.heart-cycle-summary .cycle-lv { color:#ffab86; }
+.heart-cycle-summary .cycle-rv { color:#63cfff; }
+.heart-motion-controls { display:grid; gap:5px; }
+.heart-motion-controls label:first-child { display:flex; align-items:center; justify-content:space-between; gap:5px; font-size:12px; }
+.heart-phase-shortcuts { display:flex; gap:5px; position:absolute; left:10px; bottom:9px; }
+
+.heart-cycle-valves { display:flex; flex-wrap:wrap; gap:5px; margin:7px 0 2px; }
+.heart-cycle-valves span { border:1px solid #375667; border-radius:5px; padding:2px 5px; color:#bbd3db; font-size:10px; }
+.heart-cycle-valves [data-open=true] { border-color:#54c9b4; color:#aaf5de; }

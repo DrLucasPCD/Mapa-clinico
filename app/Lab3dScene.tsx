@@ -14,6 +14,9 @@ import {
 } from './lab3d-data';
 import { makeMolecule, makeNeuron, type Molecule } from './lab3d-geometry';
 import { makeCoronaryDemo } from './lab3d-coronary';
+import { prepareHeartMotion, type HeartRig } from './heart-motion';
+import { heartCycle } from './heart-cycle';
+import { makeHeartIndicators } from './heart-indicators';
 
 export type LabPart = { id: string; name: string; layer: string };
 type Props = {
@@ -37,6 +40,9 @@ type Props = {
   playing: boolean;
   bpm: number;
   time: RefObject<number>;
+  lockedCamera: boolean;
+  vectors: boolean;
+  chamberView: 'all' | 'atria' | 'ventricles';
   onSelect: (id: string) => void;
   onParts: (parts: LabPart[]) => void;
 };
@@ -53,10 +59,15 @@ function ghostMaterial(color: T.Color, clip: T.Plane) {
       varying vec3 eye;
       varying vec3 n;
       #include <clipping_planes_pars_vertex>
+      #include <morphtarget_pars_vertex>
       void main() {
-        vec4 mvPosition=modelViewMatrix*vec4(position,1.);
+        #include <beginnormal_vertex>
+        #include <morphnormal_vertex>
+        #include <begin_vertex>
+        #include <morphtarget_vertex>
+        vec4 mvPosition=modelViewMatrix*vec4(transformed,1.);
         eye=normalize(-mvPosition.xyz);
-        n=normalize(normalMatrix*normal);
+        n=normalize(normalMatrix*objectNormal);
         gl_Position=projectionMatrix*mvPosition;
         #include <clipping_planes_vertex>
       }`,
@@ -89,7 +100,7 @@ const disposeObject = (root: T.Object3D) =>
     if (
       !(
         object instanceof T.Mesh ||
-        object instanceof T.LineSegments ||
+        object instanceof T.Line ||
         object instanceof T.Points
       )
     )
@@ -146,6 +157,8 @@ export default function Lab3dScene(props: Props) {
     scene.add(pivot);
     let base: T.Group;
     let coronary: ReturnType<typeof makeCoronaryDemo> | undefined;
+    let heartRig: HeartRig | undefined;
+    let indicators: ReturnType<typeof makeHeartIndicators> | undefined;
     let neuralPath: T.Curve<T.Vector3> | undefined;
     const impulse = new T.Mesh(
       new T.SphereGeometry(0.073, 16, 9),
@@ -248,6 +261,12 @@ export default function Lab3dScene(props: Props) {
       if (scope === 'heart') {
         coronary = makeCoronaryDemo(model);
         pivot.add(coronary.group);
+        heartRig = prepareHeartMotion(model.children.filter((object):object is T.Mesh=>object instanceof T.Mesh));
+        if (heartRig) {
+          coronary.bind(heartRig);
+          indicators = makeHeartIndicators(heartRig,model);
+          pivot.add(indicators.group);
+        }
       }
       const entries = new Map<string, LabPart>();
       const partCenter = new T.Vector3();
@@ -367,6 +386,7 @@ export default function Lab3dScene(props: Props) {
     renderer.domElement.addEventListener('pointerdown', start);
     renderer.domElement.addEventListener('pointerup', pick);
     const keyMove = (event: KeyboardEvent) => {
+      if (current.current.lockedCamera) return;
       const step =
         event.key === 'ArrowLeft' || event.key === 'ArrowUp'
           ? 1
@@ -401,8 +421,7 @@ export default function Lab3dScene(props: Props) {
     let previous = 0;
     let absolute = 0;
     let selected: PartMesh | undefined;
-    let cardiacTime = 0,
-      timingBpm = 0;
+    let timingBpm = 0;
     function draw(now: number) {
       frame = requestAnimationFrame(draw);
       const p = current.current;
@@ -411,24 +430,19 @@ export default function Lab3dScene(props: Props) {
       absolute += delta;
       previous = now;
       if (scope === 'heart') {
-        const cycle = 60 / p.bpm;
-        if (timingBpm !== p.bpm && timingBpm)
-          cardiacTime = (cardiacTime * timingBpm) / p.bpm;
+        if (timingBpm && timingBpm !== p.bpm) p.time.current *= timingBpm / p.bpm;
         timingBpm = p.bpm;
-        cardiacTime += delta;
-        p.time.current = cardiacTime;
-        const elapsed = (cardiacTime % cycle) - 0.043;
-        const kick =
-          elapsed > 0 && elapsed < 0.22
-            ? Math.sin((elapsed / 0.22) * Math.PI)
-            : 0;
-        if (base) base.scale.setScalar(1 - 0.021 * kick);
+        p.time.current += delta;
+        const motion = heartCycle(p.time.current,p.bpm);
+        heartRig?.update(motion);
+        indicators?.update(motion,p.showFlow && p.stage === 0 && p.chamberView === 'all' && p.cut === 0 && p.spread === 0 && p.layers.includes('chambers'),
+          p.vectors && p.chamberView !== 'atria' && p.spread === 0 && p.cut === 0);
         if (coronary) {
-          coronary.group.scale.setScalar(1 - 0.021 * kick);
-          coronary.update(absolute, p.showFlow, p.stage, p.progress, p.spread);
-          coronary.group.visible = p.cut === 0;
+          coronary.update(absolute,p.showFlow,p.stage,p.progress,p.spread,heartRig,motion);
+          coronary.group.visible = p.cut === 0 && p.chamberView === 'all';
         }
       }
+      orbit.enabled = !p.lockedCamera;
       if (neuralPath) {
         impulse.visible =
           p.playing &&
@@ -443,6 +457,7 @@ export default function Lab3dScene(props: Props) {
         p.cameraReset,
         p.lookAtLesion,
         Boolean(coronary),
+        p.lockedCamera,
       ].join(':');
       if (cameraKey !== nextCamera && base) {
         cameraKey = nextCamera;
@@ -450,7 +465,7 @@ export default function Lab3dScene(props: Props) {
           p.lookAtLesion && coronary?.lesion
             ? pivot.localToWorld(coronary.lesion.clone())
             : origin;
-        moveCamera(p.camera, target, target !== origin);
+        if (!p.lockedCamera) moveCamera(p.camera, target, target !== origin);
       }
       const axis = axisIndex[p.axis];
       clip.normal.set(
@@ -467,6 +482,7 @@ export default function Lab3dScene(props: Props) {
         p.selected,
         p.showHydrogen,
         p.pointCloud,
+        p.chamberView,
       ].join(':');
       if (nextKey !== stateKey) {
         stateKey = nextKey;
@@ -476,7 +492,9 @@ export default function Lab3dScene(props: Props) {
             scope === 'molecule'
               ? p.showHydrogen || item.layer !== 'H'
               : p.layers.includes(item.layer);
-          item.mesh.visible = show && !p.pointCloud;
+          const chosenChamber = scope!=='heart' || p.chamberView==='all' ||
+            (p.chamberView==='atria' ? item.id.endsWith('-atrium') : ['left-ventricle','right-ventricle'].includes(item.id));
+          item.mesh.visible = show && chosenChamber && !p.pointCloud;
           item.mesh.position
             .copy(item.original)
             .addScaledVector(item.offset, p.spread / scale);
@@ -535,7 +553,7 @@ export default function Lab3dScene(props: Props) {
           .add(selected.mesh.position)
           .sub(selected.original);
         base.localToWorld(tagPoint);
-        moveCamera(p.camera, tagPoint, true);
+        if (!p.lockedCamera) moveCamera(p.camera, tagPoint, true);
       } else if (!p.focus) lastFocus = '';
       orbit.update();
       if (tag.current) {
@@ -563,7 +581,7 @@ export default function Lab3dScene(props: Props) {
           p.spread === 0 &&
           p.cut === 0
         ) {
-          tagPoint.copy(coronary.lesion);
+          tagPoint.copy(coronary.movingLesion ?? coronary.lesion);
           coronary.group.localToWorld(tagPoint);
           tagPoint.project(camera);
           show =
