@@ -1,8 +1,26 @@
 {
-  "lastChecked": "2026-11-14T15:47:52.672Z",
+  "lastChecked": "2026-11-15T16:20:03.296Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
+    {
+      "id": "43034831",
+      "title": "Paravertebral percutaneous embolization of isolated zone 3 endoleak after branched endovascular aortic arch repair.",
+      "date": "2027 Feb",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43034831/",
+      "authors": "Kuwayama D, Dobesh K, Tonnessen B",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43034734",
+      "title": "From flossing to fracturing-Subintimal lithotripsy for recoil stenosis modification before interwoven stent implantation.",
+      "date": "2027 Feb",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43034734/",
+      "authors": "Ong JW, Hong Q, Chan DYS",
+      "status": "Descoberta automática • ainda não revisada"
+    },
     {
       "id": "43001225",
       "title": "Intraosseous venous malformation of the distal fibula treated with image-guided sclerotherapy and embolization.",
@@ -94,6 +112,87 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43034573",
+      "title": "Acute airway obstruction revealing granulomatosis with polyangiitis: A case report of a rare isolated laryngeal presentation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43034573/",
+      "authors": "Bouallou M, Sbai AA, Benfadil D",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43034559",
+      "title": "Musculoskeletal imaging in disseminated fusariosis: A case report with diagnostic imaging challenges.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43034559/",
+      "authors": "Urbano-Rodríguez M, Vilaró MP, Fernández CB",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032751",
+      "title": "Multiphasic CT findings of gastric adenosquamous carcinoma with prominent necrosis: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032751/",
+      "authors": "Pan J, Yang J, Ran Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032745",
+      "title": "Delayed postischemic leukoencephalopathy after large vessel occlusion: Imaging and histopathologic correlation.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032745/",
+      "authors": "Bachnou MA, Daoud L, Onofrj V",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032570",
+      "title": "Spontaneous rupture of an intrasplenic arterial aneurysm presenting as an acute abdomen: CT diagnosis and surgical management.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032570/",
+      "authors": "Laaribi I, Kachmar S, Zaid I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032415",
+      "title": "Interventional radiology management of juvenile nasopharyngeal angiofibroma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032415/",
+      "authors": "Mangio H, Sun C, Bryant LH 3rd",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032393",
+      "title": "Selective coil embolization of hepatic artery pseudoaneurysm causing hemobilia secondary to hemorrhagic hepatic hydatid cyst: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032393/",
+      "authors": "Abdourabbih Y, Bentabet S, Chaouch I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032358",
+      "title": "Perforated hepatic flexure adenocarcinoma mimicking pyogenic hepatic abscess: A CT diagnostic pitfall.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032358/",
+      "authors": "Kelemu GB, Mhret DE, Tsegaw YG",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43032211",
+      "title": "Immune-mediated necrotizing myopathy complicated by rhabdomyolysis syndrome and central nervous system cytomegalovirus infection: A case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43032211/",
+      "authors": "Xu Y, Zeng N, Liu J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "43031769",
       "title": "McCune-Albright syndrome with kyphosis challenges in diagnosis and treatment: a rare male case report.",
       "date": "2026 Dec",
@@ -118,105 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43022765/",
       "authors": "Asadigandomani H, Chen X, Stewart JM",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43022680",
-      "title": "Pimitespib-associated retinal dysfunction with longitudinal multimodal imaging and electroretinography: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43022680/",
-      "authors": "Mashiko N, Aoki S, Saeki Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43022299",
-      "title": "Spontaneous complete regression of a cervical macrocystic lymphatic malformation following infection in an infant: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43022299/",
-      "authors": "Mohamed L, Kassimi M, Essamoud S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43017492",
-      "title": "Primary pulmonary MALT lymphoma with probable isolated light chain deposition disease: Case report and literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43017492/",
-      "authors": "Elghoul R, Weingartz L, Hayat F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43017475",
-      "title": "Combined antegrade-retrograde technique in urgent carotid stenting for true lumen compression after total arch replacement.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43017475/",
-      "authors": "Ng YY, Zhuang TFJ, Ling TH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43017231",
-      "title": "A rare presentation of probable catastrophic antiphospholipid syndrome with bilateral adrenal hemorrhage.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43017231/",
-      "authors": "Maji J, Roy A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43017148",
-      "title": "Acute appendicitis within a femoral hernia (De Garengeot hernia): A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43017148/",
-      "authors": "Chander R, Pereira J, Ansari M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43013476",
-      "title": "ID-SCAN: a functional MRI protocol for neurophenomenological phenotyping of dissociative identity disorder without trauma provocation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43013476/",
-      "authors": "Kajimura S, Okano K, Ueno S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43013364",
-      "title": "Multidrug-resistant (MDR) Salmonella Typhi spondylodiscitis with vertebral collapse: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43013364/",
-      "authors": "Fatima M, Khalid M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43006045",
-      "title": "Novel Use of Augmented Reality-Guided Ventriculoperitoneal Shunt Proximal Catheter Placement Using the VisAR System: A Case Report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43006045/",
-      "authors": "Charcos I, Ifrach J, Thomas AJ",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43005707",
-      "title": "Combined Transnasal and Transcranial Approach for a Complex Type IV Nasal Dermoid Sinus Cyst.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43005707/",
-      "authors": "Peron S, Palopoli A, Scalise M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43001301",
-      "title": "Twenty-five-year imaging follow-up of an untreated giant Spetzler-Martin grade V Brain arteriovenous malformation associated with cerebral infarction and epilepsy.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43001301/",
-      "authors": "Jiang F, Zhang M, Yang C",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
