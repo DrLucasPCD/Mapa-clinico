@@ -1,5 +1,6 @@
 import * as T from 'three';
 import type { CardiacMotion, Valve } from './heart-cycle';
+import { atrialInlets } from './heart-model';
 
 type Vector = T.Vector3;
 type Region =
@@ -148,6 +149,28 @@ export function prepareHeartMotion(meshes: readonly T.Mesh[]) {
   const rightFrame = createFrame(right);
   const { axis, apex, u, v, length } = frame;
   const centers = new Map(meshes.map((mesh) => [idOf(mesh), centerOf(mesh)]));
+  const inlets = new Map(
+    atrialInlets.flatMap(({ id, atrium, normal }) => {
+      const mesh = meshes.find((mesh) => idOf(mesh) === id);
+      if (!mesh || !centers.has(atrium)) return [];
+      const direction = new T.Vector3(...normal);
+      const positions = mesh.geometry.getAttribute('position');
+      const point = new T.Vector3();
+      let from = Infinity,
+        to = -Infinity;
+      for (let i = 0; i < positions.count; i++) {
+        const distance = point.fromBufferAttribute(positions, i).dot(direction);
+        from = Math.min(from, distance);
+        to = Math.max(to, distance);
+      }
+      return [
+        [
+          id as string,
+          { atrium, direction, from, span: Math.max(0.001, to - from) },
+        ] as const,
+      ];
+    }),
+  );
   const valves = new Map<string, ValveFrame>();
   for (const name of ['mitral', 'tricuspid', 'aortic', 'pulmonary'] as const) {
     const leaflets = meshes.filter((mesh) => cardiacValve(idOf(mesh)) === name);
@@ -208,6 +231,15 @@ export function prepareHeartMotion(meshes: readonly T.Mesh[]) {
     id: string,
   ) {
     result.copy(original);
+    const inlet = inlets.get(id);
+    if (inlet) {
+      // Use the atrial displacement at the ostium. Fade it out on the distal
+      // vessel so both sides of the joint stay coincident without dragging the neck.
+      const progress =
+        (original.dot(inlet.direction) - inlet.from) / inlet.span;
+      deform(original, result, chamber(inlet.atrium)!, kind, inlet.atrium);
+      return result.lerp(original, smooth((progress - 0.3) / 0.7));
+    }
     const isRight =
       region === 'right' ||
       region === 'atria-right' ||
@@ -325,7 +357,8 @@ export function prepareHeartMotion(meshes: readonly T.Mesh[]) {
   function bind(mesh: T.Mesh, motionId = idOf(mesh)) {
     const region = cardiacValve(motionId) ?? chamber(motionId) ?? 'vessel';
     const kinds: Kind[] = ['wall', 'twist'];
-    if (region.startsWith('atria')) kinds.push('atrial');
+    if (region.startsWith('atria') || inlets.has(motionId))
+      kinds.push('atrial');
     if (cardiacValve(motionId)) kinds.push('valve');
     const geometry = mesh.geometry;
     const positions = geometry.getAttribute('position');

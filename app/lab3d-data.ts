@@ -1,5 +1,11 @@
 import type { DetailedManifestOrgan } from './detailed-models';
-import { heartChambers, heartOrgans } from './heart-model';
+import {
+  atrialInlets,
+  coronaryArteries,
+  coronaryVeins,
+  heartChambers,
+  heartOrgans,
+} from './heart-model';
 
 export type LabScale = 'heart' | 'brain' | 'neuron' | 'molecule';
 export type LabView = 'natural' | 'colored' | 'ghost';
@@ -38,13 +44,6 @@ export const labLayers = {
   molecule: [],
 };
 
-const cardiacExtras = new Set([
-  'inferior_vena_cava',
-  'pulmonary_artery_l',
-  'pulmonary_artery_r',
-  'right_pulmonary_artery',
-  'left_pulmonary_artery',
-]);
 export function labOrganLayer(
   organ: DetailedManifestOrgan,
   scope: 'heart' | 'brain',
@@ -58,9 +57,7 @@ export function labOrganLayer(
       return organ.path[1]?.includes('vein') || /vein|sinus/.test(id)
         ? 'veins'
         : 'arteries';
-    return heartOrgans.includes(id) || cardiacExtras.has(id)
-      ? 'great'
-      : undefined;
+    return heartOrgans.includes(id) ? 'great' : undefined;
   }
   if (organ.path[0] !== 'Central nervous system' || organ.path[1] !== 'Brain')
     return undefined;
@@ -79,35 +76,43 @@ export function labOrganLayer(
 }
 
 const anatomyNames: Record<string, string> = {
+  ...Object.fromEntries(
+    [...atrialInlets, ...coronaryArteries, ...coronaryVeins].map(
+      ({ id, label }) => [id, label],
+    ),
+  ),
+  'bifurcation-of-pulmonary-trunk': 'Bifurcação do tronco pulmonar',
+  'right-pulmonary-artery': 'Artéria pulmonar direita',
+  'left-pulmonary-artery': 'Artéria pulmonar esquerda',
   'right-atrium': 'Átrio direito',
   'left-atrium': 'Átrio esquerdo',
   'right-ventricle': 'Ventrículo direito',
   'left-ventricle': 'Ventrículo esquerdo',
   'ascending-aorta': 'Aorta ascendente',
   'aortic-arch': 'Arco da aorta',
-  'posterior-leaflet-of-left-atrioventricular-valve': 'Folheto posterior da mitral',
-  'inferior-leaflet-of-right-atrioventricular-valve': 'Folheto inferior da tricúspide',
-  'septal-leaflet-of-right-atrioventricular-valve': 'Folheto septal da tricúspide',
+  'posterior-leaflet-of-left-atrioventricular-valve':
+    'Folheto posterior da mitral',
+  'inferior-leaflet-of-right-atrioventricular-valve':
+    'Folheto inferior da tricúspide',
+  'septal-leaflet-of-right-atrioventricular-valve':
+    'Folheto septal da tricúspide',
   'right-coronary-leaflet': 'Cúspide coronária direita da aórtica',
   'left-coronary-leaflet': 'Cúspide coronária esquerda da aórtica',
   'non-coronary-leaflet': 'Cúspide não coronária da aórtica',
-  'anterior-semilunar-leaflet-of-pulmonary-valve': 'Cúspide anterior da pulmonar',
+  'anterior-semilunar-leaflet-of-pulmonary-valve':
+    'Cúspide anterior da pulmonar',
   'right-semilunar-leaflet-of-pulmonary-valve': 'Cúspide direita da pulmonar',
   'left-semilunar-leaflet-of-pulmonary-valve': 'Cúspide esquerda da pulmonar',
-  'anterior-papillary-muscle-of-right-ventricle': 'Músculo papilar anterior do VD',
-  'inferior-papillary-muscle-of-right-ventricle': 'Músculo papilar inferior do VD',
+  'anterior-papillary-muscle-of-right-ventricle':
+    'Músculo papilar anterior do VD',
+  'inferior-papillary-muscle-of-right-ventricle':
+    'Músculo papilar inferior do VD',
   'septal-papillary-muscle-of-right-ventricle': 'Músculo papilar septal do VD',
-  'inferior-papillary-muscle-of-left-ventricle': 'Músculo papilar inferior do VE',
+  'inferior-papillary-muscle-of-left-ventricle':
+    'Músculo papilar inferior do VE',
 
   'pulmonary-trunk': 'Tronco pulmonar',
-  'superior-vena-cava': 'Veia cava superior',
   'inferior-vena-cava': 'Veia cava inferior',
-  'anterior-interventricular-artery': 'Artéria descendente anterior (DA)',
-  'left-coronary-artery': 'Tronco da coronária esquerda',
-  'right-coronary-artery': 'Artéria coronária direita',
-  'circumflex-artery-of-heart': 'Artéria circunflexa',
-  'great-cardiac-vein': 'Veia cardíaca magna',
-  'coronary-sinus': 'Seio coronário',
   'corpus-callosum': 'Corpo caloso',
   hypothalamus: 'Hipotálamo',
   hippocampus: 'Hipocampo',
@@ -149,7 +154,7 @@ export function labOrganName(id: string, fallback: string) {
 export const coronaryStages = [
   {
     title: 'Trajeto da coronária',
-    text: 'Observe a descendente anterior no sulco entre os ventrículos. As partículas mostram o sentido do fluxo no trajeto esquemático.',
+    text: 'Observe a descendente anterior no sulco entre os ventrículos. Ative o fluxo coronário para acompanhar o sentido do sangue na artéria.',
   },
   {
     title: 'Placa e lúmen',

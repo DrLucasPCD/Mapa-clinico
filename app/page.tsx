@@ -762,7 +762,7 @@ export default function App() {
             </nav>}
             {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}>
               <EcgLab onAnatomy={() => focusPathStructure('heart', 'Coração', true)}
-                onHome={() => openAtlas('overview')} onImmersive={() => openImmersive('heart')} />
+                onHome={() => openAtlas('overview')} />
             </Suspense>
             : workspaceMode === 'lab3d' ? <Suspense fallback={<p className="training-screen">Carregando Laboratório 3D…</p>}>
               <Lab3D initialScope={labScope} onImaging={openImaging} onEcg={() => openTraining('ecg')}

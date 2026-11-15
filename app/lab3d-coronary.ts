@@ -57,44 +57,6 @@ export function makeCoronaryDemo(anatomy: T.Group) {
           { i: 0, d: Infinity },
         ).i / 150
       : lesionAt;
-  const otherRoutes = [
-    ['ascending-aorta', false, '#ff695f', 0.09],
-    ['pulmonary-trunk', false, '#64a9ff', 0.085],
-    ['great-cardiac-vein', false, '#a6b2ff', 0.075],
-  ] as const;
-  const paths: {
-    curve: T.CatmullRomCurve3;
-    color: string;
-    speed: number;
-    id: string;
-  }[] = otherRoutes.flatMap(([id, reversed, color, speed]) => {
-    const mesh = find(id);
-    const curve = mesh && vesselGuide(mesh, 'y', reversed);
-    return curve ? [{ curve, color, speed, id }] : [];
-  });
-  if (guide)
-    paths.push({
-      curve: guide,
-      color: '#ff7879',
-      speed: 0.17,
-      id: 'anterior-interventricular-artery',
-    });
-  const point = new T.Vector3();
-  const cell = new T.Object3D();
-  const particleSets = paths.map(({ curve, color, speed, id }) => {
-    const particles = new T.InstancedMesh(
-      new T.SphereGeometry(
-        id === 'anterior-interventricular-artery' ? 0.00105 : 0.0018,
-        8,
-        6,
-      ),
-      new T.MeshBasicMaterial({ color, depthWrite: false }),
-      24,
-    );
-    particles.frustumCulled = false;
-    group.add(particles);
-    return { curve, speed, particles, id };
-  });
   const plaque = new T.Mesh(
     new T.SphereGeometry(1, 20, 16),
     new T.MeshStandardMaterial({
@@ -164,48 +126,39 @@ export function makeCoronaryDemo(anatomy: T.Group) {
     tip.renderOrder = 4;
     group.add(advance, tip, plaque, balloon, stent);
   }
-  const movingLesion=lesion?.clone();
-  const devices=[plaque,balloon,stent].map(object=>({object,position:object.position.clone()}));
-  const shapePoint=new T.Vector3();
-  function bind(rig:HeartRig) {
-    if(advance) rig.bind(advance,'anterior-interventricular-artery');
+  const movingLesion = lesion?.clone();
+  const devices = [plaque, balloon, stent].map((object) => ({
+    object,
+    position: object.position.clone(),
+  }));
+  const shapePoint = new T.Vector3();
+  function bind(rig: HeartRig) {
+    if (advance) rig.bind(advance, 'anterior-interventricular-artery');
   }
   function update(
-    time: number,
-    showFlow: boolean,
     stage: number,
     progress: number,
     split: number,
     rig?: HeartRig,
     motion?: CardiacMotion,
   ) {
-    if(rig && motion && movingLesion && lesion) {
-      rig.point('anterior-interventricular-artery',lesion,motion,movingLesion);
-      for(const {object,position} of devices)
-        rig.point('anterior-interventricular-artery',position,motion,object.position);
+    if (rig && motion && movingLesion && lesion) {
+      rig.point(
+        'anterior-interventricular-artery',
+        lesion,
+        motion,
+        movingLesion,
+      );
+      for (const { object, position } of devices)
+        rig.point(
+          'anterior-interventricular-artery',
+          position,
+          motion,
+          object.position,
+        );
     }
     const t = Math.min(1, Math.max(0, progress));
     const opened = stage >= 4 ? 1 : stage === 3 ? t : 0;
-    for (const { curve, speed, particles, id } of particleSets) {
-      const restricted = id === 'anterior-interventricular-artery' && stage > 0;
-      particles.visible = showFlow && split === 0 && (stage>0 || id==='anterior-interventricular-artery');
-      if (!particles.visible) continue;
-      const count = restricted ? Math.round(10 + 14 * opened) : 24;
-      particles.count = count;
-      for (let i = 0; i < count; i++) {
-        const travel =
-          (time * speed * (restricted ? 0.66 + 0.34 * opened : 1) + i / count) %
-          1;
-        curve.getPointAt(travel, point);
-        if(rig && motion) rig.point(id,point,motion,cell.position);
-        else cell.position.copy(point);
-        cell.position.z += Math.sin(i * 1.72) * 0.00065;
-        cell.position.x += Math.cos(i * 1.72) * 0.00065;
-        cell.updateMatrix();
-        particles.setMatrixAt(i, cell.matrix);
-      }
-      particles.instanceMatrix.needsUpdate = true;
-    }
     if (!wirePath || !advance) return;
     plaque.visible = split === 0 && stage >= 1;
     plaque.scale.set(
@@ -218,7 +171,13 @@ export function makeCoronaryDemo(anatomy: T.Group) {
     tip.visible = advance.visible;
     advance.geometry.setDrawRange(0, Math.round(advanceAt * 72) * 8 * 6);
     wirePath.getPointAt(advanceAt, shapePoint);
-    if(rig && motion) rig.point('anterior-interventricular-artery',shapePoint,motion,tip.position);
+    if (rig && motion)
+      rig.point(
+        'anterior-interventricular-artery',
+        shapePoint,
+        motion,
+        tip.position,
+      );
     else tip.position.copy(shapePoint);
     balloon.visible = split === 0 && stage === 3;
     balloon.scale.set(0.0011 + opened * 0.002, 0.0061, 0.0011 + opened * 0.002);

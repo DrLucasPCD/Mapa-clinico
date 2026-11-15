@@ -32,6 +32,9 @@ import {
 import { moleculeCid, moleculeOptions, type Molecule } from './lab3d-geometry';
 import HeartCyclePanel from './HeartCyclePanel';
 import { cycleComparison } from './heart-cycle';
+import { ecgLeads, type LeadId } from './ecg-model';
+import { defaultHeartFlow } from './heart-coronary-flow';
+import HeartFlowControls from './HeartFlowControls';
 import './lab3d.css';
 
 const scales = [
@@ -106,7 +109,11 @@ export default function Lab3D({
   const [close, setClose] = useState(false);
   const [pointCloud, setPointCloud] = useState(false);
   const [hydrogen, setHydrogen] = useState(true);
-  const [flow, setFlow] = useState(true);
+  const [flow, setFlow] = useState(defaultHeartFlow);
+  const [branch, setBranch] = useState('all');
+  const [lead, setLead] = useState<LeadId>('II');
+  const [conduction, setConduction] = useState(false);
+  const [leadAxes, setLeadAxes] = useState(false);
   const [bpm, setBpm] = useState(75);
   const [lockedCamera,setLockedCamera] = useState(false);
   const [vectors,setVectors] = useState(false);
@@ -165,7 +172,11 @@ export default function Lab3D({
     setStage(0);
     setProgress(0);
     setHydrogen(true);
-    setFlow(true);
+    setFlow(defaultHeartFlow);
+    setBranch('all');
+    setLead('II');
+    setConduction(false);
+    setLeadAxes(false);
     setSelected('');
     setFocus(0);
     setQuery('');
@@ -179,6 +190,8 @@ export default function Lab3D({
     setLockedCamera(false);
     setChamberView('all');
     setStage(step);
+    setFlow(value => ({ ...value, arteries: true }));
+    setBranch('anterior-interventricular-artery');
     setProgress(0);
     setSpread(0);
     setCut(0);
@@ -347,7 +360,11 @@ export default function Lab3D({
               lookAtLesion={close}
               pointCloud={pointCloud}
               showHydrogen={hydrogen}
-              showFlow={flow}
+              flow={flow}
+              coronaryBranch={branch}
+              electrical={scope === 'heart' ? {
+                lead, visibleLeads: leadAxes ? [lead] : [], showConduction: conduction, onSelectLead: setLead,
+              } : undefined}
               stage={stage}
               progress={progress}
               playing={playing}
@@ -414,7 +431,7 @@ export default function Lab3D({
             ))}
             {scope==='heart' && <button aria-pressed={lockedCamera} onClick={()=>setLockedCamera(value=>!value)}>Câmera fixa</button>}
           </div>
-          {scope==='heart' && <HeartCyclePanel bpm={bpm} time={time} onSeek={seekHeart}/>}
+          {scope==='heart' && <HeartCyclePanel bpm={bpm} time={time} lead={lead} onSeek={seekHeart}/>}
         </section>
         <aside
           className="lab3d-inspector"
@@ -460,16 +477,28 @@ export default function Lab3D({
               Vetores da contração do VE
             </label>
           </div>}
-          {scope === 'heart' && simulation}
           {scope === 'heart' && (
-            <label className="lab3d-check">
-              <input
-                type="checkbox"
-                checked={flow}
-                onChange={(e) => setFlow(e.target.checked)}
-              />{' '}
-              Mostrar partículas de fluxo
-            </label>
+            <>
+              <fieldset className="heart-flow-controls">
+                <legend>ECG e condução elétrica</legend>
+                <label className="heart-flow-branch">
+                  Derivação do traçado
+                  <select value={lead} onChange={event => setLead(event.target.value as LeadId)}>
+                    {Object.keys(ecgLeads).map(id => <option key={id} value={id}>{id}</option>)}
+                  </select>
+                </label>
+                <label className="heart-flow-option">
+                  <input type="checkbox" checked={conduction} onChange={event => setConduction(event.target.checked)} />
+                  Condução elétrica no coração
+                </label>
+                <label className="heart-flow-option">
+                  <input type="checkbox" checked={leadAxes} onChange={event => setLeadAxes(event.target.checked)} />
+                  Eixo da derivação no coração
+                </label>
+              </fieldset>
+              <HeartFlowControls flow={flow} setFlow={setFlow} branch={branch} setBranch={setBranch} />
+              {simulation}
+            </>
           )}
           {macro && (
             <div className="lab3d-cut">

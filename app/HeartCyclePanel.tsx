@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState, type RefObject } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { heartCycle } from './heart-cycle';
-import { ecgBeats, electricalVector, projectLead } from './ecg-model';
+import { ecgBeats, electricalVector, projectLead, type LeadId } from './ecg-model';
 
 export default function HeartCyclePanel({
   bpm,
+  lead,
   time,
   onSeek,
 }: {
   bpm: number;
+  lead: LeadId;
   time: RefObject<number>;
   onSeek: (seconds: number) => void;
 }) {
@@ -33,7 +35,7 @@ export default function HeartCyclePanel({
     for (let i = 0; i <= 160; i++) {
       const t = (i / 160) * period;
       const m = heartCycle(t, bpm);
-      const ecg = projectLead(electricalVector(t, beats, 'sinus', 55), 'II');
+      const ecg = projectLead(electricalVector(t, beats, 'sinus', 55), lead);
       const y = [
         24 - ecg * 17,
         87 - m.pressureLV * 0.36,
@@ -51,7 +53,7 @@ export default function HeartCyclePanel({
       );
     }
     return lines.map((segments) => segments.join(' '));
-  }, [bpm, period]);
+  }, [bpm, lead, period]);
   const motion = heartCycle(seconds, bpm);
   const phaseTime = motion.seconds;
   function seek(next: number) {
@@ -111,7 +113,7 @@ export default function HeartCyclePanel({
       </div>
       <div className="heart-cycle-graph">
         <div className="heart-cycle-labels">
-          <span>ECG · DII</span>
+          <span>ECG · {lead}</span>
           <span>
             Pressão ventricular{' '}
             <small>

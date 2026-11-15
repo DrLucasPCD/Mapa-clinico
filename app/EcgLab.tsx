@@ -79,7 +79,8 @@ const reading = [
   ['ST e onda T', 'Compare o ponto J, o segmento ST e a onda T em derivações vizinhas. Relacione os achados com o contexto clínico.'],
 ];
 
-export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: () => void; onHome: () => void; onImmersive: () => void }) {
+export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; onHome: () => void }) {
+  const flowPanel = useRef<HTMLDetailsElement>(null);
   const [pattern, setPattern] = useState<PatternId>('sinus');
   const [bpm, setBpm] = useState<number>(ecgPatterns.sinus.bpm);
   const [frequencyDraft, setFrequencyDraft] = useState<string | null>(null);
@@ -263,8 +264,8 @@ export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: 
                 onClick={() => setExpanded(value => value === 'heart' ? null : 'heart')}>{expanded === 'heart' ? <Minimize2 size={17} /> : <Maximize2 size={17} />}</button>
             </div>
             <Suspense fallback={<p className="ecg-loading">Preparando coração 3D…</p>}>
-              <EcgHeart vector={vector} lead={lead} visibleLeads={visibleLeads} phase={phase.region}
-                stage={phase.stage} motion={motion} showConduction={showPath} onSelectLead={setLead} />
+              <EcgHeart vector={vector} lead={lead} visibleLeads={visibleLeads} time={time}
+                stage={phase.stage} motion={motion} showConduction={showPath} onSelectLead={setLead} flowPanel={flowPanel} />
             </Suspense>
             <div className="ecg-model-bottom">
               <label><span className="sr-only">Mostrar derivações</span><select aria-label="Mostrar derivações" value={leadView}
@@ -311,7 +312,14 @@ export default function EcgLab({ onAnatomy, onHome, onImmersive }: { onAnatomy: 
               </div>
               <div className="ecg-related-actions">
                 <button onClick={onAnatomy}><Heart size={17} /> Anatomia relacionada <ChevronRight size={16} /></button>
-                <button onClick={onImmersive}><Activity size={17} /> Fluxo e artérias em 3D <ChevronRight size={16} /></button>
+                <button onClick={() => {
+                  const panel = flowPanel.current;
+                  if (panel) {
+                    panel.open = true;
+                    panel.scrollIntoView({ block: 'nearest' });
+                    panel.querySelector('summary')?.focus({ preventScroll: true });
+                  }
+                }}><Activity size={17} /> Fluxo e artérias em 3D <ChevronRight size={16} /></button>
                 <button onClick={() => openPlacement(true)}><Focus size={17} /> Posicionar eletrodos <ChevronRight size={16} /></button>
                 <button onClick={() => openTab('case')}><ClipboardList size={17} /> Caso clínico <ChevronRight size={16} /></button>
                 <a href="https://pubmed.ncbi.nlm.nih.gov/?term=10.1161%2FCIRCULATIONAHA.106.180200" target="_blank" rel="noreferrer"><BookOpen size={17} /> Evidências (PubMed) <ArrowUpRight size={16} /></a>

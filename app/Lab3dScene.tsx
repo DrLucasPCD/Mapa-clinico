@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadDetailedManifest, loadDetailedModel } from './detailed-models';
@@ -17,6 +17,10 @@ import { makeCoronaryDemo } from './lab3d-coronary';
 import { prepareHeartMotion, type HeartRig } from './heart-motion';
 import { heartCycle } from './heart-cycle';
 import { makeHeartIndicators } from './heart-indicators';
+import { makeCoronaryFlow, type HeartFlowOptions } from './heart-coronary-flow';
+import { leadColor, makeHeartElectrical, type HeartElectricalOptions } from './heart-ecg-overlay';
+import { ecgActivation, ecgBeats, electricalVector, type LeadId } from './ecg-model';
+import './lab3d.css';
 
 export type LabPart = { id: string; name: string; layer: string };
 type Props = {
@@ -34,7 +38,9 @@ type Props = {
   lookAtLesion: boolean;
   pointCloud: boolean;
   showHydrogen: boolean;
-  showFlow: boolean;
+  flow: HeartFlowOptions;
+  coronaryBranch?: string;
+  electrical?: HeartElectricalOptions;
   stage: number;
   progress: number;
   playing: boolean;
@@ -116,6 +122,7 @@ const disposeObject = (root: T.Object3D) =>
 export default function Lab3dScene(props: Props) {
   const host = useRef<HTMLDivElement>(null);
   const tag = useRef<HTMLDivElement>(null);
+  const leadLabels = useRef(new Map<LeadId, HTMLButtonElement>());
   const current = useRef(props);
   current.current = props;
   const [status, setStatus] = useState('');
@@ -159,6 +166,8 @@ export default function Lab3dScene(props: Props) {
     let coronary: ReturnType<typeof makeCoronaryDemo> | undefined;
     let heartRig: HeartRig | undefined;
     let indicators: ReturnType<typeof makeHeartIndicators> | undefined;
+    let blood: ReturnType<typeof makeCoronaryFlow> | undefined;
+    let electrical: ReturnType<typeof makeHeartElectrical> | undefined;
     let neuralPath: T.Curve<T.Vector3> | undefined;
     const impulse = new T.Mesh(
       new T.SphereGeometry(0.073, 16, 9),
@@ -195,7 +204,8 @@ export default function Lab3dScene(props: Props) {
     const moveCamera = (preset: LabCamera, target = origin, close = false) => {
       camera.position
         .fromArray(direction[preset])
-        .setLength(close ? 1.45 : Math.max(4.55, 3.4 / camera.aspect))
+        .setLength(close ? 1.45 : Math.max(4.55, 3.4 / camera.aspect) *
+          (current.current.electrical?.visibleLeads.length ? 1.27 : 1))
         .add(target);
       orbit.target.copy(target);
       orbit.update();
@@ -265,7 +275,9 @@ export default function Lab3dScene(props: Props) {
         if (heartRig) {
           coronary.bind(heartRig);
           indicators = makeHeartIndicators(heartRig,model);
-          pivot.add(indicators.group);
+          blood = makeCoronaryFlow(heartRig, model);
+          electrical = makeHeartElectrical(model, heartRig);
+          pivot.add(indicators.group, blood.group, electrical.group);
         }
       }
       const entries = new Map<string, LabPart>();
@@ -422,6 +434,7 @@ export default function Lab3dScene(props: Props) {
     let absolute = 0;
     let selected: PartMesh | undefined;
     let timingBpm = 0;
+    let beats: number[] = [];
     function draw(now: number) {
       frame = requestAnimationFrame(draw);
       const p = current.current;
@@ -430,16 +443,44 @@ export default function Lab3dScene(props: Props) {
       absolute += delta;
       previous = now;
       if (scope === 'heart') {
-        if (timingBpm && timingBpm !== p.bpm) p.time.current *= timingBpm / p.bpm;
-        timingBpm = p.bpm;
-        p.time.current += delta;
-        const motion = heartCycle(p.time.current,p.bpm);
+        const external = p.electrical?.external;
+        if (!external) {
+          if (timingBpm !== p.bpm) {
+            if (timingBpm) p.time.current *= timingBpm / p.bpm;
+            timingBpm = p.bpm;
+            beats = ecgBeats('sinus', p.bpm, 60 / p.bpm);
+          }
+          p.time.current += delta;
+        }
+        const motion = external?.motion ?? heartCycle(p.time.current, p.bpm);
+        const time = external?.time ?? p.time.current;
+        const assembled = p.chamberView === 'all' && p.cut === 0 && p.spread === 0;
         heartRig?.update(motion);
-        indicators?.update(motion,p.showFlow && p.stage === 0 && p.chamberView === 'all' && p.cut === 0 && p.spread === 0 && p.layers.includes('chambers'),
-          p.vectors && p.chamberView !== 'atria' && p.spread === 0 && p.cut === 0);
+        indicators?.update(
+          motion,
+          assembled && p.flow.chambers && p.layers.includes('chambers'),
+          assembled && p.flow.greatVessels && p.layers.includes('great'),
+          p.vectors && p.chamberView !== 'atria' && p.spread === 0 && p.cut === 0,
+          time,
+        );
+        const opening = p.stage >= 4 ? 1 : p.stage === 3 ? p.progress : 0;
+        blood?.update(
+          motion, time,
+          assembled && p.flow.arteries && p.layers.includes('arteries'),
+          assembled && p.flow.veins && p.layers.includes('veins'),
+          p.coronaryBranch ?? 'all', p.stage, opening,
+        );
         if (coronary) {
-          coronary.update(absolute,p.showFlow,p.stage,p.progress,p.spread,heartRig,motion);
+          coronary.update(p.stage, p.progress, p.spread, heartRig, motion);
           coronary.group.visible = p.cut === 0 && p.chamberView === 'all';
+        }
+        if (electrical) {
+          electrical.group.visible = assembled && Boolean(p.electrical);
+          if (electrical.group.visible && p.electrical) {
+            const vector = external?.vector ?? electricalVector(motion.seconds, beats, 'sinus', 55);
+            const stage = external ? external.stage : ecgActivation(motion.seconds, beats, 'sinus').stage;
+            electrical.update(p.electrical, vector, stage, motion);
+          }
         }
       }
       orbit.enabled = !p.lockedCamera;
@@ -458,6 +499,7 @@ export default function Lab3dScene(props: Props) {
         p.lookAtLesion,
         Boolean(coronary),
         p.lockedCamera,
+        Boolean(p.electrical?.visibleLeads.length),
       ].join(':');
       if (cameraKey !== nextCamera && base) {
         cameraKey = nextCamera;
@@ -601,6 +643,8 @@ export default function Lab3dScene(props: Props) {
         tag.current.hidden = !show;
       }
       renderer.render(scene, camera);
+      if (electrical && leadLabels.current.size)
+        electrical.placeLabels(camera, container.clientWidth, container.clientHeight, leadLabels.current);
     }
     const originColor = new T.Color(0);
     let lastFocus = '';
@@ -632,6 +676,24 @@ export default function Lab3dScene(props: Props) {
         aria-label="Modelo 3D interativo. Arraste ou use as setas para girar. Use mais e menos para aproximar."
       />
       <div className="lab3d-label" ref={tag} hidden />
+      {props.electrical?.visibleLeads.map(id => (
+        <button
+          key={id}
+          type="button"
+          className="heart-lead-label"
+          style={{ '--lead-color': '#' + leadColor(id).toString(16) } as CSSProperties}
+          ref={node => {
+            if (node) leadLabels.current.set(id, node);
+            else leadLabels.current.delete(id);
+          }}
+          hidden
+          aria-label={`Selecionar derivação ${id} no coração 3D`}
+          aria-pressed={id === props.electrical?.lead}
+          onClick={() => props.electrical?.onSelectLead(id)}
+        >
+          {id}
+        </button>
+      ))}
       {status && (
         <p role="status" className="lab3d-loading">
           {status}

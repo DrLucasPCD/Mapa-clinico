@@ -118,11 +118,9 @@
 .ecg-model header span, .ecg-strip header span { font-size: 11px; }
 .ecg-heart { position: relative; }
 .ecg-heart-view { width: 100%; height: clamp(210px, 24vw, 335px); background: radial-gradient(ellipse at 50% 44%, #214652, #091c28 72%); }
-.ecg-heart-status { position: absolute; inset: 0; display: grid; place-content: center; padding: 14px; text-align: center; pointer-events: none; }
-.ecg-heart-controls, .ecg-heart-help { position: absolute; bottom: 7px; }
+.ecg-heart-controls { position: absolute; bottom: 7px; }
 .ecg-heart-controls { left: 8px; display: flex; gap: 4px; }
 .ecg-heart-controls button { padding: 3px 7px; background: #173e50; border: 1px solid #5a8193; border-radius: 4px; color: #eaf5f8; }
-.ecg-heart-help { right: 8px; color: #bbd3de; }
 .ecg-legend { display: flex; flex-wrap: wrap; gap: 7px 12px; font-size: 11px; padding: 7px 10px; }
 .ecg-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #ffcd74; }
 .ecg-legend span + span i { background: #45d5e6; }
@@ -167,7 +165,7 @@
   gap: 5px;
   padding: 0 10px 8px;
 }
-.ecg-model-filters button, .ecg-heart-label {
+.ecg-model-filters button {
   border: 1px solid #557687;
   border-radius: 6px;
   background: #173848;
@@ -176,19 +174,6 @@
   font-size: 11px;
 }
 .ecg-model-filters button[aria-pressed="true"] { background: #d4f1f4; color: #143945; border-color: #d4f1f4; }
-.ecg-heart-label {
-  position: absolute;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  padding: 2px 4px;
-  line-height: 1.2;
-  min-width: 23px;
-  color: var(--lead-color);
-  background: #102a37f2;
-  border-color: var(--lead-color);
-  font-weight: 700;
-}
-.ecg-heart-label[aria-pressed="true"] { z-index: 2; color: #173848; background: #fff; border-color: #fff; }
 .ecg-lead-legend span:nth-child(2) i { background: #fff; }
 .ecg-lead-legend span:nth-child(3) i { background: #73ccef; }
 .ecg-lead-legend span:nth-child(4) i { background: #82e0bf; }

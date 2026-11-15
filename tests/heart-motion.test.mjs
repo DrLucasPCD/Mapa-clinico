@@ -6,21 +6,27 @@ import { pathToFileURL } from 'node:url';
 import * as Three from 'three';
 import ts from 'typescript';
 
-async function load(name) {
+async function moduleUrl(name) {
   let source = await readFile('app/' + name + '.ts', 'utf8');
   const threeUrl = pathToFileURL(
     createRequire(import.meta.url).resolve('three'),
   ).href;
   source = source.replace("from 'three'", "from '" + threeUrl + "'");
+  if (name === 'heart-motion')
+    source = source.replace(
+      "from './heart-model'",
+      `from '${await moduleUrl('heart-model')}'`,
+    );
   const js = ts.transpileModule(source, {
     compilerOptions: {
       module: ts.ModuleKind.ES2022,
       target: ts.ScriptTarget.ES2022,
     },
   }).outputText;
-  return import(
-    'data:text/javascript;base64,' + Buffer.from(js).toString('base64')
-  );
+  return 'data:text/javascript;base64,' + Buffer.from(js).toString('base64');
+}
+async function load(name) {
+  return import(await moduleUrl(name));
 }
 const { heartCycle, cycleComparison, heartCycleAtBeat } =
   await load('heart-cycle');
@@ -83,4 +89,44 @@ test('changes ventricular geometry with an anchored apex and opposing rotation, 
   assert.ok(
     [...left.geometry.morphAttributes.position[0].array].every(Number.isFinite),
   );
+});
+
+test('maintains the superior vena cava attachment through systole while stabilizing its distal end', () => {
+  const mesh = (id, geometry, x, y) => {
+    geometry.translate(x, y, 0);
+    const part = new Three.Mesh(geometry);
+    part.userData.anatomyId = id;
+    return part;
+  };
+  const chamber = (id, x, y, scale) => {
+    const geometry = new Three.SphereGeometry(1, 24, 18);
+    geometry.scale(...scale);
+    return mesh(id, geometry, x, y);
+  };
+  const [left, right, atrium, cava] = [
+    chamber('left-ventricle', 0.055, 1.245, [0.032, 0.052, 0.03]),
+    chamber('right-ventricle', 0.005, 1.246, [0.032, 0.05, 0.03]),
+    chamber('right-atrium', -0.036, 1.299, [0.02, 0.046, 0.021]),
+    mesh(
+      'superior-vena-cava',
+      new Three.CylinderGeometry(0.009, 0.01, 0.038, 16),
+      -0.036,
+      1.359,
+    ),
+  ];
+  const rig = prepareHeartMotion([left, right, atrium, cava]);
+  const junction = new Three.Vector3(-0.026, 1.343, 0);
+  const distal = new Three.Vector3(-0.036, 1.378, 0);
+  const onCava = new Three.Vector3();
+  const onAtrium = new Three.Vector3();
+  for (const time of [0, 0.12, 0.23, 0.332, 0.46, 0.75]) {
+    const pose = heartCycle(time);
+    rig.point('superior-vena-cava', junction, pose, onCava);
+    rig.point('right-atrium', junction, pose, onAtrium);
+    assert.ok(onCava.distanceTo(onAtrium) < 1e-8);
+    assert.ok(
+      rig.point('superior-vena-cava', distal, pose, onCava).distanceTo(distal) <
+        1e-8,
+    );
+  }
 });

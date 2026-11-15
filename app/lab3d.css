@@ -103,3 +103,19 @@
 .heart-cycle-valves { display:flex; flex-wrap:wrap; gap:5px; margin:7px 0 2px; }
 .heart-cycle-valves span { border:1px solid #375667; border-radius:5px; padding:2px 5px; color:#bbd3db; font-size:10px; }
 .heart-cycle-valves [data-open=true] { border-color:#54c9b4; color:#aaf5de; }
+
+.heart-flow-controls { display: grid; gap: 6px; margin: 0; padding: 9px 10px; min-width: 0; border: 1px solid #9ac7d65c; border-radius: 9px; }
+.heart-flow-controls legend { padding: 0 5px; font-weight: 700; font-size: 12px; }
+.heart-flow-controls small { opacity: .83; font-size: 11px; }
+.heart-flow-option { display: flex; align-items: center; gap: 7px; min-height: 21px; font-size: 12px; }
+.heart-flow-option input { inline-size: 15px; block-size: 15px; margin: 0; accent-color: #148b83; }
+.heart-flow-option i { inline-size: 8px; block-size: 8px; border-radius: 50%; background: linear-gradient(90deg, #e06951 50%, #339ce7 50%); }
+.heart-flow-option.flow-arteries i { background: #df8840; }
+.heart-flow-option.flow-veins i { background: #a085dc; }
+.heart-flow-branch { display: grid; gap: 4px; min-width: 0; margin: 2px 0; font-size: 12px; }
+.heart-flow-branch select { width: 100%; min-height: 28px; border: 1px solid #638590; border-radius: 6px; background: #143443; color: #f3fbfd; padding: 2px 5px; }
+.heart-lead-label { position: absolute; z-index: 2; transform: translate(-50%, -50%); padding: 2px 5px; border: 1px solid var(--lead-color); border-radius: 5px; background: #102a37f2; color: var(--lead-color); font-size: 11px; font-weight: 700; }
+.heart-lead-label[aria-pressed="true"] { z-index: 3; background: #fff; color: #173848; border-color: #fff; }
+.ecg-heart-flow { padding: 3px 9px 6px; font-size: 12px; color: #dceff2; }
+.ecg-heart-flow summary { width: fit-content; padding: 3px 0; color: #e4fafc; font-weight: 600; cursor: pointer; }
+.ecg-heart-flow .heart-flow-controls { margin-top: 5px; }
