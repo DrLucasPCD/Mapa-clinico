@@ -56,8 +56,9 @@ import type { AtlasSlice } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
 import { heartOrgans } from './heart-model';
-import { CaseLibrary, ReviewCenter, VisualTraining, kneeOrgans, type ReviewDestination, type VisualId } from './TrainingViews';
+import type { ReviewDestination, VisualId } from './TrainingViews';
 import type { LibraryCase } from './training-data';
+import type { PlantaoReview } from './plantao-cases';
 import type { PathStep } from './study-paths';
 import './training.css';
 import type { LabScale } from './lab3d-data';
@@ -66,6 +67,10 @@ const Atlas = lazy(() => import('./Atlas'));
 const EcgLab = lazy(() => import('./EcgLab'));
 const Lab3D = lazy(() => import('./Lab3D'));
 const Plantao = lazy(() => import('./Plantao'));
+const VisualTraining = lazy(() => import('./TrainingViews').then(module => ({ default: module.VisualTraining })));
+const CaseLibrary = lazy(() => import('./TrainingViews').then(module => ({ default: module.CaseLibrary })));
+const ReviewCenter = lazy(() => import('./TrainingViews').then(module => ({ default: module.ReviewCenter })));
+const kneeOrgans = ['femur_r', 'tibia_r', 'patella_r'] as const;
 type Workspace = 'case' | 'study' | 'imaging' | 'ultrasound' | 'paths' | 'plantao' | 'lab' | 'visual' | 'library' | 'review';
 const systems = [
   ['all', 'Corpo integrado', Layers],
@@ -99,7 +104,7 @@ export default function App() {
   const [studyTopic, setStudyTopic] = useState<string>();
   const [openCaseQuestion, setOpenCaseQuestion] = useState(false);
   const [plantaoAtlas, setPlantaoAtlas] = useState(false);
-  const [plantaoDecision, setPlantaoDecision] = useState<number>();
+  const [plantaoReview, setPlantaoReview] = useState<PlantaoReview>();
   const [visualTask, setVisualTask] = useState<VisualId | null>(null);
   const [visualSelection, setVisualSelection] = useState('');
   const [visualRevision, setVisualRevision] = useState(0);
@@ -192,7 +197,7 @@ export default function App() {
     setPathology('');
   };
   const focusStructure = (id: string, title: string) => {
-    setWorkspaceMode(current => ['ecg', 'lab3d', 'library', 'review', 'visual'].includes(current) ? 'case' : current);
+    setWorkspaceMode(current => ['lab', 'library', 'review', 'visual'].includes(current) ? 'case' : current);
     setCaseView('atlas');
     if (workspaceMode === 'plantao') setPlantaoAtlas(true);
     if (id === 'heart') setModelVariant('male');
@@ -256,10 +261,10 @@ export default function App() {
     setHidden([]);
     setSystem('all');
   };
-  function openTraining(view: 'plantao' | 'lab' | 'visual' | 'library' | 'review', decision?: number) {
+  function openTraining(view: 'plantao' | 'lab' | 'visual' | 'library' | 'review', review?: PlantaoReview) {
     if (view === 'plantao') {
       setPlantaoAtlas(false);
-      setPlantaoDecision(decision);
+      setPlantaoReview(review);
     }
     setWorkspaceMode(view);
     setMobileNav(false);
@@ -321,7 +326,7 @@ export default function App() {
       case 'case': openCase(destination.id, true); break;
       case 'curriculum': openStudy('quiz', destination.id); break;
       case 'visual': chooseVisual(destination.id); openTraining('visual'); break;
-      case 'plantao': openTraining('plantao', destination.decision); break;
+      case 'plantao': openTraining('plantao', destination.review); break;
     }
   }
   const locate = () => {
@@ -781,17 +786,23 @@ export default function App() {
               </Suspense>
             </section>
             : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
-              <Plantao key={plantaoDecision ?? 'full'} reviewDecision={plantaoDecision}
-                onAtlas={() => {
-                  setPlantaoAtlas(true);
-                  focusPathStructure('gallbladder', 'Vesícula biliar');
+              <Plantao key={plantaoReview ? plantaoReview.caseId + '/' + plantaoReview.decision : 'full'} review={plantaoReview}
+                onAtlas={(id, label) => {
+                  focusPathStructure(id, label, true);
                   requestAnimationFrame(() => document.getElementById('atlas-panel')?.scrollIntoView({ block: 'nearest' }));
-                }} onUltrasound={() => openUltrasound('27525')} />
+                }}
+                onCloseAtlas={() => setPlantaoAtlas(false)}
+                onUltrasound={() => openUltrasound('27525')}
+                onVisual={id => { chooseVisual(id); openTraining('visual'); }} />
             </Suspense>
-            : workspaceMode === 'visual' ? <VisualTraining taskId={visualTask} setTaskId={chooseVisual}
-                atlasSelection={visualSelection} selectAtlas={setVisualSelection} atlasRevision={visualRevision} />
-            : workspaceMode === 'library' ? <CaseLibrary onOpen={openLibraryCase} />
-            : workspaceMode === 'review' ? <ReviewCenter onOpen={openReview} />
+            : workspaceMode === 'visual' || workspaceMode === 'library' || workspaceMode === 'review' ? (
+              <Suspense fallback={<p className="training-screen">Carregando área de estudo…</p>}>
+                {workspaceMode === 'visual' ? <VisualTraining taskId={visualTask} setTaskId={chooseVisual}
+                    atlasSelection={visualSelection} selectAtlas={setVisualSelection} atlasRevision={visualRevision} />
+                  : workspaceMode === 'library' ? <CaseLibrary onOpen={openLibraryCase} />
+                  : <ReviewCenter onOpen={openReview} />}
+              </Suspense>
+            )
             : workspaceMode === 'paths' ? (
               <StudyPaths period={n} entry={pathEntry} modelVariant={modelVariant} onLocate={focusPathStructure}
                 onOpenBiliary={() => openUltrasound('27525')}

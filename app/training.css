@@ -267,3 +267,20 @@
   .visual-case-grid { grid-template-columns: minmax(0, 1fr); }
   .visual-case-list { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); max-height: 155px; }
 }
+
+.visual-localization-list button { padding: 5px 7px; line-height: 1.25; }
+.visual-localization-list img { width: 40px; height: 32px; display: block; flex: 0 0 40px; object-fit: contain; background: #10252d; border-radius: 4px; }
+.visual-localization-list svg { flex: 0 0 40px; }
+.visual-localization-list small { margin-bottom: 2px; }
+.training-with-atlas .localization-grid { grid-template-columns: minmax(0, 1fr); }
+.training-with-atlas .visual-localization-list { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); max-height: 130px; }
+
+.plantao-return { justify-self: start; }
+.plantao-catalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 12px; }
+.plantao-case { display: grid; grid-template-rows: auto auto 1fr auto; align-content: start; gap: 8px; }
+.plantao-case > * + * { margin-top: 0; }
+.plantao-case small { color: var(--training-brand); font-weight: 650; }
+.plantao-case p { color: var(--training-muted); }
+.plantao-case button { justify-self: start; }
+.plantao-filters { align-items: end; }
+.plantao-stage output.training-feedback { display: block; }

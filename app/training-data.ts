@@ -3,89 +3,10 @@ import { studyPaths } from './study-paths';
 import { ultrasoundCases } from './ultrasound-data';
 
 export const gallbladderImage = ultrasoundCases['27525'].zoneViews.gallbladder![0];
-export const biliaryImagingReference = 'https://gravitas.acr.org/ACPortal/GetDataForOneTopic?topicId=132';
 const stroke = cases.find(item => item.id === '2604')!;
 const abscess = cases.find(item => item.id === '87566')!;
 const fracture = cases.find(item => item.id === '164685')!;
 const normalUs = ultrasoundCases['148000'];
-
-export const interview = [
-  { question: 'Como a dor começou e quanto tempo durou?', answer: 'Começou depois do jantar, durou cerca de duas horas e cedeu. Já tive um episódio parecido.', key: true },
-  { question: 'Teve febre ou calafrios?', answer: 'Não tive febre nem calafrios.', key: true },
-  { question: 'Notou pele amarela ou urina escura?', answer: 'Não notei nenhuma dessas alterações.', key: true },
-  { question: 'Teve mudança na visão?', answer: 'Não.', key: false },
-  { question: 'A dor piora quando movimenta o ombro?', answer: 'Não muda quando mexo o ombro.', key: false },
-];
-
-export const plantaoDecisions = [
-  {
-    title: 'Qual exame de imagem você pediria primeiro?',
-    hint: 'Pense em um exame que mostre cálculos na vesícula e permita avaliar as vias biliares.',
-    options: ['Radiografia simples de abdome', 'Ultrassonografia do quadrante superior direito', 'Colangiorressonância como primeiro exame'],
-    correct: 1,
-    explanation: 'Neste cenário com suspeita de origem biliar, a ultrassonografia é usualmente apropriada como exame inicial. Ela permite procurar cálculos e avaliar a vesícula e as vias biliares.',
-  },
-  {
-    title: 'Qual achado você identifica na imagem?',
-    hint: 'Observe os focos mais brilhantes no lúmen e a faixa escura em profundidade.',
-    options: ['Focos ecogênicos com sombra acústica posterior', 'Reforço acústico atrás dos focos', 'Líquido livre ao redor da vesícula'],
-    correct: 0,
-    explanation: 'Os focos hiperecogênicos estão na vesícula e atenuam o feixe. A perda de ecos atrás deles produz sombra acústica.',
-  },
-  {
-    title: 'Qual hipótese melhor integra a história simulada e o exame?',
-    hint: 'Considere a duração da dor, sua resolução e a localização dos cálculos.',
-    options: ['Colangite aguda', 'Colecistite aguda estabelecida', 'Colelitíase sintomática com cólica biliar'],
-    correct: 2,
-    explanation: 'A dor episódica que cedeu e os cálculos intravesiculares favorecem cólica biliar neste cenário. Cálculos isolados não estabelecem colecistite. Dor persistente, febre ou icterícia mudariam a investigação.',
-  },
-];
-
-export const visualTasks = [
-  { id: 'us-shadow', title: 'Sombra acústica no USG', prompt: 'Marque o centro da sombra escura imediatamente atrás do cálculo central.', image: gallbladderImage.image, source: gallbladderImage.source, credit: gallbladderImage.author + ' · Radiopaedia', licence: 'https://radiopaedia.org/licence', target: { x: .53, y: .68, rx: .073, ry: .106 }, explanation: 'A sombra se estende em profundidade a partir do cálculo ecogênico, na direção do feixe.' },
-  { id: 'ct-mca', title: 'Artéria hiperdensa na TC', prompt: 'Marque o segmento hiperdenso da artéria cerebral média direita na TC de admissão.', image: stroke.images[0].src, source: stroke.source, credit: stroke.author + ' · Radiopaedia', licence: 'https://radiopaedia.org/licence', target: { x: .35, y: .365, rx: .092, ry: .032 }, explanation: 'Na TC axial, o lado direito do paciente aparece à esquerda da tela. Procure a hiperdensidade linear no trajeto da cerebral média.' },
-  { id: 'rm-patella', title: 'Patela na RM', prompt: 'Marque o centro da patela na imagem T1, no painel esquerdo.', image: '/study/knee-mri-hellerhoff.jpg', source: 'https://commons.wikimedia.org/wiki/File:VKB-Riss_MRT_T1_PDW_sag.jpg', credit: 'Hellerhoff · Wikimedia Commons', licence: 'https://creativecommons.org/licenses/by-sa/3.0/', target: { x: .091, y: .315, rx: .041, ry: .101 }, explanation: 'A patela fica à frente do fêmur distal. Seu interior tem sinal medular alto na sequência T1, delimitado pela cortical escura.' },
-  {
-    id: 'rx-metacarpal-neck',
-    title: 'Fratura no RX da mão',
-    prompt: 'Marque o colo do quinto metacarpo, imediatamente abaixo da articulação do dedo mínimo.',
-    image: fracture.images[0].src,
-    source: fracture.source,
-    credit: fracture.author + ' · Radiopaedia',
-    licence: 'https://radiopaedia.org/licence',
-    target: { x: .680, y: .523, rx: .045, ry: .036 },
-    explanation: 'O colo é a transição entre o corpo e a cabeça do quinto metacarpo. Neste exame, a cortical perde a continuidade nesse nível.',
-  },
-  {
-    id: 'rm-flair-lesion',
-    title: 'Lesão na RM FLAIR',
-    prompt: 'Neste corte axial, marque o centro da lesão arredondada no hemisfério esquerdo do paciente.',
-    image: abscess.images[14].src,
-    source: abscess.source,
-    credit: abscess.author + ' · Radiopaedia',
-    licence: 'https://radiopaedia.org/licence',
-    target: { x: .680, y: .699, rx: .087, ry: .081 },
-    explanation: 'A lesão aparece à direita da tela, rodeada por hipersinal em FLAIR. No relato, as demais sequências e o contexto infeccioso favoreceram abscesso.',
-  },
-  {
-    id: 'us-gallbladder-lumen',
-    title: 'Lúmen da vesícula no USG',
-    prompt: 'No painel esquerdo, marque o centro da região escura no interior da vesícula.',
-    image: normalUs.zoneViews.gallbladder![0].image,
-    source: normalUs.source,
-    credit: normalUs.author + ' · Radiopaedia',
-    licence: 'https://radiopaedia.org/licence',
-    target: { x: .274, y: .219, rx: .041, ry: .055 },
-    explanation: 'A bile no lúmen é anecoica neste quadro. Compare com o exercício de colelitíase, em que o cálculo brilhante produz uma sombra atrás dele.',
-  },
-] as const;
-export const atlasVisualTask = {
-  id: 'atlas-patella', title: 'Patela no Atlas 3D',
-  prompt: 'Clique no osso situado à frente da articulação do joelho direito.',
-  target: 'patella-right',
-  choices: [{ id: 'femur-right', label: 'Osso superior' }, { id: 'tibia-right', label: 'Osso inferior' }, { id: 'patella-right', label: 'Osso pequeno anterior' }],
-  explanation: 'A patela é o pequeno osso anterior ao fêmur distal, incorporado ao mecanismo extensor do joelho.',
-} as const;
 
 const knee = studyPaths.find(item => item.id === 'joelho')!;
 

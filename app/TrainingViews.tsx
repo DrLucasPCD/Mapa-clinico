@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { Crosshair, Library, ListChecks } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Box, Crosshair, Library, ListChecks } from 'lucide-react';
 import curriculum from './curriculum.json';
 import { cases } from './content';
 import { readCaseJourneyRecords } from './CaseJourney';
 import { readPathProgress } from './StudyPaths';
 import { studyPaths } from './study-paths';
-import { atlasVisualTask, libraryCases, plantaoDecisions, visualTasks, type LibraryCase } from './training-data';
+import { libraryCases, type LibraryCase } from './training-data';
+import { atlasVisualTask, visualModalities, visualTasks, type VisualId, type VisualModality } from './visual-localization';
+import { resolvePlantaoReview, type PlantaoReview } from './plantao-cases';
 import { getTrainingReview, recordTrainingReview } from './training-review';
 import VisualCaseCatalog from './VisualCaseCatalog';
 
 type Mark = { x: number; y: number };
-export type VisualId = typeof visualTasks[number]['id'] | typeof atlasVisualTask.id;
-export const kneeOrgans = ['femur_r', 'tibia_r', 'patella_r'] as const;
+export type { VisualId } from './visual-localization';
 
 export function VisualTraining({ taskId, setTaskId, atlasSelection, selectAtlas, atlasRevision }: {
   taskId: VisualId | null;
@@ -30,15 +31,70 @@ export function VisualTraining({ taskId, setTaskId, atlasSelection, selectAtlas,
         <button aria-pressed={taskId === null} onClick={() => setTaskId(null)}>Casos com imagem</button>
         <button aria-pressed={taskId !== null} onClick={() => { if (!taskId) setTaskId(visualTasks[0].id); }}>Localizar achados</button>
       </nav>
-      {taskId === null ? <VisualCaseCatalog /> : <>
-        <nav className="training-tabs" aria-label="Exercícios de localização">
-          {[...visualTasks, atlasVisualTask].map(item => <button key={item.id} aria-pressed={item.id === taskId} onClick={() => setTaskId(item.id)}>{item.title}</button>)}
-        </nav>
-        {taskId === atlasVisualTask.id
-          ? <AtlasExercise key={atlasRevision} selection={atlasSelection} onSelect={selectAtlas} />
-          : <ImageExercise key={taskId} task={visualTasks.find(item => item.id === taskId)!} />}
-      </>}
+      {taskId === null ? <VisualCaseCatalog /> : (
+        <VisualLocalization taskId={taskId} setTaskId={setTaskId} atlasSelection={atlasSelection} selectAtlas={selectAtlas} atlasRevision={atlasRevision} />
+      )}
     </section>
+  );
+}
+
+const localizationTasks = [...visualTasks, atlasVisualTask];
+
+function VisualLocalization({ taskId, setTaskId, atlasSelection, selectAtlas, atlasRevision }: {
+  taskId: VisualId;
+  setTaskId: (value: VisualId) => void;
+  atlasSelection: string;
+  selectAtlas: (id: string) => void;
+  atlasRevision: number;
+}) {
+  const [modality, setModality] = useState<VisualModality | ''>('');
+  const active = localizationTasks.find(item => item.id === taskId)!;
+  const filter = modality === active.modality ? modality : '';
+  const visible = localizationTasks.filter(task => !filter || task.modality === filter);
+  const position = visible.findIndex(item => item.id === taskId);
+
+  function changeModality(value: VisualModality | '') {
+    setModality(value);
+    if (value && value !== active.modality) {
+      setTaskId(localizationTasks.find(task => task.modality === value)!.id);
+    }
+  }
+
+  return (
+    <div className="visual-case-grid localization-grid">
+      <aside className="training-card visual-case-picker" aria-label="Exercícios de localização">
+        <div className="library-filters">
+          <label>Modalidade<select value={filter} onChange={event => changeModality(event.target.value as VisualModality | '')}>
+            <option value="">Todas</option>
+            {visualModalities.map(value => <option key={value} value={value}>{value}</option>)}
+          </select></label>
+        </div>
+        <p className="training-note">{visible.length} {visible.length === 1 ? 'exercício' : 'exercícios'}</p>
+        <div className="visual-case-list visual-localization-list">
+          {visible.map(item => (
+            <button type="button" className="training-secondary" key={item.id} aria-pressed={item.id === taskId}
+              onClick={() => { if (item.id !== taskId) setTaskId(item.id); }}>
+              {'image' in item ? <img src={item.image} alt="" loading="lazy" /> : <Box size={21} aria-hidden="true" />}
+              <span><small>{item.modality}</small>{item.title}</span>
+            </button>
+          ))}
+        </div>
+      </aside>
+      <div className="visual-case-detail">
+        {active.modality === 'Atlas 3D'
+          ? <AtlasExercise key={atlasRevision} selection={atlasSelection} onSelect={selectAtlas} />
+          : <ImageExercise key={taskId} task={active} />}
+        <nav className="visual-case-nav" aria-label="Navegar nos exercícios">
+          <button className="training-secondary" disabled={position === 0} onClick={() => setTaskId(visible[position - 1].id)}>
+            <ArrowLeft size={16} /> Anterior
+          </button>
+          <span>{position + 1} de {visible.length}</span>
+          <button className="training-secondary" disabled={position === visible.length - 1} onClick={() => setTaskId(visible[position + 1].id)}>
+            Próximo <ArrowRight size={16} />
+          </button>
+        </nav>
+      </div>
+    </div>
   );
 }
 
@@ -70,7 +126,7 @@ function ImageExercise({ task }: { task: typeof visualTasks[number] }) {
       <p>{task.prompt}</p>
       <figure className="training-figure visual-figure">
         <div className="visual-image">
-          <button className="visual-click" aria-label="Marcar ponto no exame. Use as setas para mover o marcador." onClick={event => {
+          <button className="visual-click" aria-label="Marcar ponto no exame. Use as setas para mover o marcador. Com Shift, os passos ficam menores." onClick={event => {
             const bounds = event.currentTarget.getBoundingClientRect();
             setChecked(false);
             setMark(event.detail ? { x: (event.clientX - bounds.left) / bounds.width, y: (event.clientY - bounds.top) / bounds.height } : { x: .5, y: .5 });
@@ -82,7 +138,8 @@ function ImageExercise({ task }: { task: typeof visualTasks[number] }) {
             setChecked(false);
             setMark(previous => {
               const { x, y } = previous ?? { x: .5, y: .5 };
-              return { x: Math.max(0, Math.min(1, x + .025 * direction[0])), y: Math.max(0, Math.min(1, y + .025 * direction[1])) };
+              const step = event.shiftKey ? .01 : .025;
+              return { x: Math.max(0, Math.min(1, x + step * direction[0])), y: Math.max(0, Math.min(1, y + step * direction[1])) };
             });
           }}>
             <img src={task.image} alt={task.title} />
@@ -159,7 +216,7 @@ export type ReviewDestination =
   | { kind: 'case'; id: string }
   | { kind: 'curriculum'; id: string }
   | { kind: 'visual'; id: VisualId }
-  | { kind: 'plantao'; decision: number };
+  | { kind: 'plantao'; review: PlantaoReview };
 
 export function ReviewCenter({ onOpen }: { onOpen: (destination: ReviewDestination) => void }) {
   const paths = readPathProgress().paths;
@@ -185,8 +242,11 @@ export function ReviewCenter({ onOpen }: { onOpen: (destination: ReviewDestinati
       const task = [...visualTasks, atlasVisualTask].find(entry => entry.id === item.id);
       if (task) entries.push({ label: task.title, detail: 'Treino visual', destination: { kind: 'visual', id: task.id } });
     } else {
-      const decision = plantaoDecisions[Number(item.id)];
-      if (decision) entries.push({ label: decision.title, detail: 'Plantão · Dor no hipocôndrio direito', destination: { kind: 'plantao', decision: Number(item.id) } });
+      const pendingCase = resolvePlantaoReview(item.id);
+      if (pendingCase) {
+        const { scenario, review } = pendingCase;
+        entries.push({ label: scenario.decisions[review.decision].title, detail: 'Plantão · ' + scenario.title, destination: { kind: 'plantao', review } });
+      }
     }
   });
 

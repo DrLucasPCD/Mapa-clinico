@@ -1,0 +1,226 @@
+{
+  "pneumothorax": {
+    "image": "/study/plantao/pneumothorax.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13749074/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Basnet A, Rajbhandari BK, Rana EM, K C R, K C SR, Bohara A, Chataut B. · Figura 1 · PubMed Central",
+    "modality": "RX"
+  },
+  "pulmonary-embolism": {
+    "image": "/study/plantao/pulmonary-embolism.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13745162/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Bungo M, Watanabe KI, Teshima Y, Sakashita Y, Uemura H, Yamamura M, Sakaguchi T. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "appendicitis": {
+    "image": "/study/plantao/appendicitis.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13753327/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Chander R, Pereira J, Ansari M. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "kidney-stone": {
+    "image": "/study/plantao/kidney-stone.jpg",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13389618/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Buali HF, Abushloa T, Ahmed K. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "pneumonia": {
+    "image": "/study/plantao/pneumonia.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13731238/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Suliman M, Umme N, Umme A, Shaikh N, Fawzy I. · Figura 2 · PubMed Central",
+    "modality": "RX"
+  },
+  "cerebral-bleed": {
+    "image": "/study/plantao/cerebral-bleed.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633017/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Lee YV, Ahn J, Lee E, Park C, Son EJ, Jeong JY. · Figura 1. · PubMed Central",
+    "modality": "TC"
+  },
+  "subdural": {
+    "image": "/study/plantao/subdural.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13634392/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Overstijns M, Straehle J, Wolf K, Doria-Medina R, Bissolo M, El Rahal A, Lützen N, Urbach H, Beck J, Volz F. · Figura 2 · PubMed Central",
+    "modality": "TC"
+  },
+  "torsion": {
+    "image": "/study/plantao/torsion.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13617110/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Zhong X, Zhang X, Yang S, Ma R, Tang X, Jin M, Gong T. · Figura 3 · PubMed Central",
+    "modality": "USG"
+  },
+  "ovarian-torsion": {
+    "image": "/study/plantao/ovarian-torsion.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13570784/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Lemouedden H, Khalloufi C, Moustaide H, Benkirane S, Erradi G. · Figura 1 · PubMed Central",
+    "modality": "USG"
+  },
+  "ectopic": {
+    "image": "/study/plantao/ectopic.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13688605/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Patel D, Hansadah S, Jagati S. · Figura 1 · PubMed Central",
+    "modality": "USG"
+  },
+  "pyloric": {
+    "image": "/study/plantao/pyloric.jpg",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12776224/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Pokhrel B, Bhatta A, Basnet A, Pokhrel N, Regmi D. · Figura 2 · PubMed Central",
+    "modality": "USG"
+  },
+  "dislocation": {
+    "image": "/study/plantao/dislocation.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13625666/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Lacouture JD, Otoya-Giorgi V, González HAP, Liévano JR, Gonzalez-Gomez JC, Fierro-Porto G. · Figura 1 · PubMed Central",
+    "modality": "RX"
+  },
+  "rupture-aaa": {
+    "image": "/study/plantao/rupture-aaa.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13744133/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Sippel J, Foreman A, Kiefer CS, Scheidler J. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "aortic-dissection": {
+    "image": "/study/plantao/aortic-dissection.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13751902/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Handa K, Sakamoto T, Ohata T, Nakamura T, Kuratani T. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "pelvic-fracture": {
+    "image": "/study/plantao/pelvic-fracture.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13589850/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Alshreef AB, SaemAldahar M, Almuffarh DS, Alhazmi A. · Figura 1 · PubMed Central",
+    "modality": "RX"
+  },
+  "pulmonary-edema": {
+    "image": "/study/plantao/pulmonary-edema.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13727214/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Roh AR, Baek JH, Park JI. · Figura 1. · PubMed Central",
+    "modality": "RX"
+  },
+  "duodenal-perforation": {
+    "image": "/study/plantao/duodenal-perforation.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13544783/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Tran TT, Ngo DQ. · Figura 1. · PubMed Central",
+    "modality": "TC"
+  },
+  "volvulus": {
+    "image": "/study/plantao/volvulus.jpg",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13474052/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Abdul Latheef AS, Zubi AR, Adam IM. · Figura 1 · PubMed Central",
+    "modality": "RX"
+  },
+  "nec-fasciitis": {
+    "image": "/study/plantao/nec-fasciitis.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13679822/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Garrosi S, Marcelin N, Paredes I, Pastrana M. · Figura 2 · PubMed Central",
+    "modality": "TC"
+  },
+  "pancreatitis": {
+    "image": "/study/plantao/pancreatitis.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13751596/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Liu X, Song L. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "cauda-equina": {
+    "image": "/study/plantao/cauda-equina.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13654741/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Chen X, Lv H. · Figura 1 · PubMed Central",
+    "modality": "RM"
+  },
+  "septic-joint": {
+    "image": "/study/plantao/septic-joint.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13731876/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Gardner EM, Greenhow TL. · Figura 2 · PubMed Central",
+    "modality": "RM"
+  },
+  "intracranial-sah": {
+    "image": "/study/plantao/intracranial-sah.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13742841/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Yamashiro T, Sakima H, Yamashiro T, Nakamatsu M, Kusunose K. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "pneumomediastinum": {
+    "image": "/study/plantao/pneumomediastinum.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13562374/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Miguel CF, Oliveira MM, Torres T, de Andrade BP. · Figura 1 · PubMed Central",
+    "modality": "RX"
+  },
+  "aneurysm-splenic": {
+    "image": "/study/plantao/aneurysm-splenic.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13546891/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Patel M, Hanna J, Yassine R, Zarour C. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "delirium": {
+    "image": "/study/plantao/delirium.jpg",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13198784/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Watson J, Persaud V, Subhan A. · Figura 2 · PubMed Central",
+    "modality": "RM"
+  },
+  "renal-tumor": {
+    "image": "/study/plantao/renal-tumor.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13752718/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Amakura K, Yajima S, Yoshioka D, Kawashima A, Hasegawa S, Kawamura T, Kawamura A, Misumi Y, Miyagawa S. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "miliary-nodules": {
+    "image": "/study/plantao/miliary-nodules.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13749941/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Zhao J, Zhang L, Wang Y, Zhao C, Cheng G. · Figura 1 · PubMed Central",
+    "modality": "TC"
+  },
+  "spinal-ependymoma": {
+    "image": "/study/plantao/spinal-ependymoma.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13745988/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Kono K, Shigemura T, Yamamoto Y, Morimoto M, Murata Y. · Figura 1 · PubMed Central",
+    "modality": "RM"
+  },
+  "hepatic-masses": {
+    "image": "/study/plantao/hepatic-masses.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13734556/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Odong G, Panwar P, Otom L, Wakahora I, Idet S, Kibe S, Okiro P, Abdulkarim S, Alemanji A, Kidee A, Gitau S. · Figura 1. · PubMed Central",
+    "modality": "USG"
+  },
+  "pulmonary-vein": {
+    "image": "/study/plantao/pulmonary-vein.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13593846/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Shin Y, Son H, Yoon N, Kim J. · Figura 1 · PubMed Central",
+    "modality": "USG"
+  },
+  "fetal-laterality": {
+    "image": "/study/plantao/fetal-laterality.webp",
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13744134/",
+    "licence": "https://creativecommons.org/licenses/by/4.0/",
+    "credit": "Hardy V, Ortegat M, De Clippel K, Sznajer Y, Wuyts W, Blaumeiser B, Steenhaut P. · Figura 1 · PubMed Central",
+    "modality": "USG"
+  }
+}
