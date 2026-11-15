@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   ClipboardList,
+  Square,
   Stethoscope,
+  Volume2,
 } from 'lucide-react';
 import {
   plantaoCases,
@@ -12,11 +14,27 @@ import {
   type PlantaoReview,
   type PlantaoScenario,
 } from './plantao-cases';
+import { getClinicalPlan } from './plantao-clinical';
+import { plantaoVoiceUrl } from './plantao-voice';
 import { recordTrainingReview } from './training-review';
 import type { VisualId } from './visual-localization';
 
-const stages = ['Entrevista', 'Exame', 'Imagem', 'Hipótese', 'Devolutiva'];
+const clinicalStages = [
+  'Entrevista',
+  'Avaliação inicial',
+  'Hipótese',
+  'Manejo',
+  'Devolutiva',
+];
+const legacyStages = [
+  'Entrevista',
+  'Exame',
+  'Imagem',
+  'Hipótese',
+  'Devolutiva',
+];
 const interviewLimit = 3;
+const autoVoicePreference = 'mapa-plantao-auto-voice';
 const disciplines = [
   ...new Set(plantaoCases.map((item) => item.discipline)),
 ].sort((a, b) => a.localeCompare(b, 'pt-BR'));
@@ -40,7 +58,14 @@ export default function Plantao({
   const [selection, setSelection] = useState<string | null>(
     review?.caseId ?? null,
   );
-  const [reviewDecision, setReviewDecision] = useState(review?.decision);
+  const [activeReview, setActiveReview] = useState(review);
+  const [autoVoice, setAutoVoice] = useState(() => {
+    try {
+      return localStorage.getItem(autoVoicePreference) !== 'off';
+    } catch {
+      return true;
+    }
+  });
   const [discipline, setDiscipline] = useState('');
   const [query, setQuery] = useState('');
   const scenario = selection ? getPlantaoScenario(selection) : undefined;
@@ -53,14 +78,32 @@ export default function Plantao({
       ).includes(normalizedQuery),
   );
 
-  function generate() {
+  function changeAutoVoice(enabled: boolean) {
+    setAutoVoice(enabled);
+    try {
+      localStorage.setItem(autoVoicePreference, enabled ? 'on' : 'off');
+    } catch {
+      /* Keep the setting for this visit. */
+    }
+  }
+
+  function generate(previousId?: string) {
+    if (!visible.length) return;
+    const previousBase = previousId?.split('~')[0];
+    const candidates = visible.filter((item) => item.id !== previousBase);
+    const pool = candidates.length ? candidates : visible;
     const values = crypto.getRandomValues(new Uint32Array(2));
-    const base = visible[values[0] % visible.length];
-    if (base) openCase(`${base.id}~${values[1].toString(36)}`);
+    const base = pool[values[0] % pool.length];
+    const id = `${base.id}~${values[1].toString(36)}`;
+    openCase(
+      id === previousId
+        ? `${base.id}~${((values[1] + 1) >>> 0).toString(36)}`
+        : id,
+    );
   }
 
   function openCase(id: string | null) {
-    setReviewDecision(undefined);
+    setActiveReview(undefined);
     setSelection(id);
     links.onCloseAtlas();
   }
@@ -79,7 +122,7 @@ export default function Plantao({
           <h2 id="plantao-title">Modo Plantão</h2>
           <p>
             {scenario?.title ??
-              'Escolha uma queixa para conduzir o atendimento.'}
+              'Investigue a queixa, estabeleça a prioridade e escolha a conduta.'}
           </p>
         </div>
       </header>
@@ -94,8 +137,15 @@ export default function Plantao({
           <PlantaoSession
             key={scenario.id}
             scenario={scenario}
-            reviewDecision={reviewDecision}
+            review={activeReview}
             onBack={() => openCase(null)}
+            onGenerate={
+              scenario.generated && !activeReview
+                ? () => generate(scenario.id)
+                : undefined
+            }
+            autoVoice={autoVoice}
+            onAutoVoiceChange={changeAutoVoice}
             {...links}
           />
         </>
@@ -108,7 +158,7 @@ export default function Plantao({
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Queixa, especialidade ou exame"
+                placeholder="Queixa ou especialidade"
               />
             </label>
             <label>
@@ -126,24 +176,22 @@ export default function Plantao({
             <button
               className="training-primary"
               disabled={!visible.length}
-              onClick={generate}
+              onClick={() => generate()}
             >
-              Gerar simulação <ArrowRight size={16} />
+              Gerar caso clínico <ArrowRight size={16} />
             </button>
           </div>
           <output className="training-note">
             {visible.length === plantaoCases.length
               ? `${visible.length} casos na base`
               : `${visible.length} de ${plantaoCases.length} casos`}{' '}
-            · A geração varia a entrevista e a ordem das respostas a partir dos
-            casos selecionados.
+            · O gerador usa a base filtrada para variar o relato e treinar
+            avaliação inicial, hipótese e manejo.
           </output>
           <div className="plantao-catalog" aria-label="Casos do Modo Plantão">
             {visible.map((item) => (
               <article className="training-card plantao-case" key={item.id}>
-                <small>
-                  {item.discipline} · {item.modality}
-                </small>
+                <small>{item.discipline}</small>
                 <h3>{item.title}</h3>
                 <p>{item.complaint}</p>
                 <button
@@ -164,31 +212,90 @@ export default function Plantao({
 
 function PlantaoSession({
   scenario,
-  reviewDecision,
+  review,
   onBack,
+  onGenerate,
   onAtlas,
   onCloseAtlas,
   onUltrasound,
   onVisual,
+  autoVoice,
+  onAutoVoiceChange,
 }: Links & {
   scenario: PlantaoScenario;
-  reviewDecision?: number;
+  review?: PlantaoReview;
   onBack: () => void;
+  onGenerate?: () => void;
+  autoVoice: boolean;
+  onAutoVoiceChange: (enabled: boolean) => void;
 }) {
-  const reviewing = reviewDecision !== undefined;
+  const reviewing = review !== undefined;
+  const clinical = !review || review.clinical === true;
+  const stages = clinical ? clinicalStages : legacyStages;
   const [mode, setMode] = useState<Mode | null>(reviewing ? 'guided' : null);
-  const [step, setStep] = useState(reviewing ? reviewDecision + 1 : 0);
+  const [step, setStep] = useState(review ? review.decision + 1 : 0);
   const [asked, setAsked] = useState<number[]>([]);
   const [answers, setAnswers] = useState<number[]>([]);
   const [choice, setChoice] = useState<number | null>(null);
   const [hint, setHint] = useState(false);
-  const { interview, decisions, visual, atlas } = scenario;
+  const player = useRef<HTMLAudioElement>(null);
+  const voiceRequest = useRef(0);
+  const [activeVoice, setActiveVoice] = useState<string | null>(null);
+  const [voiceError, setVoiceError] = useState(false);
+  useEffect(() => {
+    const audio = player.current;
+    return () => {
+      voiceRequest.current += 1;
+      audio?.pause();
+    };
+  }, []);
+  const { interview, visual, atlas } = scenario;
+  const plan = getClinicalPlan(scenario);
+  const decisions = clinical ? plan.decisions : scenario.decisions;
+  const reference = clinical ? plan.reference : scenario.reference;
   const decision = decisions[step - 1];
   const confirmed = step > 0 && answers[step - 1] !== undefined;
   const keyQuestions = interview.filter((item) => item.key);
   const askedKey = asked.filter((index) => interview[index].key).length;
 
+  function stopVoice() {
+    voiceRequest.current += 1;
+    player.current?.pause();
+    setActiveVoice(null);
+  }
+
+  function playVoice(key: string, text: string) {
+    const audio = player.current;
+    if (!audio) return;
+    const request = ++voiceRequest.current;
+    audio.src = plantaoVoiceUrl(text);
+    setActiveVoice(key);
+    setVoiceError(false);
+    audio.play().catch(() => {
+      if (request !== voiceRequest.current) return;
+      stopVoice();
+      setVoiceError(true);
+    });
+  }
+
+  function voiceButton(key: string, text: string, label: string) {
+    const active = activeVoice === key;
+    const Icon = active ? Square : Volume2;
+    return (
+      <button
+        type="button"
+        className="plantao-voice-button"
+        onClick={() => (active ? stopVoice() : playVoice(key, text))}
+      >
+        <Icon size={16} aria-hidden="true" /> {active ? 'Parar áudio' : label}
+      </button>
+    );
+  }
+
   function start(next: Mode | null) {
+    stopVoice();
+    setVoiceError(false);
+    if (next && autoVoice) playVoice('complaint', scenario.complaint);
     setMode(next);
     setStep(0);
     setAsked([]);
@@ -199,6 +306,7 @@ function PlantaoSession({
   }
 
   function advance() {
+    stopVoice();
     setStep((value) => value + 1);
     setChoice(null);
     setHint(false);
@@ -211,7 +319,7 @@ function PlantaoSession({
     setAnswers(nextAnswers);
     recordTrainingReview(
       'plantao',
-      plantaoReviewKey(scenario.id, step - 1),
+      plantaoReviewKey(scenario.id, step - 1, clinical),
       choice === decision.correct,
     );
     if (mode === 'exam') advance();
@@ -227,9 +335,32 @@ function PlantaoSession({
           <strong>{scenario.patient}</strong>
           <br />«{scenario.complaint}»
         </p>
+        {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- The full utterance is displayed next to each play button. */}
+        <audio ref={player} preload="none" onEnded={stopVoice} />
+        <div className="plantao-voice-controls">
+          {voiceButton('complaint', scenario.complaint, 'Ouvir queixa')}
+          <label>
+            <input
+              type="checkbox"
+              checked={autoVoice}
+              onChange={(event) => {
+                const enabled = event.target.checked;
+                if (!enabled) stopVoice();
+                onAutoVoiceChange(enabled);
+              }}
+            />
+            Falas automáticas
+          </label>
+        </div>
+        {voiceError && (
+          <output className="training-note">
+            Áudio indisponível. Toque em Ouvir para tentar novamente.
+          </output>
+        )}
         <small>
-          {scenario.generated && <>Simulação gerada a partir da base. </>}
-          História adaptada para estudo com imagem de um caso publicado.
+          {scenario.generated
+            ? 'Variação de um caso da base clínica.'
+            : 'História clínica adaptada para simulação.'}
         </small>
         {mode && step > 0 && (
           <p>
@@ -260,6 +391,15 @@ function PlantaoSession({
                   <strong>{interview[index].question}</strong>
                   <br />
                   {interview[index].answer}
+                  {step > 0 && (
+                    <div>
+                      {voiceButton(
+                        `answer-${index}`,
+                        interview[index].answer,
+                        'Ouvir resposta',
+                      )}
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -288,7 +428,8 @@ function PlantaoSession({
           <>
             <h3>O que você quer perguntar?</h3>
             <p>
-              Escolha até {interviewLimit} perguntas antes de solicitar o exame.
+              Escolha até {interviewLimit} perguntas para orientar a avaliação
+              inicial.
             </p>
             <div className="training-options">
               {interview.map((item, index) => (
@@ -297,12 +438,22 @@ function PlantaoSession({
                     disabled={
                       asked.includes(index) || asked.length >= interviewLimit
                     }
-                    onClick={() => setAsked((previous) => [...previous, index])}
+                    onClick={() => {
+                      setAsked((previous) => [...previous, index]);
+                      if (autoVoice) playVoice(`answer-${index}`, item.answer);
+                    }}
                   >
                     {item.question}
                   </button>
                   {asked.includes(index) && (
-                    <p className="training-feedback">{item.answer}</p>
+                    <div className="training-feedback plantao-spoken-response">
+                      <p>{item.answer}</p>
+                      {voiceButton(
+                        `answer-${index}`,
+                        item.answer,
+                        'Ouvir resposta',
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
@@ -314,29 +465,15 @@ function PlantaoSession({
               </details>
             )}
             <button className="training-primary" onClick={advance}>
-              Ir para a escolha do exame <ArrowRight size={16} />
+              Ir para a avaliação inicial <ArrowRight size={16} />
             </button>
           </>
         )}
         {mode && decision && (
           <>
             {reviewing && <h3>Revisão · {stages[step]}</h3>}
-            {step === 2 && (
-              <figure className="training-figure">
-                {/* oxlint-disable-next-line next/no-img-element -- The original examination figure is served by Vite. */}
-                <img
-                  src={scenario.image}
-                  alt={`Imagem de ${scenario.modality} do caso em estudo`}
-                />
-                <figcaption>
-                  {scenario.credit} ·{' '}
-                  <a href={scenario.licence} target="_blank" rel="noreferrer">
-                    Licença
-                  </a>
-                </figcaption>
-              </figure>
-            )}
-            {step === 3 && (
+            {!clinical && step === 2 && <PlantaoFigure scenario={scenario} />}
+            {!clinical && step === 3 && (
               <p className="training-feedback">
                 <strong>Laudo resumido</strong>
                 <br />
@@ -358,6 +495,9 @@ function PlantaoSession({
                 </label>
               ))}
             </fieldset>
+            {clinical && step >= 2 && (
+              <ComplementaryExams key={step} scenario={scenario} />
+            )}
             {mode === 'guided' && !confirmed && (
               <button
                 className="training-secondary"
@@ -437,10 +577,16 @@ function PlantaoSession({
                 </li>
               ))}
             </ol>
+            {clinical && <ComplementaryExams scenario={scenario} />}
             <div className="training-actions">
+              {onGenerate && (
+                <button className="training-primary" onClick={onGenerate}>
+                  Gerar outro caso clínico <ArrowRight size={16} />
+                </button>
+              )}
               {visual && (
                 <button
-                  className="training-primary"
+                  className="training-secondary"
                   onClick={() => onVisual(visual)}
                 >
                   Localizar achado no exame
@@ -475,16 +621,12 @@ function PlantaoSession({
               <a href={scenario.licence} target="_blank" rel="noreferrer">
                 Licença
               </a>
-              {scenario.reference && (
+              {reference && (
                 <>
                   {' '}
                   ·{' '}
-                  <a
-                    href={scenario.reference.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {scenario.reference.label}
+                  <a href={reference.url} target="_blank" rel="noreferrer">
+                    {reference.label}
                   </a>
                 </>
               )}
@@ -493,5 +635,38 @@ function PlantaoSession({
         )}
       </div>
     </div>
+  );
+}
+
+function ComplementaryExams({ scenario }: { scenario: PlantaoScenario }) {
+  return (
+    <details className="plantao-complementary">
+      <summary>Consultar exames complementares</summary>
+      <p>
+        <strong>Laudo resumido</strong>
+        <br />
+        {scenario.report}
+      </p>
+      <PlantaoFigure scenario={scenario} />
+    </details>
+  );
+}
+
+function PlantaoFigure({ scenario }: { scenario: PlantaoScenario }) {
+  return (
+    <figure className="training-figure">
+      {/* oxlint-disable-next-line next/no-img-element -- The original examination figure is served by Vite. */}
+      <img
+        loading="lazy"
+        src={scenario.image}
+        alt={`Imagem de ${scenario.modality} do caso em estudo`}
+      />
+      <figcaption>
+        {scenario.credit} ·{' '}
+        <a href={scenario.licence} target="_blank" rel="noreferrer">
+          Licença
+        </a>
+      </figcaption>
+    </figure>
   );
 }

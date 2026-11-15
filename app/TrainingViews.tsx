@@ -9,6 +9,7 @@ import { libraryCases, type LibraryCase } from './training-data';
 import { atlasVisualTask, visualModalities, visualTasks, type VisualId, type VisualModality } from './visual-localization';
 import { resolvePlantaoReview, type PlantaoReview } from './plantao-cases';
 import { getTrainingReview, recordTrainingReview } from './training-review';
+import { getClinicalPlan } from './plantao-clinical';
 import VisualCaseCatalog from './VisualCaseCatalog';
 
 type Mark = { x: number; y: number };
@@ -245,7 +246,8 @@ export function ReviewCenter({ onOpen }: { onOpen: (destination: ReviewDestinati
       const pendingCase = resolvePlantaoReview(item.id);
       if (pendingCase) {
         const { scenario, review } = pendingCase;
-        entries.push({ label: scenario.decisions[review.decision].title, detail: 'Plantão · ' + scenario.title, destination: { kind: 'plantao', review } });
+        const decisions = review.clinical ? getClinicalPlan(scenario).decisions : scenario.decisions;
+        entries.push({ label: decisions[review.decision].title, detail: 'Plantão · ' + scenario.title, destination: { kind: 'plantao', review } });
       }
     }
   });

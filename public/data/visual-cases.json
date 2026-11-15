@@ -12,7 +12,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13752510.1/luag350f1.webp",
       "caption": "Contrast-enhanced computed tomography shows a 5.9-cm heterogeneous right adrenal mass (arrow) with cystic areas and no fat or calcification, without local invasion. Attenuation was 44 Hounsfield units (HU) precontrast, 94 HU portal venous, and 62 HU at 15 minutes, demonstrating absolute washout of 64% and relative washout of 34%, consistent with pheochromocytoma.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13752510/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Feocromocitoma roto durante o tratamento pré-operatório com doxazosina",
+        "caption": "A tomografia computadorizada com contraste mostra uma massa heterogênea de 5,9 cm na suprarrenal direita (seta), com áreas císticas, sem gordura, calcificações ou invasão local. A atenuação foi de 44 UH antes do contraste, 94 UH na fase portal e 62 UH após 15 minutos. O washout absoluto foi de 64% e o relativo de 34%, compatíveis com feocromocitoma.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13754529-tc",
@@ -25,7 +30,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13754529.1/avd-19-1-26-00144-g003.webp",
       "caption": "Longitudinal morphological changes of the AFX2 (Endologix, Irvine, CA, USA) components in Case 2. (A) Three-dimensional reconstructed CT obtained after the initial EVAR, 7 years before reintervention, demonstrating adequate overlap between the AFX2 main body and proximal cuff. (B) Three-dimensional reconstructed CT obtained 6 years after EVAR, 1 year before reintervention, demonstrating lateral displacement of the main body relative to the proximal cuff. (C) Three-dimensional CTA obtained 7 years after EVAR, at the time of reintervention, demonstrating marked component uncoupling after progressive sideways displacement. All images are shown at the same viewing angle (RAO 60°). White arrows indicate the direction of progressive lateral displacement of the main body relative to the proximal cuff. CT, computed tomography; CTA, computed tomography angiography; EVAR, endovascular aneurysm repair; RAO, right anterior oblique position",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13754529/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Endoleak tardio do tipo IIIa apesar da sobreposição adequada dos componentes após reparo endovascular com AFX2: dois relatos de caso",
+        "caption": "Evolução dos componentes da endoprótese AFX2 no caso 2. (A) A reconstrução tridimensional da TC após o reparo inicial, sete anos antes da reintervenção, mostra sobreposição adequada entre o corpo principal e a extensão proximal. (B) A TC feita seis anos após o reparo, um ano antes da reintervenção, mostra deslocamento lateral do corpo principal em relação à extensão proximal. (C) A angio-TC tridimensional feita durante a reintervenção, sete anos após o reparo, mostra separação acentuada dos componentes após deslocamento lateral progressivo. Todas as imagens usam a mesma projeção oblíqua anterior direita a 60°. As setas brancas indicam a direção do deslocamento.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13752718-tc",
@@ -38,7 +48,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13752718.1/scr-12-01-26-0531-g001.webp",
       "caption": "(A) and (B) Abdominal contrast-enhanced CT image taken after neoadjuvant chemotherapy showing a tumor of the left kidney extending from the left renal vein into the IVC, up to the level of the diaphragm (red arrows).IVC, inferior vena cava",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13752718/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Reparo em bloco sem suturas da veia cava inferior e da veia hepática direita em paciente com carcinoma invasivo de células renais",
+        "caption": "(A) e (B) TC abdominal com contraste após quimioterapia neoadjuvante. O tumor do rim esquerdo se estende da veia renal esquerda à veia cava inferior, chegando ao nível do diafragma (setas vermelhas).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13752484-rm",
@@ -51,7 +66,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13752484.1/CRRA-2026-1597887-g006.webp",
       "caption": "Imaging findings during the compensated collateral phase. A woman in her 40s with moyamoya disease had previously undergone left superficial temporal artery–middle cerebral artery (STA–MCA) bypass surgery with additional indirect revascularization for ischemic symptoms involving the left cerebral hemisphere and remained neurologically stable during long‐term follow‐up. (A) Axial magnetic resonance angiography (MRA) obtained 9 years after left‐sided bypass surgery demonstrates bilateral steno‐occlusive changes of the internal carotid arteries (ICAs), consistent with moyamoya disease. The left STA–MCA bypass graft is patent, and extracranial‐to‐intracranial collateral flow supplying the left cerebral hemisphere is well preserved (blue arrows). Mild narrowing is observed in the proximal portion of the right posterior cerebral artery (PCA) (red arrow), while distal PCA branches remain well visualized, suggesting preserved PCA–derived leptomeningeal collateral supply to the anterior circulation. No significant steno‐occlusive changes are observed in the left PCA. (B) Axial fluid‐attenuated inversion recovery (FLAIR) imaging obtained at the same examination demonstrates no FLAIR ivy sign in either cerebral hemisphere. Old ischemic lesions are observed predominantly in the bilateral periventricular deep white matter, consistent with previous ischemic injury. Diffusion‐weighted imaging showed no acute ischemic lesions (not shown).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13752484/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Sinal da hera no FLAIR durante a oclusão progressiva da artéria cerebral posterior e seu desaparecimento após revascularização na doença de moyamoya do adulto",
+        "caption": "Achados na fase de circulação colateral compensada. Mulher na faixa dos 40 anos com doença de moyamoya e isquemia no hemisfério esquerdo tratada com bypass entre a artéria temporal superficial e a artéria cerebral média esquerdas, associado à revascularização indireta. Manteve estabilidade neurológica no acompanhamento. (A) A angio-RM axial, nove anos após a cirurgia, mostra alterações esteno-oclusivas bilaterais nas carótidas internas e bypass esquerdo pérvio, com circulação colateral extracraniana para o hemisfério esquerdo preservada (setas azuis). Há estreitamento leve no segmento proximal da artéria cerebral posterior direita (seta vermelha), com visualização dos ramos distais, sugerindo preservação das colaterais leptomeníngeas para a circulação anterior. Não há alterações esteno-oclusivas significativas na artéria cerebral posterior esquerda. (B) A sequência axial FLAIR não mostra sinal da hera. Há lesões isquêmicas antigas principalmente na substância branca profunda periventricular bilateral. A difusão, não apresentada, não mostrou isquemia aguda.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13751902-tc",
@@ -64,7 +84,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13751902.1/avd-19-1-26-00112-g001.webp",
       "caption": "Preoperative computed tomography. BCA, brachiocephalic artery; F, false lumen; RCCA, right common carotid artery; RSCA, right subclavian artery; T, true lumen",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13751902/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Reparo híbrido de todo o arco sem manipular a aorta nativa em dissecção residual após substituição do hemiarco",
+        "caption": "TC pré-operatória. BCA indica o tronco braquiocefálico. F indica o lúmen falso. RCCA indica a artéria carótida comum direita. RSCA indica a artéria subclávia direita. T indica o lúmen verdadeiro.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13750456-tc",
@@ -77,7 +102,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13750456.1/rjag1028f1.webp",
       "caption": "Preoperative contrast-enhanced CT showing a main tumor measuring ~5 × 6 cm. (A) Abdominal aortic level. (B) Renal artery level. (C) Renal hilum level. (D) Enlarged lymph nodes at the aortic bifurcation. (E) Coronal image at the abdominal aortic level. (F) Sagittal image at the psoas major level. Red arrows indicate the tumor or enlarged lymph nodes.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13750456/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Ressecção de tumor retroperitoneal por via totalmente extraperitoneal, por incisão mediana no plano anterior à fáscia transversalis",
+        "caption": "TC pré-operatória com contraste mostrando tumor de aproximadamente 5 × 6 cm. (A) Nível da aorta abdominal. (B) Nível da artéria renal. (C) Nível do hilo renal. (D) Linfonodos aumentados na bifurcação aórtica. (E) Corte coronal no nível da aorta abdominal. (F) Corte sagital no nível do músculo psoas maior. As setas vermelhas indicam o tumor ou os linfonodos aumentados.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13750455-tc",
@@ -90,7 +120,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13750455.1/rjag1000f1.webp",
       "caption": "Preoperative contrast-enhanced abdominal CT obtained before stoma reversal demonstrates heterotopic ossification along the superior aspect of the previous midline incision. (A) Axial image showing an ossified lesion within the fascial layer (arrows). (B) Coronal image demonstrating an ~21-mm inverted V-shaped ossified lesion.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13750455/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Ossificação heterotópica na parede abdominal após incisão mediana",
+        "caption": "TC abdominal com contraste, realizada antes da reversão do estoma, mostrando ossificação heterotópica no segmento superior da antiga incisão mediana. (A) Corte axial com lesão ossificada na camada fascial (setas). (B) Corte coronal com lesão em V invertido de aproximadamente 21 mm.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13750454-tc",
@@ -103,7 +138,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13750454.1/rjag1024f1.webp",
       "caption": "Contrast-enhanced CT images demonstrate small bowel obstruction caused by a migrated biliary stent encased within a fecaloma. The arrows indicate the fecaloma-encased stent. (a) Axial image. (b) Coronal image showing the stent-containing fecaloma in the right iliac fossa, with proximal small bowel dilatation and fecalization. (c) Sagittal image showing the stent-containing fecaloma and dilated small bowel loops.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13750454/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Obstrução do intestino delgado por prótese biliar migrada e envolvida por fecaloma",
+        "caption": "A TC com contraste demonstra obstrução do intestino delgado por prótese biliar migrada, envolvida por fecaloma (setas). (a) Corte axial. (b) Corte coronal, com o fecaloma na fossa ilíaca direita, dilatação do delgado a montante e conteúdo de aspecto fecal. (c) Corte sagital, com o fecaloma contendo a prótese e alças dilatadas.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13750452-tc",
@@ -116,7 +156,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13750452.1/rjag1031f4.webp",
       "caption": "Six-month postoperative surveillance findings. (A) Contrast-enhanced CT demonstrates focal bladder-wall thickening at the 3–4 o’clock position near the previous bladder cuff excision site (red arrow), without evidence of local recurrence or distant metastasis. (B) Cystoscopic examination shows the healed bladder cuff excision site without a visible recurrent tumor. (C) Histopathological examination of a representative bladder biopsy shows benign urothelium without evidence of malignancy at the previous bladder cuff site (hematoxylin and eosin staining, ×400).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13750452/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Carcinoma renal de células claras e carcinoma urotelial do trato superior sincrônicos e ipsilaterais, complicados por cálculo ureteral",
+        "caption": "Acompanhamento seis meses após a cirurgia. (A) A TC com contraste mostra espessamento focal da parede vesical entre 3 e 4 horas, próximo ao local da ressecção do manguito vesical (seta vermelha), sem evidência de recidiva local ou metástase à distância. (B) A cistoscopia mostra cicatrização do local, sem tumor visível. (C) A biópsia vesical mostra urotélio benigno, sem evidência de malignidade no local da ressecção (hematoxilina-eosina, aumento de 400×).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13749941-tc",
@@ -129,7 +174,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13749941.1/40249_2026_1519_Fig1_HTML.webp",
       "caption": "Chest computed tomography image of the critically ill pregnant patient with military tuberculosis. Arrows indicate diffuse military nodules distributed throughout both lung fields",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13749941/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Manejo multidisciplinar de tuberculose disseminada com meningite tuberculosa e hepatite B ativa em gestante crítica no terceiro trimestre",
+        "caption": "TC de tórax da gestante em estado crítico com tuberculose miliar. As setas indicam micronódulos miliares difusos em ambos os pulmões.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13753505-tc",
@@ -142,7 +192,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13753505.1/cureus-0018-00000119392-i01.webp",
       "caption": "Contrast-enhanced CT demonstrating bilateral cervical lymphadenopathy involving levels II–IV and left level V, with central necrosis of a left level II lymph node (arrow).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13753505/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Doença de Kikuchi-Fujimoto com linfadenopatia cervical necrótica simulando linfadenite tuberculosa em mulher jovem com histórico familiar de autoimunidade",
+        "caption": "TC com contraste mostrando linfadenopatia cervical bilateral nos níveis II a IV e à esquerda no nível V. Há necrose central em um linfonodo esquerdo do nível II (seta).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13751790-rm",
@@ -155,7 +210,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13751790.1/432_2026_6656_Fig1_HTML.webp",
       "caption": "Initial MRI findings. Sagittal (A) and axial (B) contrast-enhanced T1-weighted MRI show multifocal IDEM enhancing lesions at T12–L1, L2, L3–L4, L4–L5, and S1. The dominant right-sided lesion at T12–L1 causes substantial compression and displacement of the conus medullaris/proximal cauda equina",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13751790/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Ependimoma mixopapilar espinhal intradural extramedular multifocal",
+        "caption": "RM inicial ponderada em T1 com contraste, nos cortes sagital (A) e axial (B), mostrando lesões intradurais extramedulares multifocais com realce em T12–L1, L2, L3–L4, L4–L5 e S1. A lesão dominante à direita em T12–L1 provoca compressão e deslocamento importantes do cone medular e da porção proximal da cauda equina.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13748942-tc",
@@ -168,7 +228,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13748942.1/CRID-2026-7764551-g001.webp",
       "caption": "Cone‐beam computed tomography (CBCT) demonstrating multiple bilateral radiolucent intraosseous cavities in the mandible. (A) Panoramic reconstruction showing the bilateral posterior cavities. (B–G) Selected representative cross‐sectional images of the right posterior cavity, corresponding to the edentulous region of Tooth 46, demonstrating its buccolingual extent and thinning of the buccal and lingual cortical plates. The right posterior cavity measures approximately 19 × 10 × 14 mm in the anteroposterior, buccolingual, and superoinferior axes, respectively. The cortical plates are thinned but remain continuous, without unequivocal cortical perforation. The inferior mandibular border is preserved, and the mandibular canal remains identifiable inferior to the cavity, with close spatial relationship on some sections but without unequivocal interruption of its corticated boundaries.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13748942/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Displasia cemento-óssea florida associada a cistos ósseos simples: evolução radiográfica ao longo de 13 anos",
+        "caption": "TC de feixe cônico mostrando múltiplas cavidades intraósseas radiolúcidas em ambos os lados da mandíbula. (A) Reconstrução panorâmica com cavidades posteriores bilaterais. (B–G) Cortes representativos da cavidade posterior direita, correspondente à região edêntula do dente 46, com extensão vestibulolingual e adelgaçamento das corticais vestibular e lingual. A cavidade mede aproximadamente 19 × 10 × 14 mm nos eixos anteroposterior, vestibulolingual e superoinferior. As corticais estão finas, mas contínuas, sem perfuração inequívoca. A borda inferior da mandíbula está preservada. O canal mandibular é identificável abaixo da cavidade e próximo a ela em alguns cortes, sem interrupção inequívoca de seus limites corticais.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13748942-rx",
@@ -181,7 +246,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13748942.1/CRID-2026-7764551-g003.webp",
       "caption": "Follow‐up panoramic radiograph obtained 2 months after surgical exploration and curettage of the cavity in the right posterior mandible, demonstrating early radiographic evidence of bone remodeling in the explored area, with no evidence of postoperative complications. The arrow indicates the area of early bone remodeling.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13748942/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Displasia cemento-óssea florida associada a cistos ósseos simples: evolução radiográfica ao longo de 13 anos",
+        "caption": "Radiografia panorâmica de controle dois meses após exploração e curetagem de cavidade na região posterior direita da mandíbula. Há sinais iniciais de remodelação óssea na área explorada (seta), sem evidência de complicações pós-operatórias.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13748112-tc",
@@ -194,7 +264,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13748112.1/CCR3-14-e73909-g003.webp",
       "caption": "Non‐Contrast CT scan of abdomen showing numerous radiodense structures throughout the pancreas and within dilated main pancreatic duct, the largest one measuring about 26 × 13 mm near the tail. Liver is mildly enlarged in size with uniform density.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13748112/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Pancreatite crônica calcificante como provável manifestação inicial de lúpus eritematoso sistêmico com sobreposição de doença mista do tecido conjuntivo",
+        "caption": "TC abdominal sem contraste mostrando numerosas estruturas hiperdensas pelo pâncreas e no ducto pancreático principal dilatado. A maior mede cerca de 26 × 13 mm, próxima à cauda. O fígado está discretamente aumentado e tem atenuação homogênea.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13747032-usg",
@@ -207,7 +282,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13747032.1/cureus-0018-00000119353-i03.webp",
       "caption": "Bedside POCUS demonstrating a large pericardial effusion.Parasternal long-axis bedside cardiac ultrasound showing a large pericardial effusion. The red arrows indicate anechoic pericardial fluid surrounding the heart.POCUS: point-of-care ultrasound",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13747032/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Tamponamento cardíaco hemorrágico em paciente com doença renal terminal em uso de apixabana",
+        "caption": "Ultrassonografia cardíaca à beira do leito no eixo longo paraesternal, mostrando derrame pericárdico volumoso. As setas vermelhas apontam o líquido pericárdico anecoico ao redor do coração.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13747032-rx",
@@ -220,7 +300,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13747032.1/cureus-0018-00000119353-i02.webp",
       "caption": "Admission chest radiograph.Portable upright anteroposterior (AP) chest radiograph showed an enlarged cardiac silhouette and mild pulmonary vascular congestion. AP projection can magnify the cardiac silhouette, limiting assessment of true cardiac enlargement.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13747032/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Tamponamento cardíaco hemorrágico em paciente com doença renal terminal em uso de apixabana",
+        "caption": "Radiografia portátil de tórax na admissão, em projeção anteroposterior (AP) e com o paciente em posição vertical. A silhueta cardíaca está aumentada e há discreta congestão vascular pulmonar. A projeção AP pode ampliar a silhueta e dificultar a avaliação do tamanho cardíaco real.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13745988-rm",
@@ -233,7 +318,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13745988.1/CRO-2026-8151806-g004.webp",
       "caption": "Preoperative MRI of the thoracolumbar spine. T2‐weighted MRI showing multiple intradural extramedullary tumors along the thoracolumbar spine. (a) Thoracic spine. (b) Lumbar spine.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13745988/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Migração cranial de ependimoma torácico disseminado com paraparesia transitória",
+        "caption": "RM pré-operatória da coluna toracolombar ponderada em T2, mostrando múltiplos tumores intradurais extramedulares. (a) Coluna torácica. (b) Coluna lombar.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13744134-usg",
@@ -246,7 +336,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13744134.1/cureus-0018-00000119267-i01.webp",
       "caption": "Prenatal ultrasound examination performed at 30 + 4 weeks of gestationFour-chamber view demonstrating dextrocardia, with the cardiac apex (*) pointing to the right.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13744134/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Diagnóstico pré-natal de alteração de lateralidade associada a variantes do gene NME7",
+        "caption": "Ultrassonografia pré-natal com 30 semanas e 4 dias. A visão de quatro câmaras mostra dextrocardia, com o ápice cardíaco (*) voltado para a direita.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13743920-rm",
@@ -259,7 +354,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13743920.1/CCR3-14-e73887-g001.webp",
       "caption": "Supplied baseline axial brain MR image showing two areas of high signal in the frontoparietal region (red arrows). The acquisition date, sequence, and anatomical laterality could not be verified from the unlabelled panel. It does not show post‐contrast enhancement; restricted diffusion cannot be confirmed without the corresponding ADC map.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13743920/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Suspeita clínica de desmielinização tumefativa simulando tumor cerebral em menino de 10 anos",
+        "caption": "RM cerebral axial inicial mostrando duas áreas de hipersinal na região frontoparietal (setas vermelhas). A imagem sem identificação não permite confirmar a data, a sequência ou a lateralidade anatômica. Não há demonstração de realce pós-contraste. A restrição à difusão depende da avaliação do mapa ADC correspondente.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13741461-usg",
@@ -272,7 +372,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13741461.1/12887_2026_8016_Fig1_HTML.webp",
       "caption": "Initial ultrasound of the cyst showing an encapsulated, homogeneous and poorly vascularized mass",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13741461/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Cisto dermoide glabelar e o papel da RM na investigação de extensão intracraniana",
+        "caption": "Ultrassonografia inicial do cisto mostrando massa encapsulada, homogênea e pouco vascularizada.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13741461-rm",
@@ -285,7 +390,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13741461.1/12887_2026_8016_Fig2_HTML.webp",
       "caption": "MRI findings at three representative time points. Left: Initial MRI. Middle: Follow-up MRI, approximately 10 months after the initial examination, showing the intracranial lesion. Right: Follow-up MRI, approximately 4 months after the second surgery. Images are shown from top to bottom as sagittal T2-weighted, axial T1-weighted, and axial diffusion-weighted imaging (DWI). White arrows indicate the lesions identified on the respective examinations. Blue dotted arrows on the initial MRI indicate subtle findings that, on retrospective review, may suggest intracranial extension",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13741461/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Cisto dermoide glabelar e o papel da RM na investigação de extensão intracraniana",
+        "caption": "RM em três momentos. À esquerda, exame inicial. Ao centro, controle cerca de dez meses depois, mostrando a lesão intracraniana. À direita, controle cerca de quatro meses após a segunda cirurgia. De cima para baixo, cortes sagitais ponderados em T2, axiais ponderados em T1 e difusão axial (DWI). As setas brancas indicam as lesões nos respectivos exames. As setas azuis pontilhadas mostram achados sutis na RM inicial que, em revisão retrospectiva, podem sugerir extensão intracraniana.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13745162-usg",
@@ -298,7 +408,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13745162.1/scr-12-01-26-0519-g003.webp",
       "caption": "Collateral venous development after popliteal vein ligation. Venous duplex ultrasonography at 1 year postoperatively showed no evidence of deep vein thrombosis and demonstrated the development of collateral venous channels proximal to the ligated popliteal vein.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13745162/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Aneurisma da veia poplítea com embolia pulmonar recorrente, tratado por ligadura sem reconstrução venosa",
+        "caption": "A ultrassonografia venosa com Doppler, um ano após a cirurgia, não mostrou trombose venosa profunda e identificou o desenvolvimento de canais venosos colaterais acima da ligadura da veia poplítea.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13744392-rx",
@@ -311,7 +426,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13744392.1/cureus-0018-00000119153-i04.webp",
       "caption": "Follow-up chest radiograph showing marked improvement in left lung aeration following drainage of a pleural effusion associated with postoperative chylothorax on ICU day 3.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13744392/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Quilotórax tardio de alto débito após timectomia por timoma",
+        "caption": "Radiografia de controle com melhora acentuada da aeração do pulmão esquerdo após drenagem do derrame pleural associado ao quilotórax pós-operatório, no terceiro dia de UTI.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13739398-rm",
@@ -324,7 +444,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13739398.1/cureus-0018-00000119188-i01.webp",
       "caption": "MRI brain T2 FLAIR sequenceThe left image shows characteristic hyperintensity in the medial thalami associated with Wernicke’s encephalopathy, which is indicated by the arrow. The right image demonstrates complete resolution of the abnormality on follow-up imaging three months later.MRI: magnetic resonance imaging, FLAIR: fluid-attenuated inversion recovery",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13739398/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Encefalopatia de Wernicke secundária a hiperêmese gravídica grave no segundo trimestre",
+        "caption": "Sequência FLAIR ponderada em T2. À esquerda, hipersinal característico nos tálamos mediais associado à encefalopatia de Wernicke (seta). À direita, resolução completa no exame de controle após três meses.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13738226-rm",
@@ -337,7 +462,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13738226.1/rjag1021f1.webp",
       "caption": "Preoperative contrast-enhanced lumbar MRI at L4–5. (A) Sagittal and (B) axial T1-weighted contrast-enhanced images demonstrate a well-defined, intensely enhancing intracanal mass posterior to the L4–5 interspace, with internal cystic/nonenhancing components and severe dural sac compression (arrows).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13738226/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Hérnia de disco lombar intradural simulando tumor, tratada por endoscopia unilateral biportal",
+        "caption": "RM lombar pré-operatória com contraste no nível L4–L5. Os cortes sagital (A) e axial (B) ponderados em T1 mostram massa bem delimitada no canal, posterior ao espaço L4–L5, com realce intenso, componentes internos císticos ou sem realce e compressão grave do saco dural (setas).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13736075-rm",
@@ -350,7 +480,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13736075.1/CRIU-2026-1896431-g005.webp",
       "caption": "(A–D) Cranial MRI at diagnosis and follow‐up. Pretreatment contrast‐enhanced T1‐weighted cranial MRI obtained in October 2023. (A) Axial and (B) coronal sequences demonstrate an extensive right temporal dural‐based enhancing lesion with pachymeningeal thickening and surrounding vasogenic edema. Follow‐up MRI obtained in January 2025. (C) Axial and (D) coronal contrast‐enhanced sequences show durable local disease control without evidence of recurrent dural metastatic disease.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13736075/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Metástase dural extensa na apresentação inicial de câncer de próstata metastático, com controle após tratamento multimodal",
+        "caption": "RM de crânio no diagnóstico e no acompanhamento. (A) Corte axial e (B) coronal ponderados em T1 com contraste em outubro de 2023, antes do tratamento, mostram extensa lesão de base dural temporal direita, com realce, espessamento paquimeníngeo e edema vasogênico adjacente. (C) Corte axial e (D) coronal com contraste em janeiro de 2025 mostram controle local mantido, sem evidência de recidiva da metástase dural.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13735907-rx",
@@ -363,7 +498,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13735907.1/CRO-2026-9611206-g001.webp",
       "caption": "(A) Anteroposterior, (B) lateral, and (C) oblique radiographs of the left hand demonstrating a calcified soft tissue mass adjacent to the thumb metacarpal (white arrow).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13735907/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Osteocondrolipoma pediátrico do primeiro metacarpo",
+        "caption": "Radiografias da mão esquerda em projeções anteroposterior (A), lateral (B) e oblíqua (C), mostrando massa calcificada de partes moles adjacente ao metacarpo do polegar (seta branca).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13734556-usg",
@@ -376,7 +516,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13734556.1/ac9-13-e02377-g001.webp",
       "caption": "Ultrasound of the liver demonstrating 2 predominantly solid, circumscribed, heterogeneous hypoechoic masses (red arrows). (A) Shows a large lesion (18 × 14 cm) extending across segments IVb to VI, with central anechoic areas (purple arrows) and associated hepatomegaly. (B) Demonstrates a smaller similar lesion in segment VII, measuring 7.3 × 7.8 cm.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13734556/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "PEComa hepático primário em mulher jovem com antecedente de câncer colorretal",
+        "caption": "Ultrassonografia do fígado mostrando duas massas hipoecoicas, heterogêneas, delimitadas e predominantemente sólidas (setas vermelhas). (A) Lesão de 18 × 14 cm abrangendo os segmentos IVb a VI, com áreas centrais anecoicas (setas roxas) e hepatomegalia associada. (B) Lesão semelhante no segmento VII, de 7,3 × 7,8 cm.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13732814-rx",
@@ -389,7 +534,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13732814.1/CCR3-14-e73824-g004.webp",
       "caption": "Sagittal radiographic view of the right mandible showing the main mental foramen MF1.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13732814/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Cinco forames mentuais: variante anatômica identificada por TC de feixe cônico de alta resolução",
+        "caption": "Corte sagital da mandíbula direita mostrando o forame mentual principal (MF1).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13731194-rm",
@@ -402,7 +552,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13731194.1/rjag998f1.webp",
       "caption": "Preoperative MRI. (A) Sagittal and (B) axial T2-weighted images show a dorsal thoracic arachnoid cyst with anterior displacement and compression of the cord.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13731194/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Fenestração endoscópica híbrida de cisto aracnoide intradural torácico com múltiplos portais e navegação por braço robótico",
+        "caption": "RM pré-operatória ponderada em T2, nos cortes sagital (A) e axial (B), mostrando cisto aracnoide torácico dorsal com deslocamento anterior e compressão da medula.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13731193-usg",
@@ -415,7 +570,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13731193.1/rjag1018f1.webp",
       "caption": "Transvaginal ultrasonography showing a hypoechoic intrauterine mass (arrowhead), initially interpreted as an intrauterine hematoma.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13731193/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Redução laparoscópica de intestino delgado encarcerado e estrangulado por meio da ampliação controlada de uma perfuração uterina após aspiração manual intrauterina",
+        "caption": "Ultrassonografia transvaginal com massa intrauterina hipoecoica (ponta de seta), inicialmente interpretada como hematoma intrauterino.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13731188-rm",
@@ -428,7 +588,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13731188.1/rjag1020f1.webp",
       "caption": "MRI of lumbar vertebrae showed T1 low (A) and T2 high (B and C) well-circumscribed cystic lesions dural to the dural sac at Th12 and L1. The lesions displaced the dural sac ventrally and toward the right side.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13731188/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Demonstração intraoperatória de mecanismo valvular em cisto aracnoide espinhal extradural com encarceramento de raiz nervosa",
+        "caption": "A RM da coluna lombar mostra lesões císticas bem delimitadas em T12 e L1, com hipossinal em T1 (A) e hipersinal em T2 (B e C). As lesões deslocam o saco dural para a frente e para a direita.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13739609-rm",
@@ -441,7 +606,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13739609.1/scr-12-01-26-0452-g002.webp",
       "caption": "MRI findings. Arrowheads indicate the tumor. (A) T2-weighted imaging shows a heterogeneous high-intensity mass. (B) Diffusion-weighted imaging and (C) ADC mapping demonstrate restricted diffusion within the solid component.ADC, apparent diffusion coefficient",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13739609/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Mielolipoma pré-sacral simulando lipossarcoma e complicado por hemorragia intraoperatória maciça",
+        "caption": "As pontas de seta indicam o tumor. (A) A RM ponderada em T2 mostra massa heterogênea com hipersinal. (B) A sequência de difusão e (C) o mapa do coeficiente de difusão aparente (ADC) mostram restrição no componente sólido.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13729088-rx",
@@ -454,7 +624,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13729088.1/CRO-2026-9540064-g001.webp",
       "caption": "Preoperative radiographs of the glenohumeral joint. The calcified lesion is indicated by an arrow. (a) Anteroposterior view. (b) Scapular Y view. (c) Axillary view of the glenohumeral joint.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13729088/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Depósito tumoral de pirofosfato de cálcio na articulação glenoumeral",
+        "caption": "Radiografias pré-operatórias mostrando lesão calcificada (seta). (a) Projeção anteroposterior. (b) Perfil escapular em Y. (c) Projeção axilar da articulação glenoumeral.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13729088-rm",
@@ -467,7 +642,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13729088.1/CRO-2026-9540064-g004.webp",
       "caption": "Preoperative magnetic resonance images of the left shoulder. The lesion is indicated by the arrow. (a) T1‐weighted sagittal image. (b) T2‐weighted sagittal image. (c) T2‐weighted fat suppressed axial image.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13729088/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Depósito tumoral de pirofosfato de cálcio na articulação glenoumeral",
+        "caption": "RM pré-operatória do ombro esquerdo, com a lesão indicada pela seta. (a) Corte sagital ponderado em T1. (b) Corte sagital ponderado em T2. (c) Corte axial ponderado em T2 com supressão de gordura.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13743346-usg",
@@ -480,7 +660,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13743346.1/uaag041f1.webp",
       "caption": "Ultrasonography of the left hepatic lobe on March 27, 2026. Grayscale ultrasonography demonstrates a large heterogeneous hypoechoic collection measuring approximately 8.4 × 6.9 × 7.9 cm, consistent with a hepatic abscess. Complex fluid and internal echogenic material are present. A focal echogenic reflector within the collection (arrow) corresponds to the migrated fish bone in cross-section.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13743346/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Migração transgástrica oculta de espinha de peixe com abscesso tardio no lobo hepático esquerdo",
+        "caption": "Ultrassonografia em escala de cinza do lobo hepático esquerdo em 27 de março de 2026. Há uma coleção hipoecoica heterogênea de aproximadamente 8,4 × 6,9 × 7,9 cm, compatível com abscesso hepático, com líquido complexo e material ecogênico interno. O foco ecogênico dentro da coleção (seta) corresponde ao corte transversal da espinha de peixe migrada.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13726543-usg",
@@ -493,7 +678,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13726543.1/cureus-0018-00000118987-i02.webp",
       "caption": "Ultrasound findings.Ultrasound of the left thoracic wall focuses to characterized the dorsal lesion, demonstrates a solid, slightly heterogeneous mass with an echogenicity predominantly similar to that of subcutaneous tissue (A, white circle) and hypovascularity on color Doppler (B), not fully measurable by this method.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13726543/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Lipoma gigante da parede torácica em menina de dois anos: achados de imagem compatíveis com benignidade",
+        "caption": "Ultrassonografia da parede torácica esquerda mostrando massa dorsal sólida e discretamente heterogênea, com ecogenicidade predominantemente semelhante à do tecido subcutâneo (A, círculo branco) e pouca vascularização ao Doppler colorido (B). O método não permitiu medir toda a lesão.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13726543-rx",
@@ -506,7 +696,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13726543.1/cureus-0018-00000118987-i01.webp",
       "caption": "Chest radiography.Posteroanterior (A) and scapular profile (B) views show a large soft-tissue density mass in the left thoracic wall (white arrows), measuring 11.0 × 9.8 cm on the posteroanterior view. The yellow arrow in B indicates the slightly displaced fracture of the sixth rib with signs of ongoing consolidation. Note the deformity of the adjacent ribs and the superior displacement of the scapula.L: left side marker",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13726543/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Lipoma gigante da parede torácica em menina de dois anos: achados de imagem compatíveis com benignidade",
+        "caption": "Radiografias de tórax nas projeções posteroanterior (A) e perfil escapular (B), com massa de densidade de partes moles na parede torácica esquerda (setas brancas), medindo 11,0 × 9,8 cm em A. A seta amarela em B aponta a fratura discretamente desviada da sexta costela, com sinais de consolidação. Há deformidade das costelas adjacentes e deslocamento superior da escápula. L identifica o lado esquerdo.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13679814-rx",
@@ -519,7 +714,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13679814.1/rjag946f1.webp",
       "caption": "Postero-anterior chest radiograph. The lung fields, mediastinal contours, and diaphragm are unremarkable, and no radio-opaque foreign body is demonstrated, illustrating the failure of plain radiography to identify the retained dental prosthesis.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13679814/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Prótese dentária deglutida causando obstrução esofágica tardia e fístula traqueoesofágica em paciente jovem",
+        "caption": "Radiografia posteroanterior de tórax com campos pulmonares, contornos mediastinais e diafragma sem alterações aparentes. Não há corpo estranho radiopaco visível. A radiografia simples não identificou a prótese dentária retida.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13681131-rx",
@@ -532,7 +732,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13681131.1/medi-105-e51231-g001.webp",
       "caption": "(A) Upright abdominal x-ray shows large amounts of free gas beneath the diaphragm, with scattered gas in the intestinal lumen and slightly rigid bowel morphology, as indicated by the 2 arrows. (B) The arrow indicates the site of perforation on the proximal greater curvature of the posterior gastric wall, identified during intraoperative exploration.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13681131/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Perfuração gástrica neonatal inicialmente diagnosticada como enterocolite necrosante",
+        "caption": "(A) Radiografia de abdome em ortostase com grande quantidade de gás livre abaixo do diafragma, gás esparso nas alças e discreta rigidez de seu contorno (setas). (B) A seta indica a perfuração na porção proximal da grande curvatura, na parede gástrica posterior, identificada na cirurgia.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13719007-rx",
@@ -545,7 +750,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13719007.1/cureus-0018-00000117161-i01.webp",
       "caption": "(a) Preoperative clinical photograph of post-and-core restored tooth 12; (b) Preoperative IOPA showing the fibre post, inadequate apical obturation and periapical radiolucency; (c) Axial CBCT image showing the extent of the periapical lesion; (d) Digital Glide Path image; (e) Virtual 3-D guide before printing; (f) 3-D printed guide test-fitted intraorally and extraorally; (g) Microscopic view showing post removal till targeted endpoint; (h) Working-length radiograph after canal patency was regained; (i) Postoperative radiograph (at 6-month follow-up) showing apical MTA obturation, bonded fibre post-and-core restoration and continued periapical healing.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13719007/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Técnica Digital Glide Path© para remoção guiada de pino de fibra em paciente com deficiência de fator VIII",
+        "caption": "(a) Fotografia pré-operatória do dente 12 restaurado com pino e núcleo. (b) Radiografia periapical pré-operatória com pino de fibra, obturação apical inadequada e radiolucência periapical. (c) Corte axial da TC de feixe cônico mostrando a extensão da lesão. (d) Imagem da técnica Digital Glide Path. (e) Guia tridimensional virtual antes da impressão. (f) Teste de adaptação intra e extraoral do guia impresso. (g) Visão microscópica da remoção do pino até o ponto planejado. (h) Radiografia de odontometria após restabelecer a patência do canal. (i) Controle em seis meses com obturação apical com agregado de trióxido mineral (MTA), restauração adesiva com pino de fibra e núcleo e reparo periapical em evolução.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13695089-rx",
@@ -558,7 +768,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13695089.1/cureus-0018-00000116816-i01.webp",
       "caption": "Admission chest radiograph demonstrating cardiomegaly and bilateral pleural effusions (arrows).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13695089/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Tamponamento cardíaco iminente na apresentação inicial de linfoma mediastinal",
+        "caption": "Radiografia de tórax na admissão mostrando cardiomegalia e derrames pleurais bilaterais (setas).",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13560834-rx",
@@ -571,7 +786,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13560834.1/ytag638f1.webp",
       "caption": "Anterior–posterior chest radiograph taken on postoperative day 7 showing the peripherally inserted central catheter tip in the lower third of the superior vena cava at the cavoatrial junction (black arrow).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13560834/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Migração espontânea de cateter central de inserção periférica após cirurgia cardíaca",
+        "caption": "Radiografia anteroposterior de tórax no sétimo dia pós-operatório. A seta preta aponta a ponta do cateter central de inserção periférica (PICC) no terço inferior da veia cava superior, na junção cavoatrial.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13593846-usg",
@@ -584,7 +804,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13593846.1/fcvm-13-1927233-g001.webp",
       "caption": "(A) Transthoracic echocardiography apical four chamber view showing broad mass (22.4 × 51.0 mm) with moderate echogenicity at posterior wall of the left atrium. (B) Color Doppler demonstrating an inflow jet from right pulmonary vein.",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13593846/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Implante de stent em veia pulmonar guiado por ecocardiografia intracardíaca em estenose causada por tumor atrial esquerdo",
+        "caption": "(A) Ecocardiograma transtorácico apical de quatro câmaras mostrando massa de ecogenicidade moderada na parede posterior do átrio esquerdo, de 22,4 × 51,0 mm. (B) O Doppler colorido demonstra um jato de entrada proveniente da veia pulmonar direita.",
+        "reviewed": true
+      }
     },
     {
       "id": "PMC13444721-usg",
@@ -597,7 +822,12 @@
       "image": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13444721.1/CRIC-2026-9654777-g002.jpg",
       "caption": "Echocardiogram with apical four‐chamber view showing mild LV dysfunction with apical hypokinesis (marked by green arrow) and mild pericardial effusion localized around the apex (marked by green arrow).",
       "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13444721/",
-      "licence": "https://creativecommons.org/licenses/by/4.0/"
+      "licence": "https://creativecommons.org/licenses/by/4.0/",
+      "translation": {
+        "title": "Miocardite associada a inibidores de checkpoint imunológico simulando outras cardiopatias",
+        "caption": "Ecocardiograma em visão apical de quatro câmaras mostrando disfunção leve do ventrículo esquerdo, com hipocinesia apical, e pequeno derrame pericárdico junto ao ápice (setas verdes).",
+        "reviewed": true
+      }
     }
   ]
 }

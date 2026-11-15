@@ -7,7 +7,7 @@
 - **Laboratório de ECG** com coração 3D, vetor sincronizado ao traçado, 12 derivações convencionais e derivações direitas e posteriores. Inclui nove padrões sintéticos, velocidade e ganho ajustáveis, reprodução com pausa, guia de leitura e diagrama hexaxial arrastável com cálculo do eixo frontal.
 - O coração 3D permite selecionar os eixos das 17 derivações disponíveis. A condução elétrica é exibida no mesmo modelo e acompanha o cursor do traçado. Os botões de etapa levam ao trecho correspondente do ECG. Em **Posicionar eletrodos**, o guia mostra os pontos da montagem padrão e das complementares em vistas anterior, lateral e posterior, com prática de colocação.
 - **Laboratório 3D** com dissecação de coração e encéfalo, camadas translúcidas e recortes em três planos. O coração deforma as câmaras por região, com torção ventricular, valvas móveis e fluxo ilustrado. ECG, pressão e volume didáticos acompanham a fase sob câmera fixa. O laboratório inclui uma simulação de placa, fio-guia, balão e stent na descendente anterior. O encéfalo oferece exploração de giros e núcleos, nuvem de pontos da malha, neurônio esquemático e conformações moleculares do PubChem.
-- **Modo Plantão** com um atendimento sobre dor no hipocôndrio direito nos modos guiado e prova. A história simulada é complementada por imagens reais de ultrassonografia do caso Radiopaedia rID 27525.
+- **Modo Plantão** com 51 cenários clínicos nos modos guiado e prova. O atendimento passa por entrevista, avaliação inicial, hipótese diagnóstica e manejo. Exames complementares ficam disponíveis para consulta durante o caso.
 - **Treino visual** para localizar estruturas no joelho 3D e marcar regiões de interesse em TC, RM e USG. **Minha revisão** reúne pendências dos percursos, questões, plantão, casos e treino visual no navegador. A **Biblioteca de casos** filtra seis casos por tema, sistema, modalidade e dificuldade.
 
 - Simulador de USG com escolha entre três casos verificados da Radiopaedia, transdutor arrastável sobre um mapa anterior do tronco, rotação para alternar vistas documentadas, ganho visual e destaque do órgão no Atlas. As imagens são quadros reais selecionados, não uma simulação ultrassonográfica volumétrica. A busca por outros casos abre a Radiopaedia; a API pública atual não fornece download automático de casos para importação arbitrária.
@@ -28,6 +28,7 @@
 - Fichas por período, mapa de conexões com conteúdo existente, listas de estruturas e favoritos de publicações armazenados no dispositivo.
 - Três casos reais da Radiopaedia com imagens locais de RX, TC e RM, autoria, links, perguntas e discussão. O caso rID 87566 inclui a pilha axial FLAIR de 24 cortes, navegável pelo scroll, e move um plano relativo no Atlas durante a navegação.
 - Introduções narradas com a voz exata `Trelis/piper-pt-br-faber-medium`, sem substituição pela voz do navegador.
+- Queixa e respostas na anamnese do Modo Plantão narradas por Faber, incluindo as variações geradas.
 - PWA com ícones, manifesto e cache offline. O atlas, imagens e narrações ficam disponíveis offline após serem carregados online. A instalação depende do suporte do navegador.
 - Descoberta diária de relatos de caso pelo PubMed / NCBI E-utilities. Novos resultados são identificados como **não revisados**; não viram aulas ou recomendações clínicas automaticamente.
 
@@ -115,3 +116,20 @@ A distância RMS informa apenas o desvio nos marcos escolhidos, não a precisão
 O leitor também reconstrói vistas ortogonais axial, coronal e sagital quando a pilha é paralela, regular e contém geometria completa. Uma mira compartilhada sincroniza as três imagens e o corte exibido no volume. A reconstrução atual usa vizinho mais próximo; não substitui um visualizador diagnóstico validado.
 
 Validação: testes com volumes sintéticos e transformações conhecidas; teste no navegador da importação, geração da superfície, seleção de ponto e sincronização da pilha FLAIR. Não houve validação em série clínica real com referência anatômica revisada. Ainda não estão implementados segmentação automática de todos os órgãos, registro deformável nem obtenção de séries DICOM completas da Radiopaedia. JPEGs isolados continuam recebendo apenas referência anatômica; pilhas verificadas recebem sincronização relativa.
+
+
+### Atualizar os áudios do Modo Plantão
+
+Instale `piper-tts==1.8.0` em um ambiente Python e disponibilize o FFmpeg no PATH. Baixe `model.onnx` e `model.onnx.json` da [revisão da voz Faber usada pelo app](https://huggingface.co/Trelis/piper-pt-br-faber-medium/tree/0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02) para a mesma pasta. Depois de editar os diálogos, execute o comando abaixo.
+
+```sh
+node scripts/generate-plantao-voice.mjs /caminho/do/python /caminho/model.onnx
+```
+
+O script verifica os arquivos do modelo e gera os MP3 correspondentes aos textos cadastrados. O site serve as falas em arquivos estáticos. O teste de cobertura verifica os clipes das versões padrão e geradas.
+
+O gerador usa os casos que correspondem aos filtros do Modo Plantão. Ele alterna o relato do paciente e a ordem de perguntas e alternativas mantendo a coerência da hipótese e da conduta com a base. Ao terminar uma simulação gerada, é possível iniciar outra diretamente da devolutiva.
+
+### Traduzir legendas do Treino Visual
+
+A atualização diária traduz títulos e legendas em inglês para português do Brasil com o modelo [OPUS-MT](https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt). O catálogo mantém os textos originais e reutiliza a tradução enquanto título e legenda estiverem iguais. Traduções novas são identificadas na interface como automáticas.

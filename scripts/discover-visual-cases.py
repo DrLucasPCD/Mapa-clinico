@@ -57,7 +57,7 @@ def search(modality, now, days):
     terms = MODALITIES[modality][0].replace(" OR ", " OR TITLE_ABS:")
     lower = (now - timedelta(days=days)).date()
     query = (
-        "OPEN_ACCESS:Y AND IN_PMC:Y AND (PUB_TYPE:\"case reports\" OR TITLE:\"case report\" "
+        "OPEN_ACCESS:Y AND IN_PMC:Y AND LANG:eng AND (PUB_TYPE:\"case reports\" OR TITLE:\"case report\" "
         "OR TITLE:\"report of two cases\") "
         f"AND (TITLE_ABS:{terms}) AND FIRST_PDATE:[{lower} TO {now.date()}] sort_date:y"
     )
@@ -189,6 +189,15 @@ def main():
                          key=lambda item: (item["date"], item["id"]), reverse=True)
         items.extend(ordered[:args.per_modality])
     items.sort(key=lambda item: (item["date"], item["id"]), reverse=True)
+    translations = {
+        (item["title"], item["caption"]): item["translation"]
+        for item in previous["items"]
+        if item.get("translation", {}).get("title") and item["translation"].get("caption")
+    }
+    for item in items:
+        translation = translations.get((item["title"], item["caption"]))
+        if translation:
+            item["translation"] = translation
     content = {"checkedAt": now.isoformat(timespec="seconds"), "items": items}
     draft = OUTPUT.with_suffix(".tmp")
     draft.write_text(json.dumps(content, ensure_ascii=False, indent=2) + "\n", encoding="utf8")

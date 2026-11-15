@@ -11,13 +11,34 @@ concurrency:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
       - name: Consultar casos com figuras reutilizáveis
         run: python3 scripts/discover-visual-cases.py
+      - name: Verificar quais legendas precisam de tradução
+        id: captions
+        run: echo "pending=$(node scripts/visual-translation/translate.mjs --pending)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        if: steps.captions.outputs.pending == 'true'
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: scripts/visual-translation/package-lock.json
+      - uses: actions/cache@v4
+        if: steps.captions.outputs.pending == 'true'
+        with:
+          path: ${{ runner.temp }}/mapa-visual-translation-models
+          key: visual-marian-en-ptbr-q8-738ee4c
+      - name: Traduzir títulos e legendas para português do Brasil
+        if: steps.captions.outputs.pending == 'true'
+        env:
+          MAPA_TRANSLATION_CACHE: ${{ runner.temp }}/mapa-visual-translation-models
+        run: |
+          npm ci --prefix scripts/visual-translation
+          node scripts/visual-translation/translate.mjs
       - name: Publicar catálogo no GitHub
         run: |
           git config user.name 'Mapa Clínico Bot'

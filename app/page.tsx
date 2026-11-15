@@ -786,7 +786,7 @@ export default function App() {
               </Suspense>
             </section>
             : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
-              <Plantao key={plantaoReview ? plantaoReview.caseId + '/' + plantaoReview.decision : 'full'} review={plantaoReview}
+              <Plantao key={plantaoReview ? plantaoReview.caseId + '/' + (plantaoReview.clinical ? 'clinical/' : '') + plantaoReview.decision : 'full'} review={plantaoReview}
                 onAtlas={(id, label) => {
                   focusPathStructure(id, label, true);
                   requestAnimationFrame(() => document.getElementById('atlas-panel')?.scrollIntoView({ block: 'nearest' }));

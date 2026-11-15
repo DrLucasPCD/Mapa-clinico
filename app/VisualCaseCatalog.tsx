@@ -13,6 +13,7 @@ type VisualCase = {
   label: string;
   image: string;
   caption: string;
+  translation?: { title: string; caption: string; reviewed?: boolean };
   source: string;
   licence: string;
 };
@@ -36,6 +37,8 @@ const searchText = (value: string) =>
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase();
+const figureLabel = (label: string) =>
+  label.replace(/^Fig(?:ure)?\.?(?=\s|$)/i, 'Figura');
 const caseDate = (date: string) =>
   dateInRecife.format(new Date(date + 'T12:00:00Z'));
 
@@ -116,9 +119,9 @@ export default function VisualCaseCatalog() {
   const visible = catalog.items.filter(
     (item) =>
       (!modality || item.modality === modality) &&
-      searchText(`${item.title} ${item.authors} ${item.pmcid}`).includes(
-        normalizedQuery,
-      ),
+      searchText(
+        `${item.translation?.title ?? ''} ${item.title} ${item.authors} ${item.pmcid}`,
+      ).includes(normalizedQuery),
   );
   const current =
     visible.find((item) => item.id === selected) ??
@@ -199,7 +202,7 @@ export default function VisualCaseCatalog() {
                     {item.modality} · {item.pmcid}
                   </strong>
                   <small>
-                    {caseDate(item.date)} · {item.label}
+                    {caseDate(item.date)} · {figureLabel(item.label)}
                   </small>
                 </span>
               </button>
@@ -259,7 +262,7 @@ function PublishedExercise({
       <header>
         <h3>{isDaily ? 'Caso do dia' : 'Leitura de imagem'}</h3>
         <span>
-          {item.modality} · {item.pmcid} · {item.label}
+          {item.modality} · {item.pmcid} · {figureLabel(item.label)}
         </span>
       </header>
       <p>{prompts[item.modality]}</p>
@@ -276,7 +279,7 @@ function PublishedExercise({
           {/* oxlint-disable-next-line next/no-img-element -- Vite displays the licensed figure at its original aspect ratio. */}
           <img
             src={item.image}
-            alt={`${item.label} do exame de ${item.modality}`}
+            alt={`${figureLabel(item.label)} do exame de ${item.modality}`}
             onError={() => setUnavailable(true)}
           />
           <figcaption>
@@ -299,15 +302,30 @@ function PublishedExercise({
         onClick={() => setRevealed((value) => !value)}
         aria-expanded={revealed}
       >
-        {revealed ? 'Ocultar legenda' : 'Revelar legenda dos autores'}
+        {revealed ? 'Ocultar legenda' : 'Revelar legenda'}
       </button>
       {revealed && (
         <div className="training-feedback">
-          <h3 lang="en">{item.title}</h3>
-          <p lang="en">{item.caption}</p>
-          <p className="training-note">
-            Legenda original em inglês · Seleção automática
-          </p>
+          {item.translation ? (
+            <>
+              <h3 lang="pt-BR">{item.translation.title}</h3>
+              <p lang="pt-BR">{item.translation.caption}</p>
+              {!item.translation.reviewed && (
+                <p className="training-note">Tradução automática</p>
+              )}
+              <details className="visual-original-caption">
+                <summary>Ver título e legenda originais em inglês</summary>
+                <h3 lang="en">{item.title}</h3>
+                <p lang="en">{item.caption}</p>
+              </details>
+            </>
+          ) : (
+            <>
+              <h3 lang="en">{item.title}</h3>
+              <p lang="en">{item.caption}</p>
+              <p className="training-note">Legenda original em inglês</p>
+            </>
+          )}
           <a href={item.source} target="_blank" rel="noreferrer">
             Ler o caso completo
           </a>

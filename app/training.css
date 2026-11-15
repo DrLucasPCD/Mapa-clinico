@@ -284,3 +284,11 @@
 .plantao-case button { justify-self: start; }
 .plantao-filters { align-items: end; }
 .plantao-stage output.training-feedback { display: block; }
+
+.plantao-voice-controls, .plantao-spoken-response { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.plantao-voice-controls label { display: inline-flex; align-items: center; gap: 5px; color: var(--training-muted); font-size: 12px; cursor: pointer; }
+.plantao-voice-controls input { accent-color: var(--training-brand); }
+.plantao-voice-button, .training-options .plantao-voice-button { display: inline-flex; width: auto; align-items: center; gap: 5px; min-height: 32px; padding: 4px 8px; border: 1px solid var(--training-border); border-radius: 6px; background: white; color: var(--training-brand); font-size: 12px; font-weight: 650; }
+.plantao-spoken-response p { flex: 1 1 190px; }
+.visual-original-caption { margin-block: 7px; }
+.plantao-complementary { padding: 8px 10px; border: 1px solid var(--training-border); border-radius: 8px; background: var(--training-soft); }

@@ -32,7 +32,11 @@ O painel “Download Image” da própria fonte informa que o uso não requer pe
 
 ## Voz
 
-Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX e o executável Piper não são redistribuídos no aplicativo; os WAVs estão em `public/audio`.
+Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX e o executável Piper não são redistribuídos no aplicativo; as introduções em WAV estão em `public/audio`. As falas do Modo Plantão foram sintetizadas a partir da revisão `0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02` do modelo e publicadas em MP3 em `public/audio/plantao`.
+
+## Tradução do Treino Visual
+
+O catálogo traduz novas legendas com **OPUS-MT**, Helsinki-NLP, Jörg Tiedemann e Santhosh Thottingal ([OPUS-MT, 2020](https://aclanthology.org/2020.eamt-1.61), [modelo inglês–português](https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt)). A automação usa a [conversão ONNX quantizada por Douglasrambo](https://huggingface.co/Douglasrambo/opus-mt-tc-big-en-pt-onnx/tree/738ee4cce801ce7c519954e4b78d02d5057b6740). Ambos indicam licença [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). As traduções de legendas mantêm a atribuição e a licença do artigo de origem.
 
 ## Referências educacionais
 

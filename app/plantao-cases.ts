@@ -606,7 +606,11 @@ const cases = [
 ] as const satisfies readonly PlantaoCase[];
 
 export type PlantaoVariation = { complaint: string; evolution: string };
-export type PlantaoReview = { caseId: string; decision: number };
+export type PlantaoReview = {
+  caseId: string;
+  decision: number;
+  clinical?: true;
+};
 export type PlantaoScenario = Omit<PlantaoCase, 'visual'> &
   VisualMedia & {
     visual?: (typeof visualTasks)[number]['id'];
@@ -717,18 +721,24 @@ export function getPlantaoScenario(id: string): PlantaoScenario | undefined {
   };
 }
 
-export function plantaoReviewKey(caseId: string, decision: number) {
+export function plantaoReviewKey(
+  caseId: string,
+  decision: number,
+  clinical = false,
+) {
+  if (clinical) return `${caseId}/clinical/${decision}`;
   return caseId === 'biliary' ? String(decision) : `${caseId}/${decision}`;
 }
 
 export function resolvePlantaoReview(id: string) {
-  const match = /^(?:([a-z0-9~-]+)\/)?([0-2])$/.exec(id);
+  const match = /^(?:([a-z0-9~-]+)\/(?:(clinical)\/)?)?([0-2])$/.exec(id);
   if (!match) return undefined;
   const scenario = getPlantaoScenario(match[1] ?? 'biliary');
   if (!scenario) return undefined;
   const review: PlantaoReview = {
     caseId: scenario.id,
-    decision: Number(match[2]),
+    decision: Number(match[3]),
+    ...(match[2] ? { clinical: true as const } : {}),
   };
   return { scenario, review };
 }
