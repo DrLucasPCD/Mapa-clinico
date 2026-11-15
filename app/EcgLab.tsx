@@ -1,6 +1,6 @@
 import { heartCycleAtBeat } from './heart-cycle';
 import { lazy, memo, Suspense, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { Activity, ArrowRight, ArrowUpRight, BookOpen, ChevronRight, ClipboardList, Focus, Heart, Home, Maximize2, Minimize2, Pause, Play, RotateCcw, Settings2, Target } from 'lucide-react';
+import { Activity, ArrowRight, ArrowUpRight, BookOpen, ChevronRight, ClipboardList, Focus, Heart, Maximize2, Minimize2, Pause, Play, RotateCcw, Settings2, Target } from 'lucide-react';
 import { activationTimes, axisClass, calculateAxis, chestLeads, ecgActivation, ecgBeats, ecgLeads, ecgPatterns, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
 import EcgConduction from './EcgConduction';
 import { conductionSteps } from './ecg-conduction';
@@ -79,7 +79,7 @@ const reading = [
   ['ST e onda T', 'Compare o ponto J, o segmento ST e a onda T em derivações vizinhas. Relacione os achados com o contexto clínico.'],
 ];
 
-export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; onHome: () => void }) {
+export default function EcgLab({ onAnatomy }: { onAnatomy: () => void }) {
   const flowPanel = useRef<HTMLDetailsElement>(null);
   const bindFlowPanel = useCallback((node: HTMLDetailsElement | null) => {
     flowPanel.current = node;
@@ -196,15 +196,7 @@ export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; o
   }
 
   return (
-    <section id="ecg-lab" className="training-screen ecg-lab" aria-labelledby="ecg-title">
-      <nav className="ecg-breadcrumb" aria-label="Localização no aplicativo">
-        <button onClick={onHome} aria-label="Início"><Home size={16} /></button><ChevronRight size={14} />
-        <span>Laboratórios</span><ChevronRight size={14} /><strong>ECG</strong>
-      </nav>
-      <header className="training-header ecg-dashboard-header">
-        <span className="training-icon"><Activity size={28} /></span>
-        <div><h2 id="ecg-title">Laboratório de ECG</h2><p>Da anatomia ao diagnóstico, em um só lugar.</p></div>
-      </header>
+    <section id="ecg-lab" className="training-screen ecg-lab" aria-label="ECG e circulação">
       <nav className="ecg-learning-path" aria-label="Percurso no laboratório">
         <button onClick={onAnatomy}><Heart size={20} /> Anatomia</button>
         <ArrowRight size={17} aria-hidden="true" />

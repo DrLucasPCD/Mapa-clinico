@@ -237,3 +237,33 @@
 @media (max-width: 740px) {
   .ecg-placement-guide .ecg-pair { grid-template-columns: minmax(0, 1fr); }
 }
+
+.integrated-lab { min-width: 0; }
+.integrated-lab-header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 15px clamp(14px, 2.4vw, 28px); background: #fff; border-bottom: 1px solid #d5e4eb; }
+.integrated-lab-header h1 { margin: 0; color: #173a4c; font-size: clamp(19px, 2vw, 27px); letter-spacing: -.02em; }
+.integrated-lab-header nav { display: flex; flex-wrap: wrap; gap: 5px; margin-inline-start: auto; }
+.integrated-lab-header button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid #d5e4eb; border-radius: 8px; color: #173a4c; font-size: 13px; font-weight: 650; }
+.integrated-lab-header button[aria-pressed="true"] { color: #fff; background: #007781; border-color: #007781; }
+@media (max-width: 650px) {
+  .integrated-lab-header nav { margin-inline-start: 0; width: 100%; }
+  .integrated-lab-header nav button { flex: 1; justify-content: center; }
+}
+
+.visual-daily { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.visual-daily span { color: var(--training-muted); font-size: 12px; }
+.visual-case-grid { display: grid; grid-template-columns: minmax(200px, .72fr) minmax(0, 2fr); gap: 13px; align-items: start; }
+.visual-case-picker .library-filters { display: grid; grid-template-columns: minmax(0, 1fr); }
+.visual-case-list { display: grid; gap: 5px; max-height: 540px; overflow-y: auto; padding: 2px; }
+.visual-case-list button { justify-content: start; }
+.visual-case-list small { display: block; font-size: 11px; color: var(--training-muted); }
+.visual-case-detail { display: grid; min-width: 0; gap: 8px; }
+.visual-case-nav { display: flex; align-items: center; justify-content: space-between; gap: 6px; color: var(--training-muted); font-size: 12px; }
+.visual-published-exercise header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 12px; }
+.visual-published-exercise header span { font-size: 12px; color: var(--training-muted); }
+.visual-published-exercise img { max-height: 565px; }
+.visual-case-note { display: grid; gap: 4px; color: var(--training-ink); font-size: 13px; }
+.visual-case-note textarea { width: 100%; padding: 7px; border: 1px solid var(--training-border); border-radius: 6px; }
+@media (max-width: 710px) {
+  .visual-case-grid { grid-template-columns: minmax(0, 1fr); }
+  .visual-case-list { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); max-height: 155px; }
+}

@@ -66,7 +66,7 @@ const Atlas = lazy(() => import('./Atlas'));
 const EcgLab = lazy(() => import('./EcgLab'));
 const Lab3D = lazy(() => import('./Lab3D'));
 const Plantao = lazy(() => import('./Plantao'));
-type Workspace = 'case' | 'study' | 'imaging' | 'ultrasound' | 'paths' | 'plantao' | 'ecg' | 'lab3d' | 'visual' | 'library' | 'review';
+type Workspace = 'case' | 'study' | 'imaging' | 'ultrasound' | 'paths' | 'plantao' | 'lab' | 'visual' | 'library' | 'review';
 const systems = [
   ['all', 'Corpo integrado', Layers],
   ['skeletal', 'Esquelético', Bone],
@@ -92,6 +92,7 @@ type Drawer =
 
 export default function App() {
   const [workspaceMode, setWorkspaceMode] = useState<Workspace>('imaging');
+  const [labMode, setLabMode] = useState<'ecg' | '3d'>('ecg');
   const [labScope, setLabScope] = useState<LabScale>('heart');
   const [caseView, setCaseView] = useState<'overview' | 'atlas' | 'case' | 'publications'>('case');
   const [pathEntry, setPathEntry] = useState<{ id: string; step: PathStep; question?: number }>();
@@ -99,7 +100,7 @@ export default function App() {
   const [openCaseQuestion, setOpenCaseQuestion] = useState(false);
   const [plantaoAtlas, setPlantaoAtlas] = useState(false);
   const [plantaoDecision, setPlantaoDecision] = useState<number>();
-  const [visualTask, setVisualTask] = useState<VisualId>('us-shadow');
+  const [visualTask, setVisualTask] = useState<VisualId | null>(null);
   const [visualSelection, setVisualSelection] = useState('');
   const [visualRevision, setVisualRevision] = useState(0);
   const [ultrasoundCase, setUltrasoundCase] = useState<UltrasoundCaseId>('148000');
@@ -157,7 +158,7 @@ export default function App() {
   const sliceMatchesHeart = slice?.region === 'thorax' || slice?.region === 'body';
   const visibleSlice = showAtlasSlice && (!(isolate && selected === 'heart') || sliceMatchesHeart) ? slice : null;
   const atlasExercise = workspaceMode === 'visual' && visualTask === 'atlas-patella';
-  const trainingWorkspace = ['plantao', 'ecg', 'lab3d', 'visual', 'library', 'review'].includes(workspaceMode);
+  const trainingWorkspace = ['plantao', 'lab', 'visual', 'library', 'review'].includes(workspaceMode);
   const showAtlas = !trainingWorkspace || atlasExercise || (workspaceMode === 'plantao' && plantaoAtlas);
   const syncSequenceSlice = useCallback((index: number, total: number) => {
     const next = atlasSliceForSequence(activeCase.acquisition, index, total);
@@ -255,7 +256,7 @@ export default function App() {
     setHidden([]);
     setSystem('all');
   };
-  function openTraining(view: 'plantao' | 'ecg' | 'lab3d' | 'visual' | 'library' | 'review', decision?: number) {
+  function openTraining(view: 'plantao' | 'lab' | 'visual' | 'library' | 'review', decision?: number) {
     if (view === 'plantao') {
       setPlantaoAtlas(false);
       setPlantaoDecision(decision);
@@ -267,7 +268,11 @@ export default function App() {
   }
   function openImmersive(scope: LabScale = 'heart') {
     setLabScope(scope);
-    openTraining('lab3d');
+    openLab('3d');
+  }
+  function openLab(mode = labMode) {
+    setLabMode(mode);
+    openTraining('lab');
   }
   function openCase(id?: string, question = false) {
     if (id) setCaseId(id);
@@ -300,7 +305,7 @@ export default function App() {
       <Icon /> {label}
     </button>
   );
-  function chooseVisual(id: VisualId) {
+  function chooseVisual(id: VisualId | null) {
     setVisualTask(id);
     setVisualSelection('');
     setVisualRevision(value => value + 1);
@@ -355,7 +360,7 @@ export default function App() {
   );
 
   return (
-    <div className={`clinical-dashboard${workspaceMode === 'ecg' ? ' clinical-ecg' : ''}`} id="top">
+    <div className="clinical-dashboard" id="top">
       <header className="clinical-topbar">
         <button
           className="mobile-menu"
@@ -455,8 +460,7 @@ export default function App() {
           {navItem('Percursos de estudo', BookOpen, () => openPaths(), workspaceMode === 'paths')}
 
           <h2 className="nav-heading"><Activity /> Laboratórios</h2>
-          {navItem('Laboratório de ECG', Activity, () => openTraining('ecg'), workspaceMode === 'ecg')}
-          {navItem('Laboratório 3D', Layers, () => openImmersive(), workspaceMode === 'lab3d')}
+          {navItem('Laboratório integrado', Activity, () => openLab(), workspaceMode === 'lab')}
           {navItem('Treino visual', Focus, () => openTraining('visual'), workspaceMode === 'visual')}
 
           <h2 className="nav-heading"><BookOpen /> Minha aprendizagem</h2>
@@ -751,24 +755,31 @@ export default function App() {
             {workspaceMode === 'paths' && <a className="path-atlas-return" href="#study-paths">Voltar ao percurso</a>}
           </section>)}
           <section className="case-column">
-            {workspaceMode !== 'ecg' && workspaceMode !== 'lab3d' && <nav className="workspace-tabs" aria-label="Área de estudo">
+            {workspaceMode !== 'lab' && <nav className="workspace-tabs" aria-label="Área de estudo">
               <button className={workspaceMode === 'paths' ? 'active' : ''} onClick={() => openPaths()}>Percursos</button>
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => openCase()}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={openImaging}>TC / RM</button>
               <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
               <button className={workspaceMode === 'plantao' ? 'active' : ''} onClick={() => openTraining('plantao')}>Plantão</button>
-              <button onClick={() => openTraining('ecg')}>ECG</button>
+              <button onClick={() => openLab('ecg')}>ECG</button>
             </nav>}
-            {workspaceMode === 'ecg' ? <Suspense fallback={<p className="training-screen">Carregando laboratório…</p>}>
-              <EcgLab onAnatomy={() => focusPathStructure('heart', 'Coração', true)}
-                onHome={() => openAtlas('overview')} />
-            </Suspense>
-            : workspaceMode === 'lab3d' ? <Suspense fallback={<p className="training-screen">Carregando Laboratório 3D…</p>}>
-              <Lab3D initialScope={labScope} onImaging={openImaging} onEcg={() => openTraining('ecg')}
-                onStroke={() => openCase('2604')}
-                onAtlas={scope => focusPathStructure(scope === 'heart' ? 'heart' : 'cerebrum', scope === 'heart' ? 'Coração' : 'Encéfalo', true)} />
-            </Suspense>
+            {workspaceMode === 'lab' ? <section className="integrated-lab" aria-labelledby="integrated-lab-title">
+              <header className="integrated-lab-header">
+                <span className="training-icon"><Activity size={23} /></span>
+                <h1 id="integrated-lab-title">Laboratório integrado</h1>
+                <nav aria-label="Ferramentas do laboratório">
+                  <button type="button" aria-pressed={labMode === 'ecg'} onClick={() => setLabMode('ecg')}><Activity size={16} /> ECG e circulação</button>
+                  <button type="button" aria-pressed={labMode === '3d'} onClick={() => setLabMode('3d')}><Layers size={16} /> Anatomia 3D</button>
+                </nav>
+              </header>
+              <Suspense fallback={<p className="training-screen" role="status">Carregando laboratório…</p>}>
+                {labMode === 'ecg' ? <EcgLab onAnatomy={() => openImmersive('heart')} />
+                : <Lab3D scope={labScope} setScope={setLabScope} onImaging={openImaging} onEcg={() => openLab('ecg')}
+                    onStroke={() => openCase('2604')}
+                    onAtlas={scope => focusPathStructure(scope === 'heart' ? 'heart' : 'cerebrum', scope === 'heart' ? 'Coração' : 'Encéfalo', true)} />}
+              </Suspense>
+            </section>
             : workspaceMode === 'plantao' ? <Suspense fallback={<p className="training-screen">Carregando plantão…</p>}>
               <Plantao key={plantaoDecision ?? 'full'} reviewDecision={plantaoDecision}
                 onAtlas={() => {

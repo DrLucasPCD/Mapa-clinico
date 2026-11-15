@@ -7,14 +7,15 @@ import { readPathProgress } from './StudyPaths';
 import { studyPaths } from './study-paths';
 import { atlasVisualTask, libraryCases, plantaoDecisions, visualTasks, type LibraryCase } from './training-data';
 import { getTrainingReview, recordTrainingReview } from './training-review';
+import VisualCaseCatalog from './VisualCaseCatalog';
 
 type Mark = { x: number; y: number };
 export type VisualId = typeof visualTasks[number]['id'] | typeof atlasVisualTask.id;
 export const kneeOrgans = ['femur_r', 'tibia_r', 'patella_r'] as const;
 
 export function VisualTraining({ taskId, setTaskId, atlasSelection, selectAtlas, atlasRevision }: {
-  taskId: VisualId;
-  setTaskId: (value: VisualId) => void;
+  taskId: VisualId | null;
+  setTaskId: (value: VisualId | null) => void;
   atlasSelection: string;
   selectAtlas: (id: string) => void;
   atlasRevision: number;
@@ -23,14 +24,20 @@ export function VisualTraining({ taskId, setTaskId, atlasSelection, selectAtlas,
     <section id="visual-training" className="training-screen" aria-labelledby="visual-title">
       <header className="training-header">
         <span className="training-icon"><Crosshair size={23} /></span>
-        <div><h2 id="visual-title">Treino visual</h2><p>Localize um achado no exame ou uma estrutura no modelo 3D.</p></div>
+        <div><h2 id="visual-title">Treino visual</h2><p>Pratique a leitura de exames e a localização de estruturas no Atlas 3D.</p></div>
       </header>
-      <nav className="training-tabs" aria-label="Exercícios visuais">
-        {[...visualTasks, atlasVisualTask].map(item => <button key={item.id} aria-pressed={item.id === taskId} onClick={() => setTaskId(item.id)}>{item.title}</button>)}
+      <nav className="training-tabs" aria-label="Modo de treino visual">
+        <button aria-pressed={taskId === null} onClick={() => setTaskId(null)}>Casos com imagem</button>
+        <button aria-pressed={taskId !== null} onClick={() => { if (!taskId) setTaskId(visualTasks[0].id); }}>Localizar achados</button>
       </nav>
-      {taskId === atlasVisualTask.id
-        ? <AtlasExercise key={atlasRevision} selection={atlasSelection} onSelect={selectAtlas} />
-        : <ImageExercise key={taskId} task={visualTasks.find(item => item.id === taskId)!} />}
+      {taskId === null ? <VisualCaseCatalog /> : <>
+        <nav className="training-tabs" aria-label="Exercícios de localização">
+          {[...visualTasks, atlasVisualTask].map(item => <button key={item.id} aria-pressed={item.id === taskId} onClick={() => setTaskId(item.id)}>{item.title}</button>)}
+        </nav>
+        {taskId === atlasVisualTask.id
+          ? <AtlasExercise key={atlasRevision} selection={atlasSelection} onSelect={selectAtlas} />
+          : <ImageExercise key={taskId} task={visualTasks.find(item => item.id === taskId)!} />}
+      </>}
     </section>
   );
 }

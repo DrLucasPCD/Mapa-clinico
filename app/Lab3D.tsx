@@ -87,19 +87,19 @@ const descriptions = {
 } as const;
 
 export default function Lab3D({
-  initialScope = 'heart',
+  scope,
+  setScope,
   onImaging,
   onEcg,
   onStroke,
   onAtlas,
-}: Destination & { initialScope?: LabScale }) {
-  const [scope, setScope] = useState<LabScale>(initialScope);
+}: Destination & { scope: LabScale; setScope: (value: LabScale) => void }) {
   const [molecule, setMolecule] = useState<Molecule>('dopamina');
   const [view, setView] = useState<LabView>(
-    initialScope === 'heart' ? 'ghost' : 'natural',
+    scope === 'heart' ? 'ghost' : 'natural',
   );
   const [layers, setLayers] = useState(() =>
-    labLayers[initialScope].map((x) => x.id),
+    labLayers[scope].map((x) => x.id),
   );
   const [spread, setSpread] = useState(0);
   const [cut, setCut] = useState(0);
@@ -302,9 +302,7 @@ export default function Lab3D({
           <Layers size={29} />
         </span>
         <div>
-          <small>LABORATÓRIOS / ANATOMIA IMERSIVA</small>
-          <h1 id="lab3d-title">Laboratório 3D</h1>
-          <p>Do órgão à molécula: explore, disseque e acompanhe a função.</p>
+          <h2 id="lab3d-title">Anatomia 3D</h2>
         </div>
         <button className="lab3d-imaging-link" onClick={onImaging}>
           <ScanLine size={16} /> Abrir TC / RM <ArrowRight size={14} />
@@ -656,7 +654,7 @@ export default function Lab3D({
         {scope === 'heart' && (
           <>
             <button onClick={onEcg}>
-              <Activity size={16} /> Laboratório de ECG <ArrowRight size={14} />
+              <Activity size={16} /> ECG e circulação <ArrowRight size={14} />
             </button>
             <button onClick={() => onAtlas('heart')}>
               <Heart size={16} /> Coração no Atlas

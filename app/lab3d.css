@@ -4,7 +4,7 @@
 .lab3d-header { display:flex; align-items:center; gap:13px; flex-wrap:wrap; }
 .lab3d-mark { display:grid; place-items:center; width:53px; height:53px; border-radius:14px; background:linear-gradient(145deg,#10a99e,#005872); color:white; }
 .lab3d-header small,.lab3d-activity-title small { color:#007a80; font-size:10px; font-weight:800; letter-spacing:.12em; }
-.lab3d-header h1 { font-size:clamp(27px,4vw,41px); letter-spacing:-.035em; line-height:1; font-weight:800; color:#10273a; margin:1px 0 6px; }
+.lab3d-header h2 { font-size:clamp(27px,4vw,41px); letter-spacing:-.035em; line-height:1; font-weight:800; color:#10273a; margin:1px 0 6px; }
 .lab3d-header p,.lab3d-inspector>p { color:#486478; }
 .lab3d button,.lab3d select { border:1px solid #c9dde4; border-radius:8px; background:#fff; padding:7px 10px; font-weight:600; font-size:12px; color:#143a4b; }
 .lab3d button:hover { border-color:#479ba4; }
