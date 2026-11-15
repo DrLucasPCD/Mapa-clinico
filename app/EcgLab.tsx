@@ -1,5 +1,5 @@
 import { heartCycleAtBeat } from './heart-cycle';
-import { lazy, memo, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { lazy, memo, Suspense, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Activity, ArrowRight, ArrowUpRight, BookOpen, ChevronRight, ClipboardList, Focus, Heart, Home, Maximize2, Minimize2, Pause, Play, RotateCcw, Settings2, Target } from 'lucide-react';
 import { activationTimes, axisClass, calculateAxis, chestLeads, ecgActivation, ecgBeats, ecgLeads, ecgPatterns, electricalVector, frontalLeads, patternIds, posteriorLeads, projectLead, rightLeads, type LeadId, type PatternId } from './ecg-model';
 import EcgConduction from './EcgConduction';
@@ -81,6 +81,9 @@ const reading = [
 
 export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; onHome: () => void }) {
   const flowPanel = useRef<HTMLDetailsElement>(null);
+  const bindFlowPanel = useCallback((node: HTMLDetailsElement | null) => {
+    flowPanel.current = node;
+  }, []);
   const [pattern, setPattern] = useState<PatternId>('sinus');
   const [bpm, setBpm] = useState<number>(ecgPatterns.sinus.bpm);
   const [frequencyDraft, setFrequencyDraft] = useState<string | null>(null);
@@ -265,7 +268,7 @@ export default function EcgLab({ onAnatomy, onHome }: { onAnatomy: () => void; o
             </div>
             <Suspense fallback={<p className="ecg-loading">Preparando coração 3D…</p>}>
               <EcgHeart vector={vector} lead={lead} visibleLeads={visibleLeads} time={time}
-                stage={phase.stage} motion={motion} showConduction={showPath} onSelectLead={setLead} flowPanel={flowPanel} />
+                stage={phase.stage} motion={motion} showConduction={showPath} onSelectLead={setLead} flowPanel={bindFlowPanel} />
             </Suspense>
             <div className="ecg-model-bottom">
               <label><span className="sr-only">Mostrar derivações</span><select aria-label="Mostrar derivações" value={leadView}

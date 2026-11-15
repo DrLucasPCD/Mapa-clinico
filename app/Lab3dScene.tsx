@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadDetailedManifest, loadDetailedModel } from './detailed-models';
@@ -45,7 +45,7 @@ type Props = {
   progress: number;
   playing: boolean;
   bpm: number;
-  time: RefObject<number>;
+  time?: RefObject<number>;
   lockedCamera: boolean;
   vectors: boolean;
   chamberView: 'all' | 'atria' | 'ventricles';
@@ -124,7 +124,7 @@ export default function Lab3dScene(props: Props) {
   const tag = useRef<HTMLDivElement>(null);
   const leadLabels = useRef(new Map<LeadId, HTMLButtonElement>());
   const current = useRef(props);
-  current.current = props;
+  useLayoutEffect(() => { current.current = props; }, [props]);
   const [status, setStatus] = useState('');
   const { scope, molecule } = props;
 
@@ -444,7 +444,7 @@ export default function Lab3dScene(props: Props) {
       previous = now;
       if (scope === 'heart') {
         const external = p.electrical?.external;
-        if (!external) {
+        if (!external && p.time) {
           if (timingBpm !== p.bpm) {
             if (timingBpm) p.time.current *= timingBpm / p.bpm;
             timingBpm = p.bpm;
@@ -452,8 +452,8 @@ export default function Lab3dScene(props: Props) {
           }
           p.time.current += delta;
         }
-        const motion = external?.motion ?? heartCycle(p.time.current, p.bpm);
-        const time = external?.time ?? p.time.current;
+        const time = external?.time ?? p.time?.current ?? 0;
+        const motion = external?.motion ?? heartCycle(time, p.bpm);
         const assembled = p.chamberView === 'all' && p.cut === 0 && p.spread === 0;
         heartRig?.update(motion);
         indicators?.update(

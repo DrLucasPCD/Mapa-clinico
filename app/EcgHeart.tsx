@@ -1,4 +1,4 @@
-import { useRef, useState, type RefObject } from 'react';
+import { useState, type RefCallback } from 'react';
 import Lab3dScene from './Lab3dScene';
 import HeartFlowControls from './HeartFlowControls';
 import { labLayers, type LabCamera } from './lab3d-data';
@@ -19,7 +19,7 @@ type Props = {
   motion: CardiacMotion;
   stage: ConductionStage | null;
   showConduction: boolean;
-  flowPanel: RefObject<HTMLDetailsElement | null>;
+  flowPanel: RefCallback<HTMLDetailsElement>;
   onSelectLead: (id: LeadId) => void;
 };
 
@@ -31,9 +31,17 @@ const cameraOptions = [
   ['oblique', 'Oblíqua'],
 ] as const;
 
-export default function EcgHeart(props: Props) {
-  const { time, vector, stage, motion } = props;
-  const clock = useRef(0);
+export default function EcgHeart({
+  time,
+  vector,
+  stage,
+  motion,
+  lead,
+  visibleLeads,
+  showConduction,
+  onSelectLead,
+  flowPanel,
+}: Props) {
   const [flow, setFlow] = useState<HeartFlowOptions>({
     chambers: false,
     greatVessels: false,
@@ -42,11 +50,11 @@ export default function EcgHeart(props: Props) {
   });
   const [branch, setBranch] = useState('all');
   const [preset, setPreset] = useState<{ camera: LabCamera; key: number }>();
-  const plane = ecgLeads[props.lead].plane;
+  const plane = ecgLeads[lead].plane;
   const preferred =
-    props.visibleLeads.length === 0
+    visibleLeads.length === 0
       ? 'frontal'
-      : props.visibleLeads.some((id) => ecgLeads[id].plane !== plane)
+      : visibleLeads.some((id) => ecgLeads[id].plane !== plane)
         ? 'oblique'
         : plane === 'frontal'
           ? 'frontal'
@@ -59,7 +67,7 @@ export default function EcgHeart(props: Props) {
             scope="heart"
             molecule="dopamina"
             layers={layers}
-            view={props.showConduction ? 'ghost' : 'natural'}
+            view={showConduction ? 'ghost' : 'natural'}
             spread={0}
             cut={0}
             axis="coronal"
@@ -73,17 +81,16 @@ export default function EcgHeart(props: Props) {
             flow={flow}
             coronaryBranch={branch}
             electrical={{
-              lead: props.lead,
-              visibleLeads: props.visibleLeads,
-              showConduction: props.showConduction,
-              onSelectLead: props.onSelectLead,
+              lead,
+              visibleLeads,
+              showConduction,
+              onSelectLead,
               external: { time, vector, stage, motion },
             }}
             stage={0}
             progress={0}
             playing={false}
             bpm={60 / motion.period}
-            time={clock}
             lockedCamera={false}
             vectors={false}
             chamberView="all"
@@ -108,7 +115,7 @@ export default function EcgHeart(props: Props) {
           ))}
         </div>
       </div>
-      <details className="ecg-heart-flow" ref={props.flowPanel}>
+      <details className="ecg-heart-flow" ref={flowPanel}>
         <summary>Fluxo no coração 3D</summary>
         <HeartFlowControls
           flow={flow}
