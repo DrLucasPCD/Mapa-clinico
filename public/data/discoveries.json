@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-15T16:20:03.296Z",
+  "lastChecked": "2026-11-16T19:34:44.960Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -112,6 +112,33 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43036822",
+      "title": "Live birth after uterus-sparing management of disseminated intravascular coagulation following uterine evacuation for miscarriage in a woman with adenomyosis: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43036822/",
+      "authors": "Akutsu M, Itagaki H, Ino Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43036774",
+      "title": "Successful fertility-preserving management of a viable cesarean scar ectopic pregnancy: a case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43036774/",
+      "authors": "Devarajan A, Nguyen A, Khoury A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43036731",
+      "title": "Evolution of sub-internal limiting membrane hemorrhage on multimodal imaging.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43036731/",
+      "authors": "Ramakrishnan MS, Sims J, Karaca I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "43034573",
       "title": "Acute airway obstruction revealing granulomatosis with polyangiitis: A case report of a rare isolated laryngeal presentation.",
       "date": "2026 Dec",
@@ -190,33 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43032211/",
       "authors": "Xu Y, Zeng N, Liu J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43031769",
-      "title": "McCune-Albright syndrome with kyphosis challenges in diagnosis and treatment: a rare male case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43031769/",
-      "authors": "Peng W, Liu H, Cui W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43023183",
-      "title": "Epivascular glia mimicking drusen in dry age related macular degeneration.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43023183/",
-      "authors": "Bagheri S, Quarta A, Abbasgholizadeh R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43022765",
-      "title": "Non-traumatic vitreous base detachment in an adult with neurofibromatosis type 1: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43022765/",
-      "authors": "Asadigandomani H, Chen X, Stewart JM",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
