@@ -194,7 +194,7 @@ export function usePatientAI() {
         local.chat.completions.create({
           messages: patientMessages(scenario, history, question),
           temperature: 0,
-          max_tokens: 220,
+          max_tokens: 48,
           extra_body: { enable_thinking: false },
         }),
         new Promise<never>((_, reject) => {

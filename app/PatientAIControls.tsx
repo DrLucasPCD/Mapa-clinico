@@ -40,15 +40,13 @@ export default function PatientAIControls({
             GB, guardado no navegador quando possível. Requer WebGPU e
             aproximadamente 4–5 GB de memória disponível.
           </small>
-          {state.status === 'error' && (
-            <button
-              type="button"
-              className="training-secondary"
-              onClick={() => void ai.enable('light')}
-            >
-              Usar modelo leve · cerca de 1 GB
-            </button>
-          )}
+          <button
+            type="button"
+            className="training-secondary"
+            onClick={() => void ai.enable('light')}
+          >
+            Usar modelo leve · cerca de 1 GB
+          </button>
         </>
       )}
       {state.status === 'loading' && (

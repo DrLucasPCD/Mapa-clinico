@@ -65,61 +65,26 @@ void test('follow-up context is bounded, preserves conversation roles, and exclu
   assert.equal(patientMessages(plantaoCases[1], [], 'Olá').length, 2);
 });
 
-void test('only known case statements enter the transcript and scoring, never generated clinical claims', () => {
+void test('only known case statements enter the transcript and scoring', () => {
   const scenario = plantaoCases[0];
-  const raw = JSON.stringify({
-    kind: 'facts',
-    facts: [
-      scenario.interview[0].question,
-      scenario.interview[0].question,
-      scenario.interview[1].question,
-    ],
-    reply: 'Não tenho alergias. Tome antibiótico.',
-  });
-  assert.deepEqual(parsePatientReply(raw, scenario), {
+  assert.deepEqual(parsePatientReply('F1,F1,F2', scenario), {
     reply: scenario.interview[0].answer + ' ' + scenario.interview[1].answer,
     facts: [0, 1],
   });
-  assert.equal(
-    parsePatientReply('{"kind":"unknown","facts":[]}', scenario).reply,
-    'Não sei informar isso agora.',
-  );
-  for (const facts of [[5], [-1], ['0'], [0.5], ['Invented question'], null]) {
-    assert.throws(() =>
-      parsePatientReply(JSON.stringify({ kind: 'facts', facts }), scenario),
-    );
-  }
-  for (const raw of ['{"kind":', '{}', '{"kind":"diagnosis","facts":[]}']) {
-    assert.throws(() => parsePatientReply(raw, scenario));
-  }
-});
-
-void test('a clinical selection labelled as a complaint still answers and scores only the selected evidence', () => {
-  const scenario = plantaoCases[0];
-  assert.deepEqual(
-    parsePatientReply(
-      JSON.stringify({
-        kind: 'complaint',
-        facts: [scenario.interview[1].question, scenario.interview[2].question],
-      }),
-      scenario,
-    ),
-    {
-      reply: scenario.interview[1].answer + ' ' + scenario.interview[2].answer,
-      facts: [1, 2],
-    },
-  );
-  for (const raw of [
-    '{"kind":"facts","facts":[]}',
-    JSON.stringify({
-      kind: 'unknown',
-      facts: [scenario.interview[0].question],
-    }),
+  assert.deepEqual(parsePatientReply('UNKNOWN', scenario), {
+    reply: 'Não sei informar isso agora.',
+    facts: [],
+  });
+  for (const output of [
+    '',
+    'F0',
+    'F999',
+    'F1,',
+    'F1,UNKNOWN',
+    'Não tenho alergias.',
+    'F1\nTome antibiótico.',
   ]) {
-    assert.deepEqual(parsePatientReply(raw, scenario), {
-      reply: 'Não sei informar isso agora.',
-      facts: [],
-    });
+    assert.throws(() => parsePatientReply(output, scenario));
   }
 });
 
@@ -132,23 +97,19 @@ void test('only existing exact transcripts use prerecorded Faber files', () => {
   );
 });
 
-void test('plain inference accepts fenced JSON while requiring valid case references', () => {
+void test('plain inference accepts fenced result codes, with a strict boundary around the selection', () => {
   const scenario = plantaoCases[0];
   const fence = '\x60'.repeat(3);
-  const json = JSON.stringify({
-    kind: 'facts',
-    facts: [scenario.interview[0].question],
-  });
-  const wrap = (value) => `${fence}json\n${value}\n${fence}`;
-  assert.deepEqual(parsePatientReply(wrap(json), scenario), {
-    reply: scenario.interview[0].answer,
-    facts: [0],
-  });
-  assert.throws(() =>
-    parsePatientReply(
-      wrap('{"kind":"facts","facts":["Outra ficha"]}'),
-      scenario,
-    ),
+  const wrap = (value) => `${fence}text\n${value}\n${fence}`;
+  assert.deepEqual(
+    parsePatientReply('<think>\n\n</think>\n' + wrap('F1'), scenario),
+    {
+      reply: scenario.interview[0].answer,
+      facts: [0],
+    },
   );
-  assert.throws(() => parsePatientReply(wrap(json.slice(0, -1)), scenario));
+  assert.throws(() => parsePatientReply(wrap('F1, F99'), scenario));
+  assert.throws(() =>
+    parsePatientReply(wrap('F1') + '\nOutro texto', scenario),
+  );
 });
