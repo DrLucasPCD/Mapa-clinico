@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-16T19:34:44.960Z",
+  "lastChecked": "2026-11-17T18:32:51.217Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -37,6 +37,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
       "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43041956",
+      "title": "Collecting duct carcinoma of the kidney presenting as hydronephrosis with renal calculi: A case report.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43041956/",
+      "authors": "Li L, Wang P, Qi Y",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -112,6 +121,69 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43042434",
+      "title": "Metastatic Triple-Negative Male Breast Carcinoma of Occult Primary With Axillary Nodal and Cutaneous Metastases.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042434/",
+      "authors": "Sugiyama E, Di Lena E, Matsuda K",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43042431",
+      "title": "Prolonged Cholestasis as an Initial Presentation of Miliary Tuberculosis in a Pediatric Patient.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042431/",
+      "authors": "Zambrano Perez C, Rusinque Del Busto MJ, Caceres Montejo J",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43042426",
+      "title": "The Vitamin B12-C-Reactive Protein Index in Advanced Cancer: A Case Report and Narrative Review of an Underutilized Potential Prognostic Biomarker.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042426/",
+      "authors": "Zulfiqar AA, Andres E",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43042423",
+      "title": "Ductal Carcinoma In Situ in a Complex Fibroadenoma.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042423/",
+      "authors": "Mitrousias A, Tsoti SM, Papapanagiotou I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43042420",
+      "title": "Anterior Pelvic Herniation After Urethral Atresia: A Case Report and the Bladder Space-Occupying Hypothesis.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042420/",
+      "authors": "Li HN, Liu XB, Shen JH",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43042193",
+      "title": "Emergency Physician-Performed Point-of-Care Ultrasound Identified Left Atrial Myxoma in Acute Cerebellar Infarction.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43042193/",
+      "authors": "Sato T, Ichibayashi R, Sadamoto S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43041900",
+      "title": "Thyroid metastases from breast cancer: A report of two cases and a literature review.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43041900/",
+      "authors": "Li Y, Wang W",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "43036822",
       "title": "Live birth after uterus-sparing management of disseminated intravascular coagulation following uterine evacuation for miscarriage in a woman with adenomyosis: a case report.",
       "date": "2026 Dec",
@@ -145,78 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43034573/",
       "authors": "Bouallou M, Sbai AA, Benfadil D",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43034559",
-      "title": "Musculoskeletal imaging in disseminated fusariosis: A case report with diagnostic imaging challenges.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43034559/",
-      "authors": "Urbano-Rodríguez M, Vilaró MP, Fernández CB",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032751",
-      "title": "Multiphasic CT findings of gastric adenosquamous carcinoma with prominent necrosis: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032751/",
-      "authors": "Pan J, Yang J, Ran Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032745",
-      "title": "Delayed postischemic leukoencephalopathy after large vessel occlusion: Imaging and histopathologic correlation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032745/",
-      "authors": "Bachnou MA, Daoud L, Onofrj V",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032570",
-      "title": "Spontaneous rupture of an intrasplenic arterial aneurysm presenting as an acute abdomen: CT diagnosis and surgical management.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032570/",
-      "authors": "Laaribi I, Kachmar S, Zaid I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032415",
-      "title": "Interventional radiology management of juvenile nasopharyngeal angiofibroma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032415/",
-      "authors": "Mangio H, Sun C, Bryant LH 3rd",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032393",
-      "title": "Selective coil embolization of hepatic artery pseudoaneurysm causing hemobilia secondary to hemorrhagic hepatic hydatid cyst: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032393/",
-      "authors": "Abdourabbih Y, Bentabet S, Chaouch I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032358",
-      "title": "Perforated hepatic flexure adenocarcinoma mimicking pyogenic hepatic abscess: A CT diagnostic pitfall.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032358/",
-      "authors": "Kelemu GB, Mhret DE, Tsegaw YG",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43032211",
-      "title": "Immune-mediated necrotizing myopathy complicated by rhabdomyolysis syndrome and central nervous system cytomegalovirus infection: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43032211/",
-      "authors": "Xu Y, Zeng N, Liu J",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
