@@ -292,7 +292,7 @@ function PlantaoSession({
   const [pending, setPending] = useState(false);
   const [pendingQuestion, setPendingQuestion] = useState('');
   const [conversationNote, setConversationNote] = useState('');
-  const ai = usePatientAI();
+  const ai = usePatientAI(scenario);
   const patientVoice = usePatientVoice();
   const [activeVoice, setActiveVoice] = useState<string | null>(null);
   const [speaking, setSpeaking] = useState(false);
@@ -458,7 +458,7 @@ function PlantaoSession({
       setPendingQuestion(text);
       const request = ++conversationRequest.current;
       try {
-        const response = await ai.respond(scenario, turns, text);
+        const response = await ai.respond(text, latest?.question);
         if (request !== conversationRequest.current) return;
         answer = response.reply;
         covered = response.facts;

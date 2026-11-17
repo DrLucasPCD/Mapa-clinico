@@ -31,24 +31,17 @@ export default function PatientAIControls({
           <button
             type="button"
             className="training-primary"
-            onClick={() => void ai.enable()}
+            onClick={ai.enable}
           >
             <Download size={15} />
             {state.status === 'error'
-              ? 'Reativar IA local · modelo leve'
-              : 'Ativar IA opcional · modelo leve'}
+              ? 'Reativar interpretação local'
+              : 'Ativar interpretação local'}
           </button>
           <small>
-            Grátis, sem conta ou chave de API. Requer WebGPU. O modelo leve usa
-            um download de cerca de 1 GB e pode ser menos preciso.
+            Download inicial de cerca de 145 MB, reutilizado quando o navegador
+            permite. Roda na CPU, sem conta ou chave de API.
           </small>
-          <button
-            type="button"
-            className="training-secondary"
-            onClick={() => void ai.enable('standard')}
-          >
-            Usar modelo maior · cerca de 2,5 GB
-          </button>
         </>
       )}
       {state.status === 'loading' && (
@@ -128,9 +121,8 @@ export default function PatientAIControls({
         )}
       </div>
       <small>
-        As mensagens digitadas são processadas aqui. O download acessa Hugging
-        Face e o distribuidor do WebLLM. A IA pode cometer erros e não substitui
-        a correção do caso.
+        As mensagens são processadas no aparelho. O download do modelo usa o
+        Hugging Face. O modelo pode interpretar uma pergunta incorretamente.
       </small>
     </div>
   );

@@ -1,149 +1,105 @@
 import { useEffect, useRef, useState } from 'react';
-import type { WebWorkerMLCEngine } from '@mlc-ai/web-llm';
 import type { PlantaoScenario } from './plantao-cases';
+import { patientReplies } from './plantao-encounter';
 import {
-  parsePatientReply,
-  patientMessages,
+  patientFactPassages,
+  patientQueries,
+  patientReplyFromFacts,
+  type PatientAIEvent,
+  type PatientAIRequest,
   type PatientReply,
-  type PatientTurn,
 } from './patient-ai';
 
-type GPU = {
-  requestAdapter: () => Promise<{
-    features: { has: (feature: string) => boolean };
-  } | null>;
-};
-export type PatientAIState = {
-  status: 'off' | 'loading' | 'ready' | 'error' | 'unsupported';
+const initial = { status: 'off' as const, progress: 0, message: '' };
+type State = {
+  status: 'off' | 'loading' | 'ready' | 'error';
   progress: number;
   message: string;
 };
-const initial: PatientAIState = {
-  status: 'off',
-  progress: 0,
-  message: '',
-};
-const models = {
-  standard: {
-    size: '4B',
-    f16: 'a5c9fab855e3ccbdfed2e7e69683d75f30332161',
-    f32: 'b7e4eb1ba80728187fb5df44055cc1a7c32310e0',
-    context: 4096,
-  },
-  light: {
-    size: '1.7B',
-    f16: '80b3abcec6c3b3f5355dc0cc99cc4fb578f192bc',
-    f32: 'bddd4d584cabe19113f7e4ff46fd9e73b4d3dc89',
-    context: 3072,
-  },
-};
 
-export function usePatientAI() {
-  const [state, setState] = useState(initial);
-  const engine = useRef<WebWorkerMLCEngine | null>(null);
+export function usePatientAI(scenario: PlantaoScenario) {
+  const [state, setState] = useState<State>(initial);
   const worker = useRef<Worker | null>(null);
-  const revision = useRef(0);
-  const busy = useRef(false);
-  const cancelResponse = useRef<(() => void) | undefined>(undefined);
-  const activeLoad = useRef(false);
-  const loadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const ready = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const pending = useRef<{
+    resolve: (reply: PatientReply) => void;
+    reject: (error: Error) => void;
+  } | null>(null);
 
   function release() {
-    revision.current++;
-    cancelResponse.current?.();
-    cancelResponse.current = undefined;
-    clearTimeout(loadTimer.current);
+    clearTimeout(timer.current);
     worker.current?.terminate();
     worker.current = null;
-    engine.current = null;
-    busy.current = false;
-    activeLoad.current = false;
+    ready.current = false;
+    pending.current?.reject(new Error('Interpretação interrompida'));
+    pending.current = null;
   }
 
   useEffect(() => () => release(), []);
 
-  async function enable(profile: keyof typeof models = 'light') {
-    if (activeLoad.current || engine.current) return;
+  function fail() {
+    const wasReady = ready.current;
     release();
-    activeLoad.current = true;
-    const request = revision.current;
+    setState({
+      status: 'error',
+      progress: 0,
+      message: wasReady
+        ? 'A interpretação local foi interrompida. A entrevista continua com os dados do caso.'
+        : 'Não foi possível preparar a interpretação local. A entrevista com a ficha continua disponível.',
+    });
+  }
+
+  function enable() {
+    if (worker.current) return;
     setState({
       status: 'loading',
       progress: 0,
-      message: 'Baixando e preparando o modelo…',
+      message: 'Preparando o modelo de interpretação…',
     });
-    const fail = () => {
-      if (revision.current !== request) return;
-      const wasLoading = activeLoad.current;
-      release();
-      setState({
-        status: 'error',
-        progress: 0,
-        message: wasLoading
-          ? 'Não foi possível preparar a IA local. Confira a conexão e a memória disponível.'
-          : 'A IA local foi interrompida. A entrevista continua com os dados do caso.',
-      });
-    };
-    loadTimer.current = setTimeout(fail, 300_000);
     try {
-      const gpu = (navigator as Navigator & { gpu?: GPU }).gpu;
-      const adapter = await gpu?.requestAdapter();
-      if (request !== revision.current) return;
-      if (!adapter) {
-        release();
-        setState({
-          status: 'unsupported',
-          progress: 0,
-          message:
-            'A IA opcional requer WebGPU. A entrevista com os dados do caso está disponível.',
-        });
-        return;
-      }
-      const { WebWorkerMLCEngine, prebuiltAppConfig } =
-        await import('@mlc-ai/web-llm');
-      if (request !== revision.current) return;
-      const model = models[profile];
-      const precision = adapter.features.has('shader-f16') ? 'f16' : 'f32';
-      const modelId = `Qwen3-${model.size}-q4${precision}_1-MLC`;
-      const record = prebuiltAppConfig.model_list.find(
-        (model) => model.model_id === modelId,
-      )!;
-      const modelRevision = model[precision];
-      worker.current = new Worker(
+      const current = new Worker(
         new URL('./patient-ai.worker.ts', import.meta.url),
         { type: 'module' },
       );
-      worker.current.onerror = fail;
-      const local = new WebWorkerMLCEngine(worker.current, {
-        appConfig: {
-          model_list: [
-            { ...record, model: `${record.model}/resolve/${modelRevision}/` },
-          ],
-        },
-        initProgressCallback: ({ progress }) => {
-          if (request === revision.current && activeLoad.current)
-            setState({
-              status: 'loading',
-              progress: Math.max(0, Math.min(1, progress)),
-              message: 'Baixando e preparando o modelo…',
-            });
-        },
-      });
-      await local.reload(modelId, { context_window_size: model.context });
-      if (request !== revision.current) return;
-      clearTimeout(loadTimer.current);
-      activeLoad.current = false;
-      engine.current = local;
-      setState({
-        status: 'ready',
-        progress: 1,
-        message:
-          profile === 'light'
-            ? 'Conversa livre ativa · modelo leve'
-            : 'Conversa livre ativa neste aparelho',
-      });
+      worker.current = current;
+      timer.current = setTimeout(fail, 180_000);
+      const failCurrent = () => {
+        if (worker.current === current) fail();
+      };
+      current.onerror = failCurrent;
+      current.onmessageerror = failCurrent;
+      current.onmessage = ({ data }: MessageEvent<PatientAIEvent>) => {
+        if (worker.current !== current) return;
+        if (data.type === 'progress' && !ready.current) {
+          setState({
+            status: 'loading',
+            progress: data.value,
+            message: 'Preparando o modelo de interpretação…',
+          });
+        } else if (data.type === 'ready') {
+          clearTimeout(timer.current);
+          ready.current = true;
+          setState({
+            status: 'ready',
+            progress: 1,
+            message: 'Interpretação local ativa',
+          });
+        } else if (data.type === 'error') {
+          fail();
+        } else if (data.type === 'reply' && pending.current) {
+          clearTimeout(timer.current);
+          pending.current.resolve(
+            patientReplyFromFacts(scenario, data.facts, patientReplies.clarify),
+          );
+          pending.current = null;
+        }
+      };
+      const request: PatientAIRequest = {
+        type: 'prepare',
+        facts: patientFactPassages(scenario),
+      };
+      current.postMessage(request);
     } catch {
       fail();
     }
@@ -151,69 +107,27 @@ export function usePatientAI() {
 
   function disable() {
     release();
-    setState({ status: 'off', progress: 0, message: '' });
+    setState(initial);
   }
 
-  async function respond(
-    scenario: PlantaoScenario,
-    history: readonly PatientTurn[],
-    question: string,
-  ): Promise<PatientReply> {
-    const local = engine.current;
-    if (!local || busy.current)
-      throw new Error('A IA local está indisponível.');
-    busy.current = true;
-    const request = revision.current;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let content: string;
-    let finishReason: string | null | undefined;
-    try {
-      const completion = await Promise.race([
-        // WebLLM may dispose its GrammarMatcher during GPU loss. Validate ordinary
-        // text here so generation does not depend on that native matcher.
-        local.chat.completions.create({
-          messages: patientMessages(scenario, history, question),
-          temperature: 0,
-          max_tokens: 48,
-          extra_body: { enable_thinking: false },
-        }),
-        new Promise<never>((_, reject) => {
-          cancelResponse.current = () =>
-            reject(new Error('Conversa interrompida'));
-          timer = setTimeout(
-            () => reject(new Error('Tempo de resposta excedido')),
-            15_000,
-          );
-        }),
-      ]);
-      if (request !== revision.current)
-        throw new Error('Conversa interrompida');
-      finishReason = completion.choices[0]?.finish_reason;
-      content = completion.choices[0]?.message.content ?? '';
-    } catch (error) {
-      if (request === revision.current) {
-        console.warn('Falha na inferência local do paciente', error);
-        release();
-        setState({
-          status: 'error',
-          progress: 0,
-          message:
-            'A IA local foi interrompida. A entrevista continua com os dados do caso.',
-        });
-      }
-      throw error;
-    } finally {
-      clearTimeout(timer);
-      if (request === revision.current) {
-        cancelResponse.current = undefined;
-        busy.current = false;
-      }
+  function respond(question: string, previousQuestion?: string) {
+    const current = worker.current;
+    if (!current || !ready.current || pending.current) {
+      return Promise.reject(new Error('Interpretação local indisponível'));
     }
-    // Misformatted output does not invalidate a working engine. The question
-    // stays available for retry and the conversation is only updated on success.
-    if (finishReason !== 'stop' && finishReason !== 'length')
-      throw new Error('Resposta incompleta');
-    return parsePatientReply(content, scenario);
+    return new Promise<PatientReply>((resolve, reject) => {
+      pending.current = { resolve, reject };
+      timer.current = setTimeout(fail, 15_000);
+      try {
+        const request: PatientAIRequest = {
+          type: 'search',
+          queries: patientQueries(question, previousQuestion),
+        };
+        current.postMessage(request);
+      } catch {
+        fail();
+      }
+    });
   }
 
   return { state, enable, disable, respond };
