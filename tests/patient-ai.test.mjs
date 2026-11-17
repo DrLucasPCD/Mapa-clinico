@@ -69,7 +69,11 @@ test('only known case statements enter the transcript and scoring, never generat
   const scenario = plantaoCases[0];
   const raw = JSON.stringify({
     kind: 'facts',
-    facts: [0, 0, 1],
+    facts: [
+      scenario.interview[0].question,
+      scenario.interview[0].question,
+      scenario.interview[1].question,
+    ],
     reply: 'Não tenho alergias. Tome antibiótico.',
   });
   assert.deepEqual(parsePatientReply(raw, scenario), {
@@ -80,7 +84,7 @@ test('only known case statements enter the transcript and scoring, never generat
     parsePatientReply('{"kind":"unknown","facts":[]}', scenario).reply,
     'Não sei informar isso agora.',
   );
-  for (const facts of [[5], [-1], ['0'], [0.5], null]) {
+  for (const facts of [[5], [-1], ['0'], [0.5], ['Invented question'], null]) {
     assert.throws(() =>
       parsePatientReply(JSON.stringify({ kind: 'facts', facts }), scenario),
     );
@@ -93,7 +97,13 @@ test('only known case statements enter the transcript and scoring, never generat
 test('a clinical selection labelled as a complaint still answers and scores only the selected evidence', () => {
   const scenario = plantaoCases[0];
   assert.deepEqual(
-    parsePatientReply('{"kind":"complaint","facts":[1,2]}', scenario),
+    parsePatientReply(
+      JSON.stringify({
+        kind: 'complaint',
+        facts: [scenario.interview[1].question, scenario.interview[2].question],
+      }),
+      scenario,
+    ),
     {
       reply: scenario.interview[1].answer + ' ' + scenario.interview[2].answer,
       facts: [1, 2],
@@ -101,7 +111,10 @@ test('a clinical selection labelled as a complaint still answers and scores only
   );
   for (const raw of [
     '{"kind":"facts","facts":[]}',
-    '{"kind":"unknown","facts":[0]}',
+    JSON.stringify({
+      kind: 'unknown',
+      facts: [scenario.interview[0].question],
+    }),
   ]) {
     assert.deepEqual(parsePatientReply(raw, scenario), {
       reply: 'Não sei informar isso agora.',

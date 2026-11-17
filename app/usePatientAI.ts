@@ -178,7 +178,7 @@ export function usePatientAI() {
           max_tokens: 220,
           response_format: {
             type: 'json_object',
-            schema: patientReplySchema(scenario.interview.length),
+            schema: patientReplySchema(scenario),
           },
           extra_body: { enable_thinking: false },
         }),
