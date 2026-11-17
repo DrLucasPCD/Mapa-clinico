@@ -450,7 +450,10 @@ function PlantaoSession({
     stopVoice();
     let answer: string;
     let covered: number[];
-    if (ai.state.status === 'ready') {
+    const suggestedQuestion = interview.some(
+      (entry) => normalize(entry.question) === normalize(text),
+    );
+    if (ai.state.status === 'ready' && !suggestedQuestion) {
       pendingRef.current = true;
       setPending(true);
       setPendingQuestion(text);
