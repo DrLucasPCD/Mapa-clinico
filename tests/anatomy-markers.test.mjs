@@ -6,6 +6,7 @@ import * as T from 'three';
 import ts from 'typescript';
 
 const require = createRequire(import.meta.url);
+const clinical = load('app/clinical-correlations.ts');
 function load(path) {
   const { outputText } = ts.transpileModule(readFileSync(path, 'utf8'), {
     compilerOptions: {
@@ -15,9 +16,12 @@ function load(path) {
     },
   });
   const exports = {};
-  new Function('exports', 'require', outputText)(exports, (name) =>
-    name.startsWith('./') ? require('../app/' + name.slice(2)) : require(name),
-  );
+  new Function('exports', 'require', outputText)(exports, (name) => {
+    if (name === './clinical-correlations') return clinical;
+    return name.startsWith('./')
+      ? require('../app/' + name.slice(2))
+      : require(name);
+  });
   return exports;
 }
 
@@ -29,6 +33,7 @@ const {
   getAnatomyDetail,
   chamberOrBrainMarkers,
   anatomyVessel,
+  anatomyDisplayName,
 } = load('app/anatomy-details.ts');
 
 test('a marker attaches to an exposed triangle, moves with a morph and hides when the mesh is cut', () => {
@@ -135,4 +140,44 @@ test('detailed anatomy cards and discovery markers correspond to atlas meshes', 
     'Giro pré-central',
   );
   assert.ok(anatomyVessel('internal_carotid_artery_l').branches.length > 0);
+});
+
+test('clinical reasoning reaches every prior card and uses model IDs for the new topics', () => {
+  const { clinicalCorrelation, clinicalCorrelations, clinicalReferences } =
+    clinical;
+  const modelIds = new Set();
+  for (const file of ['manifest.json', 'manifest_female.json']) {
+    for (const { organ_id: id } of JSON.parse(
+      readFileSync('public/models/detailed/' + file, 'utf8'),
+    ).organs) {
+      modelIds.add(id.replace(/_([lr])$/, '').replaceAll('_', '-'));
+    }
+  }
+  for (const id of Object.keys(anatomyDetails))
+    assert.ok(clinicalCorrelation(id), id);
+  for (const [id, entry] of Object.entries(clinicalCorrelations)) {
+    assert.ok(modelIds.has(id) || ['heart', 'cerebrum'].includes(id), id);
+    for (const field of ['mechanism', 'exam', 'distinction', 'investigation'])
+      assert.ok(entry[field].length > 90, `${id} · ${field}`);
+    assert.ok(entry.references.length, id);
+    for (const reference of entry.references)
+      assert.match(clinicalReferences[reference].url, /^https:\/\//);
+  }
+  assert.equal(
+    clinicalCorrelation('cerebr@right'),
+    clinicalCorrelations.cerebrum,
+  );
+  assert.equal(
+    clinicalCorrelation('heart-left-ventricle'),
+    clinicalCorrelations['left-ventricle'],
+  );
+  assert.equal(
+    clinicalCorrelation('source-alias', 'facial_nerve_vii_r'),
+    clinicalCorrelations['facial-nerve-vii'],
+  );
+  assert.equal(
+    anatomyDisplayName('facial-nerve-vii-right', 'Facial nerve (VII)'),
+    'Nervo facial (VII) · lado direito',
+  );
+  assert.equal(clinicalCorrelation('unmodeled-left-ventricle'), undefined);
 });

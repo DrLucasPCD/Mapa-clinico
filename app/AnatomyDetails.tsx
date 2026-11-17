@@ -6,6 +6,11 @@ import {
   relatedAnatomyTopics,
 } from './anatomy-details';
 import { lessonFor } from './content';
+import {
+  clinicalCorrelation,
+  clinicalReferences,
+  type ClinicalCorrelation,
+} from './clinical-correlations';
 import './anatomy-details.css';
 
 export type AnatomyMetadata = {
@@ -59,6 +64,7 @@ export default function AnatomyDetails({
 }) {
   const detail = getAnatomyDetail(id);
   const lesson = lessonFor(id);
+  const correlation = clinicalCorrelation(id, metadata?.sourceId);
   const vessel = metadata && anatomyVessel(metadata.sourceId);
   const topics = relatedAnatomyTopics(id, metadata?.aliases);
   const references = new Map<string, string>();
@@ -74,6 +80,10 @@ export default function AnatomyDetails({
       'https://openstax.org/books/anatomy-and-physiology-2e/pages/20-5-circulatory-pathways',
       'OpenStax · Vias circulatórias',
     );
+  correlation?.references.forEach((key) => {
+    const { label, url } = clinicalReferences[key];
+    references.set(url, label);
+  });
   topics.forEach((topic) => {
     if (!references.has(topic.reference))
       references.set(topic.reference, topic.title);
@@ -115,11 +125,20 @@ export default function AnatomyDetails({
         </p>
       ) : null}
       {detail && <p className="anatomy-profile-summary">{detail.short}</p>}
-      {text &&
-        orderedTabs.map(([key, title]) => (
-          <details key={key} open={key === initial}>
+      {orderedTabs.map(([key, title]) => {
+        const clinical = key === 'clinica' ? correlation : undefined;
+        if (!text?.[key] && !clinical) return null;
+        return (
+          <details
+            key={key}
+            open={key === initial || Boolean(clinical && !text)}
+          >
             <summary>{title}</summary>
-            <p>{text[key]}</p>
+            {clinical ? (
+              <ClinicalReasoning correlation={clinical} />
+            ) : (
+              <p>{text?.[key]}</p>
+            )}
             {key === 'anatomia' && lesson?.origin && (
               <dl className="anatomy-profile-attachments">
                 <dt>Origem</dt>
@@ -131,7 +150,8 @@ export default function AnatomyDetails({
               </dl>
             )}
           </details>
-        ))}
+        );
+      })}
       {vessel && (
         <details open={!text}>
           <summary>Origem, território e ramos</summary>
@@ -185,7 +205,7 @@ export default function AnatomyDetails({
           ))}
         </details>
       )}
-      {!text && !vessel && !topics.length && (
+      {!text && !vessel && !topics.length && !correlation && (
         <p>
           O atlas apresenta os dados anatômicos do catálogo para esta estrutura.
           A ficha clínica individual ainda está em elaboração.
@@ -217,5 +237,37 @@ export default function AnatomyDetails({
         </details>
       )}
     </section>
+  );
+}
+
+function ClinicalReasoning({
+  correlation,
+}: {
+  correlation: ClinicalCorrelation;
+}) {
+  return (
+    <div className="anatomy-clinical-reasoning">
+      <h4>{correlation.title}</h4>
+      <dl>
+        <dt>Mecanismo e localização</dt>
+        <dd>{correlation.mechanism}</dd>
+        <dt>O que pesquisar no exame</dt>
+        <dd>{correlation.exam}</dd>
+        <dt>Como separar as hipóteses</dt>
+        <dd>{correlation.distinction}</dd>
+        <dt>Investigação e sinais de alarme</dt>
+        <dd>{correlation.investigation}</dd>
+      </dl>
+      {correlation.exercise && (
+        <div className="anatomy-clinical-exercise">
+          <h5>Raciocine com o caso</h5>
+          <p>{correlation.exercise.question}</p>
+          <details>
+            <summary>Revelar raciocínio</summary>
+            <p>{correlation.exercise.explanation}</p>
+          </details>
+        </div>
+      )}
+    </div>
   );
 }

@@ -273,7 +273,14 @@ export default function Lab3dScene(props: Props) {
       }
       if (!model.children.length) throw new Error('empty model');
       base = model;
-      const box = new T.Box3().setFromObject(model);
+      const box = new T.Box3();
+      if (scope === 'brain') {
+        // Center the brain on intracranial anatomy even when a cranial nerve
+        // model extends through the neck or into the thorax.
+        for (const child of model.children) {
+          if (child.userData.layer !== 'cranial') box.expandByObject(child);
+        }
+      } else box.setFromObject(model);
       const center = box.getCenter(new T.Vector3());
       const size = box.getSize(new T.Vector3());
       scale = 2.45 / Math.max(size.x, size.y, size.z);

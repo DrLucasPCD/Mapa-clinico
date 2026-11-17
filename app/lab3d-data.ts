@@ -29,6 +29,7 @@ const brainLayer = [
   { id: 'ventricles', label: 'Ventrículos', color: '#4be5ef' },
   { id: 'cerebellum', label: 'Cerebelo', color: '#dfc469' },
   { id: 'brainstem', label: 'Tronco encefálico', color: '#5ba9e6' },
+  { id: 'cranial', label: 'Nervos cranianos', color: '#d7ad66' },
 ];
 export const neuronLayers = [
   { id: 'dendrites', label: 'Dendritos', color: '#e8a962' },
@@ -59,6 +60,9 @@ export function labOrganLayer(
         : 'arteries';
     return heartOrgans.includes(id) ? 'great' : undefined;
   }
+  if (organ.path[0] === 'Peripheral nervous system' &&
+      /_nerve_(i|ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii)_[lr]$/.test(id))
+    return 'cranial';
   if (organ.path[0] !== 'Central nervous system' || organ.path[1] !== 'Brain')
     return undefined;
   const [, , area, , lobe] = organ.path;

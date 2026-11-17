@@ -62,6 +62,8 @@ const formatSearch = (value: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim();
+const defaultLayers = (scope: LabScale) =>
+  labLayers[scope].map(({ id }) => id).filter(id => id !== 'cranial');
 type Destination = {
   onImaging: () => void;
   onEcg: () => void;
@@ -101,9 +103,7 @@ export default function Lab3D({
   const [view, setView] = useState<LabView>(
     scope === 'heart' ? 'ghost' : 'natural',
   );
-  const [layers, setLayers] = useState(() =>
-    labLayers[scope].map((x) => x.id),
-  );
+  const [layers, setLayers] = useState(() => defaultLayers(scope));
   const [spread, setSpread] = useState(0);
   const [cut, setCut] = useState(0);
   const [axis, setAxis] = useState<LabAxis>('coronal');
@@ -170,7 +170,7 @@ export default function Lab3D({
     setVectors(false);
     setChamberView('all');
     setView(next === 'heart' ? 'ghost' : 'natural');
-    setLayers(labLayers[next].map((x) => x.id));
+    setLayers(defaultLayers(next));
     setSpread(0);
     setCut(0);
     setAxis('coronal');

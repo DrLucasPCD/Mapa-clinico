@@ -1,5 +1,6 @@
 import vessels from './vessels.json';
 import curriculum from './curriculum.json';
+import { clinicalCorrelation } from './clinical-correlations';
 
 type Detail = {
   name: string;
@@ -566,7 +567,8 @@ export function anatomyDisplayName(
   const base = baseId(id);
   const detail = getAnatomyDetail(id);
   const vessel = sourceId ? vesselByMesh.get(sourceId) : undefined;
-  const name = detail?.name ?? vessel?.name;
+  const name =
+    detail?.name ?? clinicalCorrelation(id, sourceId)?.name ?? vessel?.name;
   if (!name) return fallback;
   if (Object.hasOwn(anatomyDetails, base) || !/-(left|right)$/.test(base))
     return name;

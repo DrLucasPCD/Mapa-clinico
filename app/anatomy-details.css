@@ -88,3 +88,47 @@
   outline: 2px solid #11877b;
   outline-offset: 2px;
 }
+
+.anatomy-clinical-reasoning {
+  display: grid;
+  gap: 10px;
+}
+.anatomy-clinical-reasoning h4 {
+  margin: 0;
+  color: #173d4d;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.32;
+}
+.anatomy-clinical-reasoning dl {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+}
+.anatomy-clinical-reasoning dt {
+  color: #0a655f;
+  font-weight: 740;
+}
+.anatomy-clinical-reasoning dd {
+  margin: 0;
+  padding-bottom: 8px;
+}
+.anatomy-clinical-reasoning dd + dt {
+  border-top: 1px solid #dde9e9;
+  padding-top: 8px;
+}
+.anatomy-clinical-exercise {
+  padding: 10px;
+  border: 1px solid #cbe3de;
+  border-radius: 8px;
+  background: #edf8f4;
+}
+.anatomy-clinical-exercise h5 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 740;
+  color: #174f53;
+}
+.anatomy-clinical-exercise details {
+  padding: 7px 9px;
+}
