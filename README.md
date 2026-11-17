@@ -118,6 +118,16 @@ O leitor também reconstrói vistas ortogonais axial, coronal e sagital quando a
 Validação: testes com volumes sintéticos e transformações conhecidas; teste no navegador da importação, geração da superfície, seleção de ponto e sincronização da pilha FLAIR. Não houve validação em série clínica real com referência anatômica revisada. Ainda não estão implementados segmentação automática de todos os órgãos, registro deformável nem obtenção de séries DICOM completas da Radiopaedia. JPEGs isolados continuam recebendo apenas referência anatômica; pilhas verificadas recebem sincronização relativa.
 
 
+### Conversa livre gratuita no Modo Plantão
+
+Abra um atendimento, escolha o modo guiado ou prova e clique em **Ativar conversa livre**. O app usa Qwen3 4B quantizado via WebLLM em um Web Worker. O download inicial é de aproximadamente 2,5 GB e fica no cache do navegador quando o armazenamento permite. Requer WebGPU, conexão no primeiro carregamento e cerca de 4–5 GB de memória disponível. Não usa API paga, chave, conta ou servidor de inferência.
+
+O modelo interpreta a pergunta e as últimas seis trocas para selecionar fatos da história do paciente. A resposta clínica é montada exclusivamente a partir desses fatos, preservando o roteiro e a pontuação da entrevista. Informação ausente é reconhecida como desconhecida, sem criar negativas, antecedentes ou resultados. O modelo não recebe laudo, diagnóstico, decisões ou gabarito. A seleção semântica ainda pode errar; a correção docente do caso continua sendo a referência.
+
+**Ativar voz Faber para respostas livres** carrega o mesmo modelo Trelis usado nas gravações, com síntese local Piper/ONNX em outro worker e download adicional de cerca de 90 MB. Falas já gravadas continuam usando MP3. Falas combinadas e identificação podem ser sintetizadas no aparelho. As mensagens digitadas não são enviadas aos distribuidores dos modelos. O ditado opcional do navegador tem tratamento independente e pode usar um serviço de transcrição, como informado na interface.
+
+O carregamento tem progresso e cancelamento. Falhas preservam a pergunta para reenvio. Sair do caso libera os workers e a GPU, e o atendimento seguinte inicia sem histórico do anterior. Ao faltar suporte WebGPU ou memória, as perguntas guiadas permanecem disponíveis. O service worker não baixa os runtimes de IA e voz antecipadamente.
+
 ### Atualizar os áudios do Modo Plantão
 
 Instale `piper-tts==1.8.0` em um ambiente Python e disponibilize o FFmpeg no PATH. Baixe `model.onnx` e `model.onnx.json` da [revisão da voz Faber usada pelo app](https://huggingface.co/Trelis/piper-pt-br-faber-medium/tree/0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02) para a mesma pasta. Depois de editar os diálogos, execute o comando abaixo.

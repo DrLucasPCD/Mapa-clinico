@@ -1,6 +1,17 @@
-import { readdir, writeFile } from 'node:fs/promises';
+import { readdir, stat, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 const files = (await readdir('dist/assets')).map((f) => '/assets/' + f);
+// Optional inference runtimes are cached only after the user requests them.
+const shellFiles = (
+  await Promise.all(
+    files.map(async (file) =>
+      !/\/(patient-(ai|voice)|piper_phonemize|ort-wasm)/.test(file) &&
+      (await stat('dist' + file)).size < 2_000_000
+        ? file
+        : null,
+    ),
+  )
+).filter(Boolean);
 const version = createHash('sha256')
   .update(files.join('|'))
   .digest('hex')
@@ -12,7 +23,7 @@ const shell = [
   '/icon.svg',
   '/icon-192.png',
   '/icon-512.png',
-  ...files,
+  ...shellFiles,
 ];
 const source = `const CACHE='mapa-${version}';const SHELL=${JSON.stringify(shell)};
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));

@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
+    "@diffusionstudio/piper-wasm": "1.0.0",
+    "@mlc-ai/web-llm": "0.2.89",
     "@shadcn/react": "0.3.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
@@ -25,6 +27,7 @@
     "embla-carousel-react": "8.5.2",
     "input-otp": "1.4.2",
     "lucide-react": "1.31.0",
+    "onnxruntime-web": "1.18.0",
     "react": "19.2.6",
     "react-day-picker": "9.8.1",
     "react-dom": "19.2.6",

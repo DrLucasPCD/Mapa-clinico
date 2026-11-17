@@ -139,6 +139,10 @@ export default function PlantaoEncounter({
   onOpen,
   onStopVoice,
   voiceButton,
+  aiControls,
+  pending = false,
+  pendingQuestion,
+  conversationError,
 }: {
   scenario: PlantaoScenario;
   latest?: EncounterTurn;
@@ -148,6 +152,10 @@ export default function PlantaoEncounter({
   onOpen: (panel: 'record' | 'actions') => void;
   onStopVoice: () => void;
   voiceButton: (key: string, text: string, label: string) => ReactNode;
+  aiControls?: ReactNode;
+  pending?: boolean;
+  pendingQuestion?: string;
+  conversationError?: string;
 }) {
   const [draft, setDraft] = useState('');
   const [micState, setMicState] = useState<
@@ -232,7 +240,7 @@ export default function PlantaoEncounter({
   }
 
   function send(text: string) {
-    if (listening || !text.trim()) return;
+    if (listening || pending || !text.trim()) return;
     onAsk(text.trim());
     setDraft('');
     setMicMessage('');
@@ -251,11 +259,14 @@ export default function PlantaoEncounter({
             ? 'Ouvindo sua pergunta…'
             : micState === 'transcribing'
               ? 'Transcrevendo…'
-              : speaking
-                ? 'Resposta do paciente em reprodução…'
-                : 'Faça uma pergunta de cada vez.'}
+              : pending
+                ? 'O paciente está respondendo…'
+                : speaking
+                  ? 'Resposta do paciente em reprodução…'
+                  : 'Faça uma pergunta de cada vez.'}
         </output>
       </div>
+      {aiControls}
       <div className="plantao-encounter-actions">
         <button
           type="button"
@@ -274,7 +285,9 @@ export default function PlantaoEncounter({
         <button
           type="button"
           className="training-primary plantao-mic"
-          disabled={!SpeechRecognition || micState === 'transcribing'}
+          disabled={
+            !SpeechRecognition || micState === 'transcribing' || pending
+          }
           onClick={toggleMicrophone}
         >
           {listening ? <Square size={16} /> : <Mic size={16} />}
@@ -304,12 +317,32 @@ export default function PlantaoEncounter({
         <button
           className="training-primary"
           type="submit"
-          disabled={listening || !draft.trim()}
+          disabled={listening || pending || !draft.trim()}
         >
           <Send size={15} /> Enviar
         </button>
       </form>
       {micMessage && <output className="training-note">{micMessage}</output>}
+      {pending && (
+        <output className="training-note">
+          Você perguntou «{pendingQuestion}». Preparando a resposta…
+        </output>
+      )}
+      {conversationError && (
+        <div className="training-note" role="alert">
+          {conversationError}
+          {pendingQuestion && (
+            <button
+              type="button"
+              className="training-secondary"
+              disabled={pending}
+              onClick={() => send(pendingQuestion)}
+            >
+              Reenviar pergunta
+            </button>
+          )}
+        </div>
+      )}
       <div className="plantao-suggestions" aria-label="Sugestões de perguntas">
         {scenario.interview.map((entry, i) => (
           <button
@@ -317,7 +350,7 @@ export default function PlantaoEncounter({
             key={entry.question}
             type="button"
             data-asked={asked.includes(i)}
-            disabled={listening}
+            disabled={listening || pending}
             onClick={() => send(entry.question)}
           >
             {entry.question}

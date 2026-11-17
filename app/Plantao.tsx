@@ -18,7 +18,10 @@ import {
   type PlantaoScenario,
 } from './plantao-cases';
 import { getClinicalPlan } from './plantao-clinical';
-import { plantaoVoiceUrl } from './plantao-voice';
+import { hasPatientRecording, plantaoVoiceUrl } from './plantao-voice';
+import { usePatientAI } from './usePatientAI';
+import { usePatientVoice } from './usePatientVoice';
+import PatientAIControls from './PatientAIControls';
 import { recordTrainingReview } from './training-review';
 import type { VisualId } from './visual-localization';
 import PlantaoEncounter, {
@@ -282,6 +285,14 @@ function PlantaoSession({
   const medicalConsole = useRef<HTMLDivElement>(null);
   const visitStage = useRef<HTMLDivElement>(null);
   const voiceRequest = useRef(0);
+  const voiceObjectUrl = useRef<string | null>(null);
+  const conversationRequest = useRef(0);
+  const pendingRef = useRef(false);
+  const [pending, setPending] = useState(false);
+  const [pendingQuestion, setPendingQuestion] = useState('');
+  const [conversationError, setConversationError] = useState('');
+  const ai = usePatientAI();
+  const patientVoice = usePatientVoice();
   const [activeVoice, setActiveVoice] = useState<string | null>(null);
   const [speaking, setSpeaking] = useState(false);
   const [voiceError, setVoiceError] = useState(false);
@@ -289,6 +300,8 @@ function PlantaoSession({
     const audio = player.current;
     return () => {
       voiceRequest.current += 1;
+      conversationRequest.current += 1;
+      if (voiceObjectUrl.current) URL.revokeObjectURL(voiceObjectUrl.current);
       audio?.pause();
     };
   }, []);
@@ -308,22 +321,42 @@ function PlantaoSession({
   function stopVoice() {
     voiceRequest.current += 1;
     player.current?.pause();
+    if (voiceObjectUrl.current) URL.revokeObjectURL(voiceObjectUrl.current);
+    voiceObjectUrl.current = null;
     setActiveVoice(null);
     setSpeaking(false);
   }
 
-  function playVoice(key: string, text: string) {
+  async function playVoice(key: string, text: string) {
     const audio = player.current;
     if (!audio) return;
-    const request = ++voiceRequest.current;
-    audio.src = plantaoVoiceUrl(text);
+    stopVoice();
+    const request = voiceRequest.current;
     setActiveVoice(key);
     setVoiceError(false);
-    audio.play().catch(() => {
+    try {
+      if (hasPatientRecording(text)) audio.src = plantaoVoiceUrl(text);
+      else {
+        const blob = await patientVoice.synthesize(text);
+        if (request !== voiceRequest.current) return;
+        voiceObjectUrl.current = URL.createObjectURL(blob);
+        audio.src = voiceObjectUrl.current;
+      }
+      await audio.play();
+    } catch {
       if (request !== voiceRequest.current) return;
       stopVoice();
       setVoiceError(true);
-    });
+    }
+  }
+
+  function cancelConversation() {
+    conversationRequest.current++;
+    ai.interrupt();
+    pendingRef.current = false;
+    setPending(false);
+    setPendingQuestion('');
+    setConversationError('');
   }
 
   function voiceButton(key: string, text: string, label: string) {
@@ -341,9 +374,10 @@ function PlantaoSession({
   }
 
   function start(next: Mode | null) {
+    cancelConversation();
     stopVoice();
     setVoiceError(false);
-    if (next && autoVoice) playVoice('complaint', scenario.complaint);
+    if (next && autoVoice) void playVoice('complaint', scenario.complaint);
     setMode(next);
     setStep(0);
     setAsked([]);
@@ -360,6 +394,7 @@ function PlantaoSession({
   }
 
   function advance() {
+    cancelConversation();
     stopVoice();
     setStep((value) => value + 1);
     setChoice(null);
@@ -400,7 +435,9 @@ function PlantaoSession({
     }));
   }
 
-  function ask(text: string) {
+  async function ask(text: string) {
+    if (pendingRef.current) return;
+    setConversationError('');
     const action = requestedIntervention(text);
     if (action) {
       stopVoice();
@@ -410,21 +447,48 @@ function PlantaoSession({
       return;
     }
     const result = resolvePatientTurn(scenario, text);
-    retainCommunication(result);
-    if (result.index !== undefined) {
-      const index = result.index;
-      setAsked((previous) =>
-        previous.includes(index) ? previous : [...previous, index],
-      );
+    stopVoice();
+    let answer: string;
+    let covered: number[];
+    if (ai.state.status === 'ready') {
+      pendingRef.current = true;
+      setPending(true);
+      setPendingQuestion(text);
+      const request = ++conversationRequest.current;
+      try {
+        const response = await ai.respond(scenario, turns, text);
+        if (request !== conversationRequest.current) return;
+        answer = response.reply;
+        covered = response.facts;
+      } catch {
+        if (request === conversationRequest.current)
+          setConversationError(
+            `A resposta à pergunta «${text}» foi interrompida. Você pode reenviar a pergunta ou ativar a IA novamente.`,
+          );
+        return;
+      } finally {
+        if (request === conversationRequest.current) {
+          pendingRef.current = false;
+          setPending(false);
+        }
+      }
+    } else {
+      answer = result.answer;
+      covered = result.index === undefined ? [] : [result.index];
     }
-    setTurns((previous) => [
-      ...previous,
-      { question: text, answer: result.answer },
-    ]);
-    if (autoVoice) playVoice('reply', result.answer);
+    retainCommunication(result);
+    setAsked((previous) => [...new Set([...previous, ...covered])]);
+    setTurns((previous) => [...previous, { question: text, answer }]);
+    setPendingQuestion('');
+    if (
+      autoVoice &&
+      (hasPatientRecording(answer) || patientVoice.status === 'ready')
+    )
+      void playVoice('reply', answer);
   }
 
   function finish() {
+    cancelConversation();
     stopVoice();
     setPanel(null);
     setStep(stages.length - 1);
@@ -472,6 +536,16 @@ function PlantaoSession({
               }
               onStopVoice={stopVoice}
               voiceButton={voiceButton}
+              pending={pending}
+              pendingQuestion={pendingQuestion}
+              conversationError={conversationError}
+              aiControls={
+                <PatientAIControls
+                  ai={ai}
+                  voice={patientVoice}
+                  pending={pending}
+                />
+              }
             />
             {mode === 'guided' && (
               <>
@@ -723,7 +797,11 @@ function PlantaoSession({
         </div>
         {voiceError && (
           <output className="training-note">
-            Áudio indisponível. Toque em Ouvir para tentar novamente.
+            {latest &&
+            !hasPatientRecording(latest.answer) &&
+            patientVoice.status !== 'ready'
+              ? 'Ative a voz Faber local no painel de conversa livre para ouvir respostas novas.'
+              : 'Áudio indisponível. Toque em Ouvir para tentar novamente.'}
           </output>
         )}
         <small>

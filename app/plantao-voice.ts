@@ -1,6 +1,12 @@
 import { getPlantaoScenario, plantaoCases } from './plantao-cases';
 import { patientReplies } from './plantao-encounter';
 
+let recordedLines: Set<string> | undefined;
+export function hasPatientRecording(text: string) {
+  recordedLines ??= new Set(plantaoVoiceLines().map((clip) => clip.text));
+  return recordedLines.has(text);
+}
+
 export function plantaoVoiceUrl(text: string) {
   // Address clips by text so reordered questions and repeated answers reuse the recording.
   let hash = 2166136261;

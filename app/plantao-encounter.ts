@@ -1,6 +1,7 @@
 import type { PlantaoScenario } from './plantao-cases';
 
 export const patientReplies = {
+  unknown: 'Não sei informar isso agora.',
   greeting: 'Olá. Pode me perguntar o que precisar.',
   reassurance: 'Certo. Obrigado por me explicar.',
   clarify: 'Não tenho essa informação agora. Pode perguntar de outro jeito?',

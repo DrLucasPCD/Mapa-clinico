@@ -32,7 +32,7 @@ O painel “Download Image” da própria fonte informa que o uso não requer pe
 
 ## Voz
 
-Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX e o executável Piper não são redistribuídos no aplicativo; as introduções em WAV estão em `public/audio`. As falas do Modo Plantão foram sintetizadas a partir da revisão `0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02` do modelo e publicadas em MP3 em `public/audio/plantao`.
+Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX é baixado diretamente da fonte somente quando o usuário ativa a voz local. As introduções em WAV estão em `public/audio`. As falas do Modo Plantão foram sintetizadas a partir da revisão `0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02` do modelo e publicadas em MP3 em `public/audio/plantao`.
 
 ## Retratos do Modo Plantão
 
@@ -67,3 +67,12 @@ Arquivos em `public/models/detailed`: distribuição de https://github.com/Nurka
 ### Modelos moleculares 3D
 
 O Laboratório 3D usa coordenadas de conformações e ligações obtidas da API PUG REST do PubChem (NCBI), convertidas para JSON: [dopamina, CID 681](https://pubchem.ncbi.nlm.nih.gov/compound/681), [serotonina, CID 5202](https://pubchem.ncbi.nlm.nih.gov/compound/5202) e [noradrenalina, CID 439260](https://pubchem.ncbi.nlm.nih.gov/compound/439260). As cenas renderizam essas coordenadas localmente.
+
+## Inferência local da conversa e da voz
+
+- Qwen Team, **Qwen3-4B**, Apache 2.0. Pesos quantizados MLC em https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC (revisão `a5c9fab855e3ccbdfed2e7e69683d75f30332161`) e https://huggingface.co/mlc-ai/Qwen3-4B-q4f32_1-MLC (revisão `b7e4eb1ba80728187fb5df44055cc1a7c32310e0`). Os pesos são baixados diretamente da fonte, fora do repositório. O modelo original e sua licença estão em https://huggingface.co/Qwen/Qwen3-4B .
+- MLC AI, **WebLLM 0.2.89**, Apache 2.0, https://github.com/mlc-ai/web-llm .
+- Microsoft, **ONNX Runtime Web 1.18.0**, MIT, https://github.com/microsoft/onnxruntime .
+- Diffusion Studio, **piper-wasm 1.0.0**, wrapper declarado MIT, https://github.com/diffusion-studio/piper-wasm . O pacote inclui o fonemizador Piper e dados e código do **eSpeak NG**, GPLv3 ou posterior, https://github.com/rhasspy/espeak-ng . Os componentes compilados mantêm suas licenças próprias. Fontes e receita de compilação estão no repositório do pacote e nos upstreams https://github.com/wide-video/piper-phonemize e https://github.com/wide-video/piper-wasm .
+
+A voz Faber continua sendo a revisão Trelis identificada acima. A adaptação da inferência local no app usa tensores Piper e geração de WAV no worker; não há serviço pago de TTS.
