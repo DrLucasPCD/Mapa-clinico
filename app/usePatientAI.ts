@@ -14,14 +14,14 @@ type GPU = {
   } | null>;
 };
 export type PatientAIState = {
-  status: 'checking' | 'off' | 'loading' | 'ready' | 'error' | 'unsupported';
+  status: 'off' | 'loading' | 'ready' | 'error' | 'unsupported';
   progress: number;
   message: string;
 };
 const initial: PatientAIState = {
-  status: 'checking',
+  status: 'off',
   progress: 0,
-  message: 'Verificando suporte à IA local…',
+  message: '',
 };
 const models = {
   standard: {
@@ -46,7 +46,6 @@ export function usePatientAI() {
   const busy = useRef(false);
   const cancelResponse = useRef<(() => void) | undefined>(undefined);
   const activeLoad = useRef(false);
-  const f16 = useRef(true);
   const loadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
@@ -63,39 +62,7 @@ export function usePatientAI() {
     activeLoad.current = false;
   }
 
-  useEffect(() => {
-    let active = true;
-    const gpu = (navigator as Navigator & { gpu?: GPU }).gpu;
-    void (async () => {
-      try {
-        const adapter = await gpu?.requestAdapter();
-        if (!active) return;
-        if (!adapter) {
-          setState({
-            status: 'unsupported',
-            progress: 0,
-            message:
-              'A IA opcional requer WebGPU. Você pode entrevistar o paciente usando a ficha do caso.',
-          });
-          return;
-        }
-        f16.current = adapter.features.has('shader-f16');
-        setState({ status: 'off', progress: 0, message: '' });
-      } catch {
-        if (active)
-          setState({
-            status: 'unsupported',
-            progress: 0,
-            message:
-              'A GPU está indisponível. Você pode entrevistar o paciente usando a ficha do caso.',
-          });
-      }
-    })();
-    return () => {
-      active = false;
-      release();
-    };
-  }, []);
+  useEffect(() => () => release(), []);
 
   async function enable(profile: keyof typeof models = 'light') {
     if (activeLoad.current || engine.current) return;
@@ -121,11 +88,24 @@ export function usePatientAI() {
     };
     loadTimer.current = setTimeout(fail, 300_000);
     try {
+      const gpu = (navigator as Navigator & { gpu?: GPU }).gpu;
+      const adapter = await gpu?.requestAdapter();
+      if (request !== revision.current) return;
+      if (!adapter) {
+        release();
+        setState({
+          status: 'unsupported',
+          progress: 0,
+          message:
+            'A IA opcional requer WebGPU. A entrevista com os dados do caso está disponível.',
+        });
+        return;
+      }
       const { WebWorkerMLCEngine, prebuiltAppConfig } =
         await import('@mlc-ai/web-llm');
       if (request !== revision.current) return;
       const model = models[profile];
-      const precision = f16.current ? 'f16' : 'f32';
+      const precision = adapter.features.has('shader-f16') ? 'f16' : 'f32';
       const modelId = `Qwen3-${model.size}-q4${precision}_1-MLC`;
       const record = prebuiltAppConfig.model_list.find(
         (model) => model.model_id === modelId,
