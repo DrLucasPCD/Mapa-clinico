@@ -3,6 +3,9 @@ import {
   ArrowLeft,
   ArrowRight,
   ClipboardList,
+  FlaskConical,
+  ListChecks,
+  SlidersHorizontal,
   Square,
   Stethoscope,
   Volume2,
@@ -18,6 +21,21 @@ import { getClinicalPlan } from './plantao-clinical';
 import { plantaoVoiceUrl } from './plantao-voice';
 import { recordTrainingReview } from './training-review';
 import type { VisualId } from './visual-localization';
+import PlantaoEncounter, {
+  EncounterDialog,
+  PatientPortrait,
+  PatientVitals,
+  type EncounterTurn,
+} from './PlantaoEncounter';
+import {
+  assessCommunication,
+  examFindings,
+  patientIdentity,
+  requestedIntervention,
+  resolvePatientTurn,
+  type Communication,
+} from './plantao-encounter';
+import './plantao-encounter.css';
 
 const clinicalStages = [
   'Entrevista',
@@ -33,7 +51,6 @@ const legacyStages = [
   'Hipótese',
   'Devolutiva',
 ];
-const interviewLimit = 3;
 const autoVoicePreference = 'mapa-plantao-auto-voice';
 const disciplines = [
   ...new Set(plantaoCases.map((item) => item.discipline)),
@@ -44,6 +61,19 @@ const normalize = (value: string) =>
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase();
 type Mode = 'guided' | 'exam';
+type Panel = 'record' | 'actions' | 'finish' | null;
+type InterventionTab = 'examine' | 'investigate' | 'manage';
+const actionTabs: [InterventionTab, string][] = [
+  ['examine', 'Examinar'],
+  ['investigate', 'Investigar'],
+  ['manage', 'Conduzir'],
+];
+const resultLabel: Record<string, string> = {
+  exam: 'Exame físico dirigido',
+  vitals: 'Sinais vitais',
+  imaging: 'Exame complementar',
+  plan: 'Nota de conduta',
+};
 type Links = {
   onAtlas: (id: string, label: string) => void;
   onCloseAtlas: () => void;
@@ -235,12 +265,25 @@ function PlantaoSession({
   const [mode, setMode] = useState<Mode | null>(reviewing ? 'guided' : null);
   const [step, setStep] = useState(review ? review.decision + 1 : 0);
   const [asked, setAsked] = useState<number[]>([]);
+  const [turns, setTurns] = useState<EncounterTurn[]>([]);
+  const [communication, setCommunication] = useState<Communication>({
+    introduced: false,
+    supported: false,
+  });
+  const [panel, setPanel] = useState<Panel>(null);
+  const [actionTab, setActionTab] = useState<InterventionTab>('examine');
+  const [results, setResults] = useState<string[]>([]);
+  const [planDraft, setPlanDraft] = useState('');
+  const [savedPlan, setSavedPlan] = useState('');
   const [answers, setAnswers] = useState<number[]>([]);
   const [choice, setChoice] = useState<number | null>(null);
   const [hint, setHint] = useState(false);
   const player = useRef<HTMLAudioElement>(null);
+  const medicalConsole = useRef<HTMLDivElement>(null);
+  const visitStage = useRef<HTMLDivElement>(null);
   const voiceRequest = useRef(0);
   const [activeVoice, setActiveVoice] = useState<string | null>(null);
+  const [speaking, setSpeaking] = useState(false);
   const [voiceError, setVoiceError] = useState(false);
   useEffect(() => {
     const audio = player.current;
@@ -257,11 +300,16 @@ function PlantaoSession({
   const confirmed = step > 0 && answers[step - 1] !== undefined;
   const keyQuestions = interview.filter((item) => item.key);
   const askedKey = asked.filter((index) => interview[index].key).length;
+  const finished = mode !== null && step === stages.length - 1;
+  const identity = patientIdentity(scenario);
+  const latest = turns.at(-1);
+  const findings = examFindings(scenario);
 
   function stopVoice() {
     voiceRequest.current += 1;
     player.current?.pause();
     setActiveVoice(null);
+    setSpeaking(false);
   }
 
   function playVoice(key: string, text: string) {
@@ -299,6 +347,12 @@ function PlantaoSession({
     setMode(next);
     setStep(0);
     setAsked([]);
+    setTurns([]);
+    setCommunication({ introduced: false, supported: false });
+    setResults([]);
+    setPanel(null);
+    setPlanDraft('');
+    setSavedPlan('');
     setAnswers([]);
     setChoice(null);
     setHint(false);
@@ -325,88 +379,69 @@ function PlantaoSession({
     if (mode === 'exam') advance();
   }
 
+  function openActions(tab: InterventionTab) {
+    setActionTab(tab);
+    setPanel('actions');
+  }
+
+  function collect(result: string) {
+    setResults((previous) => [
+      ...previous.filter((item) => item !== result),
+      result,
+    ]);
+    setPanel(null);
+    requestAnimationFrame(() => medicalConsole.current?.focus());
+  }
+
+  function retainCommunication(cues: Communication) {
+    setCommunication((previous) => ({
+      introduced: previous.introduced || cues.introduced,
+      supported: previous.supported || cues.supported,
+    }));
+  }
+
+  function ask(text: string) {
+    const action = requestedIntervention(text);
+    if (action) {
+      stopVoice();
+      retainCommunication(assessCommunication(text));
+      if (action === 'investigate') openActions('investigate');
+      else collect(action);
+      return;
+    }
+    const result = resolvePatientTurn(scenario, text);
+    retainCommunication(result);
+    if (result.index !== undefined) {
+      const index = result.index;
+      setAsked((previous) =>
+        previous.includes(index) ? previous : [...previous, index],
+      );
+    }
+    setTurns((previous) => [
+      ...previous,
+      { question: text, answer: result.answer },
+    ]);
+    if (autoVoice) playVoice('reply', result.answer);
+  }
+
+  function finish() {
+    stopVoice();
+    setPanel(null);
+    setStep(stages.length - 1);
+    setChoice(null);
+    setHint(false);
+  }
+
   return (
-    <div className="plantao-layout">
-      <aside className="training-card plantao-chart">
-        <h3>
-          <ClipboardList size={18} /> Prontuário da simulação
-        </h3>
-        <p>
-          <strong>{scenario.patient}</strong>
-          <br />«{scenario.complaint}»
-        </p>
-        {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- The full utterance is displayed next to each play button. */}
-        <audio ref={player} preload="none" onEnded={stopVoice} />
-        <div className="plantao-voice-controls">
-          {voiceButton('complaint', scenario.complaint, 'Ouvir queixa')}
-          <label>
-            <input
-              type="checkbox"
-              checked={autoVoice}
-              onChange={(event) => {
-                const enabled = event.target.checked;
-                if (!enabled) stopVoice();
-                onAutoVoiceChange(enabled);
-              }}
-            />
-            Falas automáticas
-          </label>
-        </div>
-        {voiceError && (
-          <output className="training-note">
-            Áudio indisponível. Toque em Ouvir para tentar novamente.
-          </output>
-        )}
-        <small>
-          {scenario.generated
-            ? 'Variação de um caso da base clínica.'
-            : 'História clínica adaptada para simulação.'}
-        </small>
-        {mode && step > 0 && (
-          <p>
-            <strong>Exame físico</strong>
-            <br />
-            {scenario.exam}
-          </p>
-        )}
-        {mode && !reviewing && (
-          <ol className="plantao-progress" aria-label="Etapas do atendimento">
-            {stages.map((item, index) => (
-              <li
-                key={item}
-                aria-current={step === index ? 'step' : undefined}
-                className={index <= step ? 'reached' : ''}
-              >
-                {item}
-              </li>
-            ))}
-          </ol>
-        )}
-        {asked.length > 0 && (
-          <details>
-            <summary>Respostas da entrevista ({asked.length})</summary>
-            <ul>
-              {asked.map((index) => (
-                <li key={index}>
-                  <strong>{interview[index].question}</strong>
-                  <br />
-                  {interview[index].answer}
-                  {step > 0 && (
-                    <div>
-                      {voiceButton(
-                        `answer-${index}`,
-                        interview[index].answer,
-                        'Ouvir resposta',
-                      )}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
-      </aside>
-      <div className="training-card plantao-stage">
+    <div
+      className={'plantao-layout' + (!reviewing ? ' plantao-consultation' : '')}
+    >
+      {!reviewing && <PatientVitals scenario={scenario} />}
+      <div
+        className="training-card plantao-stage"
+        tabIndex={-1}
+        ref={visitStage}
+      >
         {!mode && (
           <>
             <h3>Escolha como atender</h3>
@@ -426,43 +461,34 @@ function PlantaoSession({
         )}
         {mode && step === 0 && (
           <>
-            <h3>O que você quer perguntar?</h3>
-            <p>
-              Escolha até {interviewLimit} perguntas para orientar a avaliação
-              inicial.
-            </p>
-            <div className="training-options">
-              {interview.map((item, index) => (
-                <div key={item.question}>
-                  <button
-                    disabled={
-                      asked.includes(index) || asked.length >= interviewLimit
-                    }
-                    onClick={() => {
-                      setAsked((previous) => [...previous, index]);
-                      if (autoVoice) playVoice(`answer-${index}`, item.answer);
-                    }}
-                  >
-                    {item.question}
-                  </button>
-                  {asked.includes(index) && (
-                    <div className="training-feedback plantao-spoken-response">
-                      <p>{item.answer}</p>
-                      {voiceButton(
-                        `answer-${index}`,
-                        item.answer,
-                        'Ouvir resposta',
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <PlantaoEncounter
+              scenario={scenario}
+              latest={latest}
+              asked={asked}
+              speaking={speaking}
+              onAsk={ask}
+              onOpen={(next) =>
+                next === 'actions' ? openActions('examine') : setPanel(next)
+              }
+              onStopVoice={stopVoice}
+              voiceButton={voiceButton}
+            />
             {mode === 'guided' && (
-              <details>
-                <summary>Ver dica</summary>
-                <p>{scenario.interviewHint}</p>
-              </details>
+              <>
+                {turns.length > 0 && (
+                  <details>
+                    <summary>
+                      Feedback da entrevista · {askedKey}/{keyQuestions.length}{' '}
+                      pistas
+                    </summary>
+                    <CommunicationChecklist cues={communication} />
+                  </details>
+                )}
+                <details>
+                  <summary>Ver dica</summary>
+                  <p>{scenario.interviewHint}</p>
+                </details>
+              </>
             )}
             <button className="training-primary" onClick={advance}>
               Ir para a avaliação inicial <ArrowRight size={16} />
@@ -495,8 +521,26 @@ function PlantaoSession({
                 </label>
               ))}
             </fieldset>
-            {clinical && step >= 2 && (
-              <ComplementaryExams key={step} scenario={scenario} />
+            {clinical && !reviewing && (
+              <div className="training-actions">
+                {step === 1 ? (
+                  <button
+                    type="button"
+                    className="training-secondary"
+                    onClick={() => openActions('examine')}
+                  >
+                    <Stethoscope size={15} /> Examinar paciente
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="training-secondary"
+                    onClick={() => openActions('investigate')}
+                  >
+                    <FlaskConical size={15} /> Consultar exames complementares
+                  </button>
+                )}
+              </div>
             )}
             {mode === 'guided' && !confirmed && (
               <button
@@ -542,7 +586,7 @@ function PlantaoSession({
             )}
           </>
         )}
-        {mode && step === stages.length - 1 && (
+        {finished && (
           <>
             <h3>Devolutiva</h3>
             <p>
@@ -557,6 +601,13 @@ function PlantaoSession({
               · {askedKey} de {keyQuestions.length} pistas principais
               exploradas.
             </p>
+            <section
+              className="plantao-communication-review"
+              aria-label="Comunicação com o paciente"
+            >
+              <h4>Comunicação com o paciente</h4>
+              <CommunicationChecklist cues={communication} />
+            </section>
             <details>
               <summary>Rever as pistas da entrevista</summary>
               <ul>
@@ -571,7 +622,12 @@ function PlantaoSession({
               {decisions.map((item, index) => (
                 <li key={item.title}>
                   <strong>{item.title}</strong>
-                  <p>Sua escolha: {item.options[answers[index]]}</p>
+                  <p>
+                    Sua escolha:{' '}
+                    {answers[index] === undefined
+                      ? 'Sem resposta'
+                      : item.options[answers[index]]}
+                  </p>
                   <p>Resposta: {item.options[item.correct]}</p>
                   <p>{item.explanation}</p>
                 </li>
@@ -634,7 +690,315 @@ function PlantaoSession({
           </>
         )}
       </div>
+      <aside className="training-card plantao-chart">
+        <h3>
+          <ClipboardList size={18} /> Prontuário da simulação
+        </h3>
+        <p>
+          <strong>{identity.name}</strong> · {scenario.patient}
+          <br />«{scenario.complaint}»
+        </p>
+        {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- The full utterance is displayed next to each play button. */}
+        <audio
+          ref={player}
+          preload="none"
+          onPlaying={() => setSpeaking(true)}
+          onPause={() => setSpeaking(false)}
+          onEnded={stopVoice}
+        />
+        <div className="plantao-voice-controls">
+          {voiceButton('complaint', scenario.complaint, 'Ouvir queixa')}
+          <label>
+            <input
+              type="checkbox"
+              checked={autoVoice}
+              onChange={(event) => {
+                const enabled = event.target.checked;
+                if (!enabled) stopVoice();
+                onAutoVoiceChange(enabled);
+              }}
+            />
+            Falas automáticas
+          </label>
+        </div>
+        {voiceError && (
+          <output className="training-note">
+            Áudio indisponível. Toque em Ouvir para tentar novamente.
+          </output>
+        )}
+        <small>
+          {scenario.generated
+            ? 'Variação de um caso da base clínica.'
+            : 'História clínica adaptada para simulação.'}
+        </small>
+        {reviewing && step > 0 && (
+          <p>
+            <strong>Exame físico</strong>
+            <br />
+            {scenario.exam}
+          </p>
+        )}
+        {mode && !reviewing && (
+          <ol className="plantao-progress" aria-label="Etapas do atendimento">
+            {stages.map((item, index) => (
+              <li
+                key={item}
+                aria-current={step === index ? 'step' : undefined}
+                className={index <= step ? 'reached' : ''}
+              >
+                {item}
+              </li>
+            ))}
+          </ol>
+        )}
+        {mode && !reviewing && step > 0 && !finished && (
+          <div className="plantao-chart-actions">
+            <button
+              type="button"
+              className="training-secondary"
+              onClick={() => setPanel('record')}
+            >
+              <ClipboardList size={15} /> Ficha do paciente
+            </button>
+            <button
+              type="button"
+              className="training-secondary"
+              onClick={() =>
+                openActions(
+                  step === 1
+                    ? 'examine'
+                    : step === 2
+                      ? 'investigate'
+                      : 'manage',
+                )
+              }
+            >
+              <SlidersHorizontal size={15} /> Intervenções
+            </button>
+          </div>
+        )}
+        {mode && !reviewing && (
+          <div className="plantao-console" ref={medicalConsole} tabIndex={-1}>
+            <h3>
+              <ListChecks size={17} /> Console médico
+            </h3>
+            {!results.length && (
+              <p className="training-note">
+                Os resultados das intervenções aparecem aqui.
+              </p>
+            )}
+            {[...results].reverse().map((item, index) => (
+              <details key={item} open={index === 0}>
+                <summary>
+                  {resultLabel[item] ?? item}
+                  {item === 'imaging' ? ' · ' + scenario.modality : ''}
+                </summary>
+                {item === 'exam' && <p>{scenario.exam}</p>}
+                {findings[item] && <p>{findings[item]}</p>}
+                {item === 'vitals' && (
+                  <PatientVitals scenario={scenario} compact />
+                )}
+                {item === 'imaging' && (
+                  <>
+                    <p>{scenario.report}</p>
+                    <PlantaoFigure scenario={scenario} />
+                  </>
+                )}
+                {item === 'plan' && (
+                  <p className="plantao-entered-plan">{savedPlan}</p>
+                )}
+              </details>
+            ))}
+            {!finished && results.length > 0 && (
+              <button
+                className="training-secondary plantao-resume"
+                type="button"
+                onClick={() => visitStage.current?.focus()}
+              >
+                <ArrowLeft size={15} /> Voltar ao atendimento
+              </button>
+            )}
+            {!finished && (
+              <button
+                className="plantao-end"
+                type="button"
+                onClick={() => setPanel('finish')}
+              >
+                Encerrar atendimento
+              </button>
+            )}
+          </div>
+        )}
+        {turns.length > 0 && (
+          <details>
+            <summary>Histórico da conversa ({turns.length})</summary>
+            <ol className="plantao-turn-list">
+              {turns.map((turn, index) => (
+                <li key={index}>
+                  <strong>{turn.question}</strong>
+                  <p>{turn.answer}</p>
+                  {voiceButton(`turn-${index}`, turn.answer, 'Ouvir resposta')}
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
+      </aside>
+      {panel === 'record' && (
+        <EncounterDialog
+          title="Ficha do paciente"
+          onClose={() => setPanel(null)}
+        >
+          <div className="plantao-patient-record">
+            <PatientPortrait scenario={scenario} speaking={speaking} />
+            <strong>{identity.name}</strong>
+            <p>
+              {scenario.patient} · {scenario.discipline}
+            </p>
+          </div>
+          <h4>Queixa principal</h4>
+          <p>«{scenario.complaint}»</p>
+          {voiceButton('complaint', scenario.complaint, 'Ouvir queixa')}
+          <h4>Sinais vitais simulados</h4>
+          <PatientVitals scenario={scenario} compact />
+        </EncounterDialog>
+      )}
+      {panel === 'actions' && (
+        <EncounterDialog title="Intervenções" onClose={() => setPanel(null)}>
+          <div
+            className="plantao-action-tabs training-tabs"
+            aria-label="Tipos de intervenção"
+          >
+            {actionTabs.map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={id === actionTab}
+                onClick={() => setActionTab(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {actionTab === 'examine' && (
+            <div className="plantao-action-list">
+              {['vitals', 'exam', ...Object.keys(findings)].map((result) => (
+                <button
+                  key={result}
+                  type="button"
+                  className="training-secondary"
+                  onClick={() => collect(result)}
+                >
+                  <span>
+                    <strong>{resultLabel[result] ?? result}</strong>
+                    <small>
+                      {result === 'vitals'
+                        ? 'Revisar os dados de monitorização do caso.'
+                        : 'Obter os achados do exame do caso.'}
+                    </small>
+                  </span>
+                  <span>
+                    {results.includes(result) ? 'Rever' : 'Solicitar'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {actionTab === 'investigate' && (
+            <div className="plantao-action-list">
+              <button
+                type="button"
+                className="training-secondary"
+                disabled={step < 2}
+                onClick={() => collect('imaging')}
+              >
+                <span>
+                  <strong>Exame disponível · {scenario.modality}</strong>
+                  <small>
+                    {step < 2
+                      ? 'Disponível após a avaliação inicial.'
+                      : 'Laudo e imagem disponíveis no console médico.'}
+                  </small>
+                </span>
+                <span>
+                  {results.includes('imaging') ? 'Rever' : 'Solicitar'}
+                </span>
+              </button>
+            </div>
+          )}
+          {actionTab === 'manage' && (
+            <form
+              className="plantao-plan-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                if (!planDraft.trim()) return;
+                setSavedPlan(planDraft.trim());
+                collect('plan');
+              }}
+            >
+              <label>
+                Nota de conduta
+                <textarea
+                  rows={4}
+                  maxLength={900}
+                  value={planDraft}
+                  onChange={(event) => setPlanDraft(event.target.value)}
+                  placeholder="Registre seu plano para discutir na devolutiva."
+                />
+              </label>
+              <small>
+                A correção do manejo é feita na etapa de decisão clínica.
+              </small>
+              <button
+                className="training-primary"
+                type="submit"
+                disabled={!planDraft.trim()}
+              >
+                Registrar no console
+              </button>
+            </form>
+          )}
+        </EncounterDialog>
+      )}
+      {panel === 'finish' && (
+        <EncounterDialog
+          title="Encerrar atendimento"
+          onClose={() => setPanel(null)}
+        >
+          <p>
+            Abra a devolutiva com as decisões já registradas. As etapas
+            restantes ficam como sem resposta.
+          </p>
+          <div className="training-actions">
+            <button
+              type="button"
+              className="training-secondary"
+              onClick={() => setPanel(null)}
+            >
+              Continuar atendendo
+            </button>
+            <button type="button" className="training-primary" onClick={finish}>
+              Ver devolutiva
+            </button>
+          </div>
+        </EncounterDialog>
+      )}
     </div>
+  );
+}
+
+function CommunicationChecklist({ cues }: { cues: Communication }) {
+  return (
+    <ul>
+      <li>
+        {cues.introduced ? 'Registrada' : 'A desenvolver'} · Apresentação e
+        papel no atendimento
+      </li>
+      <li>
+        {cues.supported ? 'Registrado' : 'A desenvolver'} · Acolhimento ou
+        explicação ao paciente
+      </li>
+    </ul>
   );
 }
 

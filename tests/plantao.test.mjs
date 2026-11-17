@@ -31,6 +31,14 @@ const {
 } = load('./plantao-cases');
 const { visualTasks } = load('./visual-localization');
 const { getClinicalPlan } = load('./plantao-clinical');
+const {
+  resolvePatientTurn,
+  requestedIntervention,
+  patientReplies,
+  patientVitals,
+  patientIdentity,
+  examFindings,
+} = load('./plantao-encounter');
 
 test('the emergency catalog has at least 50 distinct cases with attributed local images', async () => {
   assert.ok(plantaoCases.length >= 50);
@@ -152,4 +160,89 @@ test('Faber clips cover the original and generated patient dialogue', () => {
     assert.ok(file.length > 512, url);
     assert.equal(file.subarray(0, 3).toString(), 'ID3', url);
   }
+  for (const reply of Object.values(patientReplies))
+    assert.ok(clips.has(plantaoVoiceUrl(reply)));
+});
+
+test('patients answer suggestions for every case, including reordered generated interviews', () => {
+  for (const base of plantaoCases) {
+    for (const scenario of [base, getPlantaoScenario(base.id + '~6a')]) {
+      scenario.interview.forEach(({ question, answer }, index) => {
+        const turn = resolvePatientTurn(scenario, question);
+        assert.equal(turn.index, index, scenario.id);
+        assert.equal(turn.answer, answer, scenario.id);
+      });
+      assert.deepEqual(patientIdentity(scenario), patientIdentity(base));
+      assert.deepEqual(patientVitals(scenario), patientVitals(base));
+    }
+  }
+});
+
+test('natural questions, introductions and reassurance use supported data and dialogue', () => {
+  const stroke = getPlantaoScenario('stroke');
+  const start = resolvePatientTurn(
+    stroke,
+    'Me chamo Carla. Quando foi o último momento sem sintomas?',
+  );
+  assert.equal(start.introduced, true);
+  assert.equal(start.index, 0);
+  assert.equal(start.answer, stroke.interview[0].answer);
+  assert.equal(resolvePatientTurn(stroke, 'Começou de repente?').index, 1);
+  assert.equal(
+    resolvePatientTurn(stroke, 'Toma algum remédio para afinar o sangue?')
+      .index,
+    2,
+  );
+  const support = resolvePatientTurn(
+    stroke,
+    'Mantenha a calma, vamos resolver.',
+  );
+  assert.equal(support.supported, true);
+  assert.equal(support.index, undefined);
+  assert.equal(support.answer, patientReplies.reassurance);
+  assert.equal(
+    resolvePatientTurn(stroke, 'Qual seu tipo sanguíneo?').answer,
+    patientReplies.clarify,
+  );
+  const biliary = getPlantaoScenario('biliary~1k');
+  const yellow = resolvePatientTurn(biliary, 'Os olhos ficaram amarelados?');
+  assert.match(yellow.answer, /não notei/i);
+});
+
+test('clinical commands open the appropriate intervention without treating histories as exam orders', () => {
+  assert.equal(
+    requestedIntervention('Vamos aferir os sinais vitais'),
+    'vitals',
+  );
+  assert.equal(requestedIntervention('Vou fazer a palpação'), 'exam');
+  assert.equal(requestedIntervention('Solicito uma tomografia'), 'investigate');
+  assert.equal(
+    requestedIntervention('Você já fez uma tomografia antes?'),
+    undefined,
+  );
+  assert.equal(
+    patientVitals(getPlantaoScenario('hypotension')).find(
+      (item) => item.id === 'pressure',
+    ).value,
+    '85/52',
+  );
+  assert.equal(
+    patientVitals(getPlantaoScenario('fever-focal')).find(
+      (item) => item.id === 'temperature',
+    ).value,
+    '38,5',
+  );
+  assert.equal(
+    patientVitals(getPlantaoScenario('glabellar-nodule')).filter(
+      (item) => item.value,
+    ).length,
+    0,
+  );
+  assert.equal(
+    examFindings(getPlantaoScenario('stroke~21'))['Glicemia capilar'],
+    '105 mg/dL.',
+  );
+  assert.ok(
+    !Object.keys(examFindings(getPlantaoScenario('glabellar-nodule'))).length,
+  );
 });

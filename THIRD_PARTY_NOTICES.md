@@ -34,6 +34,17 @@ O painel “Download Image” da própria fonte informa que o uso não requer pe
 
 Trelis — **piper-pt-br-faber-medium**. https://huggingface.co/Trelis/piper-pt-br-faber-medium . Model card declara CC0 1.0, https://creativecommons.org/publicdomain/zero/1.0/ . Narrações foram geradas a partir de textos didáticos originais. O modelo ONNX e o executável Piper não são redistribuídos no aplicativo; as introduções em WAV estão em `public/audio`. As falas do Modo Plantão foram sintetizadas a partir da revisão `0ac9b61ff8e1d9c2a7eaf0e32602c16f6b491a02` do modelo e publicadas em MP3 em `public/audio/plantao`.
 
+## Retratos do Modo Plantão
+
+Os retratos fictícios em `public/study/patients/plantao-portraits.jpg` foram gerados com a ferramenta ImageGen. Os retratos e nomes apresentados durante a consulta representam personagens da simulação.
+
+<details>
+<summary>Prompt de geração</summary>
+
+Create one polished lookbook sprite sheet for a Brazilian clinical education web app, in subtle editorial 3D portrait style. Exactly 6 square tiles in a clean 3-column by 2-row grid, landscape 3:2 image, each tile equal with absolutely no borders/gutters. Each contains a different fictional Brazilian person centered in a head and shoulders portrait, same crop and eye level, head fits in middle 64% of tile for circular crop. Top row from left: adult woman early 30s with dark shoulder-length hair and teal knit top; adult man early 30s with brown skin and dark curls in slate overshirt; older woman 65 with dark gray hair in mauve blouse. Bottom row from left: older man around 70 with brown skin and salt-and-pepper hair in denim blue shirt; guardian beside school-age child close together in a single centered portrait; gender-neutral adult wearing a muted teal crew-neck shirt. Calm, natural expressions, attentive gaze toward clinician, warm natural soft light with dimensional shading. Uniform pale pearly mint to pale lavender background. Everyday clothes. No medical hardware, no logos, no text, no labels, no props, no real person likeness, no visible brand. High quality facial anatomy and distinct readable silhouettes at thumbnail scale.
+
+</details>
+
 ## Tradução do Treino Visual
 
 O catálogo traduz novas legendas com **OPUS-MT**, Helsinki-NLP, Jörg Tiedemann e Santhosh Thottingal ([OPUS-MT, 2020](https://aclanthology.org/2020.eamt-1.61), [modelo inglês–português](https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt)). A automação usa a [conversão ONNX quantizada por Douglasrambo](https://huggingface.co/Douglasrambo/opus-mt-tc-big-en-pt-onnx/tree/738ee4cce801ce7c519954e4b78d02d5057b6740). Ambos indicam licença [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). As traduções de legendas mantêm a atribuição e a licença do artigo de origem.

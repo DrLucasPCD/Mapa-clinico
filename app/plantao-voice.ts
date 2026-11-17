@@ -1,4 +1,5 @@
 import { getPlantaoScenario, plantaoCases } from './plantao-cases';
+import { patientReplies } from './plantao-encounter';
 
 export function plantaoVoiceUrl(text: string) {
   // Address clips by text so reordered questions and repeated answers reuse the recording.
@@ -10,7 +11,9 @@ export function plantaoVoiceUrl(text: string) {
 }
 
 export function plantaoVoiceLines() {
-  const clips = new Map<string, string>();
+  const clips = new Map<string, string>(
+    Object.values(patientReplies).map((text) => [plantaoVoiceUrl(text), text]),
+  );
   for (const base of plantaoCases) {
     // A seed changes question and answer order. Each case has one alternate transcript.
     const generated = getPlantaoScenario(`${base.id}~0`)!;
