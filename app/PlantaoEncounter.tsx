@@ -142,7 +142,8 @@ export default function PlantaoEncounter({
   aiControls,
   pending = false,
   pendingQuestion,
-  conversationError,
+  conversationNote,
+  onUseCaseAnswer,
 }: {
   scenario: PlantaoScenario;
   latest?: EncounterTurn;
@@ -155,7 +156,8 @@ export default function PlantaoEncounter({
   aiControls?: ReactNode;
   pending?: boolean;
   pendingQuestion?: string;
-  conversationError?: string;
+  conversationNote?: string;
+  onUseCaseAnswer: () => void;
 }) {
   const [draft, setDraft] = useState('');
   const [micState, setMicState] = useState<
@@ -324,24 +326,21 @@ export default function PlantaoEncounter({
       </form>
       {micMessage && <output className="training-note">{micMessage}</output>}
       {pending && (
-        <output className="training-note">
-          Você perguntou «{pendingQuestion}». Preparando a resposta…
-        </output>
-      )}
-      {conversationError && (
-        <div className="training-note" role="alert">
-          {conversationError}
-          {pendingQuestion && (
-            <button
-              type="button"
-              className="training-secondary"
-              disabled={pending}
-              onClick={() => send(pendingQuestion)}
-            >
-              Reenviar pergunta
-            </button>
-          )}
+        <div className="training-note">
+          <output>
+            Você perguntou «{pendingQuestion}». Consultando a IA local…
+          </output>
+          <button
+            type="button"
+            className="training-secondary"
+            onClick={onUseCaseAnswer}
+          >
+            Responder com a ficha agora
+          </button>
         </div>
+      )}
+      {conversationNote && (
+        <output className="training-note">{conversationNote}</output>
       )}
       <div className="plantao-suggestions" aria-label="Sugestões de perguntas">
         {scenario.interview.map((entry, i) => (

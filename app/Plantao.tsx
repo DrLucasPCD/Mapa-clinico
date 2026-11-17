@@ -35,7 +35,8 @@ import {
   examFindings,
   patientIdentity,
   requestedIntervention,
-  resolvePatientTurn,
+  resolvePatientConversation,
+  patientReplies,
   type Communication,
 } from './plantao-encounter';
 import './plantao-encounter.css';
@@ -290,7 +291,7 @@ function PlantaoSession({
   const pendingRef = useRef(false);
   const [pending, setPending] = useState(false);
   const [pendingQuestion, setPendingQuestion] = useState('');
-  const [conversationError, setConversationError] = useState('');
+  const [conversationNote, setConversationNote] = useState('');
   const ai = usePatientAI();
   const patientVoice = usePatientVoice();
   const [activeVoice, setActiveVoice] = useState<string | null>(null);
@@ -352,11 +353,12 @@ function PlantaoSession({
 
   function cancelConversation() {
     conversationRequest.current++;
-    if (ai.state.status === 'ready' || ai.state.status === 'loading') ai.disable();
+    if (ai.state.status === 'ready' || ai.state.status === 'loading')
+      ai.disable();
     pendingRef.current = false;
     setPending(false);
     setPendingQuestion('');
-    setConversationError('');
+    setConversationNote('');
   }
 
   function voiceButton(key: string, text: string, label: string) {
@@ -437,7 +439,7 @@ function PlantaoSession({
 
   async function ask(text: string) {
     if (pendingRef.current) return;
-    setConversationError('');
+    setConversationNote('');
     const action = requestedIntervention(text);
     if (action) {
       stopVoice();
@@ -446,14 +448,11 @@ function PlantaoSession({
       else collect(action);
       return;
     }
-    const result = resolvePatientTurn(scenario, text);
+    const result = resolvePatientConversation(scenario, text, latest?.answer);
     stopVoice();
-    let answer: string;
-    let covered: number[];
-    const suggestedQuestion = interview.some(
-      (entry) => normalize(entry.question) === normalize(text),
-    );
-    if (ai.state.status === 'ready' && !suggestedQuestion) {
+    let answer = result.answer;
+    let covered = result.facts;
+    if (ai.state.status === 'ready' && answer === patientReplies.clarify) {
       pendingRef.current = true;
       setPending(true);
       setPendingQuestion(text);
@@ -464,20 +463,16 @@ function PlantaoSession({
         answer = response.reply;
         covered = response.facts;
       } catch {
-        if (request === conversationRequest.current)
-          setConversationError(
-            `A resposta foi interrompida. A pergunta «${text}» ficou guardada para reenvio.`,
-          );
-        return;
+        if (request !== conversationRequest.current) return;
+        setConversationNote(
+          'A IA não concluiu a resposta. A conversa continuou com os dados do caso.',
+        );
       } finally {
         if (request === conversationRequest.current) {
           pendingRef.current = false;
           setPending(false);
         }
       }
-    } else {
-      answer = result.answer;
-      covered = result.index === undefined ? [] : [result.index];
     }
     retainCommunication(result);
     setAsked((previous) => [...new Set([...previous, ...covered])]);
@@ -541,7 +536,8 @@ function PlantaoSession({
               voiceButton={voiceButton}
               pending={pending}
               pendingQuestion={pendingQuestion}
-              conversationError={conversationError}
+              conversationNote={conversationNote}
+              onUseCaseAnswer={ai.disable}
               aiControls={
                 <PatientAIControls
                   ai={ai}

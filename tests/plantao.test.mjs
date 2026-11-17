@@ -33,6 +33,7 @@ const { visualTasks } = load('./visual-localization');
 const { getClinicalPlan } = load('./plantao-clinical');
 const {
   resolvePatientTurn,
+  resolvePatientConversation,
   requestedIntervention,
   patientReplies,
   patientVitals,
@@ -207,6 +208,45 @@ test('natural questions, introductions and reassurance use supported data and di
   const biliary = getPlantaoScenario('biliary~1k');
   const yellow = resolvePatientTurn(biliary, 'Os olhos ficaram amarelados?');
   assert.match(yellow.answer, /não notei/i);
+});
+
+void test('the patient answers paraphrases, follow-ups and two topics without loading an AI model', () => {
+  const scenario = getPlantaoScenario('biliary');
+  const start = resolvePatientConversation(
+    scenario,
+    'Me conta quanto tempo a dor ficou incomodando.',
+  );
+  assert.deepEqual(start.facts, [0]);
+  assert.equal(
+    resolvePatientConversation(
+      scenario,
+      'Depois disso, chegou a passar?',
+      start.answer,
+    ).answer,
+    start.answer,
+  );
+  const symptoms = resolvePatientConversation(
+    scenario,
+    'Chegou a tremer de frio ou percebeu que seus olhos ficaram amarelos?',
+  );
+  assert.deepEqual(symptoms.facts, [1, 2]);
+  assert.equal(
+    symptoms.answer,
+    scenario.interview[1].answer + ' ' + scenario.interview[2].answer,
+  );
+  assert.equal(
+    resolvePatientConversation(
+      scenario,
+      'Tem alergia a algum remédio?',
+      start.answer,
+    ).answer,
+    patientReplies.unknown,
+  );
+  assert.equal(
+    resolvePatientConversation(scenario, 'E a febre, continua?', start.answer)
+      .answer,
+    scenario.interview[1].answer,
+  );
 });
 
 test('clinical commands open the appropriate intervention without treating histories as exam orders', () => {

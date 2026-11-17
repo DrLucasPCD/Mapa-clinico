@@ -75,7 +75,7 @@ export function usePatientAI() {
             status: 'unsupported',
             progress: 0,
             message:
-              'A conversa livre precisa de WebGPU. Tente uma versão recente do Chrome ou Edge em um aparelho compatível. As perguntas guiadas continuam disponíveis.',
+              'A IA opcional requer WebGPU. Você pode entrevistar o paciente usando a ficha do caso.',
           });
           return;
         }
@@ -87,7 +87,7 @@ export function usePatientAI() {
             status: 'unsupported',
             progress: 0,
             message:
-              'Não foi possível acessar a GPU neste navegador. As perguntas guiadas continuam disponíveis.',
+              'A GPU está indisponível. Você pode entrevistar o paciente usando a ficha do caso.',
           });
       }
     })();
@@ -116,7 +116,7 @@ export function usePatientAI() {
         progress: 0,
         message: wasLoading
           ? 'Não foi possível preparar a IA local. Confira a conexão e a memória disponível.'
-          : 'A IA local foi interrompida. Você pode reativá-la e reenviar a pergunta.',
+          : 'A IA local foi interrompida. A entrevista continua com os dados do caso.',
       });
     };
     loadTimer.current = setTimeout(fail, 300_000);
@@ -202,7 +202,7 @@ export function usePatientAI() {
             reject(new Error('Conversa interrompida'));
           timer = setTimeout(
             () => reject(new Error('Tempo de resposta excedido')),
-            60_000,
+            15_000,
           );
         }),
       ]);
@@ -218,7 +218,7 @@ export function usePatientAI() {
           status: 'error',
           progress: 0,
           message:
-            'A IA local interrompeu a resposta. Reative-a para reenviar a pergunta.',
+            'A IA local foi interrompida. A entrevista continua com os dados do caso.',
         });
       }
       throw error;

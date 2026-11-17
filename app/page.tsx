@@ -99,7 +99,10 @@ type Drawer =
   | null;
 
 export default function App() {
-  const [workspaceMode, setWorkspaceMode] = useState<Workspace>('imaging');
+  // Open the interview directly without initializing a WebGL scene first.
+  const [workspaceMode, setWorkspaceMode] = useState<Workspace>(() =>
+    typeof window !== 'undefined' && window.location.hash === '#plantao' ? 'plantao' : 'imaging',
+  );
   const [labMode, setLabMode] = useState<'ecg' | '3d'>('ecg');
   const [labScope, setLabScope] = useState<LabScale>('heart');
   const [caseView, setCaseView] = useState<'overview' | 'atlas' | 'case' | 'publications'>('case');

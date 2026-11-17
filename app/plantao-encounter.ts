@@ -23,16 +23,17 @@ const stopWords = new Set(
 );
 
 const onset =
-  /\b(comec\w*|inicio|iniciou|primeir\w*|evolu\w*|durou|duracao|desde|de repente|subit\w*|ultimo momento|ultima vez|faz quanto tempo|ha quanto tempo|que horas)\b/;
+  /\b(comec\w*|inicio|iniciou|primeir\w*|evolu\w*|durou|duracao|desde|de repente|subit\w*|ultimo momento|ultima vez|quanto tempo|que horas)\b/;
 const associated =
   /\b(outros sintomas|mais algum sintoma|alem (d[ao]s? \w+)|junto|associad\w*|mais alguma coisa)\b/;
 const context =
   /\b(antecedent\w*|historico|histor[yi]a (previa|medica)|doencas previ\w*|doencas cronicas|fator de risco|teve isso antes|episodio parecido)\b/;
+const painPattern = /\b(ondas|colic\w*|continu\w*|vai e volta)\b/;
 const concepts = [
   /\b(remedi\w*|medicamento\w*|medicac\w*|comprimido\w*)\b/,
   /\b(anticoagul\w*|afin\w* o sangue|varfarin\w*|apixaban\w*|rivaroxaban\w*)\b/,
   /\b(cirurg\w*|oper\w*|procediment\w*)\b/,
-  /\b(febre|calafri\w*|temperatura alta)\b/,
+  /\b(febre|calafri\w*|temperatura alta|trem\w* (?:de|com) frio|corpo quente)\b/,
   /\b(icter\w*|amarel\w*|urina escura|olhos amarelos)\b/,
   /\b(cefaleia|dor de cabeca)\b/,
   /\b(dormencia|formig\w*|parestes\w*)\b/,
@@ -45,7 +46,7 @@ const concepts = [
   /\b(braco|perna|lado|face|esquerd\w*|direit\w*)\b/,
   /\b(on[dt]e do[ie]|onde doi mais|local\w* da dor|ponto (de maior dor|mais doloroso)|em que parte|maior dor|sente a dor)\b/,
   /\b(bateu|impact\w*|mecanismo|caiu|queda)\b/,
-  /\b(ondas|colic\w*|continu\w*|vai e volta)\b/,
+  painPattern,
   /\b(sangra\w*|sangue)\b/,
 ];
 
@@ -77,6 +78,27 @@ export function resolvePatientTurn(
 ): Communication & { index?: number; answer: string } {
   const value = normalize(text);
   const communication = assessCommunication(text);
+  const exact = scenario.interview.findIndex(
+    ({ question }) => normalize(question) === value,
+  );
+  if (exact >= 0)
+    return {
+      ...communication,
+      index: exact,
+      answer: scenario.interview[exact].answer,
+    };
+  if (/\b(alerg\w*|reacao alergica)\b/.test(value)) {
+    const allergy = scenario.interview.findIndex(({ question }) =>
+      /\b(alerg\w*|reacao alergica)\b/.test(normalize(question)),
+    );
+    return allergy === -1
+      ? { ...communication, answer: patientReplies.unknown }
+      : {
+          ...communication,
+          index: allergy,
+          answer: scenario.interview[allergy].answer,
+        };
+  }
   const words = terms(value);
   let best: { index: number; points: number } | undefined;
   let ambiguous = false;
@@ -85,38 +107,35 @@ export function resolvePatientTurn(
     const q = normalize(question);
     const a = normalize(answer);
     let points = 0;
-    if (value === q) points = 100;
-    else {
-      for (const concept of concepts) {
-        if (concept.test(value))
-          points += concept.test(q) ? 5 : concept.test(a) ? 3 : 0;
-      }
-      const specific = concepts.some((pattern) => pattern.test(value));
-      const requiresContent =
-        !specific ||
-        onset.test(value) ||
-        associated.test(value) ||
-        context.test(value);
-      if (
-        requiresContent &&
-        onset.test(value) &&
-        onset.test(q) &&
-        !/\b(apareceu de uma vez|foi aumentando|de repente)\b/.test(q)
-      )
-        points += 5;
-      if (associated.test(value) && associated.test(q)) points += 5;
-      if (context.test(value) && context.test(q)) points += 5;
-      // Short queries have little context. Require a clinical cue or at least two overlapping terms.
-      const overlap = [...terms(q)].filter((word) => words.has(word)).length;
-      points += Math.min(2, overlap) * (overlap > 1 ? 2 : 1);
-      if (
-        /\b(apareceu de uma vez|ta piorando|foi aumentando|de repente)\b/.test(
-          value,
-        ) &&
-        /\b(apareceu de uma vez|foi aumentando|de repente)\b/.test(q)
-      )
-        points += 6;
+    for (const concept of concepts) {
+      if (concept.test(value))
+        points += concept.test(q) ? 5 : concept.test(a) ? 3 : 0;
     }
+    const specific = concepts.some((pattern) => pattern.test(value));
+    const requiresContent =
+      !specific ||
+      onset.test(value) ||
+      associated.test(value) ||
+      context.test(value);
+    if (
+      requiresContent &&
+      onset.test(value) &&
+      onset.test(q) &&
+      !/\b(apareceu de uma vez|foi aumentando|de repente)\b/.test(q)
+    )
+      points += 5;
+    if (associated.test(value) && associated.test(q)) points += 5;
+    if (context.test(value) && context.test(q)) points += 5;
+    // Short queries have little context. Require a clinical cue or at least two overlapping terms.
+    const overlap = [...terms(q)].filter((word) => words.has(word)).length;
+    points += Math.min(2, overlap) * (overlap > 1 ? 2 : 1);
+    if (
+      /\b(apareceu de uma vez|ta piorando|foi aumentando|de repente)\b/.test(
+        value,
+      ) &&
+      /\b(apareceu de uma vez|foi aumentando|de repente)\b/.test(q)
+    )
+      points += 6;
     if (points < 4) return;
     if (!best || points > best.points) {
       best = { index, points };
@@ -139,12 +158,83 @@ export function resolvePatientTurn(
   if (communication.supported)
     return { ...communication, answer: patientReplies.reassurance };
   if (
+    /\b(como (voce |o senhor |a senhora )?se chama|seu nome|qual (e )?a sua idade|quantos anos)\b/.test(
+      value,
+    )
+  ) {
+    return {
+      ...communication,
+      answer: `${patientIdentity(scenario).name}. ${scenario.patient}.`,
+    };
+  }
+  if (
     /\b(o que (aconteceu|trouxe voce|esta sentindo)|queixa principal|por que veio|como posso ajudar)\b/.test(
       value,
     )
   )
     return { ...communication, answer: scenario.complaint };
   return { ...communication, answer: patientReplies.clarify };
+}
+
+const changeOverTime =
+  /\b(passou|passar|cedeu|melhorou|sumiu|continua|ainda doi|ainda esta doendo|parou de doer|persiste)\b/;
+
+export function resolvePatientConversation(
+  scenario: PlantaoScenario,
+  text: string,
+  previousAnswer?: string,
+) {
+  const first = resolvePatientTurn(scenario, text);
+  const firstFacts = first.index === undefined ? [] : [first.index];
+  // A new topic (such as fever or when lying down) must not reuse the last fact.
+  const value = normalize(text);
+  if (
+    first.answer === patientReplies.unknown ||
+    (first.index !== undefined &&
+      normalize(scenario.interview[first.index].question) === value)
+  )
+    return { ...first, facts: firstFacts };
+  if (
+    first.index === undefined &&
+    previousAnswer &&
+    changeOverTime.test(value) &&
+    !concepts.some((topic) => topic !== painPattern && topic.test(value))
+  ) {
+    const followUp = scenario.interview.findIndex(
+      ({ question, answer }) =>
+        answer === previousAnswer &&
+        onset.test(normalize(question)) &&
+        changeOverTime.test(normalize(answer)),
+    );
+    if (followUp >= 0)
+      return {
+        ...first,
+        answer: scenario.interview[followUp].answer,
+        facts: [followUp],
+      };
+  }
+  const parts = text
+    .split(/\?\s*|\s+(?:e|ou)\s+/i)
+    .filter((part) => part.trim());
+  if (parts.length > 1) {
+    const facts = [
+      ...new Set(
+        parts.flatMap((part) => {
+          const { index } = resolvePatientTurn(scenario, part);
+          return index === undefined ? [] : [index];
+        }),
+      ),
+    ];
+    if (facts.length > 1)
+      return {
+        ...first,
+        facts,
+        answer: facts
+          .map((index) => scenario.interview[index].answer)
+          .join(' '),
+      };
+  }
+  return { ...first, facts: firstFacts };
 }
 
 const vitalFields = [

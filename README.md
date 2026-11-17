@@ -120,13 +120,13 @@ Validação: testes com volumes sintéticos e transformações conhecidas; teste
 
 ### Conversa livre gratuita no Modo Plantão
 
-Abra um atendimento, escolha o modo guiado ou prova e clique em **Ativar conversa livre · modelo leve**. O app usa Qwen3 1.7B quantizado via WebLLM em um Web Worker com download de cerca de 1 GB. A opção **Usar modelo maior** carrega Qwen3 4B, com download de cerca de 2,5 GB e requisito de aproximadamente 4–5 GB de memória disponível. Os downloads podem ser reaproveitados pelo cache do navegador. Ambos requerem WebGPU e conexão no primeiro carregamento. A conversa roda no dispositivo, sem API paga, chave ou conta.
+Abra um atendimento, escolha o modo guiado ou prova e digite a sua pergunta. As respostas da ficha são imediatas e funcionam sem WebGPU. A opção **Ativar IA opcional · modelo leve** usa Qwen3 1.7B via WebLLM com download de cerca de 1 GB. **Usar modelo maior** carrega Qwen3 4B, com download de cerca de 2,5 GB. Os dois modelos exigem WebGPU e conexão no primeiro carregamento. O processamento ocorre no dispositivo, sem API paga, chave ou conta.
 
 O modelo interpreta a pergunta e as últimas seis trocas para selecionar fatos da história do paciente. A resposta clínica é montada exclusivamente a partir desses fatos, preservando o roteiro e a pontuação da entrevista. Informação ausente é reconhecida como desconhecida, sem criar negativas, antecedentes ou resultados. O modelo não recebe laudo, diagnóstico, decisões ou gabarito. A seleção semântica ainda pode errar; a correção docente do caso continua sendo a referência.
 
 **Ativar voz Faber para respostas livres** carrega o mesmo modelo Trelis usado nas gravações, com síntese local Piper/ONNX em outro worker e download adicional de cerca de 90 MB. Falas já gravadas continuam usando MP3. Falas combinadas e identificação podem ser sintetizadas no aparelho. As mensagens digitadas não são enviadas aos distribuidores dos modelos. O ditado opcional do navegador tem tratamento independente e pode usar um serviço de transcrição, como informado na interface.
 
-O carregamento tem progresso e cancelamento. Falhas preservam a pergunta para reenvio. Sair do caso libera os workers e a GPU, e o atendimento seguinte inicia sem histórico do anterior. Ao faltar suporte WebGPU ou memória, as perguntas guiadas permanecem disponíveis. O service worker não baixa os runtimes de IA e voz antecipadamente.
+O carregamento tem progresso e cancelamento. Se a IA demorar mais de 15 segundos, falhar ou for dispensada pelo aluno, a mesma pergunta recebe a resposta da ficha e fica no histórico. Sair do caso libera os workers e a GPU, e o atendimento seguinte inicia sem histórico do anterior. Ao faltar suporte WebGPU ou memória, as perguntas guiadas permanecem disponíveis. O service worker não baixa os runtimes de IA e voz antecipadamente.
 
 ### Atualizar os áudios do Modo Plantão
 
