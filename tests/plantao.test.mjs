@@ -240,12 +240,53 @@ void test('the patient answers paraphrases, follow-ups and two topics without lo
       'Tem alergia a algum remédio?',
       start.answer,
     ).answer,
-    patientReplies.unknown,
+    patientReplies.allergyUnknown,
   );
   assert.equal(
     resolvePatientConversation(scenario, 'E a febre, continua?', start.answer)
       .answer,
     scenario.interview[1].answer,
+  );
+});
+
+void test('a request for a pain rating uses the patient’s description without inventing a number or scoring another clue', () => {
+  const hand = getPlantaoScenario('hand-trauma');
+  const result = resolvePatientConversation(
+    hand,
+    'De 1 a 10, como está sua dor?',
+  );
+  assert.equal(
+    result.answer,
+    'É difícil dar uma nota. Dói perto do dedo mínimo.',
+  );
+  assert.deepEqual(result.facts, []);
+  const variant = getPlantaoScenario('hand-trauma~1');
+  assert.equal(
+    resolvePatientConversation(variant, 'De 0 a 10?').answer,
+    'É difícil dar uma nota. Dói pouco abaixo da articulação do dedo mínimo.',
+  );
+  const rated = {
+    ...hand,
+    interview: [
+      ...hand.interview,
+      {
+        question: 'Qual nota de 0 a 10 para a dor?',
+        answer: 'Agora está em seis.',
+        key: true,
+      },
+    ],
+  };
+  assert.equal(
+    resolvePatientConversation(rated, 'De zero a dez, quanto dói?').answer,
+    'Agora está em seis.',
+  );
+  assert.equal(
+    resolvePatientConversation(hand, 'Onde você sente a maior dor?').answer,
+    hand.interview[1].answer,
+  );
+  assert.equal(
+    resolvePatientConversation(hand, 'De 0 a 10, quanto está o enjoo?').answer,
+    patientReplies.clarify,
   );
 });
 

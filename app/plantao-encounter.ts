@@ -1,10 +1,12 @@
 import type { PlantaoScenario } from './plantao-cases';
 
 export const patientReplies = {
-  unknown: 'Não sei informar isso agora.',
+  unknown: 'Não sei te dizer com certeza.',
+  allergyUnknown: 'Não sei te dizer se tenho alguma alergia.',
+  painScale: 'É difícil dar uma nota.',
   greeting: 'Olá. Pode me perguntar o que precisar.',
   reassurance: 'Certo. Obrigado por me explicar.',
-  clarify: 'Não tenho essa informação agora. Pode perguntar de outro jeito?',
+  clarify: 'Não entendi bem. Você pode me perguntar de outro jeito?',
 } as const;
 
 const normalize = (value: string) =>
@@ -29,6 +31,18 @@ const associated =
 const context =
   /\b(antecedent\w*|historico|histor[yi]a (previa|medica)|doencas previ\w*|doencas cronicas|fator de risco|teve isso antes|episodio parecido)\b/;
 const painPattern = /\b(ondas|colic\w*|continu\w*|vai e volta)\b/;
+const painLocation =
+  /\b(on[dt]e do[ie]|onde doi mais|local\w* da dor|ponto (de maior dor|mais doloroso)|em que parte|maior dor|sente a dor)\b/;
+const painWords = /\b(dor|doe|doi|doendo|colicas?)\b/;
+const numericScale = /\b(?:0|1|zero|um)(?: (?:a|ate))? (?:10|dez)\b/;
+function asksPainRating(value: string) {
+  return (
+    /\b(nota (?:da|para a|pra) dor|quantos pontos de dor)\b/.test(value) ||
+    (numericScale.test(value) &&
+      (painWords.test(value) ||
+        /^(?:de)?$/.test(value.replace(numericScale, '').trim())))
+  );
+}
 const concepts = [
   /\b(remedi\w*|medicamento\w*|medicac\w*|comprimido\w*)\b/,
   /\b(anticoagul\w*|afin\w* o sangue|varfarin\w*|apixaban\w*|rivaroxaban\w*)\b/,
@@ -44,7 +58,7 @@ const concepts = [
   /\b(evacu\w*|fezes|gases|soltar pum)\b/,
   /\b(hemodialise|dialise|tratamento (d[eo] |para o )?ri[mn])\b/,
   /\b(braco|perna|lado|face|esquerd\w*|direit\w*)\b/,
-  /\b(on[dt]e do[ie]|onde doi mais|local\w* da dor|ponto (de maior dor|mais doloroso)|em que parte|maior dor|sente a dor)\b/,
+  painLocation,
   /\b(bateu|impact\w*|mecanismo|caiu|queda)\b/,
   painPattern,
   /\b(sangra\w*|sangue)\b/,
@@ -72,6 +86,30 @@ function terms(text: string) {
   );
 }
 
+export function patientPainScaleReply(scenario: PlantaoScenario) {
+  // The opening statement is already shared with the student, so it can add
+  // context without revealing another interview clue or scoring it as asked.
+  const symptom = scenario.complaint
+    .match(/[^.!?]+[.!?]?/g)
+    ?.map((sentence) => sentence.trim())
+    .find((sentence) => painWords.test(normalize(sentence)));
+  if (symptom) return `${patientReplies.painScale} ${symptom}`;
+
+  // Some alternate openings mention an injury without describing its pain.
+  const location = scenario.interview.find(({ question }) =>
+    painLocation.test(normalize(question)),
+  )?.answer;
+  if (
+    location &&
+    /^(pouco (?:abaixo|acima)|perto|na|no|em|do lado)\b/.test(
+      normalize(location),
+    )
+  ) {
+    return `${patientReplies.painScale} Dói ${location[0].toLowerCase()}${location.slice(1)}`;
+  }
+  return patientReplies.painScale;
+}
+
 export function resolvePatientTurn(
   scenario: PlantaoScenario,
   text: string,
@@ -87,12 +125,24 @@ export function resolvePatientTurn(
       index: exact,
       answer: scenario.interview[exact].answer,
     };
+  if (asksPainRating(value)) {
+    const rating = scenario.interview.findIndex(({ question }) =>
+      asksPainRating(normalize(question)),
+    );
+    if (rating !== -1)
+      return {
+        ...communication,
+        index: rating,
+        answer: scenario.interview[rating].answer,
+      };
+    return { ...communication, answer: patientPainScaleReply(scenario) };
+  }
   if (/\b(alerg\w*|reacao alergica)\b/.test(value)) {
     const allergy = scenario.interview.findIndex(({ question }) =>
       /\b(alerg\w*|reacao alergica)\b/.test(normalize(question)),
     );
     return allergy === -1
-      ? { ...communication, answer: patientReplies.unknown }
+      ? { ...communication, answer: patientReplies.allergyUnknown }
       : {
           ...communication,
           index: allergy,
@@ -189,7 +239,8 @@ export function resolvePatientConversation(
   // A new topic (such as fever or when lying down) must not reuse the last fact.
   const value = normalize(text);
   if (
-    first.answer === patientReplies.unknown ||
+    asksPainRating(value) ||
+    first.answer === patientReplies.allergyUnknown ||
     (first.index !== undefined &&
       normalize(scenario.interview[first.index].question) === value)
   )

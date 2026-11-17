@@ -90,7 +90,7 @@ export function usePatientAI(scenario: PlantaoScenario) {
         } else if (data.type === 'reply' && pending.current) {
           clearTimeout(timer.current);
           pending.current.resolve(
-            patientReplyFromFacts(scenario, data.facts, patientReplies.clarify),
+            patientReplyFromFacts(scenario, data.facts, patientReplies.unknown),
           );
           pending.current = null;
         }

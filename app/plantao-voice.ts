@@ -1,5 +1,5 @@
 import { getPlantaoScenario, plantaoCases } from './plantao-cases';
-import { patientReplies } from './plantao-encounter';
+import { patientPainScaleReply, patientReplies } from './plantao-encounter';
 
 let recordedLines: Set<string> | undefined;
 export function hasPatientRecording(text: string) {
@@ -26,6 +26,7 @@ export function plantaoVoiceLines() {
     for (const scenario of [base, generated]) {
       for (const text of [
         scenario.complaint,
+        patientPainScaleReply(scenario),
         ...scenario.interview.map((item) => item.answer),
       ]) {
         const url = plantaoVoiceUrl(text);
