@@ -27,7 +27,7 @@ const { patientMessages, parsePatientReply } = load('./patient-ai');
 const { plantaoCases, getPlantaoScenario } = load('./plantao-cases');
 const { hasPatientRecording, plantaoVoiceLines } = load('./plantao-voice');
 
-test('patient context contains the current history without hidden reports or answers, including generated cases', () => {
+void test('patient context contains the current history without hidden reports or answers, including generated cases', () => {
   for (const base of plantaoCases) {
     for (const scenario of [base, getPlantaoScenario(base.id + '~2s')]) {
       const system = patientMessages(scenario, [], 'Como você está?')[0]
@@ -42,7 +42,7 @@ test('patient context contains the current history without hidden reports or ans
   }
 });
 
-test('follow-up context is bounded, preserves conversation roles, and excludes old sessions', () => {
+void test('follow-up context is bounded, preserves conversation roles, and excludes old sessions', () => {
   const history = Array.from({ length: 20 }, (_, i) => ({
     question: `Pergunta ${i}`,
     answer: `Resposta ${i}`,
@@ -65,7 +65,7 @@ test('follow-up context is bounded, preserves conversation roles, and excludes o
   assert.equal(patientMessages(plantaoCases[1], [], 'Olá').length, 2);
 });
 
-test('only known case statements enter the transcript and scoring, never generated clinical claims', () => {
+void test('only known case statements enter the transcript and scoring, never generated clinical claims', () => {
   const scenario = plantaoCases[0];
   const raw = JSON.stringify({
     kind: 'facts',
@@ -94,7 +94,7 @@ test('only known case statements enter the transcript and scoring, never generat
   }
 });
 
-test('a clinical selection labelled as a complaint still answers and scores only the selected evidence', () => {
+void test('a clinical selection labelled as a complaint still answers and scores only the selected evidence', () => {
   const scenario = plantaoCases[0];
   assert.deepEqual(
     parsePatientReply(
@@ -123,11 +123,32 @@ test('a clinical selection labelled as a complaint still answers and scores only
   }
 });
 
-test('only existing exact transcripts use prerecorded Faber files', () => {
+void test('only existing exact transcripts use prerecorded Faber files', () => {
   for (const { text } of plantaoVoiceLines())
     assert.ok(hasPatientRecording(text));
   assert.equal(
     hasPatientRecording('Uma resposta gerada que nunca foi gravada.'),
     false,
   );
+});
+
+void test('plain inference accepts fenced JSON while requiring valid case references', () => {
+  const scenario = plantaoCases[0];
+  const fence = '\x60'.repeat(3);
+  const json = JSON.stringify({
+    kind: 'facts',
+    facts: [scenario.interview[0].question],
+  });
+  const wrap = (value) => `${fence}json\n${value}\n${fence}`;
+  assert.deepEqual(parsePatientReply(wrap(json), scenario), {
+    reply: scenario.interview[0].answer,
+    facts: [0],
+  });
+  assert.throws(() =>
+    parsePatientReply(
+      wrap('{"kind":"facts","facts":["Outra ficha"]}'),
+      scenario,
+    ),
+  );
+  assert.throws(() => parsePatientReply(wrap(json.slice(0, -1)), scenario));
 });

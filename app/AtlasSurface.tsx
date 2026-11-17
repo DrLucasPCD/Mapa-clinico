@@ -5,10 +5,12 @@ export default function AtlasSurface({
   surfaceRef,
   status,
   children,
+  onRetry,
 }: {
   surfaceRef: Ref<HTMLDivElement>;
   status: string;
   children?: ReactNode;
+  onRetry?: () => void;
 }) {
   return (
     <div className="atlas-canvas">
@@ -21,8 +23,13 @@ export default function AtlasSurface({
       />
       {children}
       {status ? (
-        <div className="atlas-status" role="status">
-          {status}
+        <div className="atlas-status">
+          <output>{status}</output>
+          {onRetry && (
+            <button type="button" className="atlas-retry" onClick={onRetry}>
+              Reabrir visualização 3D
+            </button>
+          )}
         </div>
       ) : null}
     </div>

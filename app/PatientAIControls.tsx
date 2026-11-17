@@ -32,7 +32,7 @@ export default function PatientAIControls({
           >
             <Download size={15} />
             {state.status === 'error'
-              ? 'Tentar ativar novamente'
+              ? 'Reativar modelo padrão'
               : 'Ativar conversa livre'}
           </button>
           <small>
@@ -40,6 +40,15 @@ export default function PatientAIControls({
             GB, guardado no navegador quando possível. Requer WebGPU e
             aproximadamente 4–5 GB de memória disponível.
           </small>
+          {state.status === 'error' && (
+            <button
+              type="button"
+              className="training-secondary"
+              onClick={() => void ai.enable('light')}
+            >
+              Usar modelo leve · cerca de 1 GB
+            </button>
+          )}
         </>
       )}
       {state.status === 'loading' && (

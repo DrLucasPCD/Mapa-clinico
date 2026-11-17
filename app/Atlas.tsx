@@ -50,15 +50,19 @@ export default function Atlas(props: AtlasProps) {
     current = useRef(props);
   current.current = props;
   const [status, setStatus] = useState('Carregando atlas anatômico…');
+  const [contextUnavailable, setContextUnavailable] = useState(false);
+  const [rendererAttempt, setRendererAttempt] = useState(0);
   const [points, setPoints] = useState<AnatomyMarker[]>([]);
   const [activeMarker, setActiveMarker] = useState('');
   const markerElements = useRef(new Map<string, HTMLDivElement>());
   useEffect(() => {
     if (!host.current) return;
     let disposed = false,
+      contextIsLost = false,
       frame = 0;
     const el = host.current;
     setPoints([]);
+    setContextUnavailable(false);
     setStatus('Carregando modelo anatômico detalhado…');
     let renderer: T.WebGLRenderer;
     try {
@@ -181,6 +185,7 @@ export default function Atlas(props: AtlasProps) {
       if (!disposed) setStatus('Não foi possível carregar o modelo. Verifique a conexão e tente novamente.');
     });
     const resize = () => {
+      if (contextIsLost) return;
       const w = el.clientWidth,
         h = el.clientHeight;
       if (!w || !h) return;
@@ -256,11 +261,17 @@ export default function Atlas(props: AtlasProps) {
     };
     const contextLost = (e: Event) => {
       e.preventDefault();
-      setStatus(
-        'A renderização 3D foi interrompida pelo navegador. Recarregue a página para recuperar o atlas.',
-      );
+      contextIsLost = true;
+      cancelAnimationFrame(frame);
+      setContextUnavailable(true);
     };
-    const contextRestored = () => setStatus('');
+    const contextRestored = () => {
+      if (disposed || !contextIsLost) return;
+      contextIsLost = false;
+      resize();
+      setContextUnavailable(false);
+      frame = requestAnimationFrame(animate);
+    };
     renderer.domElement.addEventListener('webglcontextlost', contextLost);
     renderer.domElement.addEventListener(
       'webglcontextrestored',
@@ -287,7 +298,7 @@ export default function Atlas(props: AtlasProps) {
     };
     el.addEventListener('keydown', keyboard);
     const animate = (time: number) => {
-      if (disposed) return;
+      if (disposed || contextIsLost) return;
       frame = requestAnimationFrame(animate);
       const p = current.current;
       const isolated = p.isolate ? p.isolateSelection ?? p.selected : '';
@@ -517,12 +528,19 @@ export default function Atlas(props: AtlasProps) {
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [props.modelVariant, props.organs]);
+  }, [props.modelVariant, props.organs, rendererAttempt]);
   const active = props.selected === activeMarker ? activeMarker : '';
   const currentPoint = points.find(point => point.id === active);
+  const displayedStatus = contextUnavailable
+    ? 'O navegador pausou o Atlas 3D. Ele volta assim que a renderização for restaurada.'
+    : status;
   return <>
-    <AtlasSurface surfaceRef={host} status={status}>
-      {props.markers && !status && <AnatomyMarkers
+    <AtlasSurface
+      surfaceRef={host}
+      status={displayedStatus}
+      onRetry={contextUnavailable ? () => setRendererAttempt(attempt => attempt + 1) : undefined}
+    >
+      {props.markers && !displayedStatus && <AnatomyMarkers
         points={points}
         active={active}
         elements={markerElements}

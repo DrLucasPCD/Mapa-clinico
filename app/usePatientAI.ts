@@ -4,7 +4,7 @@ import type { PlantaoScenario } from './plantao-cases';
 import {
   parsePatientReply,
   patientMessages,
-  patientReplySchema,
+  type PatientReply,
   type PatientTurn,
 } from './patient-ai';
 
@@ -23,6 +23,20 @@ const initial: PatientAIState = {
   progress: 0,
   message: 'Verificando suporte à IA local…',
 };
+const models = {
+  standard: {
+    size: '4B',
+    f16: 'a5c9fab855e3ccbdfed2e7e69683d75f30332161',
+    f32: 'b7e4eb1ba80728187fb5df44055cc1a7c32310e0',
+    context: 4096,
+  },
+  light: {
+    size: '1.7B',
+    f16: '80b3abcec6c3b3f5355dc0cc99cc4fb578f192bc',
+    f32: 'bddd4d584cabe19113f7e4ff46fd9e73b4d3dc89',
+    context: 3072,
+  },
+};
 
 export function usePatientAI() {
   const [state, setState] = useState(initial);
@@ -30,6 +44,7 @@ export function usePatientAI() {
   const worker = useRef<Worker | null>(null);
   const revision = useRef(0);
   const busy = useRef(false);
+  const cancelResponse = useRef<(() => void) | undefined>(undefined);
   const activeLoad = useRef(false);
   const f16 = useRef(true);
   const loadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -38,6 +53,8 @@ export function usePatientAI() {
 
   function release() {
     revision.current++;
+    cancelResponse.current?.();
+    cancelResponse.current = undefined;
     clearTimeout(loadTimer.current);
     worker.current?.terminate();
     worker.current = null;
@@ -80,7 +97,7 @@ export function usePatientAI() {
     };
   }, []);
 
-  async function enable() {
+  async function enable(profile: keyof typeof models = 'standard') {
     if (activeLoad.current || engine.current) return;
     release();
     activeLoad.current = true;
@@ -92,12 +109,14 @@ export function usePatientAI() {
     });
     const fail = () => {
       if (revision.current !== request) return;
+      const wasLoading = activeLoad.current;
       release();
       setState({
         status: 'error',
         progress: 0,
-        message:
-          'Não foi possível preparar a IA local. Confira a conexão e a memória disponível e tente novamente.',
+        message: wasLoading
+          ? 'Não foi possível preparar a IA local. Confira a conexão ou experimente o modelo leve.'
+          : 'A IA local foi interrompida. Você pode reativá-la ou usar o modelo leve.',
       });
     };
     loadTimer.current = setTimeout(fail, 300_000);
@@ -105,15 +124,13 @@ export function usePatientAI() {
       const { WebWorkerMLCEngine, prebuiltAppConfig } =
         await import('@mlc-ai/web-llm');
       if (request !== revision.current) return;
-      const modelId = f16.current
-        ? 'Qwen3-4B-q4f16_1-MLC'
-        : 'Qwen3-4B-q4f32_1-MLC';
+      const model = models[profile];
+      const precision = f16.current ? 'f16' : 'f32';
+      const modelId = `Qwen3-${model.size}-q4${precision}_1-MLC`;
       const record = prebuiltAppConfig.model_list.find(
         (model) => model.model_id === modelId,
       )!;
-      const modelRevision = f16.current
-        ? 'a5c9fab855e3ccbdfed2e7e69683d75f30332161'
-        : 'b7e4eb1ba80728187fb5df44055cc1a7c32310e0';
+      const modelRevision = model[precision];
       worker.current = new Worker(
         new URL('./patient-ai.worker.ts', import.meta.url),
         { type: 'module' },
@@ -126,7 +143,7 @@ export function usePatientAI() {
           ],
         },
         initProgressCallback: ({ progress }) => {
-          if (request === revision.current)
+          if (request === revision.current && activeLoad.current)
             setState({
               status: 'loading',
               progress: Math.max(0, Math.min(1, progress)),
@@ -134,7 +151,7 @@ export function usePatientAI() {
             });
         },
       });
-      await local.reload(modelId, { context_window_size: 4096 });
+      await local.reload(modelId, { context_window_size: model.context });
       if (request !== revision.current) return;
       clearTimeout(loadTimer.current);
       activeLoad.current = false;
@@ -142,7 +159,10 @@ export function usePatientAI() {
       setState({
         status: 'ready',
         progress: 1,
-        message: 'Conversa livre ativa neste aparelho',
+        message:
+          profile === 'light'
+            ? 'Conversa livre ativa · modelo leve'
+            : 'Conversa livre ativa neste aparelho',
       });
     } catch {
       fail();
@@ -154,35 +174,32 @@ export function usePatientAI() {
     setState({ status: 'off', progress: 0, message: '' });
   }
 
-  function interrupt() {
-    if (busy.current) disable();
-    else engine.current?.interruptGenerate();
-  }
-
   async function respond(
     scenario: PlantaoScenario,
     history: readonly PatientTurn[],
     question: string,
-  ) {
+  ): Promise<PatientReply> {
     const local = engine.current;
     if (!local || busy.current)
       throw new Error('A IA local está indisponível.');
     busy.current = true;
     const request = revision.current;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let content: string;
+    let finishReason: string | null | undefined;
     try {
       const completion = await Promise.race([
+        // WebLLM may dispose its GrammarMatcher during GPU loss. Validate ordinary
+        // text here so generation does not depend on that native matcher.
         local.chat.completions.create({
           messages: patientMessages(scenario, history, question),
           temperature: 0,
           max_tokens: 220,
-          response_format: {
-            type: 'json_object',
-            schema: patientReplySchema(scenario),
-          },
           extra_body: { enable_thinking: false },
         }),
         new Promise<never>((_, reject) => {
+          cancelResponse.current = () =>
+            reject(new Error('Conversa interrompida'));
           timer = setTimeout(
             () => reject(new Error('Tempo de resposta excedido')),
             60_000,
@@ -191,31 +208,33 @@ export function usePatientAI() {
       ]);
       if (request !== revision.current)
         throw new Error('Conversa interrompida');
-      if (completion.choices[0]?.finish_reason !== 'stop')
-        throw new Error(
-          `Resposta incompleta (${completion.choices[0]?.finish_reason})`,
-        );
-      return parsePatientReply(
-        completion.choices[0]?.message.content ?? '',
-        scenario,
-      );
+      finishReason = completion.choices[0]?.finish_reason;
+      content = completion.choices[0]?.message.content ?? '';
     } catch (error) {
-      console.warn('Falha na inferência local do paciente', error);
       if (request === revision.current) {
+        console.warn('Falha na inferência local do paciente', error);
         release();
         setState({
           status: 'error',
           progress: 0,
           message:
-            'A IA local interrompeu a resposta. Ative-a novamente ou continue com as perguntas guiadas.',
+            'A IA local interrompeu a resposta. Reative-a ou experimente o modelo leve.',
         });
       }
       throw error;
     } finally {
       clearTimeout(timer);
-      if (request === revision.current) busy.current = false;
+      if (request === revision.current) {
+        cancelResponse.current = undefined;
+        busy.current = false;
+      }
     }
+    // Misformatted output does not invalidate a working engine. The question
+    // stays available for retry and the conversation is only updated on success.
+    if (finishReason !== 'stop' && finishReason !== 'length')
+      throw new Error('Resposta incompleta');
+    return parsePatientReply(content, scenario);
   }
 
-  return { state, enable, disable, respond, interrupt };
+  return { state, enable, disable, respond };
 }

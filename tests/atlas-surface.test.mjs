@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { Window } from 'happy-dom';
 import ts from 'typescript';
 
-test('Loading and error overlays never remove or replace the renderer canvas', async () => {
+void test('Loading and error overlays never remove or replace the renderer canvas', async () => {
   const window = new Window();
   globalThis.window = window;
   globalThis.document = window.document;
@@ -32,9 +32,11 @@ test('Loading and error overlays never remove or replace the renderer canvas', a
     document.body.append(rootNode);
     const root = createRoot(rootNode),
       ref = React.createRef();
-    const render = (status) =>
+    const render = (status, onRetry) =>
       flushSync(() =>
-        root.render(React.createElement(Surface, { surfaceRef: ref, status })),
+        root.render(
+          React.createElement(Surface, { surfaceRef: ref, status, onRetry }),
+        ),
       );
     render('Carregando atlas');
     const mount = ref.current,
@@ -46,14 +48,20 @@ test('Loading and error overlays never remove or replace the renderer canvas', a
     assert(canvas.isConnected, 'Finishing loading detached the WebGL canvas');
     assert.equal(ref.current, mount);
     assert.equal(rootNode.querySelector('canvas'), canvas);
-    assert.equal(rootNode.querySelector('[role=status]'), null);
-    render('A renderização foi interrompida');
+    assert.equal(rootNode.querySelector('output'), null);
+    let retries = 0;
+    render('A renderização foi interrompida', () => {
+      retries += 1;
+    });
     assert(canvas.isConnected);
-    assert(rootNode.querySelector('[role=status]'));
+    assert(rootNode.querySelector('output'));
+    rootNode.querySelector('button').click();
+    assert.equal(retries, 1);
     render('');
     assert(canvas.isConnected);
+    assert.equal(rootNode.querySelector('button'), null);
     flushSync(() => root.unmount());
-    window.happyDOM.abort();
+    await window.happyDOM.abort();
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

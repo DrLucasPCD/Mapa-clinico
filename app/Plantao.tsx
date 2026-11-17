@@ -352,7 +352,7 @@ function PlantaoSession({
 
   function cancelConversation() {
     conversationRequest.current++;
-    ai.interrupt();
+    if (ai.state.status === 'ready' || ai.state.status === 'loading') ai.disable();
     pendingRef.current = false;
     setPending(false);
     setPendingQuestion('');
@@ -466,7 +466,7 @@ function PlantaoSession({
       } catch {
         if (request === conversationRequest.current)
           setConversationError(
-            `A resposta à pergunta «${text}» foi interrompida. Você pode reenviar a pergunta ou ativar a IA novamente.`,
+            `A resposta foi interrompida. A pergunta «${text}» ficou guardada para reenvio.`,
           );
         return;
       } finally {
