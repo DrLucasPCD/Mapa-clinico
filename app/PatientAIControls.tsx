@@ -32,20 +32,19 @@ export default function PatientAIControls({
           >
             <Download size={15} />
             {state.status === 'error'
-              ? 'Reativar modelo padrão'
-              : 'Ativar conversa livre'}
+              ? 'Reativar conversa livre · modelo leve'
+              : 'Ativar conversa livre · modelo leve'}
           </button>
           <small>
-            Grátis, sem conta ou chave de API. Download inicial de cerca de 2,5
-            GB, guardado no navegador quando possível. Requer WebGPU e
-            aproximadamente 4–5 GB de memória disponível.
+            Grátis, sem conta ou chave de API. Requer WebGPU. O modelo leve usa
+            um download de cerca de 1 GB e pode ser menos preciso.
           </small>
           <button
             type="button"
             className="training-secondary"
-            onClick={() => void ai.enable('light')}
+            onClick={() => void ai.enable('standard')}
           >
-            Usar modelo leve · cerca de 1 GB
+            Usar modelo maior · cerca de 2,5 GB
           </button>
         </>
       )}

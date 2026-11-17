@@ -120,7 +120,7 @@ Validação: testes com volumes sintéticos e transformações conhecidas; teste
 
 ### Conversa livre gratuita no Modo Plantão
 
-Abra um atendimento, escolha o modo guiado ou prova e clique em **Ativar conversa livre**. O app usa Qwen3 4B quantizado via WebLLM em um Web Worker. O download inicial é de aproximadamente 2,5 GB e fica no cache do navegador quando o armazenamento permite. Requer WebGPU, conexão no primeiro carregamento e cerca de 4–5 GB de memória disponível. Não usa API paga, chave, conta ou servidor de inferência.
+Abra um atendimento, escolha o modo guiado ou prova e clique em **Ativar conversa livre · modelo leve**. O app usa Qwen3 1.7B quantizado via WebLLM em um Web Worker com download de cerca de 1 GB. A opção **Usar modelo maior** carrega Qwen3 4B, com download de cerca de 2,5 GB e requisito de aproximadamente 4–5 GB de memória disponível. Os downloads podem ser reaproveitados pelo cache do navegador. Ambos requerem WebGPU e conexão no primeiro carregamento. A conversa roda no dispositivo, sem API paga, chave ou conta.
 
 O modelo interpreta a pergunta e as últimas seis trocas para selecionar fatos da história do paciente. A resposta clínica é montada exclusivamente a partir desses fatos, preservando o roteiro e a pontuação da entrevista. Informação ausente é reconhecida como desconhecida, sem criar negativas, antecedentes ou resultados. O modelo não recebe laudo, diagnóstico, decisões ou gabarito. A seleção semântica ainda pode errar; a correção docente do caso continua sendo a referência.
 

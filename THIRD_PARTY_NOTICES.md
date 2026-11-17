@@ -71,6 +71,7 @@ O Laboratório 3D usa coordenadas de conformações e ligações obtidas da API 
 ## Inferência local da conversa e da voz
 
 - Qwen Team, **Qwen3-4B**, Apache 2.0. Pesos quantizados MLC em https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC (revisão `a5c9fab855e3ccbdfed2e7e69683d75f30332161`) e https://huggingface.co/mlc-ai/Qwen3-4B-q4f32_1-MLC (revisão `b7e4eb1ba80728187fb5df44055cc1a7c32310e0`). Os pesos são baixados diretamente da fonte, fora do repositório. O modelo original e sua licença estão em https://huggingface.co/Qwen/Qwen3-4B .
+- Qwen Team, **Qwen3-1.7B**, Apache 2.0. Modelo leve de conversa. Pesos quantizados MLC em https://huggingface.co/mlc-ai/Qwen3-1.7B-q4f16_1-MLC e https://huggingface.co/mlc-ai/Qwen3-1.7B-q4f32_1-MLC . Licença e modelo original em https://huggingface.co/Qwen/Qwen3-1.7B .
 - MLC AI, **WebLLM 0.2.89**, Apache 2.0, https://github.com/mlc-ai/web-llm .
 - Microsoft, **ONNX Runtime Web 1.18.0**, MIT, https://github.com/microsoft/onnxruntime .
 - Diffusion Studio, **piper-wasm 1.0.0**, wrapper declarado MIT, https://github.com/diffusion-studio/piper-wasm . O pacote inclui o fonemizador Piper e dados e código do **eSpeak NG**, GPLv3 ou posterior, https://github.com/rhasspy/espeak-ng . Os componentes compilados mantêm suas licenças próprias. Fontes e receita de compilação estão no repositório do pacote e nos upstreams https://github.com/wide-video/piper-phonemize e https://github.com/wide-video/piper-wasm .

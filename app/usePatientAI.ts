@@ -97,7 +97,7 @@ export function usePatientAI() {
     };
   }, []);
 
-  async function enable(profile: keyof typeof models = 'standard') {
+  async function enable(profile: keyof typeof models = 'light') {
     if (activeLoad.current || engine.current) return;
     release();
     activeLoad.current = true;
@@ -115,8 +115,8 @@ export function usePatientAI() {
         status: 'error',
         progress: 0,
         message: wasLoading
-          ? 'Não foi possível preparar a IA local. Confira a conexão ou experimente o modelo leve.'
-          : 'A IA local foi interrompida. Você pode reativá-la ou usar o modelo leve.',
+          ? 'Não foi possível preparar a IA local. Confira a conexão e a memória disponível.'
+          : 'A IA local foi interrompida. Você pode reativá-la e reenviar a pergunta.',
       });
     };
     loadTimer.current = setTimeout(fail, 300_000);
@@ -218,7 +218,7 @@ export function usePatientAI() {
           status: 'error',
           progress: 0,
           message:
-            'A IA local interrompeu a resposta. Reative-a ou experimente o modelo leve.',
+            'A IA local interrompeu a resposta. Reative-a para reenviar a pergunta.',
         });
       }
       throw error;
