@@ -8,6 +8,7 @@ import {
   Brain,
   Bookmark,
   ChevronRight,
+  CircleDot,
   CircleHelp,
   Focus,
   Grid3X3,
@@ -48,6 +49,8 @@ import './dashboard.css';
 import './workspace.css';
 import './study.css';
 import StudyPanel from './StudyPanel';
+import AnatomyDetails from './AnatomyDetails';
+import { anatomyDisplayName } from './anatomy-details';
 import StudyPaths from './StudyPaths';
 import ImagingWorkbench from './ImagingWorkbench';
 import UltrasoundSimulator from './UltrasoundSimulator';
@@ -125,8 +128,10 @@ export default function App() {
     [period, setPeriod] = useState('2');
   const [selected, setSelected] = useState('heart'),
     [name, setName] = useState('Coração');
-  const [isolate, setIsolate] = useState(false),
-    [beating, setBeating] = useState(true);
+  const [isolatedId, setIsolatedId] = useState('');
+  const isolate = Boolean(isolatedId);
+  const [beating, setBeating] = useState(true);
+  const [atlasMarkers, setAtlasMarkers] = useState(true);
   const [explode, setExplode] = useState(0),
     [cut, setCut] = useState(0),
     [transparency, setTransparency] = useState(0);
@@ -158,10 +163,12 @@ export default function App() {
   const n = Number(period),
     lesson = lessons.find((l) => selected.includes(l.id)),
     activeCase = cases.find((c) => c.id === caseId) ?? cases[0];
+  const catalogStructure = modelCatalog.find(entry => entry.id === selected) ??
+    modelCatalog.find(entry => entry.aliases.includes(selected));
   const showAtlasSlice = workspaceMode === 'imaging' ||
     (workspaceMode === 'case' && activeCase.acquisition?.kind === 'ordered-series');
   const sliceMatchesHeart = slice?.region === 'thorax' || slice?.region === 'body';
-  const visibleSlice = showAtlasSlice && (!(isolate && selected === 'heart') || sliceMatchesHeart) ? slice : null;
+  const visibleSlice = showAtlasSlice && (isolatedId !== 'heart' || sliceMatchesHeart) ? slice : null;
   const atlasExercise = workspaceMode === 'visual' && visualTask === 'atlas-patella';
   const trainingWorkspace = ['plantao', 'lab', 'visual', 'library', 'review'].includes(workspaceMode);
   const showAtlas = !trainingWorkspace || atlasExercise || (workspaceMode === 'plantao' && plantaoAtlas);
@@ -172,7 +179,10 @@ export default function App() {
   const searchResults = useMemo(
     () => searchAtlasStructures(query, system, 60, [
       { id: 'heart', name: 'Coração', system: 'cardiovascular', objectCount: heartOrgans.length },
-      ...modelCatalog,
+      ...modelCatalog.map(entry => ({
+        ...entry,
+        name: anatomyDisplayName(entry.id, entry.name, entry.sourceId),
+      })),
     ]),
     [query, system, modelCatalog],
   );
@@ -193,7 +203,7 @@ export default function App() {
   }, [period, saved]);
   const choose = (id: string, title: string) => {
     setSelected(id);
-    setName(title);
+    setName(anatomyDisplayName(id, title));
     setPathology('');
   };
   const focusStructure = (id: string, title: string) => {
@@ -206,7 +216,7 @@ export default function App() {
     setRegion('all');
     setLayoutMode('assembled');
     setCut(0);
-    setIsolate(true);
+    setIsolatedId(id);
     setHidden([]);
     setDrawer(null);
     setMobileNav(false);
@@ -217,7 +227,7 @@ export default function App() {
     setSelected(target.atlasId);
     setName(target.label);
     setRegion('all');
-    setIsolate(true);
+    setIsolatedId(target.atlasId);
     setPathology('');
     setHidden([]);
   }, []);
@@ -248,7 +258,7 @@ export default function App() {
   };
   const resetAtlas = () => {
     setReset((v) => v + 1);
-    setIsolate(false);
+    setIsolatedId('');
     setCut(0);
     setExplode(0);
     setTransparency(0);
@@ -336,7 +346,7 @@ export default function App() {
     setSystem(activeCase.system);
     setSelected(activeCase.region);
     setName(activeCase.region === 'cerebrum' ? 'Encéfalo' : 'Metacarpos');
-    setIsolate(true);
+    setIsolatedId(activeCase.region);
     setPathology(
       activeCase.id === '2604'
         ? 'cerebrum@right'
@@ -447,7 +457,7 @@ export default function App() {
                 <button key={id} className="nav-item" aria-pressed={system === id} onClick={() => {
                   if (!showAtlas || atlasExercise) openAtlas();
                   setSystem(id);
-                  setIsolate(false);
+                  setIsolatedId('');
                   setMobileNav(false);
                   document.getElementById('atlas-panel')?.scrollIntoView({ block: 'nearest' });
                 }}><Icon /> {label}</button>
@@ -533,7 +543,7 @@ export default function App() {
                 value={system}
                 onValueChange={(v) => {
                   setSystem(v || 'all');
-                  setIsolate(false);
+                  setIsolatedId('');
                 }}
               >
                 <SelectTrigger>
@@ -561,6 +571,9 @@ export default function App() {
                 system={system}
                 selected={selected}
                 isolate={isolate}
+                isolateSelection={isolatedId}
+                markers={atlasMarkers}
+                onDetails={(id, label) => { choose(id, label); setLessonTab('anatomia'); setDrawer('lesson'); }}
                 explode={explode}
                 cut={cut}
                 plane={plane}
@@ -579,9 +592,18 @@ export default function App() {
               />
             </Suspense>
             <div className="atlas-float-tools">
+              <button type="button" className={atlasMarkers ? 'active' : ''} aria-pressed={atlasMarkers}
+                onClick={() => setAtlasMarkers(value => !value)}>
+                <CircleDot />
+                <span>Marcadores</span>
+              </button>
+              {selected && <button type="button" onClick={() => { setLessonTab('anatomia'); setDrawer('lesson'); }}>
+                <BookOpen />
+                <span>Ficha</span>
+              </button>}
               <button
                 className={isolate ? 'active' : ''}
-                onClick={() => setIsolate(!isolate)}
+                onClick={() => setIsolatedId(isolate ? '' : selected)}
               >
                 <Focus />
                 <span>Isolar</span>
@@ -589,7 +611,7 @@ export default function App() {
               <button
                 onClick={() => {
                   setHidden([...hidden, selected]);
-                  setIsolate(false);
+                  setIsolatedId('');
                 }}
               >
                 <Activity />
@@ -623,7 +645,7 @@ export default function App() {
                     value={region}
                     onValueChange={(v) => {
                       setRegion((v || 'all') as typeof region);
-                      setIsolate(false);
+                      setIsolatedId('');
                       setSystem('all');
                       setHidden([]);
                     }}
@@ -780,7 +802,7 @@ export default function App() {
               </header>
               <Suspense fallback={<p className="training-screen" role="status">Carregando laboratório…</p>}>
                 {labMode === 'ecg' ? <EcgLab onAnatomy={() => openImmersive('heart')} />
-                : <Lab3D scope={labScope} setScope={setLabScope} onImaging={openImaging} onEcg={() => openLab('ecg')}
+                : <Lab3D scope={labScope} setScope={setLabScope} period={n} onImaging={openImaging} onEcg={() => openLab('ecg')}
                     onStroke={() => openCase('2604')}
                     onAtlas={scope => focusPathStructure(scope === 'heart' ? 'heart' : 'cerebrum', scope === 'heart' ? 'Coração' : 'Encéfalo', true)} />}
               </Suspense>
@@ -910,52 +932,15 @@ export default function App() {
             {drawer === 'lesson' ? (
               <>
                 <h2>{name}</h2>
-                {lesson ? (
-                  <>
-                    <small>
-                      {lesson.latin} · {period}º período
-                    </small>
-                    <div className="lesson-content">
-                      <p>{lesson[lessonTab]}</p>
-                      <p>
-                        {
-                          lesson.levels[
-                            n <= 2 ? 0 : n <= 4 ? 1 : n <= 8 ? 2 : 3
-                          ]
-                        }
-                      </p>
-                      {lesson.origin && (
-                        <dl>
-                          <dt>Origem</dt>
-                          <dd>{lesson.origin}</dd>
-                          <dt>Inserção</dt>
-                          <dd>{lesson.insertion}</dd>
-                          <dt>Ação</dt>
-                          <dd>{lesson.action}</dd>
-                        </dl>
-                      )}
-                      <h3>Ponte com a radiologia</h3>
-                      <p>{lesson.bridge}</p>
-                      {lesson.audio && (
-                        <>
-                          <small>Ouvir introdução · Voz Faber</small>
-                          <audio
-                            controls
-                            src={'/audio/' + lesson.audio + '.wav'}
-                          />
-                        </>
-                      )}
-                      <a href={lesson.source} target="_blank" rel="noreferrer">
-                        Referência de estudo ↗
-                      </a>
-                    </div>
-                  </>
-                ) : (
-                  <p>
-                    Estrutura disponível no modelo 3D. Ainda não há uma ficha
-                    didática revisada para esta estrutura.
-                  </p>
-                )}
+                <AnatomyDetails
+                  key={selected + ':' + lessonTab}
+                  id={selected}
+                  name={name}
+                  metadata={catalogStructure}
+                  initial={lessonTab}
+                  period={n}
+                  showTitle={false}
+                />
               </>
             ) : (
               <DrawerContent

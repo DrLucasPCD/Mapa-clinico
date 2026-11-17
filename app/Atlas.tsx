@@ -13,12 +13,17 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { heartLighting, isHeartStructure } from './heart-model';
 import { prepareHeartMotion, type HeartRig } from './heart-motion';
 import { heartCycle } from './heart-cycle';
+import AnatomyMarkers, { type AnatomyMarker } from './AnatomyMarkers';
+import { createAnatomyMarkerProjection } from './anatomy-marker-projection';
+import { anatomyDisplayName, chamberOrBrainMarkers, getAnatomyDetail } from './anatomy-details';
 export type AtlasProps = {
   modelVariant?: 'male' | 'female';
   slice?: AtlasSlice | null;
   system: string;
   selected: string;
   isolate: boolean;
+  isolateSelection?: string;
+  markers?: boolean;
   explode: number;
   cut: number;
   plane: string;
@@ -37,6 +42,7 @@ export type AtlasProps = {
   /** Inversion/eversion of the foot, in degrees. */
   ankleInversion?: number;
   onSelect: (id: string, name: string) => void;
+  onDetails?: (id: string, name: string) => void;
   onLandmark?: (landmark: { point: number[]; label: string; variant: 'male' | 'female' }) => void;
 };
 export default function Atlas(props: AtlasProps) {
@@ -44,11 +50,15 @@ export default function Atlas(props: AtlasProps) {
     current = useRef(props);
   current.current = props;
   const [status, setStatus] = useState('Carregando atlas anatômico…');
+  const [points, setPoints] = useState<AnatomyMarker[]>([]);
+  const [activeMarker, setActiveMarker] = useState('');
+  const markerElements = useRef(new Map<string, HTMLDivElement>());
   useEffect(() => {
     if (!host.current) return;
     let disposed = false,
       frame = 0;
     const el = host.current;
+    setPoints([]);
     setStatus('Carregando modelo anatômico detalhado…');
     let renderer: T.WebGLRenderer;
     try {
@@ -96,6 +106,11 @@ export default function Atlas(props: AtlasProps) {
     let heartRig: HeartRig | undefined;
     let lastHeartTime = -1;
     let heartLightingActive = false;
+    const markerProjection = createAnatomyMarkerProjection();
+    let markerKey = '';
+    let focusedMarker = '';
+    let markerMeshes = new Map<string, T.Mesh>();
+    let visibleMarkerMeshes: T.Mesh[] = [];
     const match = (m: T.Mesh, id: string) =>
       detailedStructureMatches(m, id);
     loadDetailedModel(props.modelVariant ?? 'male', (message) => { if (!disposed) setStatus(message); }, props.organs).then(
@@ -193,6 +208,10 @@ export default function Atlas(props: AtlasProps) {
         .find((h) => clip.distanceToPoint(h.point) >= 0);
       if (hit) {
         const m = hit.object;
+        if (m instanceof T.Mesh && current.current.markers) {
+          markerProjection.capture(m, hit);
+          setActiveMarker(m.userData.anatomyId);
+        }
         const referencePoint = m.worldToLocal(hit.point.clone());
         if (m instanceof T.Mesh && m.morphTargetInfluences?.some(value => value !== 0) && hit.barycoord && hit.face) {
           // Interpolate the rest-pose triangle so registration uses the reference atlas.
@@ -210,10 +229,7 @@ export default function Atlas(props: AtlasProps) {
           label: m.userData.sourceName || m.name,
           variant: current.current.modelVariant ?? 'male',
         });
-        current.current.onSelect(
-          m.userData.anatomyId,
-          m.userData.sourceName || m.name,
-        );
+        current.current.onSelect(m.userData.anatomyId, anatomyDisplayName(m.userData.anatomyId, m.userData.sourceName || m.name, m.userData.sourceId));
       }
     };
     const doublePick = (e: MouseEvent) => {
@@ -235,10 +251,8 @@ export default function Atlas(props: AtlasProps) {
       controls.target.copy(center);
       camera.position.copy(center).add(new T.Vector3(0, 0, distance));
       controls.update();
-      current.current.onSelect(
-        hit.object.userData.anatomyId,
-        hit.object.userData.sourceName || hit.object.name,
-      );
+      setActiveMarker(hit.object.userData.anatomyId);
+      current.current.onSelect(hit.object.userData.anatomyId, anatomyDisplayName(hit.object.userData.anatomyId, hit.object.userData.sourceName || hit.object.name, hit.object.userData.sourceId));
     };
     const contextLost = (e: Event) => {
       e.preventDefault();
@@ -276,7 +290,8 @@ export default function Atlas(props: AtlasProps) {
       if (disposed) return;
       frame = requestAnimationFrame(animate);
       const p = current.current;
-      const focusOnHeart = p.isolate && p.selected === 'heart';
+      const isolated = p.isolate ? p.isolateSelection ?? p.selected : '';
+      const focusOnHeart = isolated === 'heart';
       if (focusOnHeart !== heartLightingActive) {
         heartLightingActive = focusOnHeart;
         ambient.color.setHex(focusOnHeart ? heartLighting.ambient.sky : 0xdff7ff);
@@ -323,7 +338,7 @@ export default function Atlas(props: AtlasProps) {
         m.visible =
           (p.system === 'all' ? (!m.userData.isEnvelope || p.isolate) : sys === p.system) &&
           inRegion &&
-          (!p.isolate || match(m, p.selected)) &&
+          (!p.isolate || match(m, isolated)) &&
           !p.hidden.some((id) => match(m, id));
         m.position.copy(m.userData.original);
         m.scale.copy(m.userData.scale);
@@ -411,7 +426,7 @@ export default function Atlas(props: AtlasProps) {
         lastFocus = '';
       }
       const focusKey = p.isolate
-        ? p.selected
+        ? isolated
         : p.layoutMode && p.layoutMode !== 'assembled'
           ? p.layoutMode
           : p.region && p.region !== 'all'
@@ -436,6 +451,38 @@ export default function Atlas(props: AtlasProps) {
       controls.update();
       try {
         renderer.render(scene, camera);
+        if (p.markers && meshes.length) {
+          const key = [p.selected, isolated, p.system, p.region, p.hidden.join(','), p.reset].join(':');
+          if (markerKey !== key) {
+            markerKey = key;
+            visibleMarkerMeshes = meshes.filter(m => m.visible);
+            const selectedMesh = visibleMarkerMeshes.find(m => m.userData.anatomyId === p.selected)
+              ?? visibleMarkerMeshes.find(m => match(m, p.selected) && getAnatomyDetail(m.userData.anatomyId))
+              ?? visibleMarkerMeshes.find(m => match(m, p.selected));
+            focusedMarker = selectedMesh?.userData.anatomyId ?? '';
+            const candidates = visibleMarkerMeshes.filter(m => {
+              const id = String(m.userData.anatomyId);
+              return m === selectedMesh
+                || (isolated === 'heart' || isolated.startsWith('cerebr')) && chamberOrBrainMarkers(id);
+            });
+            markerMeshes = new Map(candidates.map(m => [String(m.userData.anatomyId), m]));
+            setPoints([...markerMeshes].map(([id, mesh]) => ({
+              id,
+              name: anatomyDisplayName(id, mesh.userData.sourceName, mesh.userData.sourceId),
+              short: getAnatomyDetail(id)?.short,
+              color: mesh.userData.colors[0].getStyle(),
+            })));
+          }
+          markerProjection.update({
+            elements: markerElements.current, meshes: markerMeshes,
+            visible: visibleMarkerMeshes, camera, clip, time,
+            width: el.clientWidth, height: el.clientHeight, active: focusedMarker,
+            translucent: Boolean(p.transparency && p.transparency >= 35),
+          });
+        } else if (markerKey) {
+          markerKey = '';
+          setPoints([]);
+        }
       } catch (error) {
         cancelAnimationFrame(frame);
         console.error('Atlas render failed', error);
@@ -471,5 +518,19 @@ export default function Atlas(props: AtlasProps) {
       renderer.domElement.remove();
     };
   }, [props.modelVariant, props.organs]);
-  return <><AtlasSurface surfaceRef={host} status={status} />{props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane} · posição relativa {Math.round(props.slice.fraction * 100)}%<br/>Referência didática, sem registro ao paciente</div>}</>;
+  const active = props.selected === activeMarker ? activeMarker : '';
+  const currentPoint = points.find(point => point.id === active);
+  return <>
+    <AtlasSurface surfaceRef={host} status={status}>
+      {props.markers && !status && <AnatomyMarkers
+        points={points}
+        active={active}
+        elements={markerElements}
+        onSelect={(id, label) => { setActiveMarker(id); props.onSelect(id, label); }}
+        onClose={() => setActiveMarker('')}
+        onDetails={props.onDetails && currentPoint ? () => props.onDetails?.(currentPoint.id, currentPoint.name) : undefined}
+      />}
+    </AtlasSurface>
+    {props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane} · posição relativa {Math.round(props.slice.fraction * 100)}%<br/>Referência didática, sem registro ao paciente</div>}
+  </>;
 }

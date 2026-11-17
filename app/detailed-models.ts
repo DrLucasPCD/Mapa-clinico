@@ -194,6 +194,7 @@ export async function loadDetailedModel(
       isEnvelope: organ.system === 'regional' || organ.system === 'integumentary' || /(?:^|_)fascia(?:_|$)/.test(organ.organ_id),
       anatomySystem: organ.system === 'renal' ? 'urinary' : organ.system,
       sourceName: organ.name_en,
+      sourceId: organ.organ_id,
       sourceNode: organ.node,
       ta2Latin: organ.ta2_latin,
       aliases: aliasesForDetailedStructure(organ),

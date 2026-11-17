@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Atom,
   Brain,
+  BookOpen,
   ChevronLeft,
   ChevronRight,
   CircleDot,
@@ -35,6 +36,7 @@ import { cycleComparison } from './heart-cycle';
 import { ecgLeads, type LeadId } from './ecg-model';
 import { defaultHeartFlow } from './heart-coronary-flow';
 import HeartFlowControls from './HeartFlowControls';
+import AnatomyDetails from './AnatomyDetails';
 import './lab3d.css';
 
 const scales = [
@@ -93,7 +95,8 @@ export default function Lab3D({
   onEcg,
   onStroke,
   onAtlas,
-}: Destination & { scope: LabScale; setScope: (value: LabScale) => void }) {
+  period,
+}: Destination & { scope: LabScale; setScope: (value: LabScale) => void; period?: number }) {
   const [molecule, setMolecule] = useState<Molecule>('dopamina');
   const [view, setView] = useState<LabView>(
     scope === 'heart' ? 'ghost' : 'natural',
@@ -124,10 +127,12 @@ export default function Lab3D({
   const [stage, setStage] = useState(0);
   const [progress, setProgress] = useState(0);
   const [selected, setSelected] = useState('');
+  const [markers, setMarkers] = useState(true);
   const [focus, setFocus] = useState(0);
   const [parts, setParts] = useState<LabPart[]>([]);
   const [query, setQuery] = useState('');
   const time = useRef(0);
+  const profile = useRef<HTMLDivElement>(null);
   const subset = useMemo(
     () =>
       parts.filter(
@@ -144,6 +149,10 @@ export default function Lab3D({
   const selectedPart = parts.find((p) => p.id === selected);
   const macro = scope === 'heart' || scope === 'brain';
   const moving = scope === 'heart' || scope === 'neuron';
+
+  function openProfile() {
+    profile.current?.focus();
+  }
 
   function seekHeart(seconds:number) {
     setPlaying(false);
@@ -352,6 +361,8 @@ export default function Lab3D({
               cut={cut}
               axis={axis}
               selected={selected}
+              markers={macro ? markers : undefined}
+              onDetails={macro ? openProfile : undefined}
               focus={focus}
               camera={camera}
               cameraReset={cameraReset}
@@ -428,6 +439,9 @@ export default function Lab3D({
               </button>
             ))}
             {scope==='heart' && <button aria-pressed={lockedCamera} onClick={()=>setLockedCamera(value=>!value)}>Câmera fixa</button>}
+            {macro && <button type="button" aria-pressed={markers} onClick={() => setMarkers(value => !value)}>
+              <CircleDot size={14} /> Marcadores
+            </button>}
           </div>
           {scope==='heart' && <HeartCyclePanel bpm={bpm} time={time} lead={lead} onSeek={seekHeart}/>}
         </section>
@@ -618,6 +632,9 @@ export default function Lab3D({
             {selectedPart && (
               <div className="lab3d-selected">
                 <strong>{selectedPart.name}</strong>
+                {macro && <button type="button" aria-label="Abrir ficha anatômica" onClick={openProfile}>
+                  <BookOpen size={14} />
+                </button>}
                 <button
                   aria-label="Aproximar estrutura selecionada"
                   onClick={() => {
@@ -650,6 +667,15 @@ export default function Lab3D({
           </div>
         </aside>
       </div>
+      {macro && <div className="lab3d-anatomy-profile" tabIndex={-1} ref={profile}>
+        <AnatomyDetails
+          key={selectedPart?.id ?? scope}
+          id={selectedPart?.id ?? (scope === 'heart' ? 'heart' : 'cerebrum')}
+          name={selectedPart?.name ?? (scope === 'heart' ? 'Coração' : 'Encéfalo')}
+          metadata={selectedPart?.metadata}
+          period={period}
+        />
+      </div>}
       <footer className="lab3d-resources">
         {scope === 'heart' && (
           <>

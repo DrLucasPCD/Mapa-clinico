@@ -19,10 +19,10 @@ export default function AtlasSurface({
         role="application"
         aria-label="Atlas anatômico 3D. Arraste para girar ou use as setas do teclado. Use mais e menos para zoom. Clique em uma estrutura para selecioná-la e clique duas vezes para aproximar o foco."
       />
+      {children}
       {status ? (
         <div className="atlas-status" role="status">
           {status}
-          {children}
         </div>
       ) : null}
     </div>

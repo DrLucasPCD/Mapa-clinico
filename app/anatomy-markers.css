@@ -1,0 +1,150 @@
+.anatomy-markers {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.anatomy-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.anatomy-marker.is-active {
+  z-index: 1;
+}
+.anatomy-marker[hidden] {
+  display: none;
+}
+.anatomy-marker > button.anatomy-marker-point {
+  position: absolute;
+  left: -17px;
+  top: -17px;
+  width: 34px;
+  height: 34px;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.anatomy-marker-point::before,
+.anatomy-marker-point::after {
+  content: '';
+  grid-area: 1/1;
+  display: block;
+  border-radius: 50%;
+}
+.anatomy-marker-point::before {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #fff;
+  background: var(--marker-color);
+  box-shadow: 0 1px 5px #122533b3;
+  transition: transform 160ms ease;
+}
+.anatomy-marker .anatomy-marker-point:hover::before,
+.anatomy-marker.is-active .anatomy-marker-point::before {
+  transform: scale(1.18);
+}
+.anatomy-marker.is-active .anatomy-marker-point::after {
+  width: 23px;
+  height: 23px;
+  border: 1.5px solid color-mix(in srgb, var(--marker-color), white 40%);
+  animation: anatomy-marker-pulse 1.8s ease-out infinite;
+}
+.anatomy-marker-card {
+  position: absolute;
+  top: 14px;
+  left: 15px;
+  width: max-content;
+  max-width: min(170px, 40vw);
+  min-width: 114px;
+  padding: 9px 25px 8px 10px;
+  border: 1px solid #fff9;
+  border-left: 3px solid var(--marker-color);
+  border-radius: 10px;
+  background: #f8fbf2ed;
+  color: #152c34;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px #020b2152;
+  pointer-events: auto;
+  font-size: 12px;
+  line-height: 1.28;
+  animation: anatomy-card-reveal 160ms ease both;
+}
+.anatomy-marker[data-side='left'] .anatomy-marker-card {
+  right: 15px;
+  left: auto;
+}
+.anatomy-marker[data-vertical='up'] .anatomy-marker-card {
+  top: auto;
+  bottom: 14px;
+}
+.anatomy-marker-card strong {
+  font-weight: 750;
+}
+.anatomy-marker-card p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #3b5360;
+}
+.anatomy-marker-card button.anatomy-marker-close,
+.anatomy-marker-card button.anatomy-marker-more {
+  border: 0;
+  color: #166064;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  gap: 3px;
+  cursor: pointer;
+}
+.anatomy-marker-card button.anatomy-marker-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 4px;
+}
+.anatomy-marker-card button.anatomy-marker-more {
+  margin-top: 6px;
+  padding: 3px 0;
+  font-size: 11px;
+  font-weight: 750;
+}
+.anatomy-marker button:focus-visible {
+  outline: 2px solid #00a29b;
+  outline-offset: 2px;
+}
+@keyframes anatomy-marker-pulse {
+  from {
+    opacity: 0.92;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.48);
+  }
+}
+@keyframes anatomy-card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anatomy-marker.is-active .anatomy-marker-point::after,
+  .anatomy-marker-card {
+    animation: none;
+  }
+  .anatomy-marker-point::before {
+    transition: none;
+  }
+}

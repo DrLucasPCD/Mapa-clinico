@@ -21,8 +21,12 @@ import { makeCoronaryFlow, type HeartFlowOptions } from './heart-coronary-flow';
 import { leadColor, makeHeartElectrical, type HeartElectricalOptions } from './heart-ecg-overlay';
 import { ecgActivation, ecgBeats, electricalVector, type LeadId } from './ecg-model';
 import './lab3d.css';
+import AnatomyMarkers, { type AnatomyMarker } from './AnatomyMarkers';
+import { createAnatomyMarkerProjection } from './anatomy-marker-projection';
+import { anatomyDisplayName, chamberOrBrainMarkers, getAnatomyDetail } from './anatomy-details';
+import type { AnatomyMetadata } from './AnatomyDetails';
 
-export type LabPart = { id: string; name: string; layer: string };
+export type LabPart = { id: string; name: string; layer: string; metadata?: AnatomyMetadata; color: string };
 type Props = {
   scope: LabScale;
   molecule: Molecule;
@@ -32,6 +36,8 @@ type Props = {
   cut: number;
   axis: LabAxis;
   selected: string;
+  markers?: boolean;
+  onDetails?: () => void;
   focus: number;
   camera: LabCamera;
   cameraReset: number;
@@ -126,6 +132,9 @@ export default function Lab3dScene(props: Props) {
   const current = useRef(props);
   useLayoutEffect(() => { current.current = props; }, [props]);
   const [status, setStatus] = useState('');
+  const [parts, setParts] = useState<LabPart[]>([]);
+  const [dismissed, setDismissed] = useState('');
+  const markerElements = useRef(new Map<string, HTMLDivElement>());
   const { scope, molecule } = props;
 
   useEffect(() => {
@@ -194,6 +203,9 @@ export default function Lab3dScene(props: Props) {
       cloud?: T.Points;
     };
     const meshes: PartMesh[] = [];
+    const markerProjection = createAnatomyMarkerProjection();
+    const markerMeshes = new Map<string, T.Mesh>();
+    let visibleMarkerMeshes: T.Mesh[] = [];
     const layerColors = new Map(
       labLayers[scope].map((item) => [item.id, new T.Color(item.color)]),
     );
@@ -223,6 +235,7 @@ export default function Lab3dScene(props: Props) {
     resize();
 
     setStatus('Carregando modelo 3D…');
+    setParts([]);
     current.current.onParts([]);
     async function load() {
       let model: T.Group;
@@ -352,13 +365,20 @@ export default function Lab3dScene(props: Props) {
           color,
           cloud,
         });
-        entries.set(id, { id, name, layer });
+        markerMeshes.set(id, object);
+        entries.set(id, {
+          id, name: anatomyDisplayName(id, name, object.userData.sourceId), layer, color: groupColor.getStyle(),
+          metadata: object.userData.sourceId ? {
+            sourceId: object.userData.sourceId,
+            latin: object.userData.ta2Latin,
+            hierarchy: object.userData.sourcePath,
+            aliases: object.userData.aliases,
+          } : undefined,
+        });
       }
-      current.current.onParts(
-        [...entries.values()].sort((a, b) =>
-          a.name.localeCompare(b.name, 'pt-BR'),
-        ),
-      );
+      const ordered = [...entries.values()].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+      setParts(ordered);
+      current.current.onParts(ordered);
       stateKey = '';
       setStatus('');
       moveCamera(current.current.camera);
@@ -393,7 +413,12 @@ export default function Lab3dScene(props: Props) {
           meshes.map((item) => item.mesh).filter((m) => m.visible),
         )
         .find((match) => clip.distanceToPoint(match.point) >= 0);
-      if (hit) current.current.onSelect(hit.object.userData.anatomyId);
+      if (hit) {
+        if (hit.object instanceof T.Mesh && current.current.markers)
+          markerProjection.capture(hit.object, hit);
+        setDismissed('');
+        current.current.onSelect(hit.object.userData.anatomyId);
+      }
     };
     renderer.domElement.addEventListener('pointerdown', start);
     renderer.domElement.addEventListener('pointerup', pick);
@@ -586,6 +611,7 @@ export default function Lab3dScene(props: Props) {
               : (layerColors.get(item.layer) ?? item.color),
           );
         }
+        visibleMarkerMeshes = meshes.map(item => item.mesh).filter(mesh => mesh.visible);
       }
       const nextFocus = p.focus + ':' + p.selected;
       if (p.focus && selected && nextFocus !== lastFocus) {
@@ -600,7 +626,7 @@ export default function Lab3dScene(props: Props) {
       orbit.update();
       if (tag.current) {
         let show = false;
-        if (selected && (selected.mesh.visible || selected.cloud?.visible)) {
+        if (selected && (p.markers === undefined || p.pointCloud && p.markers) && (selected.mesh.visible || selected.cloud?.visible)) {
           tagPoint
             .copy(selected.center)
             .add(selected.mesh.position)
@@ -643,6 +669,14 @@ export default function Lab3dScene(props: Props) {
         tag.current.hidden = !show;
       }
       renderer.render(scene, camera);
+      if (p.markers && !p.pointCloud) {
+        markerProjection.update({
+          elements: markerElements.current, meshes: markerMeshes,
+          visible: visibleMarkerMeshes, camera, clip, time: now, active: p.selected,
+          width: container.clientWidth, height: container.clientHeight,
+          translucent: p.view === 'ghost',
+        });
+      }
       if (electrical && leadLabels.current.size)
         electrical.placeLabels(camera, container.clientWidth, container.clientHeight, leadLabels.current);
     }
@@ -667,6 +701,10 @@ export default function Lab3dScene(props: Props) {
     };
   }, [scope, molecule]);
 
+  const points: AnatomyMarker[] = props.markers && !props.pointCloud && !status
+    ? parts.filter(part => part.id === props.selected || chamberOrBrainMarkers(part.id))
+      .map(({ id, name, color }) => ({ id, name, color, short: getAnatomyDetail(id)?.short }))
+    : [];
   return (
     <div className="lab3d-surface">
       <div
@@ -676,6 +714,13 @@ export default function Lab3dScene(props: Props) {
         aria-label="Modelo 3D interativo. Arraste ou use as setas para girar. Use mais e menos para aproximar."
       />
       <div className="lab3d-label" ref={tag} hidden />
+      {points.length > 0 && <AnatomyMarkers
+        points={points} active={dismissed === props.selected ? '' : props.selected}
+        elements={markerElements}
+        onSelect={id => { setDismissed(''); props.onSelect(id); }}
+        onClose={() => setDismissed(props.selected)}
+        onDetails={props.onDetails}
+      />}
       {props.electrical?.visibleLeads.map(id => (
         <button
           key={id}

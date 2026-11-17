@@ -1,0 +1,90 @@
+.anatomy-profile {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  overflow-wrap: anywhere;
+  color: var(--ink, #163341);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.anatomy-profile h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #135763;
+}
+.anatomy-profile h3 svg {
+  flex: none;
+}
+.anatomy-profile p {
+  margin: 0;
+}
+.anatomy-profile .anatomy-profile-latin,
+.anatomy-profile .anatomy-profile-path {
+  color: #577581;
+  font-size: 12px;
+}
+.anatomy-profile .anatomy-profile-summary {
+  border-radius: 8px;
+  border-left: 3px solid #11877b;
+  padding: 10px 12px;
+  background: #e7f4f1;
+  color: #174953;
+  font-weight: 650;
+}
+.anatomy-profile details {
+  border: 1px solid #cee1e8;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff;
+}
+.anatomy-profile summary {
+  color: #0e656f;
+  font-weight: 720;
+  cursor: pointer;
+}
+.anatomy-profile details[open] > summary {
+  margin-bottom: 6px;
+}
+.anatomy-profile details p + p,
+.anatomy-profile details p + dl,
+.anatomy-profile details p + ul,
+.anatomy-profile details div + div {
+  margin-top: 8px;
+}
+.anatomy-profile-attachments dt {
+  font-weight: 750;
+}
+.anatomy-profile-attachments dd + dt {
+  margin-top: 6px;
+}
+.anatomy-profile details ul {
+  list-style: disc;
+  padding-inline-start: 18px;
+  margin-block: 4px 8px;
+}
+.anatomy-profile details .anatomy-profile-sources {
+  list-style: none;
+  padding: 0;
+}
+.anatomy-profile-sources a {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  color: #0a6d75;
+}
+.anatomy-profile audio {
+  width: 100%;
+}
+.lab3d-anatomy-profile {
+  margin-top: 14px;
+  padding: 13px;
+  border: 1px solid #d2e1e9;
+  border-radius: 12px;
+  background: #f5fafb;
+}
+.lab3d-anatomy-profile:focus {
+  outline: 2px solid #11877b;
+  outline-offset: 2px;
+}
