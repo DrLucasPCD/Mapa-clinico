@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-17T18:32:51.217Z",
+  "lastChecked": "2026-11-18T18:01:56.803Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -37,6 +37,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
       "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43048071",
+      "title": "New-onset depersonalization-derealization syndrome following semaglutide therapy.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43048071/",
+      "authors": "Prasad S, Sharma A, Sharma A",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43047958",
+      "title": "Occult virilization: an elusive ovarian steroid cell tumor.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43047958/",
+      "authors": "Krishnasamy Naido SN, Khinder S, Dudek A",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -121,6 +139,33 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43047471",
+      "title": "A novel homozygous ITCH nonsense variant causing autoimmune disease, multisystem, with facial dysmorphism: expanding the phenotypic and geographic spectrum.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43047471/",
+      "authors": "Ali NS, Mundi Dhahrabi HA, Abdul Raheem Al Marzooqi L",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43047272",
+      "title": "Functioning gonadotropinomas with ovarian hyperstimulation and multicystic ovaries: a tale of 2 tumors and 2 organs.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43047272/",
+      "authors": "Ghosh J, Mahadevan S, Shah R",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43047271",
+      "title": "Thyroid storm induced by palpation thyroiditis after subtotal parathyroidectomy for lithium-induced hyperparathyroidism.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43047271/",
+      "authors": "Elamin M, Mohamed S, Kaplan F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "43042434",
       "title": "Metastatic Triple-Negative Male Breast Carcinoma of Occult Primary With Axillary Nodal and Cutaneous Metastases.",
       "date": "2026 Dec",
@@ -172,51 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43042193/",
       "authors": "Sato T, Ichibayashi R, Sadamoto S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43041900",
-      "title": "Thyroid metastases from breast cancer: A report of two cases and a literature review.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43041900/",
-      "authors": "Li Y, Wang W",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43036822",
-      "title": "Live birth after uterus-sparing management of disseminated intravascular coagulation following uterine evacuation for miscarriage in a woman with adenomyosis: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43036822/",
-      "authors": "Akutsu M, Itagaki H, Ino Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43036774",
-      "title": "Successful fertility-preserving management of a viable cesarean scar ectopic pregnancy: a case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43036774/",
-      "authors": "Devarajan A, Nguyen A, Khoury A",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43036731",
-      "title": "Evolution of sub-internal limiting membrane hemorrhage on multimodal imaging.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43036731/",
-      "authors": "Ramakrishnan MS, Sims J, Karaca I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43034573",
-      "title": "Acute airway obstruction revealing granulomatosis with polyangiitis: A case report of a rare isolated laryngeal presentation.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43034573/",
-      "authors": "Bouallou M, Sbai AA, Benfadil D",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
