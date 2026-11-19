@@ -59,6 +59,23 @@ export function viewDimensions(series: DicomSeries, view: MprView) {
   return { width: series.rows, height: series.slices.length };
 }
 
+/** Carry a physical cursor only between acquisitions declared in the same patient space. */
+export function correspondingCursor(from: DicomSeries, to: DicomSeries, point: readonly number[]): MprCursor | null {
+  const a = from.slices[0], b = to.slices[0];
+  if (!a?.studyId || !a.referenceId || a.studyId !== b?.studyId || a.referenceId !== b.referenceId ||
+      point.length !== 3 || !point.every(Number.isFinite)) return null;
+  const grid = regularVolumeGrid(to);
+  if (!grid) return null;
+  const { frame, stepMm } = grid;
+  const delta = point.map((value, i) => value - frame.origin[i]);
+  const projected = [dot(delta, frame.rowDirection) / frame.columnSpacing,
+    dot(delta, frame.columnDirection) / frame.rowSpacing, dot(delta, frame.normal) / stepMm];
+  const dimensions = [to.columns, to.rows, to.slices.length];
+  if (projected.some((value, i) => value < -.5 || value >= dimensions[i] - .5)) return null;
+  const [column, row, slice] = projected.map(Math.round);
+  return { column, row, slice };
+}
+
 /** Outer bounds of the displayed image plane, in the patient's LPS millimetres. */
 export function mprPlaneCorners(series: DicomSeries, view: MprView, slice: number, point: readonly number[] | null) {
   if (view === 'source') return series.slices[slice] && sliceCorners(series.slices[slice]);

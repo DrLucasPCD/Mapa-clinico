@@ -5,7 +5,7 @@ import { atlasSliceForSequence, imageIntegration } from './image-integration';
 import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
-import { mprGeometry, mprPlaneCorners, regularVolumeGrid, type MprView } from './mpr';
+import { correspondingCursor, mprGeometry, mprPlaneCorners, regularVolumeGrid, type MprCursor, type MprView } from './mpr';
 import type { AtlasGuide } from './atlas-slice';
 import type { LesionSurface } from './lesion-mask';
 import { cardiacPhaseLabel, cineCandidates, createCardiacCine } from './cardiac-cine';
@@ -49,6 +49,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const [targetPixel, setTargetPixel] = useState<{slice:typeof selected; row:number;col:number}|null>(null);
   const [targetPoint, setTargetPoint] = useState<number[]|null>(null);
   const [mprPoint, setMprPoint] = useState<number[]|null>(null);
+  const [transferred, setTransferred] = useState<{ series: DicomSeries; cursor: MprCursor | null } | null>(null);
   const [activePlane, setActivePlane] = useState<MprView>('source');
   const [lesion, setLesion] = useState<{ series: DicomSeries; surface: LesionSurface } | null>(null);
   const updateLesion = useCallback((source: DicomSeries, result: LesionSurface | null) =>
@@ -67,6 +68,14 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const automaticLoad = useRef<AbortController | null>(null);
   const current = series[seriesIndex];
   const selected = current?.slices[sliceIndex];
+  const initialCursor = transferred?.series === current ? transferred?.cursor : null;
+  const switchSeries = (index: number) => {
+    const target = series[index];
+    const cursor = current && target && mprPoint ? correspondingCursor(current, target, mprPoint) : null;
+    setTransferred(target ? { series: target, cursor } : null);
+    setSeriesIndex(index);
+    setSliceIndex(cursor?.slice ?? Math.floor((target?.slices.length ?? 1) / 2));
+  };
   const previewIntegration = casePreview ? imageIntegration(casePreview.images, casePreview.acquisition) : null;
   const canRenderVolume = useMemo(() => Boolean(current && regularVolumeGrid(current)), [current]);
   const anatomicalPlanes = useMemo(() => current ? mprGeometry(current) : null, [current]);
@@ -84,11 +93,12 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const eligibility = useMemo(() => current ? validateCtSegmentation(current) : {eligible:false}, [current]);
   useEffect(() => {
     worker.current?.terminate(); worker.current = null;
-    const middle = current ? pixelCenter(current.slices[Math.floor(current.slices.length / 2)], Math.floor(current.rows / 2), Math.floor(current.columns / 2)) ?? null : null;
+    const middle = current ? pixelCenter(
+      current.slices[initialCursor?.slice ?? Math.floor(current.slices.length / 2)], initialCursor?.row ?? Math.floor(current.rows / 2), initialCursor?.column ?? Math.floor(current.columns / 2)) ?? null : null;
     setRelatedPhaseIds([]); setCineOpen(false);
     setSpatialMode('slices'); setSurface(null); setLesion(null); setActivePlane('source'); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
     return () => { worker.current?.terminate(); worker.current = null; };
-  }, [current]);
+  }, [current, initialCursor]);
   useEffect(() => { setRegistration(null); }, [modelVariant]);
   const generateSurface = () => {
     if (!current || !eligibility.eligible) return;
@@ -116,10 +126,10 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const ww = Math.max(1, width ?? defaultWindow.width);
 
   useEffect(() => {
-    setSliceIndex(Math.floor((current?.slices.length ?? 1) / 2));
+    setSliceIndex(initialCursor?.slice ?? Math.floor((current?.slices.length ?? 1) / 2));
     setCenter(null);
     setWidth(null);
-  }, [seriesIndex, current?.id, seriesRevision]);
+  }, [current, initialCursor, seriesRevision]);
   useEffect(() => {
     if (!current) {
       onSlice(atlasSliceForSequence(casePreview?.acquisition, previewIndex, casePreview?.images.length ?? 0));
@@ -198,6 +208,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     try {
       const result = await parseDicomFiles(Array.from(fileList));
       if (revision !== loadRevision.current) return;
+      setTransferred(null);
       setSeries(result.series);
       setSeriesRevision(revision);
       setSeriesIndex(0);
@@ -236,7 +247,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
           files.push(new File(chunks, path.split('/').pop()!, {type:'application/dicom'}));
         }
         const result = await parseDicomFiles(files);
-        if (active && revision === loadRevision.current) { setSeries(result.series); setSeriesRevision(revision); setSeriesIndex(0); setErrors(result.errors); }
+        if (active && revision === loadRevision.current) { setTransferred(null); setSeries(result.series); setSeriesRevision(revision); setSeriesIndex(0); setErrors(result.errors); }
       } catch (error) { if (active && revision === loadRevision.current && !(error instanceof DOMException && error.name === 'AbortError')) setErrors([error instanceof Error ? error.message : 'Falha ao carregar a série.']); }
       finally { if (active && revision === loadRevision.current) setLoading(false); }
     })();
@@ -250,7 +261,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     ++loadRevision.current;
     automaticLoad.current?.abort();
     automaticLoad.current = null;
-    setLoading(false); setSeries([]); setSeriesIndex(0); setSliceIndex(0);
+    setTransferred(null); setLoading(false); setSeries([]); setSeriesIndex(0); setSliceIndex(0);
     setErrors([]); setCenter(null); setWidth(null);
   };
   const move = (delta: number) => {
@@ -288,7 +299,11 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     {!current && casePreview && onLocateCase && onSelectCase && onFocusStructure && <CaseJourney item={casePreview} period={period} onLocate={onLocateCase} onSelectCase={onSelectCase} onFocusStructure={onFocusStructure} />}
     {!current && !casePreview && <p className="plane-status">Selecione todos os arquivos de uma aquisição para agrupá-los por série e ordená-los pela posição física quando disponível.</p>}
     {current && <>
-      {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => setSeriesIndex(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} {item.slices.length===1?'corte':'cortes'}{item.cardiacPhase ? ' · '+cardiacPhaseLabel(item) : ''}{item.slices.some(slice=>slice.velocity) ? ' · velocidade' : ''}</option>)}</select></label>}
+      {series.length > 1 && <label> Série <select aria-label="Selecionar série DICOM" value={seriesIndex} onChange={(event) => switchSeries(Number(event.target.value))}>{series.map((item, index) => <option value={index} key={item.id}>{item.modality} · série {index + 1} · {item.slices.length} {item.slices.length===1?'corte':'cortes'}{item.cardiacPhase ? ' · '+cardiacPhaseLabel(item) : ''}{item.slices.some(slice=>slice.velocity) ? ' · velocidade' : ''}</option>)}</select></label>}
+      {transferred?.series === current && <p className="plane-status">
+        {initialCursor ? 'A mira foi levada ao voxel mais próximo na série que compartilha o mesmo referencial.' :
+          'A nova série foi aberta no centro. A transferência exige o mesmo referencial DICOM e cobertura do ponto escolhido.'}
+      </p>}
       {(canOpenCine || current.cardiacPhase) && <div className="cine-entry">
         {canOpenCine && <button onClick={()=>setCineOpen(value=>!value)} aria-pressed={showCine}>
           {showCine ? 'Voltar à série estática' : cine ? 'Abrir cine cardíaco' : 'Abrir mapa de velocidade'}
@@ -330,7 +345,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
       </div>
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
         <TriPlanarViewer key={current.id+'-'+seriesIndex+'-'+seriesRevision} series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex}
-          onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} activePlane={activePlane} onActivePlane={setActivePlane} onLesionSurface={updateLesion} spatialView={<>
+          onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} initialPosition={initialCursor ?? undefined} activePlane={activePlane} onActivePlane={setActivePlane} onLesionSurface={updateLesion} spatialView={<>
             <div className="spatial-view-tabs" aria-label="Visualização do exame em 3D">
               <button aria-pressed={spatialMode==='slices' || !canRenderVolume} onClick={()=>setSpatialMode('slices')}>Pilhas e fusão</button>
               <button disabled={!canRenderVolume} aria-pressed={spatialMode==='volume' && canRenderVolume} onClick={()=>setSpatialMode('volume')}>Volume do exame</button>

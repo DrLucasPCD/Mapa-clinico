@@ -136,3 +136,23 @@ export function echoCinePhase(time: number, marks: EchoCycleMarks) {
     ? 0.43 * ((frame - start) / (systole - start))
     : 0.43 + 0.57 * ((frame - systole) / (end - systole));
 }
+
+const shortTurn = (from: number, to: number) => ((to - from + 540) % 360) - 180;
+
+/** Feedback in the simulator's pose coordinates, with independent tolerances for each movement. */
+export function echoProbeFeedback(probe: EchoProbe, target: EchoWindow, tilt = echoWindows[target].tilt) {
+  const desired = echoWindows[target];
+  const x = desired.x - probe.x, y = desired.y - probe.y;
+  const positionOk = Math.hypot(x, y) <= .045;
+  const turn = shortTurn(probe.roll, desired.roll);
+  const tiltError = tilt - probe.tilt;
+  const hints: string[] = [];
+  if (!positionOk) {
+    const horizontal = Math.abs(x) > .025 ? (x > 0 ? 'à esquerda do paciente' : 'à direita do paciente') : '';
+    const vertical = Math.abs(y) > .025 ? (y > 0 ? 'para baixo' : 'para cima') : '';
+    hints.push(`Desloque a sonda ${[horizontal, vertical].filter(Boolean).join(' e ')}.`);
+  }
+  if (Math.abs(turn) > 15) hints.push(`Gire o transdutor ${turn > 0 ? 'no sentido horário' : 'no sentido anti-horário'}.`);
+  if (Math.abs(tiltError) > 7) hints.push(`${tiltError > 0 ? 'Aumente' : 'Reduza'} a inclinação do feixe.`);
+  return { correct: hints.length === 0, hints };
+}

@@ -20,8 +20,8 @@ const mpr = await moduleUrl('mpr', {
   './patient-geometry': await moduleUrl('patient-geometry'),
 });
 const mask = await moduleUrl('lesion-mask', { './mpr': mpr });
-const { makeLesionSurface, paintLesion } = await import(mask);
-const { mprPlaneCorners } = await import(mpr);
+const { makeLesionSurface, paintLesion, propagateLesion } = await import(mask);
+const { mprPlaneCorners, correspondingCursor } = await import(mpr);
 const adapter =
   'data:text/javascript,' +
   encodeURIComponent(
@@ -51,6 +51,7 @@ const phantom = {
     studyId,
     referenceId,
     sopInstanceId: `1.2.3.4.${i + 1}`,
+    sopClassId: '1.2.840.10008.5.1.4.1.1.2',
     position: [10, 20, z],
     orientation: [-1, 0, 0, 0, -1, 0],
     pixelSpacing: [2, 3],
@@ -246,9 +247,8 @@ test('coronal brush updates the same voxel and reconstructs its physical extents
   assert.equal(marked.get(1)[7], 1);
 });
 
-const { echoBeamFor, echoCinePhase, echoWindows } = await import(
-  await moduleUrl('echo-windows')
-);
+const { echoBeamFor, echoCinePhase, echoWindows, echoProbeFeedback } =
+  await import(await moduleUrl('echo-windows'));
 test('rotating in the parasternal window changes axes, and cine marks constrain timing', () => {
   const probe = { ...echoWindows.plax, depth: 175 };
   assert.equal(echoBeamFor(probe).window, 'plax');
@@ -261,4 +261,205 @@ test('rotating in the parasternal window changes axes, and cine marks constrain 
   assert.equal(echoCinePhase(1.3, marks), 0.43);
   assert.equal(echoCinePhase(1.8, marks), 1);
   assert.equal(echoCinePhase(1.6, { ...marks, start: 1.4 }), null);
+});
+
+test('keeps the nearest physical voxel between series only within the same DICOM reference frame', () => {
+  const shifted = {
+    ...phantom,
+    slices: phantom.slices.map((slice) => ({
+      ...slice,
+      position: [13, 20, slice.position[2]],
+    })),
+  };
+  assert.deepEqual(correspondingCursor(phantom, shifted, [10, 18, 34]), {
+    column: 1,
+    row: 1,
+    slice: 1,
+  });
+  assert.equal(correspondingCursor(phantom, shifted, [40, 18, 34]), null);
+  assert.equal(
+    correspondingCursor(
+      phantom,
+      {
+        ...shifted,
+        slices: shifted.slices.map((slice) => ({
+          ...slice,
+          referenceId: '1.8.7',
+        })),
+      },
+      [10, 18, 34],
+    ),
+    null,
+  );
+});
+
+const { encodeDicomSeg } = await import(
+  await moduleUrl('dicom-seg-export', {
+    './mpr': mpr,
+    './lesion-mask': mask,
+  })
+);
+test('round-trips named lesions and packed multi-frame references through DICOM SEG', () => {
+  const acquired = {
+    ...phantom,
+    slices: phantom.slices.map((slice, i) => ({
+      ...slice,
+      sopInstanceId: '1.2.3.4',
+      frameNumber: i + 1,
+    })),
+  };
+  const original = parseDicomSeg(segmentation(), phantom);
+  const edited = [
+    {
+      label: 'Lesão occipital',
+      mask: propagateLesion(original[0].mask, 2, -1, 1, 3),
+    },
+    { label: 'Região contralateral', mask: original[1].mask },
+  ];
+  const bytes = encodeDicomSeg(acquired, edited);
+  assert.deepEqual(Buffer.from(bytes.subarray(128, 132)).toString(), 'DICM');
+  assert.deepEqual(
+    parseDicomSeg(bytes, acquired).map(({ label, mask }) => ({ label, mask })),
+    edited,
+  );
+  assert.throws(() => parseDicomSeg(bytes, phantom), /fora da grade/);
+});
+test('propagation stops at an existing contour and never edits a shared slice buffer', () => {
+  const a = Uint8Array.of(0, 1, 0);
+  const b = Uint8Array.of(1, 0, 0);
+  const result = propagateLesion(
+    new Map([
+      [0, a],
+      [2, b],
+    ]),
+    0,
+    1,
+    5,
+    5,
+  );
+  assert.equal(result.size, 3);
+  assert.deepEqual(result.get(1), a);
+  assert.deepEqual(result.get(2), b);
+});
+
+test('echo exercise distinguishes displacement, rotation and tilt across the wraparound', () => {
+  const probe = { ...echoWindows.psax, depth: 170 };
+  assert.deepEqual(echoProbeFeedback(probe, 'psax'), {
+    correct: true,
+    hints: [],
+  });
+  const wrong = echoProbeFeedback(
+    { ...probe, x: 0.25, roll: 175, tilt: 14 },
+    'psax',
+  );
+  assert.deepEqual(wrong.hints, [
+    'Desloque a sonda à esquerda do paciente.',
+    'Gire o transdutor no sentido anti-horário.',
+    'Reduza a inclinação do feixe.',
+  ]);
+});
+
+const dicom = await moduleUrl('dicom', { 'dicom-parser': adapter });
+const { readUltrasoundVolume } = await import(
+  await moduleUrl('ultrasound-volume', { './dicom': dicom, './mpr': mpr })
+);
+const fd = (values) => {
+  const bytes = Buffer.alloc(values.length * 8);
+  values.forEach((value, i) => bytes.writeDoubleLE(value, i * 8));
+  return bytes;
+};
+function enhancedUltrasound({
+  displaced = false,
+  timed = true,
+  wrongClass = false,
+} = {}) {
+  const slices = timed
+    ? [
+        [3, 6, 40],
+        [2, 0, 10],
+        [3, 0, 50],
+        [2, 6, 20],
+      ]
+    : [
+        [2, 6, 20],
+        [2, 0, 10],
+      ];
+  const perFrame = slices.map(([time, z]) => [
+    sq(0x20, 0x930e, [
+      element(0x20, 0x9301, 'FD', fd([displaced && time === 3 ? 1 : 0, 0, z])),
+    ]),
+    ...(timed
+      ? [sq(0x20, 0x9310, [element(0x20, 0x930d, 'FD', fd([time]))])]
+      : []),
+  ]);
+  return Buffer.concat([
+    Buffer.alloc(128),
+    Buffer.from('DICM'),
+    element(2, 0x10, 'UI', '1.2.840.10008.1.2.1'),
+    element(
+      8,
+      0x16,
+      'UI',
+      wrongClass
+        ? '1.2.840.10008.5.1.4.1.1.3.1'
+        : '1.2.840.10008.5.1.4.1.1.6.2',
+    ),
+    element(8, 0x60, 'CS', 'US'),
+    element(0x28, 0x0004, 'CS', 'MONOCHROME2'),
+    element(0x28, 0x0008, 'IS', String(slices.length)),
+    ...[
+      [2, 1],
+      [0x10, 2],
+      [0x11, 2],
+      [0x100, 8],
+      [0x101, 8],
+      [0x102, 7],
+      [0x103, 0],
+    ].map(([tag, value]) => element(0x28, tag, 'US', u16(value))),
+    sq(0x5200, 0x9229, [
+      sq(0x20, 0x930f, [element(0x20, 0x9302, 'FD', fd([1, 0, 0, 0, 1, 0]))]),
+      sq(0x28, 0x9110, [element(0x28, 0x0030, 'DS', '2\\3')]),
+    ]),
+    sq(0x5200, 0x9230, ...perFrame),
+    element(
+      0x7fe0,
+      0x0010,
+      'OB',
+      Buffer.from(slices.flatMap(([, , value]) => Array(4).fill(value))),
+    ),
+  ]);
+}
+test('Enhanced US uses physical positions and recorded temporal offsets to reconstruct independent volumes', () => {
+  const phases = readUltrasoundVolume(enhancedUltrasound());
+  assert.deepEqual(
+    phases.map((phase) => phase.time),
+    [0, 1],
+  );
+  assert.deepEqual(
+    phases.map((phase) =>
+      phase.series.slices.map((slice) => [slice.position[2], slice.pixels[0]]),
+    ),
+    [
+      [
+        [0, 10],
+        [6, 20],
+      ],
+      [
+        [0, 50],
+        [6, 40],
+      ],
+    ],
+  );
+  assert.equal(
+    readUltrasoundVolume(enhancedUltrasound({ timed: false })).length,
+    1,
+  );
+  assert.throws(
+    () => readUltrasoundVolume(enhancedUltrasound({ displaced: true })),
+    /mesma grade/,
+  );
+  assert.throws(
+    () => readUltrasoundVolume(enhancedUltrasound({ wrongClass: true })),
+    /Enhanced US Volume/,
+  );
 });

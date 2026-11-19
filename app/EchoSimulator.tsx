@@ -10,6 +10,7 @@ import {
 import {
   echoBeamFor,
   echoCinePhase,
+  echoProbeFeedback,
   echoWindowOrder,
   echoWindows,
   type EchoCycleMarks,
@@ -20,6 +21,7 @@ import { labLayers } from './lab3d-data';
 import './lab3d.css';
 
 const Lab3dScene = lazy(() => import('./Lab3dScene'));
+const EchoVolumeStudy = lazy(() => import('./EchoVolumeStudy'));
 const layers = labLayers.heart.map((layer) => layer.id);
 const flow = {
   chambers: false,
@@ -43,8 +45,23 @@ const labels = {
   systole: 'Fim da sístole',
   end: 'Diástole seguinte',
 };
+const exercises = [
+  ...echoWindowOrder.map((window) => ({
+    window,
+    label: echoWindows[window].label,
+    tilt: echoWindows[window].tilt,
+  })),
+  { window: 'psax' as const, label: 'Eixo curto · nível apical', tilt: -22 },
+];
 
 export default function EchoSimulator() {
+  const [mode, setMode] = useState<'probe' | 'volume'>('probe');
+  const [exerciseIndex, setExerciseIndex] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<ReturnType<
+    typeof echoProbeFeedback
+  > | null>(null);
+  const exercise = exerciseIndex === null ? null : exercises[exerciseIndex];
+  const hiddenGuide = Boolean(exercise && !feedback?.correct);
   const [probe, setProbe] = useState<EchoProbe>(initial);
   const [gain, setGain] = useState(100);
   const [guide, setGuide] = useState(true);
@@ -137,6 +154,11 @@ export default function EchoSimulator() {
     const { x, y, roll, tilt } = echoWindows[id];
     setProbe((previous) => ({ ...previous, x, y, roll, tilt }));
   };
+  const startExercise = (index: number) => {
+    setExerciseIndex(index);
+    setFeedback(null);
+    setProbe({ x: 0.37, y: 0.36, roll: 0, tilt: 14, depth: 170 });
+  };
   const mark = (key: keyof EchoCycleMarks) => {
     if (!video.current || video.current.readyState < 1) return;
     video.current.pause();
@@ -158,9 +180,35 @@ export default function EchoSimulator() {
     video.current.currentTime = clamp(time, 0, playback.duration);
     captureTime();
   };
+  const modeTabs = (
+    <nav
+      className="us-region-list echo-mode-tabs"
+      aria-label="Modos de ecocardiografia"
+    >
+      <button aria-pressed={mode === 'probe'} onClick={() => setMode('probe')}>
+        Simulador de sonda
+      </button>
+      <button
+        aria-pressed={mode === 'volume'}
+        onClick={() => setMode('volume')}
+      >
+        Exame volumétrico 3D / 4D
+      </button>
+    </nav>
+  );
+  if (mode === 'volume')
+    return (
+      <>
+        {modeTabs}
+        <Suspense fallback={<output>Carregando leitor volumétrico…</output>}>
+          <EchoVolumeStudy />
+        </Suspense>
+      </>
+    );
 
   return (
     <section className="echo-simulator" aria-labelledby="echo-title">
+      {modeTabs}
       <header className="us-heading">
         <div>
           <h2 id="echo-title">Simulador de ecocardiografia</h2>
@@ -172,21 +220,93 @@ export default function EchoSimulator() {
         </div>
         <span>Eco transtorácico</span>
       </header>
-      <nav
-        className="us-region-list echo-windows"
-        aria-label="Janelas de ecocardiografia"
+      <section
+        className="echo-study-note"
+        aria-label="Treino de aquisição do eco"
       >
-        {echoWindowOrder.map((id) => (
+        {!exercise ? (
           <button
-            key={id}
-            aria-pressed={window === id}
-            className={window === id ? 'active' : ''}
-            onClick={() => choose(id)}
+            className="echo-exercise-button"
+            onClick={() => startExercise(0)}
           >
-            {echoWindows[id].label}
+            Treinar uma janela sem guias
           </button>
-        ))}
-      </nav>
+        ) : (
+          <>
+            <label>
+              Janela a encontrar{' '}
+              <select
+                value={exerciseIndex ?? 0}
+                onChange={(event) => startExercise(Number(event.target.value))}
+              >
+                {exercises.map(({ label }, index) => (
+                  <option key={label} value={index}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="us-region-list">
+              <button
+                onClick={() =>
+                  setFeedback(
+                    echoProbeFeedback(probe, exercise.window, exercise.tilt),
+                  )
+                }
+              >
+                Conferir posição da sonda
+              </button>
+              <button onClick={() => startExercise(exerciseIndex!)}>
+                Recomeçar
+              </button>
+              <button
+                onClick={() => {
+                  setExerciseIndex(null);
+                  setFeedback(null);
+                }}
+              >
+                Exploração livre
+              </button>
+            </div>
+            {feedback && (
+              <output>
+                {feedback.correct
+                  ? 'Janela encontrada. Compare o plano no coração com o cine.'
+                  : feedback.hints.join(' ')}
+              </output>
+            )}
+            {feedback?.correct && exercise.window === 'psax' && (
+              <button
+                className="echo-exercise-button"
+                onClick={() => {
+                  choose('psax');
+                  if (exercise.tilt === 0)
+                    setProbe((current) => ({ ...current, tilt: -22 }));
+                }}
+              >
+                Comparar com o outro nível do eixo curto
+              </button>
+            )}
+          </>
+        )}
+      </section>
+      {!hiddenGuide && (
+        <nav
+          className="us-region-list echo-windows"
+          aria-label="Janelas de ecocardiografia"
+        >
+          {echoWindowOrder.map((id) => (
+            <button
+              key={id}
+              aria-pressed={window === id}
+              className={window === id ? 'active' : ''}
+              onClick={() => choose(id)}
+            >
+              {echoWindows[id].label}
+            </button>
+          ))}
+        </nav>
+      )}
       <div className="echo-grid">
         <section className="us-body-panel">
           <div className="us-panel-title">
@@ -231,7 +351,8 @@ export default function EchoSimulator() {
             </div>
             <span className="echo-side right">D</span>
             <span className="echo-side left">E</span>
-            {guide &&
+            {!hiddenGuide &&
+              guide &&
               (['plax', 'apical', 'subcostal'] as const).map((id) => (
                 <span
                   key={id}
@@ -406,15 +527,21 @@ export default function EchoSimulator() {
         </section>
         <section className="us-image-panel">
           <div className="us-panel-title">
-            <strong>{info?.label ?? 'Sem janela acústica'}</strong>
+            <strong>
+              {hiddenGuide
+                ? 'Imagem da janela'
+                : (info?.label ?? 'Sem janela acústica')}
+            </strong>
             <small>
-              {localClip
-                ? 'Cine local'
-                : example === 'psax-apical'
-                  ? 'Cine de referência · nível apical'
-                  : example === 'psax'
-                    ? 'Cine de referência · nível papilar'
-                    : 'Cine de referência'}
+              {hiddenGuide
+                ? 'Treino de aquisição'
+                : localClip
+                  ? 'Cine local'
+                  : example === 'psax-apical'
+                    ? 'Cine de referência · nível apical'
+                    : example === 'psax'
+                      ? 'Cine de referência · nível papilar'
+                      : 'Cine de referência'}
             </small>
           </div>
           <div className="us-image-stage echo-video">
@@ -428,7 +555,11 @@ export default function EchoSimulator() {
                 playsInline
                 loop
                 preload="metadata"
-                aria-label={`Cine de ecocardiografia ${info?.short}`}
+                aria-label={
+                  hiddenGuide
+                    ? 'Cine para o exercício'
+                    : `Cine de ecocardiografia ${info?.short}`
+                }
                 onError={() => setMediaStatus({ src, error: true })}
                 onLoadedMetadata={captureTime}
                 onTimeUpdate={captureTime}
@@ -522,7 +653,7 @@ export default function EchoSimulator() {
           </div>
         </section>
       </div>
-      {info && (
+      {info && !hiddenGuide && (
         <section className="echo-study-note">
           <h3>{info.label}</h3>
           <p>{info.placement}</p>

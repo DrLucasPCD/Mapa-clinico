@@ -161,6 +161,16 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
     scene.add(new T.AmbientLight(0xffffff, 1));
     const mpr = mprGeometry(series);
     if (!isolated && cursorPoint) {
+      const point = new T.Vector3().fromArray(cursorPoint);
+      const markerSize = radius * .035;
+      const markerLines = [new T.Vector3(1, 0, 0), new T.Vector3(0, 1, 0), new T.Vector3(0, 0, 1)]
+        .flatMap(axis => [point.clone().addScaledVector(axis, -markerSize), point.clone().addScaledVector(axis, markerSize)]);
+      const markerGeometry = new T.BufferGeometry().setFromPoints(markerLines);
+      const markerMaterial = new T.LineBasicMaterial({ color: 0x19f4f4, depthTest: false });
+      const marker = new T.LineSegments(markerGeometry, markerMaterial);
+      marker.renderOrder = 10;
+      resources.push(markerGeometry, markerMaterial);
+      scene.add(marker);
       const addGuide = (corners:T.Vector3[], color:number) => {
         const guideGeometry = new T.BufferGeometry().setFromPoints([corners[0],corners[1],corners[2],corners[0],corners[2],corners[3]]);
         const guideMaterial = new T.MeshBasicMaterial({color,transparent:true,opacity:.14,side:T.DoubleSide,depthWrite:false});

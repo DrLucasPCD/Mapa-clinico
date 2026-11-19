@@ -37,3 +37,13 @@
 .image-tools .dicom-upload input[type=file] { display:block; opacity:0; position:absolute; inset:0; width:100%; cursor:pointer; }
 .dicom-upload:focus-within { outline:2px solid #138f98; outline-offset:2px; }
 .lesion-actions output,.mpr-measure-tools output { color:#b0cdd4; font-size:11px; }
+.lesion-editor { min-width:0; border:0; padding:0; margin:0; display:grid; gap:8px; }
+.lesion-editor input[maxlength] { min-width:90px; max-width:165px; border:1px solid #497886; background:#0c2130; color:#eefcff; border-radius:5px; padding:6px 8px; }
+.lesion-review { border-top:1px solid #325261; padding-top:8px; display:grid; gap:6px; }
+.mpr-coordinate { display:flex; gap:6px 12px; flex-wrap:wrap; align-items:center; border:1px solid #305665; border-radius:6px; padding:7px 9px; margin:7px 0; color:#c4e5eb; font-size:11px; }
+.mpr-orientation { position:absolute; z-index:1; pointer-events:none; font-size:10px; color:#e0f8ff; background:#06151bdc; border-radius:3px; padding:2px 4px; }
+.mpr-orientation.left { left:4px; top:50%; translate:0 -50%; }
+.mpr-orientation.right { right:4px; top:50%; translate:0 -50%; }
+.mpr-orientation.top { top:4px; left:50%; translate:-50% 0; }
+.mpr-orientation.bottom { bottom:4px; left:50%; translate:-50% 0; }
+.lesion-modes { border:0; margin:0; padding:0; min-inline-size:0; }

@@ -19,7 +19,7 @@ export type VelocityEncoding = {
 
 export type DicomSlice = {
   seriesId: string;
-  modality: 'CT' | 'MR';
+  modality: 'CT' | 'MR' | 'US';
   rows: number;
   columns: number;
   pixels: Int8Array | Uint8Array | Int16Array | Uint16Array | Float32Array;
@@ -37,6 +37,8 @@ export type DicomSlice = {
   studyId?: string;
   referenceId?: string;
   sopInstanceId?: string;
+  sopClassId?: string;
+  volumeTimeSeconds?: number;
   frameNumber?: number;
   stackId?: string;
   contrastKey?: string;
@@ -47,7 +49,7 @@ export type DicomSlice = {
 
 export type DicomSeries = {
   id: string;
-  modality: 'CT' | 'MR';
+  modality: DicomSlice['modality'];
   rows: number;
   columns: number;
   slices: DicomSlice[];
@@ -103,6 +105,9 @@ const functionalSequences = new Set([
   'x00209111',
   'x00209113',
   'x00209116',
+  'x0020930e',
+  'x0020930f',
+  'x00209310',
   'x00189118',
   'x00189197',
   'x00409096',
@@ -313,11 +318,22 @@ export function parseDicomFrames(
   return parseNativeFrames(bytes, sourceName, true);
 }
 
+export function parseUltrasoundVolumeFrames(bytes: Uint8Array): DicomSlice[] {
+  return parseNativeFrames(bytes, 'eco-volumetrico.dcm', true, 256 * 1024 * 1024, true);
+}
+
+function doubles(ds: DataSet, tag: string, count: number) {
+  if (ds.elements[tag]?.length !== count * 8) return undefined;
+  const values = Array.from({ length: count }, (_, index) => ds.double(tag, index)!);
+  return values.every(Number.isFinite) ? values : undefined;
+}
+
 function parseNativeFrames(
   bytes: Uint8Array,
   sourceName: string,
   allowMultiple: boolean,
   pixelBudget = MAX_LOCAL_BYTES,
+  ultrasound = false,
 ): DicomSlice[] {
   const ds = parseDataset(bytes);
   const syntax = text(ds, 'x00020010') || '1.2.840.10008.1.2';
@@ -325,7 +341,10 @@ function parseNativeFrames(
   if (!rle && !NATIVE_TRANSFER_SYNTAXES.has(syntax))
     fail('Transfer syntax comprimida ou não suportada.');
   const modality = text(ds, 'x00080060');
-  if (modality !== 'CT' && modality !== 'MR')
+  const sopClassId = text(ds, 'x00080016');
+  if (ultrasound && (modality !== 'US' || sopClassId !== '1.2.840.10008.5.1.4.1.1.6.2'))
+    fail('Selecione o DICOM Enhanced US Volume exportado pelo aparelho de eco.');
+  if (modality !== 'CT' && modality !== 'MR' && !(ultrasound && modality === 'US'))
     fail('Somente imagens CT e RM são suportadas.');
   const frames = Number(text(ds, 'x00280008') || '1');
   if (!Number.isInteger(frames) || frames < 1 || frames > 3000)
@@ -400,16 +419,16 @@ function parseNativeFrames(
       (width !== undefined && (!Number.isFinite(width) || width <= 0))
     )
       fail('Janela DICOM inválida.');
-    const position = decimalList(
+    const position = (ultrasound ? doubles(group('x0020930e'), 'x00209301', 3) : decimalList(
       group('x00209113'),
       'x00200032',
       3,
-    ) as DicomSlice['position'];
-    const orientation = decimalList(
+    )) as DicomSlice['position'];
+    const orientation = (ultrasound ? doubles(group('x0020930f'), 'x00209302', 6) : decimalList(
       group('x00209116'),
       'x00200037',
       6,
-    ) as DicomSlice['orientation'];
+    )) as DicomSlice['orientation'];
     const spacing = decimalList(group('x00289110'), 'x00280030', 2);
     const pixelSpacing =
       spacing && spacing.every((value) => value > 0)
@@ -502,6 +521,8 @@ function parseNativeFrames(
       studyId,
       referenceId,
       sopInstanceId,
+      sopClassId,
+      volumeTimeSeconds: ultrasound ? finiteNumber(group('x00209310').double('x0020930d')) : undefined,
       frameNumber: frames > 1 ? frame + 1 : undefined,
       stackId: text(content, 'x00209056'),
       contrastKey,

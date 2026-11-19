@@ -35,6 +35,8 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "app/* 2.ts",
+    "app/* 2.tsx"
   ]
 }

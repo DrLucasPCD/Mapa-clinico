@@ -67,3 +67,8 @@
 .echo-roll-control:active { cursor:grabbing; }
 .echo-probe:focus-within .us-probe-handle { outline:2px solid #ffdb7b; outline-offset:4px; }
 .echo-heart-stage > output,.echo-study-note output { display:block; margin:8px; }
+.echo-mode-tabs { padding:8px 0 12px; }
+.case-column > .echo-mode-tabs { padding:12px 16px 0; }
+.echo-mode-tabs button[aria-pressed=true], .echo-exercise-button { background:#087d87; color:#fff; }
+.echo-exercise-button { border:0; border-radius:6px; padding:7px 11px; cursor:pointer; }
+.echo-study-note select { margin:0 0 9px 6px; max-width:100%; border:1px solid #b6d9df; border-radius:5px; color:#123649; background:#f5fbfb; padding:5px 8px; }

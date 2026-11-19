@@ -1,8 +1,25 @@
+import { useState } from 'react';
 import type { useLesionStudy } from './useLesionStudy';
 
-type Props = { study: ReturnType<typeof useLesionStudy> };
+type Props = {
+  study: ReturnType<typeof useLesionStudy>;
+  slice: number;
+  total: number;
+  onSlice: (index: number) => void;
+  canExport: boolean;
+};
 
-export default function LesionControls({ study }: Props) {
+export default function LesionControls({
+  study,
+  slice,
+  total,
+  onSlice,
+  canExport,
+}: Props) {
+  const [copies, setCopies] = useState(1);
+  const reviewIndex =
+    study.pending.find((index) => index > slice) ?? study.pending[0];
+  const working = study.importing || study.exporting;
   return (
     <section
       className="lesion-controls"
@@ -29,34 +46,48 @@ export default function LesionControls({ study }: Props) {
             }}
           />
         </label>
-        {study.imported.length > 0 && (
+        <button
+          onClick={() => void study.exportFile()}
+          disabled={working || !study.hasMasks || !canExport}
+        >
+          Exportar DICOM SEG
+        </button>
+        <button onClick={study.add} disabled={working}>
+          Nova região
+        </button>
+      </div>
+      {!canExport && (
+        <small>
+          A exportação requer os identificadores originais da série DICOM.
+        </small>
+      )}
+      <fieldset disabled={working} className="lesion-editor">
+        <div className="lesion-actions">
           <label>
             Região
             <select
-              value={study.selection}
-              onChange={(event) => study.select(event.currentTarget.value)}
+              value={study.region.id}
+              onChange={(event) => study.select(event.target.value)}
             >
-              <option value="manual">Marcação manual</option>
-              {study.imported.map((segment) => (
-                <option key={segment.id} value={segment.id}>
-                  {segment.label}
+              {study.regions.map((region, i) => (
+                <option key={region.id} value={region.id}>
+                  {region.label.trim() || `Lesão ${i + 1}`}
                 </option>
               ))}
             </select>
           </label>
-        )}
-        {!study.editing && (
-          <small>
-            Segmentação importada · {study.mask.size}{' '}
-            {study.mask.size === 1 ? 'corte marcado' : 'cortes marcados'}
-          </small>
-        )}
-      </div>
-      {study.editing && (
+          <label>
+            Nome da região
+            <input
+              maxLength={45}
+              value={study.region.label}
+              onChange={(event) => study.rename(event.target.value)}
+            />
+          </label>
+        </div>
         <div className="lesion-actions">
-          <div
+          <fieldset
             className="lesion-modes"
-            role="group"
             aria-label="Ferramenta de marcação"
           >
             <button
@@ -77,7 +108,7 @@ export default function LesionControls({ study }: Props) {
             >
               Borracha
             </button>
-          </div>
+          </fieldset>
           {study.tool !== 'navigate' && (
             <label className="lesion-radius">
               Raio {study.radius} mm
@@ -101,7 +132,84 @@ export default function LesionControls({ study }: Props) {
             Limpar marcação
           </button>
         </div>
-      )}
+        {study.mask.size > 0 && (
+          <div className="lesion-review">
+            <div className="lesion-actions">
+              <strong>
+                Corte adquirido {slice + 1} / {total}
+              </strong>
+              <label>
+                Propagar por
+                <select
+                  value={copies}
+                  onChange={(event) => setCopies(Number(event.target.value))}
+                >
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? 'corte' : 'cortes'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                disabled={!study.mask.has(slice) || slice === 0}
+                onClick={() => study.propagate(slice, -1, copies)}
+              >
+                ← Copiar para trás
+              </button>
+              <button
+                disabled={!study.mask.has(slice) || slice === total - 1}
+                onClick={() => study.propagate(slice, 1, copies)}
+              >
+                Copiar para frente →
+              </button>
+            </div>
+            <small>
+              O contorno é copiado para cortes vazios até encontrar um corte
+              marcado. Revise o contorno em cada fatia.
+            </small>
+            <div className="lesion-actions">
+              <button
+                aria-pressed={study.region.reviewed.has(slice)}
+                disabled={!study.mask.has(slice)}
+                onClick={() => study.toggleReview(slice)}
+              >
+                {study.region.reviewed.has(slice)
+                  ? '✓ Corte revisado'
+                  : 'Marcar corte revisado'}
+              </button>
+              <button
+                disabled={reviewIndex === undefined}
+                onClick={() => onSlice(reviewIndex!)}
+              >
+                Ir para corte pendente
+              </button>
+              <label>
+                Ir para corte marcado
+                <select
+                  value={study.mask.has(slice) ? slice : ''}
+                  onChange={(event) => onSlice(Number(event.target.value))}
+                >
+                  <option value="" disabled>
+                    Escolher…
+                  </option>
+                  {study.marked.map((index) => (
+                    <option key={index} value={index}>
+                      {index + 1} ·{' '}
+                      {study.region.reviewed.has(index)
+                        ? 'revisado'
+                        : 'pendente'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <output>
+                {study.region.reviewed.size} / {study.marked.length} revisados
+              </output>
+            </div>
+          </div>
+        )}
+      </fieldset>
       <div className="lesion-actions">
         {study.mask.size > 0 && (
           <label>

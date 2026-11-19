@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { DicomSeries } from './dicom';
-import type { DicomSegment } from './dicom-seg';
 import {
   maxMaskBytes,
   paintLesion,
+  propagateLesion,
   type BrushPoint,
   type LesionMask,
   type LesionSurface,
@@ -12,6 +12,22 @@ import { regularVolumeGrid, type MprCursor, type MprView } from './mpr';
 import type { Point3 } from './patient-geometry';
 
 const emptyMask: LesionMask = new Map();
+type Region = {
+  id: string;
+  label: string;
+  mask: LesionMask;
+  reviewed: Set<number>;
+  imported?: boolean;
+};
+
+let regionCount = 0;
+const newRegion = (label: string): Region => ({
+  id: String(++regionCount),
+  label,
+  mask: emptyMask,
+  reviewed: new Set(),
+});
+
 export type LesionTool = 'navigate' | 'paint' | 'erase';
 
 export function useLesionStudy(
@@ -19,10 +35,12 @@ export function useLesionStudy(
   enabled: boolean,
   onSurface?: (series: DicomSeries, surface: LesionSurface | null) => void,
 ) {
-  const [imported, setImported] = useState<DicomSegment[]>([]);
-  const [manual, setManual] = useState<LesionMask>(emptyMask);
-  const [selection, setSelection] = useState('manual');
-  const [undoMask, setUndoMask] = useState<LesionMask | null>(null);
+  const [regions, setRegions] = useState<Region[]>(() => [
+    newRegion('Lesão 1'),
+  ]);
+  const [selectedId, setSelectedId] = useState('');
+  const [history, setHistory] = useState<Region | null>(null);
+  const [exporting, setExporting] = useState(false);
   const [tool, setTool] = useState<LesionTool>('navigate');
   const [radius, setRadius] = useState(4);
   const [shown, setShown] = useState(true);
@@ -33,12 +51,37 @@ export function useLesionStudy(
     volume: number | null;
     error?: string;
   } | null>(null);
-  const editing = selection === 'manual';
-  const mask =
-    (editing
-      ? manual
-      : imported.find((segment) => String(segment.id) === selection)?.mask) ??
-    emptyMask;
+  const region = regions.find((item) => item.id === selectedId) ?? regions[0];
+  const { mask } = region;
+  const marked = [...mask.keys()].sort((a, b) => a - b);
+  const pending = marked.filter((slice) => !region.reviewed.has(slice));
+
+  const changeRegion = (update: (region: Region) => Region) =>
+    setRegions((current) =>
+      current.map((item) => (item.id === region.id ? update(item) : item)),
+    );
+  function updateMask(next: LesionMask) {
+    if (next === mask) return;
+    const currentBytes = regions.reduce(
+      (total, item) =>
+        total +
+        (item.id === region.id ? next.size : item.mask.size) *
+          series.rows *
+          series.columns,
+      0,
+    );
+    if (currentBytes > maxMaskBytes)
+      throw new Error(
+        'As regiões excedem o limite local de 224 MB de máscaras.',
+      );
+    const reviewed = new Set(
+      [...region.reviewed].filter(
+        (z) => next.has(z) && next.get(z) === mask.get(z),
+      ),
+    );
+    setHistory(region);
+    changeRegion((item) => ({ ...item, mask: next, reviewed }));
+  }
   const completed = result?.mask === mask ? result : null;
 
   useEffect(() => {
@@ -116,8 +159,25 @@ export function useLesionStudy(
         new Uint8Array(await file.arrayBuffer()),
         series,
       );
-      setImported(segments);
-      setSelection(String(segments[0].id));
+      const imported = segments.map((segment) => ({
+        ...newRegion(segment.label),
+        mask: segment.mask,
+        imported: true,
+      }));
+      const used = [...regions, ...imported].reduce(
+        (total, item) => total + item.mask.size * series.rows * series.columns,
+        0,
+      );
+      if (used > maxMaskBytes)
+        throw new Error(
+          'As máscaras carregadas excedem o limite local de 224 MB.',
+        );
+      setRegions((current) => [
+        ...current.filter((item) => item.mask.size),
+        ...imported,
+      ]);
+      setSelectedId(imported[0].id);
+      setHistory(null);
       setTool('navigate');
       setShown(true);
     } catch (err) {
@@ -137,10 +197,10 @@ export function useLesionStudy(
     points: BrushPoint[],
     stepMm: number,
   ) {
-    if (!editing || tool === 'navigate') return;
+    if (tool === 'navigate') return;
     try {
       const next = paintLesion(
-        manual,
+        mask,
         series,
         view,
         cursor,
@@ -149,10 +209,7 @@ export function useLesionStudy(
         stepMm,
         tool === 'paint' ? 1 : 0,
       );
-      if (next !== manual) {
-        setUndoMask(manual);
-        setManual(next);
-      }
+      updateMask(next);
       setError('');
     } catch (err) {
       setError(
@@ -163,15 +220,55 @@ export function useLesionStudy(
     }
   }
 
+  async function exportFile() {
+    setExporting(true);
+    setError('');
+    try {
+      const { encodeDicomSeg } = await import('./dicom-seg-export');
+      const bytes = encodeDicomSeg(series, regions);
+      const url = URL.createObjectURL(
+        new Blob([bytes.buffer], { type: 'application/dicom' }),
+      );
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'mapa-clinico-lesoes.dcm';
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 3000);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'Falha ao exportar DICOM SEG.',
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
+
   return {
-    imported,
-    editing,
-    selection,
+    regions,
+    region,
+    marked,
+    pending,
+    hasMasks: regions.some((item) => item.mask.size),
+    importing,
+    importFile,
+    exporting,
+    exportFile,
     select: (id: string) => {
-      setSelection(id);
+      setSelectedId(id);
       setTool('navigate');
       setShown(true);
+      setHistory(null);
     },
+    add: () => {
+      const item = newRegion(`Lesão ${regions.length + 1}`);
+      setRegions((current) => [...current, item]);
+      setSelectedId(item.id);
+      setHistory(null);
+      setShown(true);
+    },
+    rename: (label: string) => changeRegion((item) => ({ ...item, label })),
     mask,
     tool,
     setTool: (mode: LesionTool) => {
@@ -182,23 +279,51 @@ export function useLesionStudy(
     setRadius,
     shown,
     setShown,
-    importing,
-    importFile,
     stroke,
     error,
     rendering: enabled && mask.size > 0 && !completed,
     volume: completed?.volume ?? null,
     surfaceError: completed?.error ?? '',
-    canUndo: undoMask !== null,
+    canUndo: history?.id === region.id,
     undo: () => {
-      if (undoMask) {
-        setManual(undoMask);
-        setUndoMask(null);
-      }
+      if (!history || history.id !== region.id) return;
+      changeRegion((item) => ({
+        ...item,
+        mask: history.mask,
+        reviewed: history.reviewed,
+      }));
+      setHistory(null);
     },
-    clear: () => {
-      setUndoMask(manual);
-      setManual(emptyMask);
+    clear: () => updateMask(emptyMask),
+    toggleReview: (slice: number) => {
+      if (!mask.has(slice)) return;
+      changeRegion((item) => {
+        const reviewed = new Set(item.reviewed);
+        if (reviewed.has(slice)) reviewed.delete(slice);
+        else reviewed.add(slice);
+        return { ...item, reviewed };
+      });
+    },
+    propagate: (slice: number, direction: -1 | 1, count: number) => {
+      try {
+        const next = propagateLesion(
+          mask,
+          slice,
+          direction,
+          count,
+          series.slices.length,
+        );
+        if (next === mask) {
+          setError('O corte vizinho já tem contorno ou está fora da série.');
+          return;
+        }
+        updateMask(next);
+        setError('');
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Falha ao propagar o contorno.',
+        );
+      }
     },
   };
 }

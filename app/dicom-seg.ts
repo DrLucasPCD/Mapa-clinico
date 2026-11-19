@@ -125,9 +125,13 @@ export function parseDicomSeg(
     const id = item.uint16('x00620004');
     if (!id || segments.has(id))
       throw new Error('O DICOM SEG tem identificadores de segmento inválidos.');
+    const label = item.elements.x00620005;
+    const decoded = label && read(ds, 'x00080005') === 'ISO_IR 192'
+      ? new TextDecoder().decode(item.byteArray.subarray(label.dataOffset, label.dataOffset + label.length)).trim()
+      : read(item, 'x00620005');
     segments.set(id, {
       id,
-      label: read(item, 'x00620005') || `Segmento ${id}`,
+      label: decoded || `Segmento ${id}`,
       mask: new Map(),
     });
   }

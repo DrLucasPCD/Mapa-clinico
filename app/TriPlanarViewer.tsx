@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import type { DicomSeries } from './dicom';
-import { pixelCenter } from './patient-geometry';
+import { pixelCenter, sliceFrame } from './patient-geometry';
 import { cursorFromView, mprGeometry, regularVolumeGrid, viewDimensions, viewPixelIndex, viewSliceIndex, viewVoxel, type MprCursor, type MprView } from './mpr';
 import { brushSpacing, lesionColor, type BrushPoint, type LesionSurface } from './lesion-mask';
 import { useLesionStudy } from './useLesionStudy';
 import LesionControls from './LesionControls';
+import { canExportDicomSeg } from './dicom-seg-export';
 
 type Props = {
   spatialView?: ReactNode;
@@ -18,9 +19,14 @@ type Props = {
   onLesionSurface?: (series: DicomSeries, surface: LesionSurface | null) => void;
   onActivePlane?: (view: MprView) => void;
   activePlane?: MprView;
+  initialPosition?: Pick<MprCursor, 'row' | 'column'>;
 };
 
 const views: MprView[] = ['source', 'row', 'column'];
+const axisLabels = (direction: readonly number[], sign = 1) =>
+  direction.map((value, index) => ({ value: value * sign, index })).filter(({ value }) => Math.abs(value) >= .15)
+    .sort((a, b) => Math.abs(b.value) - Math.abs(a.value))
+    .map(({ value, index }) => value > 0 ? 'LPS'[index] : 'RAI'[index]).join('');
 type MeasurePoint = { view: MprView; index: number; x: number; y: number; patient: number[] };
 type Stroke = { pointerId: number; view: MprView; cursor: MprCursor; points: BrushPoint[] };
 const relativePoint = (event: MouseEvent<HTMLCanvasElement>) => {
@@ -29,19 +35,22 @@ const relativePoint = (event: MouseEvent<HTMLCanvasElement>) => {
   return { x: (event.clientX - bounds.left) / bounds.width, y: (event.clientY - bounds.top) / bounds.height };
 };
 
-export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView, onLesionSurface, activePlane = 'source', onActivePlane }: Props) {
+export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView, onLesionSurface, activePlane = 'source', onActivePlane, initialPosition }: Props) {
   const safeSlice = Math.max(0, Math.min(series.slices.length - 1, slice));
+  const ultrasound = series.modality === 'US';
   const geometry = useMemo(() => {
-    const aligned = mprGeometry(series);
-    if (aligned || !onLesionSurface) return aligned;
+    const aligned = ultrasound ? null : mprGeometry(series);
+    if (aligned || (!onLesionSurface && !ultrasound)) return aligned;
     const grid = regularVolumeGrid(series);
     return grid && { stepMm: grid.stepMm, labels: { source: 'Plano de aquisição', row: 'Ortogonal 1', column: 'Ortogonal 2' } };
-  }, [series, onLesionSurface]);
+  }, [series, onLesionSurface, ultrasound]);
+  const frame = useMemo(() => sliceFrame(series.slices[0]), [series]);
+  const exportable = useMemo(() => Boolean(onLesionSurface && canExportDicomSeg(series)), [series, onLesionSurface]);
   const study = useLesionStudy(series, Boolean(geometry && onLesionSurface), onLesionSurface);
   const { mask, shown, tool } = study;
   const drawing = useRef<Stroke | null>(null);
   const [trail, setTrail] = useState<Stroke | null>(null);
-  const [position, setPosition] = useState({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2) });
+  const [position, setPosition] = useState(() => initialPosition ?? { column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2) });
   const cursor = useMemo<MprCursor>(() => ({
     column: Math.min(series.columns - 1, position.column),
     row: Math.min(series.rows - 1, position.row),
@@ -126,7 +135,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     };
   };
   const beginStroke = (view: MprView, event: PointerEvent<HTMLCanvasElement>) => {
-    if (tool === 'navigate' || event.button !== 0 || drawing.current) return;
+    if (tool === 'navigate' || study.importing || study.exporting || event.button !== 0 || drawing.current) return;
     const point = brushPoint(view, event);
     if (!point) return;
     onActivePlane?.(view);
@@ -193,12 +202,20 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
   const location = pixelCenter(series.slices[cursor.slice], cursor.row, cursor.column);
   return <section className="mpr-viewer" aria-label="Reconstruções multiplanares sincronizadas">
     <header><small>RECONSTRUÇÃO MULTIPLANAR</small><h3>Três planos sincronizados</h3><p>Clique para mover a mira. Role o mouse sobre uma imagem para navegar pelos cortes daquele plano; as três vistas e o volume 3D acompanham.</p></header>
+    {location && <div className="mpr-coordinate">
+      <strong>{ultrasound ? 'Mira no volume' : 'Mira no exame · LPS'}</strong>
+      {location.map((value, i) => <span key={i}>{'XYZ'[i]} {value.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} mm</span>)}
+      {!ultrasound && <span>R/L · direita/esquerda, A/P · anterior/posterior, I/S · inferior/superior</span>}
+    </div>}
     <div className="mpr-measure-tools"><button aria-pressed={measureMode && tool === 'navigate'} onClick={() => { study.setTool('navigate'); setMeasureMode(value => tool !== 'navigate' || !value); setMeasureStart(null); setMeasureEnd(null); }}>{measureMode && tool === 'navigate' ? '✓ Medir distância' : 'Medir distância'}</button>{measureStart && <button onClick={() => { setMeasureStart(null); setMeasureEnd(null); }}>Limpar medida</button>}<output>{distance !== null ? `${distance.toFixed(1)} mm entre os pontos` : measureMode && tool === 'navigate' ? 'Clique em dois pontos no mesmo plano.' : 'Geometria DICOM em milímetros.'}</output></div>
-    {onLesionSurface && <LesionControls study={study} />}
+    {onLesionSurface && <LesionControls study={study} slice={safeSlice} total={series.slices.length} canExport={exportable}
+      onSlice={index => { onActivePlane?.('source'); onSlice(index); }} />}
     <div className="mpr-grid">{views.map(view => {
       const size = viewDimensions(series, view);
       const [dx, dy] = brushSpacing(series, view, geometry.stepMm);
       const stroke = trail?.view === view ? trail.points : null;
+      const horizontal = view === 'column' ? frame?.columnDirection : frame?.rowDirection;
+      const vertical = view === 'source' ? frame?.columnDirection : frame?.normal;
       return <figure key={view} className={activePlane === view ? 'mpr-active-plane' : undefined}>
         <div className="mpr-image" style={{ aspectRatio: ratios[view], width: `min(100%, calc(var(--mpr-max-height, 260px) * ${ratios[view]}))` }}>
           <canvas ref={node => { canvases.current[view] = node; }} onClick={event => select(view, event)}
@@ -207,6 +224,12 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
             onLostPointerCapture={event => endStroke(event, false)}
             style={tool === 'navigate' ? undefined : { touchAction: 'none' }}
             aria-label={`Reconstrução ${geometry.labels[view]}. Role para navegar pelos cortes.`} />
+          {!ultrasound && horizontal && vertical && <>
+            <span className="mpr-orientation left" aria-hidden="true">{axisLabels(horizontal, -1)}</span>
+            <span className="mpr-orientation right" aria-hidden="true">{axisLabels(horizontal)}</span>
+            <span className="mpr-orientation top" aria-hidden="true">{axisLabels(vertical, -1)}</span>
+            <span className="mpr-orientation bottom" aria-hidden="true">{axisLabels(vertical)}</span>
+          </>}
           {stroke && <svg className="lesion-preview" aria-hidden="true" viewBox={`0 0 ${size.width * dx} ${size.height * dy}`}>
             <polyline points={stroke.map(({ x, y }) => `${(x + .5) * dx},${(y + .5) * dy}`).join(' ')}
               fill="none" stroke={tool === 'paint' ? lesionColor : '#d3f9ff'} strokeWidth={study.radius * 2} strokeLinecap="round" strokeLinejoin="round" />
@@ -216,7 +239,6 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
         <figcaption>{geometry.labels[view]} · {view === 'source' ? 'adquirida' : 'reconstruída'}</figcaption>
       </figure>;
     })}{spatialView && <div className="mpr-spatial"><div className="spatial-heading">Espaço do exame · 3D</div>{spatialView}</div>}</div>
-    {location && <small>Mira em milímetros LPS · {location.map(value => value.toLocaleString('pt-BR', { maximumFractionDigits: 1 })).join(' / ')}</small>}
     <small>As imagens usam o espaçamento físico dos voxels da série.</small>
   </section>;
 }

@@ -235,3 +235,17 @@ export function makeLesionSurface(
     volumeMl,
   };
 }
+
+/** Copy exactly the source contour into empty adjacent acquisition planes. */
+export function propagateLesion(mask: LesionMask, slice: number, direction: -1 | 1, count: number, depth: number): LesionMask {
+  const contour = mask.get(slice);
+  if (!contour) return mask;
+  const next = new Map(mask);
+  for (let distance = 1; distance <= count; distance++) {
+    const z = slice + distance * direction;
+    if (z < 0 || z >= depth || next.has(z)) break;
+    if ((next.size + 1) * contour.byteLength > maxMaskBytes) throw new Error('A máscara excede o limite de memória local.');
+    next.set(z, contour);
+  }
+  return next.size > mask.size ? next : mask;
+}
