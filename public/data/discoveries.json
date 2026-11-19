@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-18T18:01:56.803Z",
+  "lastChecked": "2026-11-19T18:15:36.529Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -85,6 +85,60 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "42895635",
+      "title": "S1 radiculopathy presenting as progressive unilateral calf hypertrophy.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42895635/",
+      "authors": "Muñoz JP, Escobedo S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42878805",
+      "title": "IgG4-related disease of the pelvic floor musculature mimicking neoplasm: a case report with imaging-pathologic correlation.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42878805/",
+      "authors": "Lundberg J, Hoda ST, Khodarahmi I",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42870064",
+      "title": "A rare case of bilateral cuboid-navicular coalitions.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42870064/",
+      "authors": "Zheng C, Zhang J, Simeone FJ",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42862319",
+      "title": "Primary leiomyosarcoma arising adjacent to a femoral stem following total hip arthroplasty: a case report with radiologic and histopathological correlation.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42862319/",
+      "authors": "Shiraishi S, Fujiwara T, Hamai S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42850403",
+      "title": "CIC-rearranged sarcoma of the arm presenting as a soft tissue mass with regional lymphadenopathy and tumor thrombus.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42850403/",
+      "authors": "Saini M, Chandola S, Rastogi S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "42844360",
+      "title": "Atypical spindle cell/pleomorphic lipomatous tumor with sarcomatous transformation during recurrence.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42844360/",
+      "authors": "De Temmerman J, Van Den Berghe T, Cordier F",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42831063",
       "title": "Use of a Medial Femoral Condyle Free Flap for Metacarpal Reconstruction of Type IIIC Congenital Thumb Hypoplasia.",
       "date": "2027 Jan",
@@ -163,60 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43047271/",
       "authors": "Elamin M, Mohamed S, Kaplan F",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042434",
-      "title": "Metastatic Triple-Negative Male Breast Carcinoma of Occult Primary With Axillary Nodal and Cutaneous Metastases.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042434/",
-      "authors": "Sugiyama E, Di Lena E, Matsuda K",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042431",
-      "title": "Prolonged Cholestasis as an Initial Presentation of Miliary Tuberculosis in a Pediatric Patient.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042431/",
-      "authors": "Zambrano Perez C, Rusinque Del Busto MJ, Caceres Montejo J",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042426",
-      "title": "The Vitamin B12-C-Reactive Protein Index in Advanced Cancer: A Case Report and Narrative Review of an Underutilized Potential Prognostic Biomarker.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042426/",
-      "authors": "Zulfiqar AA, Andres E",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042423",
-      "title": "Ductal Carcinoma In Situ in a Complex Fibroadenoma.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042423/",
-      "authors": "Mitrousias A, Tsoti SM, Papapanagiotou I",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042420",
-      "title": "Anterior Pelvic Herniation After Urethral Atresia: A Case Report and the Bladder Space-Occupying Hypothesis.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042420/",
-      "authors": "Li HN, Liu XB, Shen JH",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43042193",
-      "title": "Emergency Physician-Performed Point-of-Care Ultrasound Identified Left Atrial Myxoma in Acute Cerebellar Infarction.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43042193/",
-      "authors": "Sato T, Ichibayashi R, Sadamoto S",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
