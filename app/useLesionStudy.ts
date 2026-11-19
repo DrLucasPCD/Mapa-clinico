@@ -28,34 +28,30 @@ export function useLesionStudy(
   const [shown, setShown] = useState(true);
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState('');
-  const [rendering, setRendering] = useState(false);
-  const [volume, setVolume] = useState<number | null>(null);
-  const [surfaceError, setSurfaceError] = useState('');
+  const [result, setResult] = useState<{
+    mask: LesionMask;
+    volume: number | null;
+    error?: string;
+  } | null>(null);
   const editing = selection === 'manual';
   const mask =
     (editing
       ? manual
       : imported.find((segment) => String(segment.id) === selection)?.mask) ??
     emptyMask;
+  const completed = result?.mask === mask ? result : null;
 
   useEffect(() => {
     if (!enabled || !onSurface) return;
     onSurface(series, null);
-    setVolume(null);
-    setSurfaceError('');
-    if (!mask.size) {
-      setRendering(false);
-      return;
-    }
+    if (!mask.size) return;
     const grid = regularVolumeGrid(series);
     if (!grid) return;
-    setRendering(true);
     const { frame, stepMm } = grid;
     let worker: Worker | undefined;
     const timer = window.setTimeout(() => {
       const fail = (message: string) => {
-        setSurfaceError(message);
-        setRendering(false);
+        setResult({ mask, volume: null, error: message });
         worker?.terminate();
       };
       try {
@@ -71,9 +67,8 @@ export function useLesionStudy(
             return;
           }
           const surface = event.data.surface;
-          setVolume(surface.volumeMl);
+          setResult({ mask, volume: surface.volumeMl });
           onSurface(series, surface);
-          setRendering(false);
           worker?.terminate();
         };
         worker.onerror = () =>
@@ -191,9 +186,9 @@ export function useLesionStudy(
     importFile,
     stroke,
     error,
-    rendering,
-    volume,
-    surfaceError,
+    rendering: enabled && mask.size > 0 && !completed,
+    volume: completed?.volume ?? null,
+    surfaceError: completed?.error ?? '',
     canUndo: undoMask !== null,
     undo: () => {
       if (undoMask) {

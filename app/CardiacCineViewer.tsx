@@ -431,7 +431,6 @@ export default function CardiacCineViewer({
         <Suspense fallback={<p>Preparando reconstruções…</p>}>
           <TriPlanarViewer
             series={active}
-            keepCursor
             slice={index}
             windowCenter={limits.center}
             windowWidth={limits.width}

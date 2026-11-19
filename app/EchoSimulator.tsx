@@ -193,36 +193,34 @@ export default function EchoSimulator() {
             <strong>Posicionar a sonda</strong>
             <small>Vista anterior · direita do paciente à esquerda</small>
           </div>
-          <div
-            ref={map}
-            className="us-body-map echo-torso"
-            role="group"
-            aria-label="Posição da sonda. Use as setas para mover."
-            tabIndex={0}
-            onPointerDown={(event) => begin(event, false)}
-            onPointerMove={(event) => {
-              if (pointer.current?.id === event.pointerId) changeProbe(event);
-            }}
-            onPointerUp={endPointer}
-            onPointerCancel={endPointer}
-            onLostPointerCapture={endPointer}
-            onKeyDown={(event) => {
-              if (event.target !== event.currentTarget) return;
-              const delta = {
-                ArrowUp: [0, -0.025],
-                ArrowDown: [0, 0.025],
-                ArrowLeft: [-0.025, 0],
-                ArrowRight: [0.025, 0],
-              }[event.key];
-              if (!delta) return;
-              event.preventDefault();
-              setProbe((previous) => ({
-                ...previous,
-                x: clamp(previous.x + delta[0], 0.12, 0.88),
-                y: clamp(previous.y + delta[1], 0.14, 0.68),
-              }));
-            }}
-          >
+          <div ref={map} className="us-body-map echo-torso">
+            <button
+              type="button"
+              className="echo-position-control"
+              aria-label="Posição da sonda. Use as setas para mover."
+              onPointerDown={(event) => begin(event, false)}
+              onPointerMove={(event) => {
+                if (pointer.current?.id === event.pointerId) changeProbe(event);
+              }}
+              onPointerUp={endPointer}
+              onPointerCancel={endPointer}
+              onLostPointerCapture={endPointer}
+              onKeyDown={(event) => {
+                const delta = {
+                  ArrowUp: [0, -0.025],
+                  ArrowDown: [0, 0.025],
+                  ArrowLeft: [-0.025, 0],
+                  ArrowRight: [0.025, 0],
+                }[event.key];
+                if (!delta) return;
+                event.preventDefault();
+                setProbe((previous) => ({
+                  ...previous,
+                  x: clamp(previous.x + delta[0], 0.12, 0.88),
+                  y: clamp(previous.y + delta[1], 0.14, 0.68),
+                }));
+              }}
+            />
             <div aria-hidden="true" className="echo-chest">
               <i />
               <i />
@@ -253,15 +251,34 @@ export default function EchoSimulator() {
                 transform: `translate(-50%,-100%) rotate(${probe.roll}deg)`,
               }}
             >
-              <button
+              <span className="us-probe-handle" aria-hidden="true">
+                ↻
+              </span>
+              <input
+                type="range"
+                min="-180"
+                max="180"
+                step="1"
+                value={probe.roll}
                 aria-label="Girar transdutor do eco"
-                role="slider"
-                aria-valuemin={-180}
-                aria-valuemax={180}
-                aria-valuenow={probe.roll}
-                className="us-probe-handle"
-                onPointerDown={(event) => begin(event, true)}
+                className="echo-roll-control"
                 title="Arraste para girar a sonda"
+                onPointerDown={(event) => {
+                  event.preventDefault();
+                  event.currentTarget.focus();
+                  begin(event, true);
+                }}
+                onPointerMove={(event) => {
+                  if (pointer.current?.id === event.pointerId)
+                    changeProbe(event);
+                }}
+                onPointerUp={endPointer}
+                onPointerCancel={endPointer}
+                onLostPointerCapture={endPointer}
+                onChange={(event) => {
+                  const roll = event.currentTarget.valueAsNumber;
+                  setProbe((previous) => ({ ...previous, roll }));
+                }}
                 onKeyDown={(event) => {
                   const increment = {
                     ArrowLeft: -5,
@@ -276,9 +293,7 @@ export default function EchoSimulator() {
                     roll: ((previous.roll + increment + 540) % 360) - 180,
                   }));
                 }}
-              >
-                ↻
-              </button>
+              />
               <span className="echo-probe-marker" aria-hidden="true" />
             </div>
           </div>
@@ -335,7 +350,7 @@ export default function EchoSimulator() {
             <small>{info ? info.short : 'Sonda fora das janelas'}</small>
           </div>
           <div className="echo-heart-stage">
-            <Suspense fallback={<p role="status">Carregando coração 3D…</p>}>
+            <Suspense fallback={<output>Carregando coração 3D…</output>}>
               <Lab3dScene
                 scope="heart"
                 molecule="dopamina"
@@ -571,11 +586,11 @@ export default function EchoSimulator() {
             )}
           </div>
           {complete && (
-            <p role="status">
+            <output>
               {synchronized
                 ? 'Ciclo sincronizado por tempo.'
                 : 'Os três marcos precisam estar em ordem cronológica.'}
-            </p>
+            </output>
           )}
         </details>
       )}

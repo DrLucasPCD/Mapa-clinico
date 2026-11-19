@@ -36,3 +36,4 @@
 .dicom-upload { position:relative; }
 .image-tools .dicom-upload input[type=file] { display:block; opacity:0; position:absolute; inset:0; width:100%; cursor:pointer; }
 .dicom-upload:focus-within { outline:2px solid #138f98; outline-offset:2px; }
+.lesion-actions output,.mpr-measure-tools output { color:#b0cdd4; font-size:11px; }

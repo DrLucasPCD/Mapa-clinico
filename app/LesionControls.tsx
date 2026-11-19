@@ -113,7 +113,7 @@ export default function LesionControls({ study }: Props) {
             Destacar nos cortes
           </label>
         )}
-        <span role="status">
+        <output>
           {study.rendering
             ? 'Reconstruindo região no espaço do exame…'
             : study.volume !== null
@@ -121,7 +121,7 @@ export default function LesionControls({ study }: Props) {
               : study.tool !== 'navigate'
                 ? 'Arraste sobre uma imagem. Role para avançar entre os cortes.'
                 : 'Escolha Pincel para começar uma marcação manual.'}
-        </span>
+        </output>
       </div>
       {(study.error || study.surfaceError) && (
         <p role="alert" className="lesion-error">

@@ -39,6 +39,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const [region, setRegion] = useState<Region>('body');
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [seriesRevision, setSeriesRevision] = useState(0);
   const [center, setCenter] = useState<number | null>(null);
   const [width, setWidth] = useState<number | null>(null);
   const [threshold, setThreshold] = useState(300);
@@ -118,7 +119,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     setSliceIndex(Math.floor((current?.slices.length ?? 1) / 2));
     setCenter(null);
     setWidth(null);
-  }, [seriesIndex, current?.id]);
+  }, [seriesIndex, current?.id, seriesRevision]);
   useEffect(() => {
     if (!current) {
       onSlice(atlasSliceForSequence(casePreview?.acquisition, previewIndex, casePreview?.images.length ?? 0));
@@ -198,6 +199,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
       const result = await parseDicomFiles(Array.from(fileList));
       if (revision !== loadRevision.current) return;
       setSeries(result.series);
+      setSeriesRevision(revision);
       setSeriesIndex(0);
       setErrors(result.errors);
     } catch (error) {
@@ -234,7 +236,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
           files.push(new File(chunks, path.split('/').pop()!, {type:'application/dicom'}));
         }
         const result = await parseDicomFiles(files);
-        if (active && revision === loadRevision.current) { setSeries(result.series); setSeriesIndex(0); setErrors(result.errors); }
+        if (active && revision === loadRevision.current) { setSeries(result.series); setSeriesRevision(revision); setSeriesIndex(0); setErrors(result.errors); }
       } catch (error) { if (active && revision === loadRevision.current && !(error instanceof DOMException && error.name === 'AbortError')) setErrors([error instanceof Error ? error.message : 'Falha ao carregar a série.']); }
       finally { if (active && revision === loadRevision.current) setLoading(false); }
     })();
@@ -327,7 +329,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
         <label>Largura da janela {Math.round(ww)}<input aria-label="Largura da janela" type="range" min="1" max={Math.max(1, Math.ceil(range[1] - range[0]))} value={ww} onChange={(event) => setWidth(Number(event.target.value))} /></label>
       </div>
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
-        <TriPlanarViewer key={current.id+'-'+seriesIndex} series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex}
+        <TriPlanarViewer key={current.id+'-'+seriesIndex+'-'+seriesRevision} series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex}
           onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} activePlane={activePlane} onActivePlane={setActivePlane} onLesionSurface={updateLesion} spatialView={<>
             <div className="spatial-view-tabs" aria-label="Visualização do exame em 3D">
               <button aria-pressed={spatialMode==='slices' || !canRenderVolume} onClick={()=>setSpatialMode('slices')}>Pilhas e fusão</button>

@@ -59,3 +59,11 @@
 .echo-playhead { display:grid; grid-template-columns:auto minmax(100px,1fr) auto; gap:8px; align-items:end; margin:10px 0; }
 .echo-playhead input { display:block; width:100%; accent-color:#008b96; }
 .echo-playhead button { background:#edf9fa; border:1px solid #b6d9df; color:#087786; border-radius:5px; padding:6px; cursor:pointer; }
+.echo-position-control { position:absolute; inset:0; z-index:1; width:100%; height:100%; background:transparent; border:0; cursor:crosshair; touch-action:none; }
+.echo-position-control:focus-visible { outline:2px solid #69e4e6; outline-offset:-3px; }
+.echo-probe { z-index:2; }
+.echo-probe .us-probe-handle { pointer-events:none; }
+.echo-roll-control { position:absolute; inset:0; margin:0; width:100%; height:100%; opacity:0; pointer-events:auto; touch-action:none; cursor:grab; }
+.echo-roll-control:active { cursor:grabbing; }
+.echo-probe:focus-within .us-probe-handle { outline:2px solid #ffdb7b; outline-offset:4px; }
+.echo-heart-stage > output,.echo-study-note output { display:block; margin:8px; }

@@ -8,7 +8,6 @@ import LesionControls from './LesionControls';
 
 type Props = {
   spatialView?: ReactNode;
-  keepCursor?: boolean;
   series: DicomSeries;
   slice: number;
   windowCenter: number;
@@ -30,7 +29,7 @@ const relativePoint = (event: MouseEvent<HTMLCanvasElement>) => {
   return { x: (event.clientX - bounds.left) / bounds.width, y: (event.clientY - bounds.top) / bounds.height };
 };
 
-export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView, keepCursor = false, onLesionSurface, activePlane = 'source', onActivePlane }: Props) {
+export default function TriPlanarViewer({ series, slice, windowCenter, windowWidth, onSlice, onPatientPoint, onCursorChange, spatialView, onLesionSurface, activePlane = 'source', onActivePlane }: Props) {
   const safeSlice = Math.max(0, Math.min(series.slices.length - 1, slice));
   const geometry = useMemo(() => {
     const aligned = mprGeometry(series);
@@ -42,13 +41,16 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
   const { mask, shown, tool } = study;
   const drawing = useRef<Stroke | null>(null);
   const [trail, setTrail] = useState<Stroke | null>(null);
-  const [cursor, setCursor] = useState<MprCursor>({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice });
+  const [position, setPosition] = useState({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2) });
+  const cursor = useMemo<MprCursor>(() => ({
+    column: Math.min(series.columns - 1, position.column),
+    row: Math.min(series.rows - 1, position.row),
+    slice: safeSlice,
+  }), [position, safeSlice, series.columns, series.rows]);
   const [measureMode, setMeasureMode] = useState(false);
   const [measureStart, setMeasureStart] = useState<MeasurePoint | null>(null);
   const [measureEnd, setMeasureEnd] = useState<MeasurePoint | null>(null);
   const canvases = useRef<Record<MprView, HTMLCanvasElement | null>>({ source: null, row: null, column: null });
-  useEffect(() => { if (keepCursor) return; setCursor({ column: Math.floor(series.columns / 2), row: Math.floor(series.rows / 2), slice: safeSlice }); setMeasureStart(null); setMeasureEnd(null); }, [series, keepCursor]);
-  useEffect(() => setCursor(current => current.slice === safeSlice ? current : { ...current, slice: safeSlice }), [safeSlice]);
   useEffect(() => {
     const frame = series.slices[cursor.slice];
     if (!frame) return;
@@ -103,7 +105,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     const { x, y } = position;
     onActivePlane?.(view);
     const next = cursorFromView(series, view, cursor, x, y);
-    setCursor(next); onSlice(next.slice);
+    setPosition({ row: next.row, column: next.column }); onSlice(next.slice);
     const point = pixelCenter(series.slices[next.slice], next.row, next.column);
     if (point) {
       onPatientPoint(point);
@@ -150,22 +152,6 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
     if (last) active.points.push(last);
     study.stroke(active.view, active.cursor, active.points, geometry.stepMm);
   };
-  const scroll = (view: MprView, delta: number) => {
-    if (!delta || drawing.current) return;
-    onActivePlane?.(view);
-    if (measureMode) { setMeasureStart(null); setMeasureEnd(null); }
-    const step = delta > 0 ? 1 : -1;
-    const next = {
-      ...cursor,
-      slice: view === 'source' ? Math.max(0, Math.min(series.slices.length - 1, cursor.slice + step)) : cursor.slice,
-      row: view === 'row' ? Math.max(0, Math.min(series.rows - 1, cursor.row + step)) : cursor.row,
-      column: view === 'column' ? Math.max(0, Math.min(series.columns - 1, cursor.column + step)) : cursor.column,
-    };
-    setCursor(next);
-    onSlice(next.slice);
-    const point = pixelCenter(series.slices[next.slice], next.row, next.column);
-    if (point) onPatientPoint(point);
-  };
   useEffect(() => {
     if (!geometry) return;
     const listeners: Array<[HTMLCanvasElement, (event: WheelEvent) => void]> = [];
@@ -175,13 +161,26 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
       const navigate = (event: WheelEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        scroll(view, event.deltaY || event.deltaX);
+        const delta = event.deltaY || event.deltaX;
+        if (!delta || drawing.current) return;
+        onActivePlane?.(view);
+        if (measureMode) { setMeasureStart(null); setMeasureEnd(null); }
+        const step = delta > 0 ? 1 : -1;
+        const next = {
+          slice: view === 'source' ? Math.max(0, Math.min(series.slices.length - 1, cursor.slice + step)) : cursor.slice,
+          row: view === 'row' ? Math.max(0, Math.min(series.rows - 1, cursor.row + step)) : cursor.row,
+          column: view === 'column' ? Math.max(0, Math.min(series.columns - 1, cursor.column + step)) : cursor.column,
+        };
+        setPosition({ row: next.row, column: next.column });
+        onSlice(next.slice);
+        const point = pixelCenter(series.slices[next.slice], next.row, next.column);
+        if (point) onPatientPoint(point);
       };
       canvas.addEventListener('wheel', navigate, { passive: false });
       listeners.push([canvas, navigate]);
     }
     return () => listeners.forEach(([canvas, navigate]) => canvas.removeEventListener('wheel', navigate));
-  }, [cursor, geometry, onActivePlane, onPatientPoint, onSlice, series]);
+  }, [cursor, geometry, measureMode, onActivePlane, onPatientPoint, onSlice, series]);
 
   if (!geometry) return <><p className="plane-status">Reconstruções ortogonais indisponíveis: a série precisa de ao menos dois cortes paralelos, regulares e com geometria DICOM completa.</p>{spatialView}</>;
   const first = series.slices[0];
@@ -194,7 +193,7 @@ export default function TriPlanarViewer({ series, slice, windowCenter, windowWid
   const location = pixelCenter(series.slices[cursor.slice], cursor.row, cursor.column);
   return <section className="mpr-viewer" aria-label="Reconstruções multiplanares sincronizadas">
     <header><small>RECONSTRUÇÃO MULTIPLANAR</small><h3>Três planos sincronizados</h3><p>Clique para mover a mira. Role o mouse sobre uma imagem para navegar pelos cortes daquele plano; as três vistas e o volume 3D acompanham.</p></header>
-    <div className="mpr-measure-tools"><button aria-pressed={measureMode && tool === 'navigate'} onClick={() => { study.setTool('navigate'); setMeasureMode(value => tool !== 'navigate' || !value); setMeasureStart(null); setMeasureEnd(null); }}>{measureMode && tool === 'navigate' ? '✓ Medir distância' : 'Medir distância'}</button>{measureStart && <button onClick={() => { setMeasureStart(null); setMeasureEnd(null); }}>Limpar medida</button>}<span role="status">{distance !== null ? `${distance.toFixed(1)} mm entre os pontos` : measureMode && tool === 'navigate' ? 'Clique em dois pontos no mesmo plano.' : 'Geometria DICOM em milímetros.'}</span></div>
+    <div className="mpr-measure-tools"><button aria-pressed={measureMode && tool === 'navigate'} onClick={() => { study.setTool('navigate'); setMeasureMode(value => tool !== 'navigate' || !value); setMeasureStart(null); setMeasureEnd(null); }}>{measureMode && tool === 'navigate' ? '✓ Medir distância' : 'Medir distância'}</button>{measureStart && <button onClick={() => { setMeasureStart(null); setMeasureEnd(null); }}>Limpar medida</button>}<output>{distance !== null ? `${distance.toFixed(1)} mm entre os pontos` : measureMode && tool === 'navigate' ? 'Clique em dois pontos no mesmo plano.' : 'Geometria DICOM em milímetros.'}</output></div>
     {onLesionSurface && <LesionControls study={study} />}
     <div className="mpr-grid">{views.map(view => {
       const size = viewDimensions(series, view);
