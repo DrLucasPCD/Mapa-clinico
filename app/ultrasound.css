@@ -13,3 +13,49 @@
 .us-exercises p{margin:6px 0;font-size:12px;line-height:1.5}
 .us-exercises [role="status"]{color:#006b75;font-weight:600}
 .us-body-map:focus-visible{outline:2px solid #39cbce;outline-offset:-3px}
+
+.echo-simulator { padding:clamp(10px, 2vw, 24px); color:#123649; }
+.echo-windows { margin:6px 0 14px; }
+.echo-grid { display:grid; grid-template-columns:minmax(160px,.7fr) minmax(250px,1.2fr) minmax(250px,1.15fr); gap:10px; align-items:start; }
+.echo-torso { height:300px; background:radial-gradient(ellipse at 50% 28%,#173d51,#071923 76%); }
+.echo-chest { position:absolute; top:9%; left:13%; width:74%; height:86%; pointer-events:none; background:linear-gradient(90deg,#2b4a5b,#587688 52%,#2b4a5b); clip-path:polygon(36% 0,64% 0,69% 8%,92% 17%,100% 31%,95% 65%,82% 92%,61% 100%,39% 100%,18% 92%,5% 65%,0 31%,8% 17%,31% 8%); }
+.echo-chest::after { content:""; position:absolute; top:12%; left:49%; height:40%; width:2%; border-radius:1rem; background:#a4bac4b2; }
+.echo-chest i { position:absolute; left:10%; right:10%; top:19%; height:15%; border:1px solid #a2c6d294; border-top:0; border-radius:0 0 50% 50%; transform:scaleY(.7); }
+.echo-chest i:nth-child(2) { top:24%; }
+.echo-chest i:nth-child(3) { top:29%; }
+.echo-chest i:nth-child(4) { top:34%; }
+.echo-chest i:nth-child(5) { top:39%; }
+.echo-chest i:nth-child(6) { top:44%; }
+.echo-side { position:absolute; top:23%; color:#b3d1dc; font-size:10px; font-weight:700; pointer-events:none; }
+.echo-side.right { left:8%; }
+.echo-side.left { right:8%; }
+.echo-hotspot { position:absolute; width:18px; height:18px; border:1px solid #87fffa; border-radius:50%; box-shadow:0 0 14px #19d3e577; transform:translate(-50%,-50%); background:#2bc9d14d; pointer-events:none; }
+.echo-probe { position:absolute; transform-origin:center bottom; pointer-events:none; }
+.echo-probe .us-probe-handle { height:38px; width:28px; border-radius:12px 12px 6px 6px; padding-top:2px; }
+.echo-probe-marker { position:absolute; right:3px; top:3px; width:5px; height:5px; border-radius:50%; background:#f7d97b; border:1px solid #354252; }
+.echo-heart-stage { position:relative; height:300px; background:radial-gradient(ellipse at 54% 55%,#12303d,#06131c 76%); }
+.echo-heart-stage > [role=status] { padding:12px; }
+.echo-video { min-height:0; height:300px; }
+.echo-video video { display:block; width:100%; height:100%; object-fit:contain; }
+.echo-sliders,.echo-model-controls { display:grid; gap:8px; padding:10px 12px; background:#102c39; color:#d0e6eb; font-size:12px; }
+.echo-sliders input[type=range] { display:block; width:100%; }
+.echo-sliders input,.echo-model-controls input { accent-color:#17b5b8; }
+.echo-sliders a { color:#9bebee; }
+.echo-import { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.echo-upload,.echo-import button { position:relative; border:1px solid #6399a3; border-radius:5px; padding:6px 8px; background:#193844; color:#ecffff; cursor:pointer; }
+.echo-upload input { position:absolute; inset:0; width:100%; opacity:0; cursor:pointer; }
+.echo-upload:focus-within { outline:2px solid #74efec; outline-offset:2px; }
+.echo-study-note { margin:12px 0; padding:12px; background:white; border:1px solid #d5e6ea; border-radius:8px; font-size:12px; line-height:1.5; }
+.echo-study-note h3,.echo-study-note p { margin:0 0 6px; }
+.echo-study-note a { color:#007782; }
+.echo-study-note summary { font-weight:650; cursor:pointer; }
+.echo-study-note summary + p { margin-top:8px; }
+.echo-study-note [role=status] { margin:8px 0 0; }
+@media(max-width:1070px) {
+  .echo-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .echo-grid .us-image-panel { grid-column:1 / -1; }
+}
+@media(max-width:630px) { .echo-grid { grid-template-columns:minmax(0, 1fr); } }
+.echo-playhead { display:grid; grid-template-columns:auto minmax(100px,1fr) auto; gap:8px; align-items:end; margin:10px 0; }
+.echo-playhead input { display:block; width:100%; accent-color:#008b96; }
+.echo-playhead button { background:#edf9fa; border:1px solid #b6d9df; color:#087786; border-radius:5px; padding:6px; cursor:pointer; }

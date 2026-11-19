@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { DicomSeries, DicomSlice } from './dicom';
 import { hasPatientGeometry, sliceCorners, sliceFrame } from './patient-geometry';
 import { loadDetailedModel } from './detailed-models';
-import { mprGeometry } from './mpr';
+import { mprGeometry, mprPlaneCorners } from './mpr';
+import { lesionColor, type LesionSurface } from './lesion-mask';
 import {
   overlayStyle,
   slabPlaneEquations,
@@ -19,6 +20,7 @@ type Props = {
   windowWidth: number;
   onIndex: (index: number) => void;
   surface?: { positions: Float32Array; indices: Uint32Array } | null;
+  lesion?: LesionSurface | null;
   registration?: { matrix: number[]; modelVariant: 'male' | 'female' } | null;
   cursorPoint?: number[] | null;
   overlaySystems?: OverlaySystem[];
@@ -79,13 +81,26 @@ function outline(slice: DicomSlice) {
   return new T.LineLoop(new T.BufferGeometry().setFromPoints(points), new T.LineBasicMaterial({ color: 0x75e7e7, transparent: true, opacity: 0.22 }));
 }
 
-export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, registration = null, cursorPoint = null, overlaySystems = ['nervous', 'cardiovascular'], overlayClip = 'volume' }: Props) {
+export default function PatientSlices({ series, index, windowCenter, windowWidth, onIndex, surface = null, lesion = null, registration = null, cursorPoint = null, overlaySystems = ['nervous', 'cardiovascular'], overlayClip = 'volume' }: Props) {
   const host = useRef<HTMLDivElement>(null);
-  const view = useRef<{series: DicomSeries; position: T.Vector3; target: T.Vector3; revision:number} | null>(null);
+  const rendererRef = useRef<T.WebGLRenderer | null>(null);
+  const view = useRef<{series: DicomSeries; position: T.Vector3; target: T.Vector3; revision:number; isolated:boolean} | null>(null);
+  const [isolate, setIsolate] = useState(false);
+  const isolated = Boolean(lesion && isolate);
   const [status, setStatus] = useState('');
   const [resetView, setResetView] = useState(0);
   const usable = hasPatientGeometry(series);
   const safeIndex = Math.max(0, Math.min(series.slices.length - 1, index));
+  const lesionGeometry = useMemo(() => {
+    if (!lesion) return null;
+    const geometry = new T.BufferGeometry();
+    geometry.setAttribute('position', new T.BufferAttribute(lesion.positions, 3));
+    geometry.setIndex(new T.BufferAttribute(lesion.indices, 1));
+    geometry.computeVertexNormals();
+    geometry.computeBoundingBox();
+    return geometry;
+  }, [lesion]);
+  useEffect(() => () => lesionGeometry?.dispose(), [lesionGeometry]);
 
   useEffect(() => {
     if (!usable || !host.current) return;
@@ -98,6 +113,17 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
     renderer.localClippingEnabled = true;
     renderer.domElement.style.cssText = 'display:block;width:100%;height:100%';
     target.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+    return () => {
+      rendererRef.current = null;
+      renderer.dispose();
+      renderer.domElement.remove();
+    };
+  }, [usable]);
+
+  useEffect(() => {
+    const renderer = rendererRef.current, target = host.current;
+    if (!usable || !renderer || !target) return;
     const scene = new T.Scene();
     scene.background = new T.Color(0x06131c);
     const camera = new T.PerspectiveCamera(38, 1, 0.1, 100000);
@@ -107,26 +133,34 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
     const textureIndexes = [...new Set([safeIndex - 1, safeIndex, safeIndex + 1].filter((value) => value >= 0 && value < series.slices.length))];
     const box = new T.Box3();
     for (const slice of series.slices) for (const corner of sliceCorners(slice)!) box.expandByPoint(new T.Vector3(...corner));
-    const center = box.getCenter(new T.Vector3());
-    const size = box.getSize(new T.Vector3());
+    if (lesionGeometry) {
+      const material = new T.MeshStandardMaterial({
+        color: lesionColor, transparent: !isolated, opacity: isolated ? 1 : .87,
+        depthWrite: isolated, roughness: .67,
+      });
+      resources.push(material);
+      const object = new T.Mesh(lesionGeometry, material);
+      object.renderOrder = 3;
+      scene.add(object);
+      scene.add(new T.HemisphereLight(0xfff0d6, 0x475a76, 1.4));
+      const light = new T.DirectionalLight(0xfff7e6, 2.8);
+      light.position.set(box.max.x + 1, box.min.y - 1, box.max.z + 1);
+      light.target.position.copy(box.getCenter(new T.Vector3()));
+      scene.add(light, light.target);
+    }
+    const viewBounds = isolated && lesionGeometry?.boundingBox ? lesionGeometry.boundingBox : box;
+    const center = viewBounds.getCenter(new T.Vector3());
+    const size = viewBounds.getSize(new T.Vector3());
     const radius = Math.max(size.length() / 2, 1);
     controls.target.copy(center);
     camera.position.copy(center).add(new T.Vector3(0.9, 0.7, 1.5).normalize().multiplyScalar(radius / Math.sin(19 * Math.PI / 180) * 1.15));
-    if (resetView === view.current?.revision && view.current?.series === series) { camera.position.copy(view.current.position); controls.target.copy(view.current.target); }
+    if (resetView === view.current?.revision && view.current?.series === series && view.current.isolated === isolated) { camera.position.copy(view.current.position); controls.target.copy(view.current.target); }
     camera.near = Math.max(0.01, radius / 1000);
     camera.far = radius * 1000;
     camera.updateProjectionMatrix();
     scene.add(new T.AmbientLight(0xffffff, 1));
     const mpr = mprGeometry(series);
-    if (mpr && cursorPoint?.length === 3 && cursorPoint.every(Number.isFinite)) {
-      const frame = sliceFrame(series.slices[0])!;
-      const origin = new T.Vector3(...frame.origin), point = new T.Vector3(cursorPoint[0], cursorPoint[1], cursorPoint[2]);
-      const u = new T.Vector3(...frame.rowDirection), v = new T.Vector3(...frame.columnDirection), w = new T.Vector3(...frame.normal);
-      const relative = point.clone().sub(origin), uAt = relative.dot(u), vAt = relative.dot(v);
-      const u0 = -frame.columnSpacing / 2, u1 = (series.columns - .5) * frame.columnSpacing;
-      const v0 = -frame.rowSpacing / 2, v1 = (series.rows - .5) * frame.rowSpacing;
-      const w0 = -mpr.stepMm / 2, w1 = (series.slices.length - .5) * mpr.stepMm;
-      const physical = (uValue:number, vValue:number, wValue:number) => origin.clone().addScaledVector(u,uValue).addScaledVector(v,vValue).addScaledVector(w,wValue);
+    if (!isolated && cursorPoint) {
       const addGuide = (corners:T.Vector3[], color:number) => {
         const guideGeometry = new T.BufferGeometry().setFromPoints([corners[0],corners[1],corners[2],corners[0],corners[2],corners[3]]);
         const guideMaterial = new T.MeshBasicMaterial({color,transparent:true,opacity:.14,side:T.DoubleSide,depthWrite:false});
@@ -135,10 +169,12 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
         const lineMaterial = new T.LineBasicMaterial({color,transparent:true,opacity:.85});
         resources.push(lineGeometry,lineMaterial); scene.add(new T.Line(lineGeometry,lineMaterial));
       };
-      addGuide([physical(u0,vAt,w0),physical(u1,vAt,w0),physical(u1,vAt,w1),physical(u0,vAt,w1)],0x39ffbd);
-      addGuide([physical(uAt,v0,w0),physical(uAt,v1,w0),physical(uAt,v1,w1),physical(uAt,v0,w1)],0xff5a86);
+      for (const [view, color] of [['row', 0x39ffbd], ['column', 0xff5a86]] as const) {
+        const corners = mprPlaneCorners(series, view, safeIndex, cursorPoint);
+        if (corners) addGuide(corners.map(corner => new T.Vector3(...corner)), color);
+      }
     }
-    if (surface && surface.positions.length && surface.indices.length) {
+    if (!isolated && surface && surface.positions.length && surface.indices.length) {
       const geometry = new T.BufferGeometry();
       geometry.setAttribute('position', new T.BufferAttribute(surface.positions, 3));
       geometry.setIndex(new T.BufferAttribute(surface.indices, 1));
@@ -147,7 +183,7 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       resources.push(geometry, material);
       scene.add(new T.Mesh(geometry, material));
     }
-    for (let i = 0; i < series.slices.length; i++) {
+    for (let i = 0; !isolated && i < series.slices.length; i++) {
       const slice = series.slices[i];
       if (textureIndexes.includes(i)) {
         const texture = imageTexture(slice, windowCenter, windowWidth);
@@ -162,10 +198,10 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       }
     }
     const bounds = new T.Box3Helper(box, 0x3bc5ce);
-    scene.add(bounds);
+    if (!isolated) scene.add(bounds);
     let cancelled = false;
     let registeredAtlas: T.Group | undefined;
-    if (registration) {
+    if (registration && !isolated) {
       if (registration.matrix.length !== 16 || !registration.matrix.every(Number.isFinite)) {
         setStatus('A matriz de registro manual é inválida.');
       } else {
@@ -179,7 +215,7 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
             new T.Plane(new T.Vector3(0, 0, 1), -box.min.z), new T.Plane(new T.Vector3(0, 0, -1), box.max.z),
           ];
           const frame = sliceFrame(series.slices[0])!;
-          for (const equation of slabPlaneEquations(frame, cursorPoint, overlayClip, mpr?.stepMm ?? 0)) {
+          for (const equation of mpr ? slabPlaneEquations(frame, cursorPoint, overlayClip, mpr.stepMm, mpr.labels) : []) {
             clippingPlanes.push(new T.Plane(new T.Vector3(...equation.normal), equation.constant));
           }
           model.traverse((object) => {
@@ -226,7 +262,7 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
     render();
     return () => {
       cancelled = true;
-      view.current = {series, revision:resetView, position: camera.position.clone(), target: controls.target.clone()};
+      view.current = {series, revision:resetView, position: camera.position.clone(), target: controls.target.clone(), isolated};
       cancelAnimationFrame(frame);
       observer.disconnect();
       controls.dispose();
@@ -234,17 +270,16 @@ export default function PatientSlices({ series, index, windowCenter, windowWidth
       bounds.geometry.dispose();
       (bounds.material as T.Material).dispose();
       if (registeredAtlas) disposeRegisteredAtlas(registeredAtlas);
-      renderer.dispose();
-      renderer.domElement.remove();
     };
-  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, registration, cursorPoint, resetView, overlaySystems, overlayClip]);
+  }, [series, safeIndex, usable, windowCenter, windowWidth, surface, lesionGeometry, isolated, registration, cursorPoint, resetView, overlaySystems, overlayClip]);
 
   if (!usable) return <p className="plane-status">Visualização espacial indisponível: esta série precisa de posição, orientação e espaçamento de pixel DICOM válidos em todos os cortes.</p>;
   return <section className="patient-slices" aria-label="Pilhas de cortes no espaço do paciente">
-    <div ref={host} style={{ height: 300, borderRadius: 8, overflow: 'hidden', background: '#06131c' }} />
+    <div ref={host} role="img" aria-label={lesion ? 'Reconstrução tridimensional da lesão no exame' : 'Cortes DICOM em três dimensões'} style={{ height: 300, borderRadius: 8, overflow: 'hidden', background: '#06131c' }} />
+    {lesion && <small className="lesion-key"><i /> Região segmentada no exame</small>}
     {(surface || registration || cursorPoint) && <small>{surface && "Ciano: superfície de alta densidade da TC. "}{registration && "Ciano: sistema nervoso; vermelho/azul: vasos; marfim: esqueleto, conforme as camadas escolhidas. "}{cursorPoint && "Verde e rosa: planos ortogonais na posição da mira."}</small>}
     {status && <p className="plane-status">{status}</p>}
-    <div className="image-tools"><button onClick={() => setResetView(value => value + 1)}>Resetar vista 3D</button><button disabled={safeIndex === 0} onClick={() => onIndex(safeIndex - 1)}>← Corte anterior</button><button disabled={safeIndex === series.slices.length - 1} onClick={() => onIndex(safeIndex + 1)}>Próximo corte →</button></div>
+    <div className="image-tools">{lesion && <button aria-pressed={isolated} onClick={() => setIsolate(value => !value)}>{isolated ? 'Mostrar cortes junto da lesão' : 'Isolar lesão'}</button>}<button onClick={() => setResetView(value => value + 1)}>Resetar vista 3D</button><button disabled={safeIndex === 0} onClick={() => onIndex(safeIndex - 1)}>← Corte anterior</button><button disabled={safeIndex === series.slices.length - 1} onClick={() => onIndex(safeIndex + 1)}>Próximo corte →</button></div>
     <small>Geometria espacial dos cortes DICOM no sistema LPS do paciente. {surface && 'A superfície mostra apenas densidade alta aproximada por limiar; não identifica órgãos nem estabelece diagnóstico. '}{registration && `A anatomia colorida é um atlas genérico ajustado manualmente${overlayClip === 'volume' ? '' : ` e recortado no plano ${overlayClip}`}; não é segmentação do paciente. `}Mostra pixels adquiridos e seus planos físicos.</small>
   </section>;
 }

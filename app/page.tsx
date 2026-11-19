@@ -55,7 +55,7 @@ import StudyPaths from './StudyPaths';
 import ImagingWorkbench from './ImagingWorkbench';
 import UltrasoundSimulator from './UltrasoundSimulator';
 import { ultrasoundZones, type UltrasoundCaseId, type UltrasoundZone } from './ultrasound-data';
-import type { AtlasSlice } from './atlas-slice';
+import type { AtlasGuide } from './atlas-slice';
 import { getDetailedCatalog, type DetailedCatalogEntry } from './detailed-catalog';
 import { atlasSliceForSequence } from './image-integration';
 import { heartOrgans } from './heart-model';
@@ -69,6 +69,7 @@ import type { LabScale } from './lab3d-data';
 const Atlas = lazy(() => import('./Atlas'));
 const EcgLab = lazy(() => import('./EcgLab'));
 const Lab3D = lazy(() => import('./Lab3D'));
+const EchoSimulator = lazy(() => import('./EchoSimulator'));
 const Plantao = lazy(() => import('./Plantao'));
 const VisualTraining = lazy(() => import('./TrainingViews').then(module => ({ default: module.VisualTraining })));
 const CaseLibrary = lazy(() => import('./TrainingViews').then(module => ({ default: module.CaseLibrary })));
@@ -115,11 +116,12 @@ export default function App() {
   const [visualSelection, setVisualSelection] = useState('');
   const [visualRevision, setVisualRevision] = useState(0);
   const [ultrasoundCase, setUltrasoundCase] = useState<UltrasoundCaseId>('148000');
+  const [ultrasoundMode, setUltrasoundMode] = useState<'abdomen' | 'echo'>('abdomen');
   const [studyTab, setStudyTab] = useState<'topics' | 'vessels' | 'quiz'>('topics');
   const [modelVariant, setModelVariant] = useState<'male' | 'female'>('male');
   const [modelCatalog, setModelCatalog] = useState<DetailedCatalogEntry[]>([]);
   useEffect(() => { let active = true; setModelCatalog([]); getDetailedCatalog(modelVariant).then(items => { if (active) setModelCatalog(items); }).catch(console.error); return () => { active = false; }; }, [modelVariant]);
-  const [slice, setSlice] = useState<AtlasSlice | null>(null);
+  const [slice, setSlice] = useState<AtlasGuide | null>(null);
   const [atlasPoint, setAtlasPoint] = useState<{ point: number[]; label: string; variant: 'male' | 'female' } | null>(null);
   const openStudy = (tab: typeof studyTab, topic?: string) => { setStudyTopic(topic); setStudyTab(tab); setWorkspaceMode('study'); setMobileNav(false); };
   const changeModel = (variant: typeof modelVariant) => { setModelVariant(variant); resetAtlas(); setSelected(''); setName(variant === 'female' ? 'Tronco feminino' : 'Corpo masculino'); };
@@ -173,7 +175,8 @@ export default function App() {
   const sliceMatchesHeart = slice?.region === 'thorax' || slice?.region === 'body';
   const visibleSlice = showAtlasSlice && (isolatedId !== 'heart' || sliceMatchesHeart) ? slice : null;
   const atlasExercise = workspaceMode === 'visual' && visualTask === 'atlas-patella';
-  const trainingWorkspace = ['plantao', 'lab', 'visual', 'library', 'review'].includes(workspaceMode);
+  const echoWorkspace = workspaceMode === 'ultrasound' && ultrasoundMode === 'echo';
+  const trainingWorkspace = echoWorkspace || ['plantao', 'lab', 'visual', 'library', 'review'].includes(workspaceMode);
   const showAtlas = !trainingWorkspace || atlasExercise || (workspaceMode === 'plantao' && plantaoAtlas);
   const syncSequenceSlice = useCallback((index: number, total: number) => {
     const next = atlasSliceForSequence(activeCase.acquisition, index, total);
@@ -243,9 +246,14 @@ export default function App() {
   };
   const openUltrasound = (id: UltrasoundCaseId = '148000') => {
     setUltrasoundCase(id);
+    setUltrasoundMode('abdomen');
     setWorkspaceMode('ultrasound');
     setMobileNav(false);
     setSlice(null);
+  };
+  const openEcho = () => {
+    openUltrasound();
+    setUltrasoundMode('echo');
   };
   const focusPathStructure = (id: string, label: string, maleOnly?: boolean) => {
     if (maleOnly) setModelVariant('male');
@@ -468,7 +476,8 @@ export default function App() {
             </div>
           </details>
           {navItem('Imagens (TC, RM, RX)', ScanLine, openImaging, workspaceMode === 'imaging')}
-          {navItem('Simulador de USG', Activity, () => openUltrasound(), workspaceMode === 'ultrasound')}
+          {navItem('Simulador de USG', Activity, () => openUltrasound(), workspaceMode === 'ultrasound' && !echoWorkspace)}
+          {navItem('Simulador de ecocardiografia', Activity, openEcho, echoWorkspace)}
           {navItem('Artérias e territórios', Activity, () => openStudy('vessels'), workspaceMode === 'study' && studyTab === 'vessels')}
 
           <h2 className="nav-heading"><Stethoscope /> Casos clínicos</h2>
@@ -790,7 +799,8 @@ export default function App() {
               <button className={workspaceMode === 'case' ? 'active' : ''} onClick={() => openCase()}>Casos</button>
               <button className={workspaceMode === 'study' ? 'active' : ''} onClick={() => setWorkspaceMode('study')}>Estudar</button>
               <button className={workspaceMode === 'imaging' ? 'active' : ''} onClick={openImaging}>TC / RM</button>
-              <button className={workspaceMode === 'ultrasound' ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
+              <button className={workspaceMode === 'ultrasound' && !echoWorkspace ? 'active' : ''} onClick={() => openUltrasound()}>USG</button>
+              <button className={echoWorkspace ? 'active' : ''} onClick={openEcho}>Eco</button>
               <button className={workspaceMode === 'plantao' ? 'active' : ''} onClick={() => openTraining('plantao')}>Plantão</button>
               <button onClick={() => openLab('ecg')}>ECG</button>
             </nav>}
@@ -801,6 +811,7 @@ export default function App() {
                 <nav aria-label="Ferramentas do laboratório">
                   <button type="button" aria-pressed={labMode === 'ecg'} onClick={() => setLabMode('ecg')}><Activity size={16} /> ECG e circulação</button>
                   <button type="button" aria-pressed={labMode === '3d'} onClick={() => setLabMode('3d')}><Layers size={16} /> Anatomia 3D</button>
+                  <button type="button" onClick={openEcho}><Activity size={16} /> Ecocardiografia</button>
                 </nav>
               </header>
               <Suspense fallback={<p className="training-screen" role="status">Carregando laboratório…</p>}>
@@ -832,7 +843,7 @@ export default function App() {
               <StudyPaths period={n} entry={pathEntry} modelVariant={modelVariant} onLocate={focusPathStructure}
                 onOpenBiliary={() => openUltrasound('27525')}
                 onOpenStroke={() => openCase('2604')} />
-            ) : workspaceMode === 'study' ? <StudyPanel key={studyTopic ?? 'browse'} initialTopic={studyTopic} modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? <UltrasoundSimulator key={ultrasoundCase} initialCaseId={ultrasoundCase} onSelectRegion={syncUltrasoundRegion} /> : <>
+            ) : workspaceMode === 'study' ? <StudyPanel key={studyTopic ?? 'browse'} initialTopic={studyTopic} modelVariant={modelVariant} period={n} onLocate={focusStructure} initialTab={studyTab} /> : workspaceMode === 'imaging' ? <ImagingWorkbench onSlice={setSlice} casePreview={activeCase} period={n} onLocateCase={locate} onSelectCase={setCaseId} onFocusStructure={(id, label) => { if (modelVariant === 'female') setModelVariant('male'); focusStructure(id, label); }} onPreviewModality={modality => { const match = cases.find(item => item.modality === modality); if (match) setCaseId(match.id); }} dicomFiles={activeCase.acquisition?.kind === 'dicom-series' ? activeCase.acquisition.files : undefined} atlasPoint={atlasPoint} modelVariant={modelVariant} /> : workspaceMode === 'ultrasound' ? (echoWorkspace ? <Suspense fallback={<p role="status">Preparando simulador de eco…</p>}><EchoSimulator /></Suspense> : <UltrasoundSimulator key={ultrasoundCase} initialCaseId={ultrasoundCase} onSelectRegion={syncUltrasoundRegion} />) : <>
             <div className="case-switcher">
               <Select
                 value={caseId}

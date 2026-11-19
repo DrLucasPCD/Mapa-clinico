@@ -8,6 +8,7 @@ import {
   type VolumeData,
 } from './volume-data';
 import { mprGeometry } from './mpr';
+import { lesionColor, type LesionSurface } from './lesion-mask';
 
 const vertex = `
 out vec3 back;
@@ -92,6 +93,7 @@ type Props = {
   width: number;
   onReference?: () => void;
   activePhase?: DicomSeries;
+  lesion?: LesionSurface | null;
 };
 
 export default function PatientVolume({
@@ -101,6 +103,7 @@ export default function PatientVolume({
   width,
   onReference,
   activePhase,
+  lesion,
 }: Props) {
   const isCine = activePhase !== undefined;
   const data = useMemo(
@@ -145,6 +148,7 @@ export default function PatientVolume({
     invert,
     reset,
     image,
+    lesion,
   });
   settings.current = {
     point,
@@ -154,6 +158,7 @@ export default function PatientVolume({
     invert,
     reset,
     image,
+    lesion,
   };
 
   useEffect(() => {
@@ -226,6 +231,15 @@ export default function PatientVolume({
     cube.matrixAutoUpdate = false;
     cube.matrix.copy(matrix);
     scene.add(cube);
+    const volumeCenter = new T.Vector3(...data.origin).addScaledVector(u.clone().add(v).add(w), .5);
+    const lesionMaterial = new T.MeshStandardMaterial({
+      color: lesionColor, roughness: .66, transparent: true, opacity: .89, depthWrite: false,
+    });
+    let lesionObject: T.Mesh | undefined;
+    scene.add(new T.HemisphereLight(0xfff4dd, 0x42558c, 1.8));
+    const keyLight = new T.DirectionalLight(0xfff7e8, 2);
+    keyLight.position.set(0, -2, 1.3);
+    scene.add(keyLight);
     const locatorGeo = new T.BufferGeometry();
     const markerPositions = new Float32Array(18);
     locatorGeo.setAttribute(
@@ -273,6 +287,24 @@ export default function PatientVolume({
       frameId = requestAnimationFrame(draw);
       if (!dirty && !moved && previous === state) return;
       dirty = false;
+      if (state.lesion !== previous?.lesion) {
+        if (lesionObject) {
+          scene.remove(lesionObject);
+          lesionObject.geometry.dispose();
+          lesionObject = undefined;
+        }
+        if (state.lesion) {
+          const overlay = new T.BufferGeometry();
+          overlay.setAttribute('position', new T.BufferAttribute(state.lesion.positions, 3));
+          overlay.setIndex(new T.BufferAttribute(state.lesion.indices, 1));
+          overlay.computeVertexNormals();
+          lesionObject = new T.Mesh(overlay, lesionMaterial);
+          lesionObject.scale.setScalar(1 / max);
+          lesionObject.position.copy(volumeCenter).multiplyScalar(-1 / max);
+          lesionObject.renderOrder = 4;
+          scene.add(lesionObject);
+        }
+      }
       previous = state;
       const { uniforms } = material;
       if (state.image && textureImage !== state.image) {
@@ -314,6 +346,8 @@ export default function PatientVolume({
       controls.dispose();
       locatorGeo.dispose();
       markerMat.dispose();
+      lesionObject?.geometry.dispose();
+      lesionMaterial.dispose();
       geometry.dispose();
       material.dispose();
       texture.dispose();
@@ -344,6 +378,7 @@ export default function PatientVolume({
           {status}
         </p>
       )}
+      {lesion && <small className="lesion-key"><i /> Região segmentada · sobreposição 3D completa</small>}
       <div className="volume-controls">
         {series.modality === 'CT' && (
           <label>

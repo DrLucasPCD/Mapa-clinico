@@ -3,6 +3,8 @@ import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadDetailedManifest, loadDetailedModel } from './detailed-models';
 import { heartLighting } from './heart-model';
+import { makeEchoHeartBeam } from './echo-heart-beam';
+import type { EchoBeam } from './echo-windows';
 import {
   labLayers,
   labOrganLayer,
@@ -47,6 +49,9 @@ type Props = {
   flow: HeartFlowOptions;
   coronaryBranch?: string;
   electrical?: HeartElectricalOptions;
+  echo?: EchoBeam | null;
+  echoCut?: boolean;
+  echoTime?: () => number | null;
   stage: number;
   progress: number;
   playing: boolean;
@@ -177,6 +182,10 @@ export default function Lab3dScene(props: Props) {
     let indicators: ReturnType<typeof makeHeartIndicators> | undefined;
     let blood: ReturnType<typeof makeCoronaryFlow> | undefined;
     let electrical: ReturnType<typeof makeHeartElectrical> | undefined;
+    const echo = scope === 'heart' && current.current.echo !== undefined ? makeEchoHeartBeam() : null;
+    if (echo) pivot.add(echo.group);
+    let previousBeam: EchoBeam | null | undefined = undefined;
+    let previousBeamRig: HeartRig | undefined;
     let neuralPath: T.Curve<T.Vector3> | undefined;
     const impulse = new T.Mesh(
       new T.SphereGeometry(0.073, 16, 9),
@@ -484,10 +493,15 @@ export default function Lab3dScene(props: Props) {
           }
           p.time.current += delta;
         }
-        const time = external?.time ?? p.time?.current ?? 0;
+        const time = external?.time ?? p.echoTime?.() ?? p.time?.current ?? 0;
         const motion = external?.motion ?? heartCycle(time, p.bpm);
         const assembled = p.chamberView === 'all' && p.cut === 0 && p.spread === 0;
         heartRig?.update(motion);
+        if (echo && (previousBeam !== p.echo || previousBeamRig !== heartRig)) {
+          previousBeam = p.echo;
+          previousBeamRig = heartRig;
+          echo.update(p.echo, heartRig);
+        }
         indicators?.update(
           motion,
           assembled && p.flow.chambers && p.layers.includes('chambers'),
@@ -549,6 +563,10 @@ export default function Lab3dScene(props: Props) {
       );
       const half = modelSize[axis] / 2 + p.spread * 0.6;
       clip.constant = p.cut <= 0 ? 10 : half * (1 - p.cut * 1.8);
+      if (echo?.group.visible && p.echoCut) {
+        const normal = new T.Vector3(0, 0, 1).applyQuaternion(echo.group.quaternion);
+        clip.setFromNormalAndCoplanarPoint(normal, pivot.localToWorld(echo.group.position.clone()));
+      }
       const nextKey = [
         p.view,
         p.layers.join(','),

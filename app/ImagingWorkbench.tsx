@@ -1,19 +1,21 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { groupDicomSeries, parseDicomFiles, sliceFraction, type DicomSeries, type Plane, type Region } from './dicom';
+import { groupDicomSeries, parseDicomFiles, type DicomSeries, type Region } from './dicom';
 import type { ClinicalCase } from './content';
 import { atlasSliceForSequence, imageIntegration } from './image-integration';
 import './study.css';
 import { validateCtSegmentation } from './ct-segmentation';
 import { pixelCenter, sliceFrame } from './patient-geometry';
-import { regularVolumeGrid } from './mpr';
+import { mprGeometry, mprPlaneCorners, regularVolumeGrid, type MprView } from './mpr';
+import type { AtlasGuide } from './atlas-slice';
+import type { LesionSurface } from './lesion-mask';
 import { cardiacPhaseLabel, cineCandidates, createCardiacCine } from './cardiac-cine';
 import LandmarkPanel from './LandmarkPanel';
+import RadiologyStudyGuide from './RadiologyStudyGuide';
 import CaseJourney from './CaseJourney';
 import type { OverlayClip, OverlaySystem } from './registered-overlay';
 
-type SliceLocation = { plane: Plane; fraction: number; region: Region } | null;
 type AtlasPoint = {point:number[]; label:string; variant:'male'|'female'};
-type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; period?: number; onLocateCase?: () => void; onSelectCase?: (id: string) => void; onFocusStructure?: (id: string, label: string) => void; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: SliceLocation) => void };
+type Props = { atlasPoint?: AtlasPoint | null; modelVariant?: 'male'|'female'; dicomFiles?: string[]; casePreview?: ClinicalCase; period?: number; onLocateCase?: () => void; onSelectCase?: (id: string) => void; onFocusStructure?: (id: string, label: string) => void; onPreviewModality?: (modality: 'TC'|'RM'|'RX') => void; onSlice: (location: AtlasGuide | null) => void };
 const CardiacCineViewer = lazy(() => import('./CardiacCineViewer'));
 const PatientVolume = lazy(() => import('./PatientVolume'));
 const PatientSlices = lazy(() => import('./PatientSlices'));
@@ -46,6 +48,10 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const [targetPixel, setTargetPixel] = useState<{slice:typeof selected; row:number;col:number}|null>(null);
   const [targetPoint, setTargetPoint] = useState<number[]|null>(null);
   const [mprPoint, setMprPoint] = useState<number[]|null>(null);
+  const [activePlane, setActivePlane] = useState<MprView>('source');
+  const [lesion, setLesion] = useState<{ series: DicomSeries; surface: LesionSurface } | null>(null);
+  const updateLesion = useCallback((source: DicomSeries, result: LesionSurface | null) =>
+    setLesion(result ? { series: source, surface: result } : null), []);
   const [registration, setRegistration] = useState<{matrix:number[];modelVariant:'male'|'female'}|null>(null);
   const [overlaySystems, setOverlaySystems] = useState<OverlaySystem[]>(['nervous', 'cardiovascular']);
   const [overlayClip, setOverlayClip] = useState<OverlayClip>('volume');
@@ -62,6 +68,8 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const selected = current?.slices[sliceIndex];
   const previewIntegration = casePreview ? imageIntegration(casePreview.images, casePreview.acquisition) : null;
   const canRenderVolume = useMemo(() => Boolean(current && regularVolumeGrid(current)), [current]);
+  const anatomicalPlanes = useMemo(() => current ? mprGeometry(current) : null, [current]);
+  const selectSourceSlice = (index: number) => { setActivePlane('source'); setSliceIndex(index); };
   const automaticPhases = useMemo(() => current ? cineCandidates(series,current,false) : [], [current,series]);
   const relatedPhases = useMemo(() => current ? cineCandidates(series,current,true)
     .filter(item => !automaticPhases.includes(item)) : [], [automaticPhases,current,series]);
@@ -71,16 +79,13 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   const encodedVelocity = Boolean(current?.slices.some(item=>item.velocity));
   const canOpenCine = Boolean(cine || encodedVelocity);
   const showCine = cineOpen && canOpenCine;
-  const onCineSlice = useCallback((item:DicomSeries,index:number) => {
-    const fraction=sliceFraction(item.slices,item.slices[index]);
-    onSlice(item.plane && fraction!==undefined ? {plane:item.plane,fraction,region:'thorax'} : null);
-  },[onSlice]);
+  const onCineSlice = useCallback(() => onSlice(null), [onSlice]);
   const eligibility = useMemo(() => current ? validateCtSegmentation(current) : {eligible:false}, [current]);
   useEffect(() => {
     worker.current?.terminate(); worker.current = null;
     const middle = current ? pixelCenter(current.slices[Math.floor(current.slices.length / 2)], Math.floor(current.rows / 2), Math.floor(current.columns / 2)) ?? null : null;
     setRelatedPhaseIds([]); setCineOpen(false);
-    setSpatialMode('slices'); setSurface(null); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
+    setSpatialMode('slices'); setSurface(null); setLesion(null); setActivePlane('source'); setSegmenting(false); setSegmentationError(''); setTargetPoint(null); setTargetPixel(null); setMprPoint(middle); setRegistration(null);
     return () => { worker.current?.terminate(); worker.current = null; };
   }, [current]);
   useEffect(() => { setRegistration(null); }, [modelVariant]);
@@ -115,14 +120,16 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     setWidth(null);
   }, [seriesIndex, current?.id]);
   useEffect(() => {
-    if (showCine) return;
-    const fraction = current && selected ? sliceFraction(current.slices, selected) : undefined;
-    if (!selected || !current?.plane || fraction === undefined) {
+    if (!current) {
       onSlice(atlasSliceForSequence(casePreview?.acquisition, previewIndex, casePreview?.images.length ?? 0));
       return;
     }
-    onSlice({ plane: current.plane, fraction, region });
-  }, [casePreview, current, onSlice, previewIndex, region, selected, sliceIndex, showCine]);
+    if (showCine || !registration || registration.modelVariant !== modelVariant) { onSlice(null); return; }
+    const patientCorners = mprPlaneCorners(current, activePlane, sliceIndex, mprPoint);
+    const plane = anatomicalPlanes?.labels[activePlane] ??
+      (activePlane === 'source' ? 'de aquisição' : activePlane === 'row' ? 'ortogonal 1' : 'ortogonal 2');
+    onSlice(patientCorners ? { plane, patientCorners, region, atlasToPatient: registration.matrix } : null);
+  }, [activePlane, anatomicalPlanes, casePreview, current, modelVariant, mprPoint, onSlice, previewIndex, region, registration, sliceIndex, showCine]);
   useEffect(() => { setPreviewIndex(0); }, [casePreview?.id]);
   useEffect(() => {
     const target = previewHost.current;
@@ -169,6 +176,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
       event.stopPropagation();
       const delta = event.deltaY || event.deltaX;
       if (!delta) return;
+      setActivePlane('source');
       setSliceIndex((value) =>
         Math.max(
           0,
@@ -243,7 +251,10 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
     setLoading(false); setSeries([]); setSeriesIndex(0); setSliceIndex(0);
     setErrors([]); setCenter(null); setWidth(null);
   };
-  const move = (delta: number) => setSliceIndex((value) => Math.max(0, Math.min((current?.slices.length ?? 1) - 1, value + delta)));
+  const move = (delta: number) => {
+    setActivePlane('source');
+    setSliceIndex(value => Math.max(0, Math.min((current?.slices.length ?? 1) - 1, value + delta)));
+  };
   const toggleOverlay = (system: OverlaySystem) => setOverlaySystems((currentSystems) =>
     currentSystems.includes(system)
       ? currentSystems.filter((item) => item !== system)
@@ -253,11 +264,12 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
   return <section className="imaging-workbench" aria-label="Leitor local de DICOM">
     <header><small>DO CORPO À IMAGEM</small><h2>Atlas e imagens integrados</h2><p>Explore o caso e a anatomia lado a lado. Importe DICOM para ver os cortes e o volume. Fases cardíacas compatíveis habilitam o cine.</p></header>
     <div className="image-tools">
-      <label>Selecionar série<input aria-label="Selecionar arquivos DICOM" type="file" accept=".dcm,application/dicom" multiple onChange={(event) => { void openFiles(event.target.files); event.target.value = ''; }} /></label>
+      <label className="dicom-upload">Importar exame de TC / RM<input aria-label="Selecionar arquivos DICOM" type="file" multiple onChange={(event) => { void openFiles(event.target.files); event.target.value = ''; }} /></label>
       {loading && <span>Processando localmente…</span>}
       {current && <button onClick={clear}>Limpar imagens</button>}
       {current && !showCine && <><button onClick={() => move(-1)} disabled={sliceIndex === 0}>← Corte anterior</button><button onClick={() => move(1)} disabled={sliceIndex === current.slices.length - 1}>Próximo corte →</button></>}
     </div>
+    <p className="dicom-private">Selecione os arquivos DICOM da aquisição, inclusive se estiverem sem extensão. O exame e as marcações são processados neste navegador e ficam disponíveis enquanto a série estiver aberta.</p>
     {errors.length > 0 && <div className="error" role="alert">{errors.map((error) => <div key={error}>{error}</div>)}</div>}
     {!current && casePreview && <section className="case-imaging-preview" aria-label="Imagens do caso selecionado">
       <nav className="modality-tabs" aria-label="Modalidades">{(['TC','RM','RX'] as const).map(modality => <button key={modality} className={casePreview.modality === modality ? 'active' : ''} onClick={() => onPreviewModality?.(modality)}>{modality}</button>)}<button disabled>USG</button><button disabled>PET</button></nav>
@@ -304,31 +316,33 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
           const col = Math.max(0, Math.min(selected.columns-1, Math.floor((event.clientX-bounds.left)/bounds.width*selected.columns)));
           const row = Math.max(0, Math.min(selected.rows-1, Math.floor((event.clientY-bounds.top)/bounds.height*selected.rows)));
           setTargetPixel({slice:selected, row, col});
+          setActivePlane('source');
           const point = pixelCenter(selected, row, col) ?? null;
           setTargetPoint(point); setMprPoint(point);
         }} aria-label={`Imagem ${current.modality}, corte ${sliceIndex + 1} de ${current.slices.length}`} />
       </div></details>
       <div className="slice-controls">
-        <label>Corte {sliceIndex + 1} de {current.slices.length}<input aria-label="Selecionar corte" type="range" min="0" max={Math.max(0, current.slices.length - 1)} value={sliceIndex} onChange={(event) => setSliceIndex(Number(event.target.value))} /></label>
+        <label>Corte {sliceIndex + 1} de {current.slices.length}<input aria-label="Selecionar corte" type="range" min="0" max={Math.max(0, current.slices.length - 1)} value={sliceIndex} onChange={(event) => selectSourceSlice(event.currentTarget.valueAsNumber)} /></label>
         <label>Centro da janela {Math.round(wc)}<input aria-label="Centro da janela" type="range" min={Math.floor(range[0])} max={Math.ceil(range[1])} value={wc} onChange={(event) => setCenter(Number(event.target.value))} /></label>
         <label>Largura da janela {Math.round(ww)}<input aria-label="Largura da janela" type="range" min="1" max={Math.max(1, Math.ceil(range[1] - range[0]))} value={ww} onChange={(event) => setWidth(Number(event.target.value))} /></label>
       </div>
       <Suspense fallback={<p className="plane-status">Preparando reconstruções…</p>}>
         <TriPlanarViewer key={current.id+'-'+seriesIndex} series={current} slice={sliceIndex} windowCenter={wc} windowWidth={ww} onSlice={setSliceIndex}
-          onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} spatialView={<>
+          onPatientPoint={setTargetPoint} onCursorChange={setMprPoint} activePlane={activePlane} onActivePlane={setActivePlane} onLesionSurface={updateLesion} spatialView={<>
             <div className="spatial-view-tabs" aria-label="Visualização do exame em 3D">
               <button aria-pressed={spatialMode==='slices' || !canRenderVolume} onClick={()=>setSpatialMode('slices')}>Pilhas e fusão</button>
               <button disabled={!canRenderVolume} aria-pressed={spatialMode==='volume' && canRenderVolume} onClick={()=>setSpatialMode('volume')}>Volume do exame</button>
             </div>
             <Suspense fallback={<p>Preparando visualização espacial…</p>}>
               {spatialMode==='volume' && canRenderVolume
-                ? <PatientVolume key={current.id} series={current} point={mprPoint} center={wc} width={ww}
+                ? <PatientVolume key={current.id} series={current} point={mprPoint} center={wc} width={ww} lesion={lesion?.series === current ? lesion.surface : null}
                     onReference={onFocusStructure ? () => { setRegion('thorax'); onFocusStructure('heart','Coração'); } : undefined} />
-                : <PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={setSliceIndex}
-                    surface={surface ?? undefined} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} />}
+                : <PatientSlices series={current} index={sliceIndex} windowCenter={wc} windowWidth={ww} onIndex={selectSourceSlice}
+                    surface={surface ?? undefined} lesion={lesion?.series === current ? lesion.surface : null} registration={registration} cursorPoint={mprPoint} overlaySystems={overlaySystems} overlayClip={overlayClip} />}
             </Suspense>
           </>} />
       </Suspense>
+      <RadiologyStudyGuide ct={current.modality === 'CT'} onWindow={(level, span) => { setCenter(level); setWidth(span); }} />
       <section className="overlay-panel" aria-label="Sobreposição anatômica registrada">
         <h3>Sobreposição neurovascular 3D</h3>
         <p role="status" className="plane-status">
@@ -339,7 +353,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
         <div className="overlay-systems">
           {([['nervous', 'Encéfalo e nervos'], ['cardiovascular', 'Artérias e vasos'], ['skeletal', 'Esqueleto']] as const).map(([system, label]) => <button key={system} aria-pressed={overlaySystems.includes(system)} className={overlaySystems.includes(system) ? `active ${system}` : ''} onClick={() => toggleOverlay(system)}>{label}</button>)}
         </div>
-        <label>Recorte anatômico<select aria-label="Plano de recorte da sobreposição" value={overlayClip} onChange={(event) => setOverlayClip(event.target.value as OverlayClip)}><option value="volume">Volume completo</option><option value="axial">Lâmina axial</option><option value="coronal">Lâmina coronal</option><option value="sagital">Lâmina sagital</option></select></label>
+        {anatomicalPlanes && <label>Recorte anatômico<select aria-label="Plano de recorte da sobreposição" value={overlayClip} onChange={(event) => setOverlayClip(event.target.value as OverlayClip)}><option value="volume">Volume completo</option><option value="axial">Lâmina axial</option><option value="coronal">Lâmina coronal</option><option value="sagital">Lâmina sagital</option></select></label>}
         {registration && <p className="plane-status">Mova a mira nas reconstruções para deslocar o recorte selecionado.</p>}
       </section>
       <details className="advanced-imaging"><summary>Superfície de alta densidade · ajustes</summary><div className="segmentation-panel">
@@ -355,7 +369,7 @@ export default function ImagingWorkbench({ onSlice, dicomFiles, casePreview, per
       </div></details>
       <LandmarkPanel series={current} atlasPoint={atlasPoint} targetPoint={targetPoint} modelVariant={modelVariant} onRegistration={setRegistration} />
       <label>Região de referência no atlas<select aria-label="Selecionar região no atlas" value={region} onChange={(event) => setRegion(event.target.value as Region)}><option value="head">Cabeça</option><option value="thorax">Tórax</option><option value="abdomen">Abdome</option><option value="body">Corpo</option></select></label>
-      <p className="plane-status">Plano adquirido: {current.plane ?? 'não determinável'}. O atlas lateral usa uma referência anatômica genérica. O ajuste manual, quando aplicado, aparece apenas no visor espacial dos cortes e tem precisão limitada aos pontos escolhidos. As reconstruções ortogonais usam os voxels da série carregada.</p>
+      <p className="plane-status">No visor 3D do exame, os cortes seguem a posição registrada no DICOM. Para projetar o plano no corpo genérico do Atlas, ajuste os marcos correspondentes. A correspondência anatômica no Atlas é aproximada.</p>
       </>}
     </>}
   </section>;

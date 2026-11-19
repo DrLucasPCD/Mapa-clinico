@@ -8,7 +8,7 @@ import {
 } from './atlas-layout';
 import AtlasSurface from './AtlasSurface';
 import { loadDetailedModel, detailedStructureMatches } from './detailed-models';
-import { relativeSlice, type AtlasSlice } from './atlas-slice';
+import { relativeSlice, type AtlasGuide } from './atlas-slice';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { heartLighting, isHeartStructure } from './heart-model';
 import { prepareHeartMotion, type HeartRig } from './heart-motion';
@@ -18,7 +18,7 @@ import { createAnatomyMarkerProjection } from './anatomy-marker-projection';
 import { anatomyDisplayName, chamberOrBrainMarkers, getAnatomyDetail } from './anatomy-details';
 export type AtlasProps = {
   modelVariant?: 'male' | 'female';
-  slice?: AtlasSlice | null;
+  slice?: AtlasGuide | null;
   system: string;
   selected: string;
   isolate: boolean;
@@ -96,6 +96,7 @@ export default function Atlas(props: AtlasProps) {
     const slicePlane = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0x32dced, transparent: true, opacity: 0.25, side: T.DoubleSide, depthWrite: false }));
     slicePlane.visible = false;
     scene.add(slicePlane);
+    let renderedSlice: AtlasGuide | null | undefined;
     const meshes: T.Mesh[] = [],
       clip = new T.Plane(new T.Vector3(1, 0, 0), 10),
       ray = new T.Raycaster(),
@@ -332,14 +333,28 @@ export default function Atlas(props: AtlasProps) {
             ? -((p.cut / 100) * 1.8)
             : 0.4 - (p.cut / 100) * 0.8;
       slicePlane.visible = Boolean(p.slice) && (!p.layoutMode || p.layoutMode === 'assembled');
-      if (p.slice) {
-        const { axis, position, bounds } = relativeSlice(p.slice);
-        const center = new T.Vector3((bounds.x[0]+bounds.x[1])/2, (bounds.y[0]+bounds.y[1])/2, (bounds.z[0]+bounds.z[1])/2);
-        center[axis] = position;
-        slicePlane.position.copy(center);
-        slicePlane.rotation.set(axis === 'y' ? -Math.PI/2 : 0, axis === 'x' ? Math.PI/2 : 0, 0);
-        slicePlane.scale.set(axis === 'x' ? bounds.z[1]-bounds.z[0] : bounds.x[1]-bounds.x[0], axis === 'y' ? bounds.z[1]-bounds.z[0] : bounds.y[1]-bounds.y[0], 1);
+      if (p.slice && p.slice !== renderedSlice) {
+        if ('patientCorners' in p.slice) {
+          const patientToAtlas = new T.Matrix4().fromArray(p.slice.atlasToPatient).invert();
+          const [first, second, third, fourth] = p.slice.patientCorners.map(corner => {
+            const { x, y, z } = new T.Vector3(...corner).applyMatrix4(patientToAtlas);
+            return new T.Vector3(x / 1000, z / 1000, -y / 1000);
+          });
+          const u = second.sub(first), v = fourth.sub(first);
+          slicePlane.position.copy(first).add(third).multiplyScalar(.5);
+          slicePlane.scale.set(u.length(), v.length(), 1);
+          u.normalize(); v.normalize();
+          slicePlane.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(u, v, new T.Vector3().crossVectors(u, v).normalize()));
+        } else {
+          const { axis, position, bounds } = relativeSlice(p.slice);
+          const center = new T.Vector3((bounds.x[0]+bounds.x[1])/2, (bounds.y[0]+bounds.y[1])/2, (bounds.z[0]+bounds.z[1])/2);
+          center[axis] = position;
+          slicePlane.position.copy(center);
+          slicePlane.rotation.set(axis === 'y' ? -Math.PI/2 : 0, axis === 'x' ? Math.PI/2 : 0, 0);
+          slicePlane.scale.set(axis === 'x' ? bounds.z[1]-bounds.z[0] : bounds.x[1]-bounds.x[0], axis === 'y' ? bounds.z[1]-bounds.z[0] : bounds.y[1]-bounds.y[0], 1);
+        }
       }
+      renderedSlice = p.slice;
       for (const m of meshes) {
         const id = String(m.userData.anatomyId),
           sys = m.userData.anatomySystem,
@@ -549,6 +564,8 @@ export default function Atlas(props: AtlasProps) {
         onDetails={props.onDetails && currentPoint ? () => props.onDetails?.(currentPoint.id, currentPoint.name) : undefined}
       />}
     </AtlasSurface>
-    {props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane} · posição relativa {Math.round(props.slice.fraction * 100)}%<br/>Referência didática, sem registro ao paciente</div>}
+    {props.slice && <div className="atlas-slice-caption">Plano {props.slice.plane}<br/>{'patientCorners' in props.slice
+      ? 'Plano DICOM · ajuste aproximado por marcos'
+      : `Referência didática · posição relativa ${Math.round(props.slice.fraction * 100)}%`}</div>}
   </>;
 }

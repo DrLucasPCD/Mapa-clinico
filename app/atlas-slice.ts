@@ -1,8 +1,16 @@
+import type { Point3 } from './patient-geometry';
+
 /** Relative educational mapping. This is not registration to the patient. */
 export type AtlasSlice = {
   plane: 'axial' | 'coronal' | 'sagital';
   fraction: number;
   region: 'head' | 'thorax' | 'abdomen' | 'body';
+};
+export type AtlasGuide = AtlasSlice | {
+  region: AtlasSlice['region'];
+  plane: string;
+  patientCorners: readonly Point3[];
+  atlasToPatient: number[];
 };
 const regions = {
   head: { x: [-0.14, 0.14], y: [1.44, 1.75], z: [-0.15, 0.15] },

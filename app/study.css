@@ -2,3 +2,37 @@
 .workspace-tabs{display:flex;background:#edf5f8;border-bottom:1px solid #d6e5eb;padding:5px;gap:5px}.workspace-tabs button{flex:1;padding:10px;border:0;border-radius:5px;color:#31586c;font-size:12px;background:transparent}.workspace-tabs button.active{background:white;color:#00818a;box-shadow:0 1px 5px #173d4710}.atlas-selection{position:absolute;right:16px;top:145px;z-index:3;max-width:180px;background:#092a37df;border:1px solid #376876;border-radius:7px;padding:8px 12px;color:#ecffff;font-size:12px;pointer-events:none}.atlas-selection small{display:block;font-size:9px;color:#8db8c5;margin-top:5px}.atlas-slice-caption{top:215px}.female-scope{background:#eaf5f6;border:1px solid #bcdfe2;color:#326170;padding:10px;font-size:11px;border-radius:6px}
 .segmentation-panel,.landmark-panel,.overlay-panel{border:1px solid #cfe1e8;border-radius:8px;padding:14px;margin:16px 0;background:#f8fcfd}.segmentation-panel h3,.landmark-panel h3,.overlay-panel h3{margin:0 0 8px;color:#087c86}.segmentation-panel input{width:90px;padding:7px;border:1px solid #cfe1e8;border-radius:5px}.landmark-panel .image-tools span{display:block;width:100%;overflow-wrap:anywhere}.landmark-panel ol{padding-left:20px}.landmark-panel li{margin:10px 0;line-height:1.5}.landmark-panel li button{margin-left:6px;border:1px solid #cfe1e8;background:white;border-radius:4px;padding:4px}.image-tools button:disabled{opacity:.45;cursor:default}.dicom-canvas{cursor:crosshair}.overlay-systems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0}.overlay-systems button{padding:9px 5px;border:1px solid #cfe1e8;border-radius:6px;background:white;color:#476674;font-size:10px}.overlay-systems button.active{color:white;border-color:transparent}.overlay-systems button.nervous{background:#299fa7}.overlay-systems button.cardiovascular{background:#d94352}.overlay-systems button.skeletal{background:#9d855e}.overlay-panel>label{display:grid;gap:5px;color:#087c86;font-size:11px}.overlay-panel select{padding:9px;border:1px solid #cfe1e8;border-radius:5px;background:white}
 .mpr-viewer{border:1px solid #cfe1e8;border-radius:8px;padding:12px;margin:16px 0;background:#071720;color:#d6e9ee}.mpr-viewer h3{margin:3px 0 5px;color:#efffff}.mpr-viewer p{margin:0 0 10px}.mpr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mpr-grid figure{margin:0;display:flex;flex-direction:column;justify-content:flex-end;background:#020608;border:1px solid #1f4d58;border-radius:6px;overflow:hidden}.mpr-grid canvas{display:block;width:100%;max-height:260px;object-fit:contain;cursor:crosshair}.mpr-grid figcaption{padding:6px;text-align:center;background:#0b2732;color:#73e1e4;font-size:10px;text-transform:capitalize}@media(max-width:700px){.mpr-grid{grid-template-columns:1fr}.mpr-grid canvas{max-height:220px}}
+
+.dicom-private { color:#526f7e; font-size:12px; }
+.mpr-grid .mpr-image { position:relative; margin-inline:auto; }
+.mpr-grid .mpr-image canvas { position:absolute; inset:0; width:100%; height:100%; max-height:none; object-fit:fill; }
+.lesion-preview { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:.68; }
+.lesion-controls { display:grid; gap:10px; margin:12px 0; padding:13px; border:1px solid #2c5361; border-radius:9px; background:#102936; color:#d7eaed; }
+.lesion-controls h4 { margin:0 0 4px; color:#fff; font-size:14px; }
+.lesion-controls p { margin:0; }
+.lesion-actions,.lesion-modes { display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
+.lesion-actions label { display:flex; align-items:center; gap:6px; }
+.lesion-actions [role=status] { color:#b0cdd4; font-size:11px; }
+.lesion-actions small { color:#a7c9d2; }
+.lesion-actions button,.lesion-upload { border:1px solid #497886; border-radius:5px; background:#173a47; color:#eefcff; padding:7px 9px; font:inherit; cursor:pointer; }
+.lesion-actions [aria-pressed=true] { background:#027a82; border-color:#63dce0; }
+.lesion-actions button:disabled { opacity:.45; cursor:default; }
+.lesion-actions input { accent-color:#0dabad; }
+.lesion-upload { position:relative; }
+.lesion-upload input { opacity:0; position:absolute; inset:0; width:100%; cursor:pointer; }
+.lesion-upload:focus-within { outline:2px solid #63dce0; outline-offset:2px; }
+.lesion-actions select { min-width:125px; width:auto; max-width:220px; padding:6px; }
+.lesion-controls .lesion-error { color:#ffc19e; }
+.lesion-key { color:#ffd1a9 !important; margin:6px 0; }
+.lesion-key i { display:inline-block; width:.8em; height:.8em; border-radius:50%; background:#ff9b53; margin-right:.35em; }
+@media(max-width:700px) { .mpr-image { --mpr-max-height:220px; } }
+.workspace-imaging .mpr-grid .mpr-image canvas { max-height:none; object-fit:fill; }
+.mpr-grid .mpr-active-plane { border-color:#53cdd2; }
+.rad-study-guide { background:#fff; border:1px solid #d2e4ea; border-radius:7px; padding:10px 12px; margin:12px 0; }
+.rad-study-guide summary { color:#076978; cursor:pointer; font-weight:650; }
+.rad-study-guide dl { display:grid; gap:4px; }
+.rad-study-guide dt { font-weight:650; }
+.rad-study-guide dd { margin:0 0 7px; }
+.dicom-upload { position:relative; }
+.image-tools .dicom-upload input[type=file] { display:block; opacity:0; position:absolute; inset:0; width:100%; cursor:pointer; }
+.dicom-upload:focus-within { outline:2px solid #138f98; outline-offset:2px; }

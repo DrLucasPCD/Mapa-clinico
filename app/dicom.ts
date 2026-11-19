@@ -36,6 +36,8 @@ export type DicomSlice = {
   sourceName: string;
   studyId?: string;
   referenceId?: string;
+  sopInstanceId?: string;
+  frameNumber?: number;
   stackId?: string;
   contrastKey?: string;
   cardiac?: CardiacTiming;
@@ -368,6 +370,7 @@ function parseNativeFrames(
   const seriesId = text(ds, 'x0020000e') || 'sem-serie';
   const studyId = text(ds, 'x0020000d');
   const referenceId = text(ds, 'x00200052');
+  const sopInstanceId = text(ds, 'x00080018');
   const instance = ds.intString('x00200013');
   const signed = representation === 1;
   const rawPixelValue = signed ? ds.int16.bind(ds) : ds.uint16.bind(ds);
@@ -498,6 +501,8 @@ function parseNativeFrames(
       sourceName,
       studyId,
       referenceId,
+      sopInstanceId,
+      frameNumber: frames > 1 ? frame + 1 : undefined,
       stackId: text(content, 'x00209056'),
       contrastKey,
       cardiac,

@@ -1,5 +1,5 @@
 import type { DicomSeries, Plane } from './dicom';
-import { sliceFrame } from './patient-geometry';
+import { sliceCorners, sliceFrame, type Point3 } from './patient-geometry';
 
 export type MprCursor = { column: number; row: number; slice: number };
 export type MprView = 'source' | 'row' | 'column';
@@ -59,12 +59,37 @@ export function viewDimensions(series: DicomSeries, view: MprView) {
   return { width: series.rows, height: series.slices.length };
 }
 
-export function viewVoxel(series: DicomSeries, view: MprView, cursor: MprCursor, x: number, y: number) {
-  const slice = view === 'source' ? cursor.slice : y;
+/** Outer bounds of the displayed image plane, in the patient's LPS millimetres. */
+export function mprPlaneCorners(series: DicomSeries, view: MprView, slice: number, point: readonly number[] | null) {
+  if (view === 'source') return series.slices[slice] && sliceCorners(series.slices[slice]);
+  const grid = regularVolumeGrid(series);
+  if (!grid || !point || point.length !== 3 || !point.every(Number.isFinite)) return undefined;
+  const { frame, stepMm } = grid;
+  const isRow = view === 'row';
+  const across = isRow ? frame.rowDirection : frame.columnDirection;
+  const fixed = isRow ? frame.columnDirection : frame.rowDirection;
+  const spacing = isRow ? frame.columnSpacing : frame.rowSpacing;
+  const width = isRow ? series.columns : series.rows;
+  const offset = dot(fixed, point.map((value, axis) => value - frame.origin[axis]));
+  const at = (u: number, z: number): Point3 => frame.origin.map((value, axis) =>
+    value + across[axis] * u * spacing + fixed[axis] * offset + frame.normal[axis] * z * stepMm,
+  ) as Point3;
+  return [at(-.5, -.5), at(width - .5, -.5), at(width - .5, series.slices.length - .5), at(-.5, series.slices.length - .5)];
+}
+
+export function viewSliceIndex(view: MprView, cursor: MprCursor, y: number) {
+  return view === 'source' ? cursor.slice : y;
+}
+
+export function viewPixelIndex(columns: number, view: MprView, cursor: MprCursor, x: number, y: number) {
   const row = view === 'source' ? y : view === 'row' ? cursor.row : x;
   const column = view === 'source' ? x : view === 'row' ? x : cursor.column;
-  const image = series.slices[slice];
-  return image.pixels[row * image.columns + column] * image.slope + image.intercept;
+  return row * columns + column;
+}
+
+export function viewVoxel(series: DicomSeries, view: MprView, cursor: MprCursor, x: number, y: number) {
+  const image = series.slices[viewSliceIndex(view, cursor, y)];
+  return image.pixels[viewPixelIndex(image.columns, view, cursor, x, y)] * image.slope + image.intercept;
 }
 
 export function cursorFromView(series: DicomSeries, view: MprView, current: MprCursor, x: number, y: number): MprCursor {

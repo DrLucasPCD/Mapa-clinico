@@ -1,4 +1,5 @@
 import type { SliceFrame } from './patient-geometry';
+import type { MprGeometry } from './mpr';
 
 export type OverlaySystem = 'nervous' | 'cardiovascular' | 'skeletal';
 export type OverlayClip = 'volume' | 'axial' | 'coronal' | 'sagital';
@@ -25,6 +26,7 @@ export function slabPlaneEquations(
   point: readonly number[] | null | undefined,
   clip: OverlayClip,
   sliceStepMm: number,
+  labels: MprGeometry['labels'] = { source: 'axial', row: 'coronal', column: 'sagital' },
 ): PlaneEquation[] {
   if (
     clip === 'volume' ||
@@ -32,14 +34,14 @@ export function slabPlaneEquations(
     point.length !== 3 ||
     !point.every(Number.isFinite)
   ) return [];
-  const [normal, spacing] = clip === 'axial'
+  const [normal, spacing] = clip === labels.source
     ? [frame.normal, sliceStepMm]
-    : clip === 'coronal'
+    : clip === labels.row
       ? [frame.columnDirection, frame.rowSpacing]
       : [frame.rowDirection, frame.columnSpacing];
   if (!Number.isFinite(spacing) || spacing <= 0) return [];
   const location = normal[0] * point[0] + normal[1] * point[1] + normal[2] * point[2];
-  const half = Math.max(0.5, spacing / 2);
+  const half = spacing / 2;
   const opposite = normal.map((value) => value === 0 ? 0 : -value) as [number, number, number];
   return [
     { normal: [...normal], constant: -(location - half) },
