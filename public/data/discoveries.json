@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-19T18:15:36.529Z",
+  "lastChecked": "2026-11-20T17:46:35.931Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -37,6 +37,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
       "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43061356",
+      "title": "Late diagnosis of Zinner syndrome despite preserved fertility: A case report.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43061356/",
+      "authors": "Tran KN, Phan TNP, Ngo LT",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -166,6 +175,15 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43056181",
+      "title": "A case of familial hemophagocytic lymphohistiocytosis type 2 with adult-onset: two novel PRF1 complex heterozygous variants.",
+      "date": "2026 Dec 31",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43056181/",
+      "authors": "You J, Zhang Y, Meng Y",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42896046",
       "title": "Pacak-Zhuang syndrome with EPAS1 p.Pro531Leu somatic variant: one case report and literature review.",
       "date": "2026 Dec 31",
@@ -193,30 +211,12 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "43047471",
-      "title": "A novel homozygous ITCH nonsense variant causing autoimmune disease, multisystem, with facial dysmorphism: expanding the phenotypic and geographic spectrum.",
+      "id": "43061712",
+      "title": "Diagnostic value of coronal CT imaging in a patient with cecal volvulus accompanied by intestinal ischemia: A case report.",
       "date": "2026 Dec",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43047471/",
-      "authors": "Ali NS, Mundi Dhahrabi HA, Abdul Raheem Al Marzooqi L",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43047272",
-      "title": "Functioning gonadotropinomas with ovarian hyperstimulation and multicystic ovaries: a tale of 2 tumors and 2 organs.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43047272/",
-      "authors": "Ghosh J, Mahadevan S, Shah R",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43047271",
-      "title": "Thyroid storm induced by palpation thyroiditis after subtotal parathyroidectomy for lithium-induced hyperparathyroidism.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43047271/",
-      "authors": "Elamin M, Mohamed S, Kaplan F",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43061712/",
+      "authors": "Ohnishi J, Sonomura T, Ueda S",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
