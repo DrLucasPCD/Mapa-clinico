@@ -1,17 +1,8 @@
 {
-  "lastChecked": "2026-11-20T17:46:35.931Z",
+  "lastChecked": "2026-11-21T16:45:58.487Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
-    {
-      "id": "43034831",
-      "title": "Paravertebral percutaneous embolization of isolated zone 3 endoleak after branched endovascular aortic arch repair.",
-      "date": "2027 Feb",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43034831/",
-      "authors": "Kuwayama D, Dobesh K, Tonnessen B",
-      "status": "Descoberta automática • ainda não revisada"
-    },
     {
       "id": "43034734",
       "title": "From flossing to fracturing-Subintimal lithotripsy for recoil stenosis modification before interwoven stent implantation.",
@@ -217,6 +208,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43061712/",
       "authors": "Ohnishi J, Sonomura T, Ueda S",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43061365",
+      "title": "Primary female urethral carcinoma with bladder neck invasion: multiparametric MRI features and staging implications.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43061365/",
+      "authors": "Sciacqua A, Montatore M, Tupputi R",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
