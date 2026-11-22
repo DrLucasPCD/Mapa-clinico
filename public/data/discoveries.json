@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-21T16:45:58.487Z",
+  "lastChecked": "2026-11-22T17:08:07.985Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -28,6 +28,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
       "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43068108",
+      "title": "Aberrant Artery Contributing to Thoracic Outlet Syndrome.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43068108/",
+      "authors": "Tan L, Gehrmann E, Radwan T",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -202,21 +211,12 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "43061712",
-      "title": "Diagnostic value of coronal CT imaging in a patient with cecal volvulus accompanied by intestinal ischemia: A case report.",
+      "id": "43068259",
+      "title": "Multimodal imaging evaluation of a giant aneurysm originating from a branch of the left circumflex coronary artery: A case report.",
       "date": "2026 Dec",
       "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43061712/",
-      "authors": "Ohnishi J, Sonomura T, Ueda S",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43061365",
-      "title": "Primary female urethral carcinoma with bladder neck invasion: multiparametric MRI features and staging implications.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43061365/",
-      "authors": "Sciacqua A, Montatore M, Tupputi R",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43068259/",
+      "authors": "Li J, Wang N, Cai M",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
