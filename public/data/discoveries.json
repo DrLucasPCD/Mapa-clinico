@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-23T21:19:57.641Z",
+  "lastChecked": "2026-11-24T20:08:18.121Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -175,15 +175,6 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "43056181",
-      "title": "A case of familial hemophagocytic lymphohistiocytosis type 2 with adult-onset: two novel PRF1 complex heterozygous variants.",
-      "date": "2026 Dec 31",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43056181/",
-      "authors": "You J, Zhang Y, Meng Y",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
       "id": "42896046",
       "title": "Pacak-Zhuang syndrome with EPAS1 p.Pro531Leu somatic variant: one case report and literature review.",
       "date": "2026 Dec 31",
@@ -217,6 +208,15 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43068259/",
       "authors": "Li J, Wang N, Cai M",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43068196",
+      "title": "Primary diaphragmatic yolk sac tumor presenting as hemothorax in an infant: A rare case report.",
+      "date": "2026 Dec",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43068196/",
+      "authors": "Bagheri M, Nozheh A, Ghafouri E",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
