@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-11-24T20:08:18.121Z",
+  "lastChecked": "2026-11-25T19:14:16.637Z",
   "query": "(\"Case Reports\"[Publication Type]) AND (radiology[Title/Abstract] OR imaging[Title/Abstract])",
   "provider": "NCBI E-utilities",
   "items": [
@@ -28,6 +28,24 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/43001215/",
       "authors": "Talal Khan MA, Ali Chishti SS, Ullah U",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43080936",
+      "title": "Recovery of adrenal function following sequential spontaneous bilateral adrenal hemorrhage.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43080936/",
+      "authors": "Gasparyan L, Joseph S, Guber HA",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
+      "id": "43080889",
+      "title": "Vertebral fractures unmasking Cushing disease: an unexpected argument for secondary osteoporosis screening.",
+      "date": "2027 Jan",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43080889/",
+      "authors": "Dahi I, Van Dorpe J, Verly E",
       "status": "Descoberta automática • ainda não revisada"
     },
     {
@@ -148,15 +166,6 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
-      "id": "42831063",
-      "title": "Use of a Medial Femoral Condyle Free Flap for Metacarpal Reconstruction of Type IIIC Congenital Thumb Hypoplasia.",
-      "date": "2027 Jan",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/42831063/",
-      "authors": "Allen BE, Pawlak N, Smith AC",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
       "id": "42822153",
       "title": "Case Report : Streptococcus equi subspecies zooepidemicus bacteriemia and spondylodiscitis following direct contact with a horse.",
       "date": "2027 Jan",
@@ -184,6 +193,15 @@
       "status": "Descoberta automática • ainda não revisada"
     },
     {
+      "id": "43077651",
+      "title": "Clinical Reasoning: A 7-Year-Old Boy With Left-Sided Involuntary Movements.",
+      "date": "2026 Dec 22",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/43077651/",
+      "authors": "Gebert JT, Evans BE, Aduru C",
+      "status": "Descoberta automática • ainda não revisada"
+    },
+    {
       "id": "42987243",
       "title": "Pearls & Oy-sters: Trace Visualization of the Central Retinal Artery: A Favorable Sign for Late-Window Endovascular Therapy in Central Retinal Artery Occlusion.",
       "date": "2026 Dec 8",
@@ -199,24 +217,6 @@
       "source": "PubMed / NCBI",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42970742/",
       "authors": "Salman SD, Miller DA, Kramer CL",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43068259",
-      "title": "Multimodal imaging evaluation of a giant aneurysm originating from a branch of the left circumflex coronary artery: A case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43068259/",
-      "authors": "Li J, Wang N, Cai M",
-      "status": "Descoberta automática • ainda não revisada"
-    },
-    {
-      "id": "43068196",
-      "title": "Primary diaphragmatic yolk sac tumor presenting as hemothorax in an infant: A rare case report.",
-      "date": "2026 Dec",
-      "source": "PubMed / NCBI",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/43068196/",
-      "authors": "Bagheri M, Nozheh A, Ghafouri E",
       "status": "Descoberta automática • ainda não revisada"
     }
   ]
